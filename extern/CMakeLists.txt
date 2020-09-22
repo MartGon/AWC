@@ -1,0 +1,1 @@
+set(DOCTEST_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Doctest CACHE INTERNAL "Path to include folder for doctest")
