@@ -65,10 +65,14 @@ TEST_CASE("Maps follow some rules")
     Unit* soldier = new Unit;
     map.AddUnit(0, 0, soldier);
 
+    Tile* grass = new Tile;
+
     SUBCASE("Don't allow operations out of bounds")
     {
         CHECK_THROWS_AS(map.AddUnit(xSize + 1, ySize + 1, soldier), const MapIndexOutOfBounds&);
+        CHECK_THROWS_AS(map.SetTile(xSize + 1, ySize + 1, grass), const MapIndexOutOfBounds&);
         CHECK_THROWS_AS(map.GetUnit(-1, -1), const MapIndexOutOfBounds&);
+        CHECK_THROWS_AS(map.GetTile(-1, -1), const MapIndexOutOfBounds&);
     }
     SUBCASE("Only one unit can be in a given position")
     {
