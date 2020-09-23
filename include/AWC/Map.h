@@ -12,19 +12,19 @@ class Map
 public:
     Map(int x, int y);
 
-    int GetWidht();
-    int GetHeight();
+    int GetWidht() const;
+    int GetHeight() const;
 
     void AddUnit(int x, int y, Unit* unit);
-    Unit* GetUnit(int x, int y);
+    Unit* GetUnit(int x, int y) const;
 
     void SetTile(int x, int y, Tile* tile);
     Tile* GetTile(int x, int y);
 
 private:
 
-    bool IsPositionFree(int x, int y);
-    bool IsPositionValid(int x, int y);
+    bool IsPositionFree(int x, int y) const;
+    bool IsPositionValid(int x, int y) const;
 
     int _x;
     int _y;
@@ -33,20 +33,33 @@ private:
     std::vector<std::vector<Tile*>> _tiles; 
 };
 
-class MapIndexOutOfBounds : public std::exception
+class MapException : public std::exception
 {
 public:
-    MapIndexOutOfBounds(const std::string& msg);
-    virtual char const* what();
+    MapException(const Map& map);
+    virtual char const* what() const noexcept override;
+protected:
+    const Map& _map;
 private:
-    std::string _msg;
+    virtual const std::string GetErrorMessage() const = 0;
 };
 
-class MapInvalidUnitPosition : public std::exception
+class MapIndexOutOfBounds : public MapException
 {
 public:
-    MapInvalidUnitPosition(const std::string& msg);
-    virtual char const* what();
+    MapIndexOutOfBounds(const Map&, int x, int y);
 private:
-    std::string _msg;
+    int _x;
+    int _y;
+    const std::string GetErrorMessage() const override;
+};
+
+class MapInvalidUnitPosition : public MapException
+{
+public:
+    MapInvalidUnitPosition(const Map& map, int x, int y);
+private:
+    int _x;
+    int _y;
+    const std::string GetErrorMessage() const override;
 };
