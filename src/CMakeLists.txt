@@ -4,6 +4,7 @@ add_library(AWCLibrary
   Map.cpp
   Unit.cpp
   Tile.cpp
+  TileType.cpp
 )
 
 target_include_directories(AWCLibrary PUBLIC ../include)

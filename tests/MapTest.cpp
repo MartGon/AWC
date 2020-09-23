@@ -3,6 +3,7 @@
 #include <AWC/Map.h>
 #include <AWC/Unit.h>
 #include <AWC/Tile.h>
+#include <AWC/TileType.h>
 
 // Size checking
 TEST_CASE("Maps have a specific size")
@@ -59,7 +60,8 @@ TEST_CASE("Maps hold tiles")
 {
     Map map{10, 10};
 
-    Tile* grass = new Tile;
+    TileType grassType{"Grass"};
+    Tile* grass = grassType.CreateTile();
     map.SetTile(0, 0, grass);
 
     SUBCASE("Can be use to retrieve a Tile in a given position")
@@ -70,7 +72,8 @@ TEST_CASE("Maps hold tiles")
     }
     SUBCASE("Or set a especific Tile in a given position")
     {
-        Tile* sea = new Tile;
+        TileType seaType{"Sea"};
+        Tile* sea = seaType.CreateTile();
         map.SetTile(0, 1, sea);
 
         auto tile = map.GetTile(0, 1);
@@ -89,7 +92,8 @@ TEST_CASE("Maps follow some rules")
     Unit* soldier = new Unit;
     map.AddUnit(0, 0, soldier);
 
-    Tile* grass = new Tile;
+    TileType grassType{"Grass"};
+    Tile* grass = grassType.CreateTile();
 
     SUBCASE("Don't allow operations out of bounds")
     {
