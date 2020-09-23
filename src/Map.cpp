@@ -6,10 +6,10 @@
 
 Map::Map(int x, int y) : _x{x}, _y{y}
 {
+    // TODO: Should change to not use std::vector<std::vector<T>>. [x + y * xSize]
     _units.resize(x);
     for(int i = 0; i < x; i++)
         _units[i] = std::vector<Unit*>{(long unsigned int)y};
-
     
     _tiles.resize(x);
     for(int i = 0; i < x; i++)
@@ -48,12 +48,22 @@ Unit* Map::GetUnit(int x, int y) const
 
 void Map::SetTile(int x, int y, Tile* tile)
 {
-    throw MapIndexOutOfBounds(*this, x, y);
+    // TODO: Previous tile should be destroyed if using raw pointers
+    if(IsPositionValid(x, y))
+        _tiles[x][y] = tile;
+    else
+        throw MapIndexOutOfBounds(*this, x, y);
 }
 
 Tile* Map::GetTile(int x, int y)
 {
-    throw MapIndexOutOfBounds(*this, x, y);
+    Tile* tile = nullptr;
+    if(IsPositionValid(x, y))
+        tile = _tiles[x][y];
+    else
+        throw MapIndexOutOfBounds(*this, x, y);
+
+    return tile;
 }
 
 // Private methods

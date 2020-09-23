@@ -55,6 +55,30 @@ TEST_CASE("Maps hold units in a given position")
     }
 }
 
+TEST_CASE("Maps hold tiles")
+{
+    Map map{10, 10};
+
+    Tile* grass = new Tile;
+    map.SetTile(0, 0, grass);
+
+    SUBCASE("Can be use to retrieve a Tile in a given position")
+    {
+        auto tile = map.GetTile(0, 0);
+
+        CHECK(tile == grass);
+    }
+    SUBCASE("Or set a especific Tile in a given position")
+    {
+        Tile* sea = new Tile;
+        map.SetTile(0, 1, sea);
+
+        auto tile = map.GetTile(0, 1);
+        CHECK(tile != grass);
+        CHECK(tile == sea);
+    }
+}
+
 // Edge cases
 TEST_CASE("Maps follow some rules")
 {
