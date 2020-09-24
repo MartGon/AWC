@@ -1,7 +1,7 @@
 #include <AWC/Tile.h>
 #include <AWC/TileType.h>
 
-Tile::Tile(TileType& tileType) : tileType_{tileType}
+Tile::Tile(const TileType& tileType) : tileType_{tileType}
 {
 
 }

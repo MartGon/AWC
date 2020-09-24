@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 class Tile;
@@ -9,7 +10,7 @@ class TileType
 public:
     TileType(const std::string& name);
 
-    Tile* CreateTile();
+    std::shared_ptr<Tile> CreateTile();
 
     std::string GetName() const;
 

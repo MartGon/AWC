@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 class Unit;
@@ -11,7 +12,7 @@ friend class Unit;
 public:
     UnitType(const std::string& name);
 
-    Unit* CreateUnit();
+    std::shared_ptr<Unit> CreateUnit() const;
 
     const std::string GetName() const;
 private:

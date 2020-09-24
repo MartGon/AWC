@@ -1,5 +1,7 @@
 #include "doctest.h"
 
+#include <memory>
+
 #include <AWC/Map.h>
 #include <AWC/Unit.h>
 #include <AWC/UnitType.h>
@@ -27,7 +29,7 @@ TEST_CASE("Maps have a specific size")
 TEST_CASE("Maps hold units in a given position") 
 {
     UnitType soldierUnitType{"Soldier"};
-    Unit* soldier = soldierUnitType.CreateUnit();
+    auto soldier = soldierUnitType.CreateUnit();
 
     Map map{10, 10};
 
@@ -37,24 +39,24 @@ TEST_CASE("Maps hold units in a given position")
 
     SUBCASE("Can be used to retrieve a unit in a given position")
     {
-        auto unit = map.GetUnit(0, 0);
+        const std::shared_ptr<Unit> unit = map.GetUnit(0, 0);
 
-        CHECK(soldier == unit);
+        CHECK(soldier.get() == unit.get());
     }
     SUBCASE("A specific position can be empty")
     {
         auto nullUnit = map.GetUnit(1, 1);
 
-        CHECK(nullUnit == nullptr);
+        CHECK(nullUnit.get() == nullptr);
     }
     SUBCASE("Should get the exact unit in a given position")
     {
-        Unit* soldier2 = soldierUnitType.CreateUnit();
+        auto soldier2 = soldierUnitType.CreateUnit();
         map.AddUnit(1, 1, soldier2);
 
         auto unit = map.GetUnit(xPos, yPos);
 
-        CHECK(unit != soldier2);
+        CHECK(unit.get() != soldier2.get());
     }
 }
 
@@ -63,24 +65,24 @@ TEST_CASE("Maps hold tiles")
     Map map{10, 10};
 
     TileType grassType{"Grass"};
-    Tile* grass = grassType.CreateTile();
+    auto grass = grassType.CreateTile();
     map.SetTile(0, 0, grass);
 
     SUBCASE("Can be use to retrieve a Tile in a given position")
     {
         auto tile = map.GetTile(0, 0);
 
-        CHECK(tile == grass);
+        CHECK(tile.get() == grass.get());
     }
     SUBCASE("Or set a especific Tile in a given position")
     {
         TileType seaType{"Sea"};
-        Tile* sea = seaType.CreateTile();
+        auto sea = seaType.CreateTile();
         map.SetTile(0, 1, sea);
 
         auto tile = map.GetTile(0, 1);
-        CHECK(tile != grass);
-        CHECK(tile == sea);
+        CHECK(tile.get() != grass.get());
+        CHECK(tile.get() == sea.get());
     }
 }
 
@@ -92,11 +94,11 @@ TEST_CASE("Maps follow some rules")
     Map map{xSize, ySize};
 
     UnitType soldierUnitType{"Soldier"};
-    Unit* soldier = soldierUnitType.CreateUnit();
+    auto soldier = soldierUnitType.CreateUnit();
     map.AddUnit(0, 0, soldier);
 
     TileType grassType{"Grass"};
-    Tile* grass = grassType.CreateTile();
+    auto grass = grassType.CreateTile();
 
     SUBCASE("Don't allow operations out of bounds")
     {
@@ -107,7 +109,7 @@ TEST_CASE("Maps follow some rules")
     }
     SUBCASE("Only one unit can be in a given position")
     {
-         Unit* soldier2 = soldierUnitType.CreateUnit();
+        auto soldier2 = soldierUnitType.CreateUnit();
         CHECK_THROWS_AS(map.AddUnit(0, 0, soldier2), const MapInvalidUnitPosition&);
     }
 }

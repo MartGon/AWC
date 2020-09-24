@@ -1,7 +1,7 @@
 #include <AWC/Unit.h>
 #include <AWC/UnitType.h>
 
-Unit::Unit(UnitType& unitType) : unitType_{unitType}
+Unit::Unit(const UnitType& unitType) : unitType_{unitType}
 {
 
 }

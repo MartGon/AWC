@@ -6,9 +6,9 @@ UnitType::UnitType(const std::string& name) : name_{name}
 
 }
 
-Unit* UnitType::CreateUnit()
+std::shared_ptr<Unit> UnitType::CreateUnit() const
 {
-    return new Unit(*this);
+    return std::make_shared<Unit>(Unit{*this});
 }
 
 const std::string UnitType::GetName() const

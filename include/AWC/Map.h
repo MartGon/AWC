@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 #include <exception>
 #include <string>
@@ -15,11 +16,11 @@ public:
     int GetWidht() const;
     int GetHeight() const;
 
-    void AddUnit(int x, int y, Unit* unit);
-    Unit* GetUnit(int x, int y) const;
+    void AddUnit(int x, int y, std::shared_ptr<Unit> unit);
+    const std::shared_ptr<Unit> GetUnit(int x, int y) const;
 
-    void SetTile(int x, int y, Tile* tile);
-    Tile* GetTile(int x, int y);
+    void SetTile(int x, int y, std::shared_ptr<Tile> tile);
+    const std::shared_ptr<Tile> GetTile(int x, int y);
 
 private:
 
@@ -29,8 +30,8 @@ private:
     int x_;
     int y_;
 
-    std::vector<std::vector<Unit*>> units_;
-    std::vector<std::vector<Tile*>> tiles_; 
+    std::vector<std::vector<std::shared_ptr<Unit>>> units_;
+    std::vector<std::vector<std::shared_ptr<Tile>>> tiles_; 
 };
 
 class MapException : public std::exception

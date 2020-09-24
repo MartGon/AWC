@@ -6,9 +6,9 @@ TileType::TileType(const std::string& name) : name_{name}
 
 }
 
-Tile* TileType::CreateTile()
+std::shared_ptr<Tile> TileType::CreateTile()
 {
-    return new Tile(*this);
+    return std::make_shared<Tile>(Tile{*this});
 }
 
 std::string TileType::GetName() const

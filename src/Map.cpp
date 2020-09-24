@@ -9,11 +9,11 @@ Map::Map(int x, int y) : x_{x}, y_{y}
     // TODO: Should change to not use std::vector<std::vector<T>>. [x + y * xSize]
     units_.resize(x);
     for(int i = 0; i < x; i++)
-        units_[i] = std::vector<Unit*>{(long unsigned int)y};
+        units_[i] = std::vector<std::shared_ptr<Unit>>{(long unsigned int)y};
     
     tiles_.resize(x);
     for(int i = 0; i < x; i++)
-        tiles_[i] = std::vector<Tile*>{(long unsigned int)y};
+        tiles_[i] = std::vector<std::shared_ptr<Tile>>{(long unsigned int)y};
     
 }
 
@@ -27,7 +27,7 @@ int Map::GetHeight() const
     return y_;
 }
 
-void Map::AddUnit(int x, int y, Unit* unit)
+void Map::AddUnit(int x, int y, std::shared_ptr<Unit> unit)
 {
     if(IsPositionFree(x, y))
         units_[x][y] = unit;
@@ -35,9 +35,9 @@ void Map::AddUnit(int x, int y, Unit* unit)
         throw MapInvalidUnitPosition(*this, x, y);
 }
 
-Unit* Map::GetUnit(int x, int y) const
+const std::shared_ptr<Unit> Map::GetUnit(int x, int y) const
 {
-    Unit* unit = nullptr;
+    std::shared_ptr<Unit> unit = nullptr;
     if(IsPositionValid(x, y))
         unit = units_[x][y];
     else
@@ -46,7 +46,7 @@ Unit* Map::GetUnit(int x, int y) const
     return unit;
 }
 
-void Map::SetTile(int x, int y, Tile* tile)
+void Map::SetTile(int x, int y, std::shared_ptr<Tile> tile)
 {
     // TODO: Previous tile should be destroyed if using raw pointers
     if(IsPositionValid(x, y))
@@ -55,9 +55,9 @@ void Map::SetTile(int x, int y, Tile* tile)
         throw MapIndexOutOfBounds(*this, x, y);
 }
 
-Tile* Map::GetTile(int x, int y)
+const std::shared_ptr<Tile> Map::GetTile(int x, int y)
 {
-    Tile* tile = nullptr;
+    std::shared_ptr<Tile> tile = nullptr;
     if(IsPositionValid(x, y))
         tile = tiles_[x][y];
     else

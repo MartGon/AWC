@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <string>
 
 class TileType;
@@ -13,9 +14,9 @@ public:
     std::string GetName();
 
 private:
-    Tile(TileType& tileType);
+    Tile(const TileType& tileType);
 
-    TileType& tileType_;
+    const TileType& tileType_;
 
     // State information
     // Team CapturedBy;

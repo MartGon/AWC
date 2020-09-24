@@ -7,10 +7,10 @@ class UnitType;
 class Unit
 {
 public:
-    Unit(UnitType& unitType);
+    Unit(const UnitType& unitType);
 
     const std::string GetName() const;
 
 private:
-    UnitType& unitType_;
+    const UnitType& unitType_;
 };
