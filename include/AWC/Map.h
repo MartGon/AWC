@@ -26,11 +26,11 @@ private:
     bool IsPositionFree(int x, int y) const;
     bool IsPositionValid(int x, int y) const;
 
-    int _x;
-    int _y;
+    int x_;
+    int y_;
 
-    std::vector<std::vector<Unit*>> _units;
-    std::vector<std::vector<Tile*>> _tiles; 
+    std::vector<std::vector<Unit*>> units_;
+    std::vector<std::vector<Tile*>> tiles_; 
 };
 
 class MapException : public std::exception

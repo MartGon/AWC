@@ -15,7 +15,7 @@ public:
 
 private:
 
-    std::string _name;
+    std::string name_;
 
     // Static stuff
     // int defense

@@ -1,12 +1,12 @@
 #include <AWC/Tile.h>
 #include <AWC/TileType.h>
 
-Tile::Tile(TileType& tileType) : _tileType{tileType}
+Tile::Tile(TileType& tileType) : tileType_{tileType}
 {
 
 }
 
 std::string Tile::GetName()
 {
-    return _tileType.GetName();
+    return tileType_.GetName();
 }

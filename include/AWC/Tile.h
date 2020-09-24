@@ -15,7 +15,7 @@ public:
 private:
     Tile(TileType& tileType);
 
-    TileType& _tileType;
+    TileType& tileType_;
 
     // State information
     // Team CapturedBy;

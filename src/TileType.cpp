@@ -1,7 +1,7 @@
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
 
-TileType::TileType(const std::string& name) : _name{name}
+TileType::TileType(const std::string& name) : name_{name}
 {
 
 }
@@ -13,5 +13,5 @@ Tile* TileType::CreateTile()
 
 std::string TileType::GetName() const
 {
-    return _name;
+    return name_;
 }

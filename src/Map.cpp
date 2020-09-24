@@ -4,33 +4,33 @@
 
 // Public interface
 
-Map::Map(int x, int y) : _x{x}, _y{y}
+Map::Map(int x, int y) : x_{x}, y_{y}
 {
     // TODO: Should change to not use std::vector<std::vector<T>>. [x + y * xSize]
-    _units.resize(x);
+    units_.resize(x);
     for(int i = 0; i < x; i++)
-        _units[i] = std::vector<Unit*>{(long unsigned int)y};
+        units_[i] = std::vector<Unit*>{(long unsigned int)y};
     
-    _tiles.resize(x);
+    tiles_.resize(x);
     for(int i = 0; i < x; i++)
-        _tiles[i] = std::vector<Tile*>{(long unsigned int)y};
+        tiles_[i] = std::vector<Tile*>{(long unsigned int)y};
     
 }
 
 int Map::GetWidht() const
 {
-    return _x;
+    return x_;
 }
 
 int Map::GetHeight() const
 {
-    return _y;
+    return y_;
 }
 
 void Map::AddUnit(int x, int y, Unit* unit)
 {
     if(IsPositionFree(x, y))
-        _units[x][y] = unit;
+        units_[x][y] = unit;
     else
         throw MapInvalidUnitPosition(*this, x, y);
 }
@@ -39,7 +39,7 @@ Unit* Map::GetUnit(int x, int y) const
 {
     Unit* unit = nullptr;
     if(IsPositionValid(x, y))
-        unit = _units[x][y];
+        unit = units_[x][y];
     else
         throw MapIndexOutOfBounds(*this, x, y);
 
@@ -50,7 +50,7 @@ void Map::SetTile(int x, int y, Tile* tile)
 {
     // TODO: Previous tile should be destroyed if using raw pointers
     if(IsPositionValid(x, y))
-        _tiles[x][y] = tile;
+        tiles_[x][y] = tile;
     else
         throw MapIndexOutOfBounds(*this, x, y);
 }
@@ -59,7 +59,7 @@ Tile* Map::GetTile(int x, int y)
 {
     Tile* tile = nullptr;
     if(IsPositionValid(x, y))
-        tile = _tiles[x][y];
+        tile = tiles_[x][y];
     else
         throw MapIndexOutOfBounds(*this, x, y);
 
@@ -75,7 +75,7 @@ bool Map::IsPositionFree(int x, int y) const
 
 bool Map::IsPositionValid(int x, int y) const
 {
-    return x >= 0 && x < _x && y >= 0 && y < _y;
+    return x >= 0 && x < x_ && y >= 0 && y < y_;
 }
 
 // Exceptions
