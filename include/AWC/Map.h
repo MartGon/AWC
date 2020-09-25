@@ -18,14 +18,15 @@ public:
 
     void AddUnit(int x, int y, std::shared_ptr<Unit> unit);
     const std::shared_ptr<Unit> GetUnit(int x, int y) const;
+    void RemoveUnit(int x, int y);
 
     void SetTile(int x, int y, std::shared_ptr<Tile> tile);
-    const std::shared_ptr<Tile> GetTile(int x, int y);
-
-private:
+    const std::shared_ptr<Tile> GetTile(int x, int y) const;
 
     bool IsPositionFree(int x, int y) const;
     bool IsPositionValid(int x, int y) const;
+
+private:
 
     int x_;
     int y_;

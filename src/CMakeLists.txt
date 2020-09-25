@@ -1,6 +1,7 @@
 
 add_library(AWCLibrary 
   AWC.cpp
+  Command.cpp
   Map.cpp
   Tile.cpp
   TileType.cpp

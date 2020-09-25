@@ -46,6 +46,14 @@ const std::shared_ptr<Unit> Map::GetUnit(int x, int y) const
     return unit;
 }
 
+void Map::RemoveUnit(int x, int y)
+{
+    if(IsPositionValid(x, y))
+        units_[x][y] = std::shared_ptr<Unit>{nullptr};
+    else
+        throw MapIndexOutOfBounds(*this, x, y);
+}
+
 void Map::SetTile(int x, int y, std::shared_ptr<Tile> tile)
 {
     // TODO: Previous tile should be destroyed if using raw pointers
@@ -55,7 +63,7 @@ void Map::SetTile(int x, int y, std::shared_ptr<Tile> tile)
         throw MapIndexOutOfBounds(*this, x, y);
 }
 
-const std::shared_ptr<Tile> Map::GetTile(int x, int y)
+const std::shared_ptr<Tile> Map::GetTile(int x, int y) const
 {
     std::shared_ptr<Tile> tile = nullptr;
     if(IsPositionValid(x, y))
