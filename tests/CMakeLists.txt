@@ -4,6 +4,7 @@ add_executable(AWCTest
     TileTest.cpp
     UnitTest.cpp
     CommandTest.cpp
+    TilePatternTest.cpp
 )
 
 target_compile_features(AWCTest PRIVATE cxx_std_17)

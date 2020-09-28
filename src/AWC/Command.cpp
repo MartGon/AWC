@@ -42,6 +42,7 @@ bool MoveCommand::CanBeExecuted()
             // Mock code for movePattern check
             // auto movePattern = unit->GetMovePattern()
             // bool canMove = movePattern->CanMove(map_, originX, originY, destX, destY)
+            // Alternative : unit->CanMove(map_, originX, originY, destX, destY)
             canBeExecuted = true;
         }
     }
@@ -59,5 +60,5 @@ InvalidCommandException::InvalidCommandException(const std::string error) : erro
 const char* InvalidCommandException::what() const noexcept
 {
     // TODO: GetLastError from command itself
-    return "";
+    return error_.c_str();
 }
