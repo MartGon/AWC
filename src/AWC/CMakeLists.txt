@@ -6,6 +6,7 @@ add_library(AWCSource
   Unit.cpp
   UnitType.cpp
   TilePattern.cpp
+  MapGraph.cpp
 )
 
 target_include_directories(AWCSource PUBLIC ${CMAKE_SOURCE_DIR}/include)

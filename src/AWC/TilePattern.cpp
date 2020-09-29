@@ -1,6 +1,7 @@
 #include <AWC/TilePattern.h>
 
 #include <vector>
+#include <queue>
 
 #include <AWC/Map.h>
 

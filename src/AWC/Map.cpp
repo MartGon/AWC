@@ -56,7 +56,6 @@ void Map::RemoveUnit(int x, int y)
 
 void Map::SetTile(int x, int y, std::shared_ptr<Tile> tile)
 {
-    // TODO: Previous tile should be destroyed if using raw pointers
     if(IsPositionValid(x, y))
         tiles_[x][y] = tile;
     else
