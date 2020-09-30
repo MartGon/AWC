@@ -1,4 +1,5 @@
 #include <functional>
+#include <string>
 
 template<typename T>
 class Vector2T
@@ -22,6 +23,12 @@ template <typename T>
 inline bool operator==(const Vector2T<T>& a, const Vector2T<T>& b)
 {
     return a.x == b.x && a.y == b.y;
+}
+
+template <typename T>
+inline std::string operator+(const std::string& str, const Vector2T<T>& vec)
+{
+    return str + "(" + std::to_string(vec.x) + ", " + std::to_string(vec.y) + ")";
 }
 
 namespace std {

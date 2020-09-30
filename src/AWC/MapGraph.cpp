@@ -9,14 +9,19 @@ MapNode::MapNode(const Vector2 pos, const int cost) : pos{pos}, cost{cost}
 
 void MapNode::AddNeigbour(Vector2 pos, std::weak_ptr<MapNode> neighbour)
 {
-    neighbours_.insert({pos, neighbour});
+    if(!NeighbourExists(pos))
+        neighbours_.insert({pos, neighbour});
+    else
+        throw MapNodeAlreadyExistingNeigbour(pos);
 }
 
 std::weak_ptr<MapNode> MapNode::GetNeighbour(Vector2 pos)
 {
     std::weak_ptr<MapNode> nei;
-    if(neighbours_.find(pos) != neighbours_.end())
+    if(NeighbourExists(pos))
         nei = neighbours_[pos];
+    else
+        throw MapNodeNoExistingNeighbour(pos);
 
     return nei;
 }
@@ -30,9 +35,24 @@ std::vector<std::weak_ptr<MapNode>> MapNode::GetNeighbours()
     return neighbours;
 }
 
+bool MapNode::NeighbourExists(Vector2 pos)
+{
+    return neighbours_.find(pos) != neighbours_.end();
+}
+
+// Exceptions
+
+MapNodeException::MapNodeException(const std::string& msg, Vector2 pos) : msg_{msg}, pos{pos}
+{
+}
+
+const char* MapNodeException::what() const noexcept
+{
+    return msg_.c_str();
+}
+
 // MapGraph
 
-// TODO: Throw exception if already exists
 std::weak_ptr<MapNode> MapGraph::CreateNode(const Vector2 pos, const int cost)
 {
     std::shared_ptr<MapNode> mapNode;
@@ -41,6 +61,8 @@ std::weak_ptr<MapNode> MapGraph::CreateNode(const Vector2 pos, const int cost)
         mapNode = std::shared_ptr<MapNode>( new MapNode{pos, cost});
         nodes_.insert({pos, mapNode});
     }
+    else
+        throw MapGraphAlreadyExistingNode(pos);
 
     return mapNode;
 }
@@ -50,6 +72,8 @@ std::weak_ptr<MapNode> MapGraph::GetNode(Vector2 pos)
     std::weak_ptr<MapNode> mapNode;
     if(NodeExists(pos))
         mapNode = nodes_[pos];
+    else
+        throw MapGraphNoExistingNode(pos);
 
     return mapNode;
 }
@@ -57,4 +81,16 @@ std::weak_ptr<MapNode> MapGraph::GetNode(Vector2 pos)
 bool MapGraph::NodeExists(Vector2 pos)
 {
     return nodes_.find(pos) != nodes_.end();
+}
+
+// Exceptions
+
+MapGraphException::MapGraphException(const std::string& msg, Vector2 pos) : msg_{msg}, pos{pos}
+{
+
+}
+
+const char* MapGraphException::what() const noexcept
+{
+    return msg_.c_str();
 }
