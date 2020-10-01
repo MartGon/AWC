@@ -2,7 +2,7 @@
 
 // MapNode
 
-MapNode::MapNode(const Vector2 pos, const int cost) : pos{pos}, cost{cost}
+MapNode::MapNode(const Vector2 pos, const int cost) : pos{pos}, cost{cost}, steps{this->cost}, visited{false}
 {
 
 }

@@ -21,7 +21,9 @@ public:
     bool NeighbourExists(Vector2 pos);
 
     const Vector2 pos;
-    const int cost;
+    int cost;
+    int& steps;
+    bool visited;
 private:
     MapNode(const Vector2 pos, const int cost);
 

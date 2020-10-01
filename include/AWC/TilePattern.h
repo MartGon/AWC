@@ -1,9 +1,12 @@
 #include <Utils/Vector2.h>
 
 #include <vector>
+#include <memory>
 
 class Map;
 class Tile;
+class MapNode;
+class MapGraph;
 
 class TilePattern
 {
@@ -12,34 +15,17 @@ public:
     virtual bool IsTileInRange(const Map& map, int originX, int originY, int destX, int destY) = 0;
 };
 
-class ManhatanPattern : public TilePattern
+class ManhattanPattern : public TilePattern
 {
 public:
-    ManhatanPattern(int minDist, int maxDist);
+    ManhattanPattern(int minDist, int maxDist);
 
     bool IsTileInRange(const Map& map, int originX, int originY, int destX, int destY) override;
 
 private:
+
+    std::vector<std::weak_ptr<MapNode>> DiscoverNeighbours(const Map& map, MapGraph& mg, int x, int y, const std::vector<Vector2>& directions);
+
     int minDist_;
     int maxDist_;
-};
-
-class Node
-{
-public:
-    Node(const Map& map, int x, int y, int cost);
-    Node(const Map& map, Vector2 pos, int cost);
-
-    void DiscoverNeighbours(const std::vector<Vector2>& directions);
-
-    void AddNeighbour(Node* neighbour)
-    {
-        neighbours.push_back(neighbour);
-    };
-
-private:
-    Vector2 pos_;
-    int cost_;
-    const Map& map_;
-    std::vector<Node*> neighbours;
 };
