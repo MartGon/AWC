@@ -14,15 +14,10 @@ TEST_CASE("MapNode tests")
     auto neiDown = mg.CreateNode({0, -1}, 1);
 
     auto sOrigin = origin.lock();
-    sOrigin->AddNeigbour(neiRight.lock()->pos, neiRight);
-    sOrigin->AddNeigbour(neiLeft.lock()->pos, neiLeft);
-    sOrigin->AddNeigbour(neiUp.lock()->pos, neiUp);
-    sOrigin->AddNeigbour(neiDown.lock()->pos, neiDown);
-
-    neiRight.lock()->AddNeigbour(sOrigin->pos, origin);
-    neiUp.lock()->AddNeigbour(sOrigin->pos, origin);
-    neiLeft.lock()->AddNeigbour(sOrigin->pos, origin);
-    neiDown.lock()->AddNeigbour(sOrigin->pos, origin);
+    mg.SetNeighbour(sOrigin->pos, neiRight.lock()->pos);
+    mg.SetNeighbour(sOrigin->pos, neiLeft.lock()->pos);
+    mg.SetNeighbour(sOrigin->pos, neiUp.lock()->pos);
+    mg.SetNeighbour(sOrigin->pos, neiDown.lock()->pos);
 
     SUBCASE("Smart pointer test")
     {
@@ -48,7 +43,7 @@ TEST_CASE("MapNode tests")
         {
             sOrigin->GetNeighbour({-1, -1});
         }
-        catch(const MapNodeException& e)
+        catch(const MapNodeNoExistingNeighbour& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.pos == Vector2{-1, -1});
@@ -56,12 +51,12 @@ TEST_CASE("MapNode tests")
         
         try
         {
-            sOrigin->AddNeigbour({-1, 0}, neiRight);
+            mg.SetNeighbour({-1, 0}, {0, 0});
         }
-        catch(const MapNodeException& e)
+        catch(const MapNodeAlreadyExistingNeigbour& e)
         {
             std::cerr << e.what() << '\n';
-            CHECK(e.pos == Vector2{-1, 0});
+            CHECK(e.pos == Vector2{0, 0});
         }
     }
 }
@@ -76,15 +71,10 @@ TEST_CASE("MapGraph test")
     auto neiDown = mg.CreateNode({0, -1}, 1);
 
     auto sOrigin = origin.lock();
-    sOrigin->AddNeigbour(neiRight.lock()->pos, neiRight);
-    sOrigin->AddNeigbour(neiLeft.lock()->pos, neiLeft);
-    sOrigin->AddNeigbour(neiUp.lock()->pos, neiUp);
-    sOrigin->AddNeigbour(neiDown.lock()->pos, neiDown);
-
-    neiRight.lock()->AddNeigbour(sOrigin->pos, origin);
-    neiUp.lock()->AddNeigbour(sOrigin->pos, origin);
-    neiLeft.lock()->AddNeigbour(sOrigin->pos, origin);
-    neiDown.lock()->AddNeigbour(sOrigin->pos, origin);
+    mg.SetNeighbour(sOrigin->pos, neiRight.lock()->pos);
+    mg.SetNeighbour(sOrigin->pos, neiLeft.lock()->pos);
+    mg.SetNeighbour(sOrigin->pos, neiUp.lock()->pos);
+    mg.SetNeighbour(sOrigin->pos, neiDown.lock()->pos);
     
     SUBCASE("Created Nodes always exist")
     {
@@ -110,7 +100,7 @@ TEST_CASE("MapGraph test")
         {
             mg.GetNode({-1, -1});
         }
-        catch(const MapGraphException& e)
+        catch(const MapGraphNoExistingNode& e)
         {
             std::cout << e.what() << '\n';
             CHECK(e.pos == Vector2{-1, -1});
@@ -122,7 +112,7 @@ TEST_CASE("MapGraph test")
         {
             mg.CreateNode({0, 0}, 0);
         }
-        catch(const MapGraphException& e)
+        catch(const MapGraphAlreadyExistingNode& e)
         {
             std::cout << e.what() << '\n';
             CHECK(e.pos == Vector2{0, 0});

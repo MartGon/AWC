@@ -14,7 +14,6 @@ class MapNode
 friend class MapGraph;
 
 public:
-    void AddNeigbour(Vector2 pos, std::weak_ptr<MapNode> neighbour);
     std::weak_ptr<MapNode> GetNeighbour(Vector2 pos);
     std::vector<std::weak_ptr<MapNode>> GetNeighbours();
 
@@ -25,6 +24,7 @@ public:
     int& steps;
     bool visited;
 private:
+    void AddNeigbour(Vector2 pos, std::weak_ptr<MapNode> neighbour);
     MapNode(const Vector2 pos, const int cost);
 
     std::unordered_map<Vector2, std::weak_ptr<MapNode>> neighbours_;
@@ -64,6 +64,7 @@ public:
     std::weak_ptr<MapNode> CreateNode(const Vector2 pos, const int cost);
     std::weak_ptr<MapNode> GetNode(Vector2 pos);
     bool NodeExists(Vector2 pos);
+    void SetNeighbour(Vector2 a, Vector2 b);
 
 private:
     std::unordered_map<Vector2, std::shared_ptr<MapNode>> nodes_;

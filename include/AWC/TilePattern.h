@@ -21,6 +21,8 @@ public:
     ManhattanPattern(int minDist, int maxDist);
 
     bool IsTileInRange(const Map& map, int originX, int originY, int destX, int destY) override;
+    std::vector<Vector2> GetTilesInRange(const Map& map, int originX, int originY) {};
+    std::vector<Vector2> GetTilePathTo(const Map& map, int originX, int originY, int destX, int destY) {};
 
 private:
 

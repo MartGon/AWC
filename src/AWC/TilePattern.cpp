@@ -26,6 +26,7 @@ bool ManhattanPattern::IsTileInRange(const Map& map, int originX, int originY, i
     std::priority_queue<std::weak_ptr<MapNode>, std::vector<std::weak_ptr<MapNode>>, decltype(greater)> prioQueue{greater};
     prioQueue.push(origin);
 
+    // Breadth first search
     while(!prioQueue.empty())
     {
         // Pop first member

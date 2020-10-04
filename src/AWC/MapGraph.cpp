@@ -83,6 +83,20 @@ bool MapGraph::NodeExists(Vector2 pos)
     return nodes_.find(pos) != nodes_.end();
 }
 
+void MapGraph::SetNeighbour(Vector2 a, Vector2 b)
+{
+    if(!NodeExists(a))
+        throw MapGraphNoExistingNode(a);
+    if(!NodeExists(b))
+        throw MapGraphNoExistingNode(b);
+    
+    auto nodeA = nodes_[a];
+    auto nodeB = nodes_[b];
+
+    nodeA->AddNeigbour(b, nodeB);
+    nodeB->AddNeigbour(a, nodeA);
+}
+
 // Exceptions
 
 MapGraphException::MapGraphException(const std::string& msg, Vector2 pos) : msg_{msg}, pos{pos}
