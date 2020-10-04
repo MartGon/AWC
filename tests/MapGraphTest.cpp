@@ -118,4 +118,46 @@ TEST_CASE("MapGraph test")
             CHECK(e.pos == Vector2{0, 0});
         }  
     }
+    SUBCASE("Test SetNeighbour NoExistingNodes exceptions")
+    {
+        try
+        {
+            mg.SetNeighbour({-1, -1}, {1, 0});
+        }
+        catch(const MapGraphNoExistingNode& e)
+        {
+            std::cerr << e.what() << '\n';
+            CHECK(e.pos == Vector2{-1, -1});
+        }
+
+        try
+        {
+            mg.SetNeighbour({1, 0}, {-1, -1});
+        }
+        catch(const MapGraphNoExistingNode& e)
+        {
+            std::cerr << e.what() << '\n';
+            CHECK(e.pos == Vector2{-1, -1});
+        }
+
+        try
+        {
+            mg.SetNeighbour({0, 0}, {1, 0});
+        }
+        catch(const MapNodeAlreadyExistingNeigbour& e)
+        {
+            std::cerr << e.what() << '\n';
+            CHECK(e.pos == Vector2{1, 0});
+        }   
+
+        try
+        {
+            mg.SetNeighbour({1, 0}, {0, 0});
+        }
+        catch(const MapNodeAlreadyExistingNeigbour& e)
+        {
+            std::cerr << e.what() << '\n';
+            CHECK(e.pos == Vector2{0, 0});
+        }
+    }
 }

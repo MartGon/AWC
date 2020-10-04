@@ -64,6 +64,7 @@ public:
     std::weak_ptr<MapNode> CreateNode(const Vector2 pos, const int cost);
     std::weak_ptr<MapNode> GetNode(Vector2 pos);
     bool NodeExists(Vector2 pos);
+    
     void SetNeighbour(Vector2 a, Vector2 b);
 
 private:
