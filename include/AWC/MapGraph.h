@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Utils/Vector2.h>
 
 #include <exception>
@@ -60,12 +62,17 @@ public:
 class MapGraph
 {
 public:
-
+    MapGraph(){}
+    MapGraph(MapGraph&& mg);
     std::weak_ptr<MapNode> CreateNode(const Vector2 pos, const int cost);
     std::weak_ptr<MapNode> GetNode(Vector2 pos);
     bool NodeExists(Vector2 pos);
     
     void SetNeighbour(Vector2 a, Vector2 b);
+
+#ifdef _DEBUG
+    bool moved = false;
+#endif
 
 private:
     std::unordered_map<Vector2, std::shared_ptr<MapNode>> nodes_;

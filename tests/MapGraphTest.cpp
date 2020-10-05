@@ -160,4 +160,14 @@ TEST_CASE("MapGraph test")
             CHECK(e.pos == Vector2{0, 0});
         }
     }
+    SUBCASE("Check move constructor")
+    {
+        MapGraph mg;
+        MapGraph mg2{std::move(mg)};
+        MapGraph mg3 = std::move(mg);
+#ifdef _DEBUG
+        CHECK(mg2.moved == true);
+        CHECK(mg3.moved == true);
+#endif 
+    }
 }

@@ -1,5 +1,7 @@
 #include <AWC/MapGraph.h>
 
+#include <iostream>
+
 // MapNode
 
 MapNode::MapNode(const Vector2 pos, const int cost) : pos{pos}, cost{cost}, steps{this->cost}, visited{false}
@@ -52,6 +54,14 @@ const char* MapNodeException::what() const noexcept
 }
 
 // MapGraph
+
+MapGraph::MapGraph(MapGraph&& other)
+{
+    nodes_ = std::move(other.nodes_);
+#ifdef _DEBUG
+    moved = true;
+#endif
+}
 
 std::weak_ptr<MapNode> MapGraph::CreateNode(const Vector2 pos, const int cost)
 {
