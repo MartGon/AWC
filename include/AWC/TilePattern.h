@@ -1,33 +1,23 @@
+#pragma once
+
+#include <AWC/MapGraph.h>
 #include <Utils/Vector2.h>
 
 #include <vector>
-#include <memory>
-
-class Map;
-class Tile;
-class MapNode;
-class MapGraph;
 
 class TilePattern
 {
 public:
-    virtual ~TilePattern() {};
-    virtual bool IsTileInRange(const Map& map, int originX, int originY, int destX, int destY) = 0;
-};
+    TilePattern(Vector2 origin, MapGraph mg);
+    bool IsTileInRange(Vector2 dest);
 
-class ManhattanPattern : public TilePattern
-{
-public:
-    ManhattanPattern(int minDist, int maxDist);
-
-    bool IsTileInRange(const Map& map, int originX, int originY, int destX, int destY) override;
-    std::vector<Vector2> GetTilesInRange(const Map& map, int originX, int originY) {};
-    std::vector<Vector2> GetTilePathTo(const Map& map, int originX, int originY, int destX, int destY) {};
+    // TODO: This may become a problem for AttackPatterns
+    // Could still return the path but only with nodes with cost > minSteps;
+    std::vector<Vector2> GetPathToTile(Vector2 dest);
+    std::vector<Vector2> GetTilePosInRange();
+    Vector2 GetOrigin();
 
 private:
-
-    std::vector<std::weak_ptr<MapNode>> DiscoverNeighbours(const Map& map, MapGraph& mg, int x, int y, const std::vector<Vector2>& directions);
-
-    int minDist_;
-    int maxDist_;
+    Vector2 origin_;
+    MapGraph mg_;
 };
