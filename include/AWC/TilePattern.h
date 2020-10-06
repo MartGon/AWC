@@ -1,6 +1,6 @@
 #pragma once
 
-#include <AWC/MapGraph.h>
+#include <AWC/TileGraph.h>
 #include <Utils/Vector2.h>
 
 #include <vector>
@@ -8,7 +8,7 @@
 class TilePattern
 {
 public:
-    TilePattern(Vector2 origin, MapGraph mg);
+    TilePattern(Vector2 origin, TileGraph mg);
     bool IsTileInRange(Vector2 dest);
 
     // TODO: This may become a problem for AttackPatterns
@@ -19,5 +19,5 @@ public:
 
 private:
     Vector2 origin_;
-    MapGraph mg_;
+    TileGraph mg_;
 };

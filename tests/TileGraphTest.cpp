@@ -1,12 +1,12 @@
 #include "doctest.h"
 
-#include <AWC/MapGraph.h>
+#include <AWC/TileGraph.h>
 
 #include <iostream>
 
-TEST_CASE("MapNode tests")
+TEST_CASE("TileNode tests")
 {
-    MapGraph mg;
+    TileGraph mg;
     auto origin = mg.CreateNode({0, 0}, 0);
     auto neiRight = mg.CreateNode({1, 0}, 1);
     auto neiLeft = mg.CreateNode({-1, 0}, 1);
@@ -43,7 +43,7 @@ TEST_CASE("MapNode tests")
         {
             sOrigin->GetNeighbour({-1, -1});
         }
-        catch(const MapNodeNoExistingNeighbour& e)
+        catch(const TileNodeNoExistingNeighbour& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.pos == Vector2{-1, -1});
@@ -61,9 +61,9 @@ TEST_CASE("MapNode tests")
     }
 }
 
-TEST_CASE("MapGraph test")
+TEST_CASE("TileGraph test")
 {
-    MapGraph mg;
+    TileGraph mg;
     auto origin = mg.CreateNode({0, 0}, 0);
     auto neiRight = mg.CreateNode({1, 0}, 1);
     auto neiLeft = mg.CreateNode({-1, 0}, 1);
@@ -100,7 +100,7 @@ TEST_CASE("MapGraph test")
         {
             mg.GetNode({-1, -1});
         }
-        catch(const MapGraphNoExistingNode& e)
+        catch(const TileGraphNoExistingNode& e)
         {
             std::cout << e.what() << '\n';
             CHECK(e.pos == Vector2{-1, -1});
@@ -112,7 +112,7 @@ TEST_CASE("MapGraph test")
         {
             mg.CreateNode({0, 0}, 0);
         }
-        catch(const MapGraphAlreadyExistingNode& e)
+        catch(const TileGraphAlreadyExistingNode& e)
         {
             std::cout << e.what() << '\n';
             CHECK(e.pos == Vector2{0, 0});
@@ -124,7 +124,7 @@ TEST_CASE("MapGraph test")
         {
             mg.SetNeighbour({-1, -1}, {1, 0});
         }
-        catch(const MapGraphNoExistingNode& e)
+        catch(const TileGraphNoExistingNode& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.pos == Vector2{-1, -1});
@@ -134,7 +134,7 @@ TEST_CASE("MapGraph test")
         {
             mg.SetNeighbour({1, 0}, {-1, -1});
         }
-        catch(const MapGraphNoExistingNode& e)
+        catch(const TileGraphNoExistingNode& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.pos == Vector2{-1, -1});
@@ -162,9 +162,9 @@ TEST_CASE("MapGraph test")
     }
     SUBCASE("Check move constructor")
     {
-        MapGraph mg;
-        MapGraph mg2{std::move(mg)};
-        MapGraph mg3 = std::move(mg);
+        TileGraph mg;
+        TileGraph mg2{std::move(mg)};
+        TileGraph mg3 = std::move(mg);
 #ifdef _DEBUG
         CHECK(mg2.moved == true);
         CHECK(mg3.moved == true);

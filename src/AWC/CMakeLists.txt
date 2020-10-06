@@ -8,7 +8,8 @@ add_library(AWCSource
   TilePattern.cpp
   TilePatternDescriptor.cpp
   TilePatternDescriptorType.cpp
-  MapGraph.cpp
+  TileGraph.cpp
+  TileNode.cpp
 )
 
 target_include_directories(AWCSource PUBLIC ${CMAKE_SOURCE_DIR}/include)

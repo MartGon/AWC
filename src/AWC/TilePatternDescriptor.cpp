@@ -4,16 +4,16 @@
 #include <functional>
 
 #include <AWC/Map.h>
-#include <AWC/MapGraph.h>
+#include <AWC/TileGraph.h>
 
 TilePatternDescriptor::TilePatternDescriptor(int minDist, int maxDist, const TilePatternDescriptorType& type) : minDist_{minDist}, maxDist_{maxDist}, type_{type}
 {
 
 }
 
-std::vector<std::weak_ptr<MapNode>> TilePatternDescriptor::DiscoverNeighbours(const Map& map, MapGraph& mg, int x, int y, const std::vector<Vector2>& directions)
+std::vector<std::weak_ptr<TileNode>> TilePatternDescriptor::DiscoverNeighbours(const Map& map, TileGraph& mg, int x, int y, const std::vector<Vector2>& directions)
 {
-    std::vector<std::weak_ptr<MapNode>> neighbours;
+    std::vector<std::weak_ptr<TileNode>> neighbours;
 
     Vector2 pos{x, y};
     auto current = mg.GetNode({x, y});
@@ -23,7 +23,7 @@ std::vector<std::weak_ptr<MapNode>> TilePatternDescriptor::DiscoverNeighbours(co
         
         if(map.IsPositionValid(tilePos.x, tilePos.y))
         {
-            std::weak_ptr<MapNode> neighbour;
+            std::weak_ptr<TileNode> neighbour;
             if(mg.NodeExists(tilePos))
                 neighbour = mg.GetNode(tilePos);
             else

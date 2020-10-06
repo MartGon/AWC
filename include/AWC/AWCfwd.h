@@ -5,5 +5,5 @@ class TilePattern;
 class TilePatternDescriptor;
 class TilePatternDescriptorType;
 class Unit;
-class MapGraph;
-class MapNode;
+class TileGraph;
+class TileNode;
