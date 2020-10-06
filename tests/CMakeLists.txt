@@ -6,6 +6,7 @@ add_executable(AWCTest
     CommandTest.cpp
     TilePatternTest.cpp
     TileGraphTest.cpp
+    STLUtilsTest.cpp
 )
 
 target_compile_features(AWCTest PRIVATE cxx_std_17)

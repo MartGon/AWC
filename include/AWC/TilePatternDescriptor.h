@@ -2,20 +2,29 @@
 #include <AWC/AWCfwd.h>
 
 #include <vector>
+#include <unordered_map>
 #include <memory>
 
 
 class TilePatternDescriptor
 {
 public:
-    std::shared_ptr<TilePattern> CreateTilePattern(Vector2 origin);
-    std::shared_ptr<TilePattern> CreateTilePatternWithDestination(Vector2 origin, Vector2 destination);
+    TilePatternDescriptor(const std::vector<Vector2>& directions);
+    TilePatternDescriptor(std::vector<Vector2> directions, const std::unordered_map<Vector2, std::vector<Vector2>>& excludedDirections);
+
+    void SetExcludedDirections(Vector2 dir, std::vector<Vector2> excludedDirections);
+    std::vector<Vector2> GetLockedDirections(Vector2 dir);
+
+    std::shared_ptr<TilePattern> CalculateTilePattern(Vector2 origin, int range);
+    std::shared_ptr<TilePattern> CalculatePatternWithDestination(Vector2 origin, Vector2 destination);
 
 private:
-    TilePatternDescriptor(int minDist, int maxDist, const TilePatternDescriptorType& type);
+
+    std::unordered_map<Vector2, std::vector<Vector2>> GenerateDefaultLockedDirections(const std::vector<Vector2>& directions);
+    std::unordered_map<Vector2, std::vector<Vector2>> GenerateLockedDirectionsFromExcluded(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& excludedDirections);
+
     std::vector<std::weak_ptr<TileNode>> DiscoverNeighbours(const Map& map, TileGraph& mg, int x, int y, const std::vector<Vector2>& directions);
 
-    int minDist_;
-    int maxDist_;
-    const TilePatternDescriptorType& type_;
+    std::vector<Vector2> directions_;
+    std::unordered_map<Vector2, std::vector<Vector2>> lockedDirectionsMap_;
 };
