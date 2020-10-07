@@ -8,6 +8,20 @@
 
 // Public
 
+// Factory methods
+TilePatternDescriptor TilePatternDescriptor::CreateTilePatternDescriptorByLockedDirectionsMap(const std::vector<Vector2>& directions, 
+    const std::unordered_map<Vector2, std::vector<Vector2>>& lockedDirectionsMap)
+{
+    return TilePatternDescriptor{directions, lockedDirectionsMap};
+}
+
+TilePatternDescriptor TilePatternDescriptor::CreateTilePatternDescriptorByExclusiveDirectionsMap(const std::vector<Vector2>& directions, 
+    const std::unordered_map<Vector2, std::vector<Vector2>>& exclusiveDirectionsMap)
+{
+    return TilePatternDescriptor{directions, GenerateLockedDirectionsMap(directions, exclusiveDirectionsMap)};
+}
+
+// Constructors
 TilePatternDescriptor::TilePatternDescriptor(const std::vector<Vector2>& directions) : 
     directions_{directions}, lockedDirectionsMap_{GenerateDefaultLockedDirections(directions)}
 {
@@ -15,12 +29,13 @@ TilePatternDescriptor::TilePatternDescriptor(const std::vector<Vector2>& directi
 }
 
 TilePatternDescriptor::TilePatternDescriptor(std::vector<Vector2> directions, 
-    const std::unordered_map<Vector2, std::vector<Vector2>>& excludedDirectionsMap) : 
-    directions_{directions}, lockedDirectionsMap_{GenerateLockedDirectionsMap(directions, excludedDirectionsMap)}
+    std::unordered_map<Vector2, std::vector<Vector2>> lockedDirectionsMap) : 
+    directions_{directions}, lockedDirectionsMap_{lockedDirectionsMap}
 {
 
 }
 
+// Methods
 std::vector<Vector2> TilePatternDescriptor::GetLockedDirections(Vector2 dir)
 {
     return lockedDirectionsMap_.at(dir);
@@ -72,27 +87,27 @@ std::unordered_map<Vector2, std::vector<Vector2>> TilePatternDescriptor::Generat
 }
 
 std::unordered_map<Vector2, std::vector<Vector2>> TilePatternDescriptor::GenerateLockedDirectionsMap(const std::vector<Vector2>& directions, 
-    const std::unordered_map<Vector2, std::vector<Vector2>>& excludedDirectionsMap)
+    const std::unordered_map<Vector2, std::vector<Vector2>>& exclusiveDirectionsMap)
 {
     std::unordered_map<Vector2, std::vector<Vector2>> lockedDirectionsMap;
 
-    for(const auto pair : excludedDirectionsMap)
+    for(const auto pair : exclusiveDirectionsMap)
     {
         auto dir = pair.first;
-        auto excludedDirections = pair.second;
+        auto exclusiveDirections = pair.second;
 
-        auto lockedDirectionsForDir = GenerateLockedDirections(directions, excludedDirections);
+        auto lockedDirectionsForDir = GenerateLockedDirections(directions, exclusiveDirections);
         lockedDirectionsMap.insert({dir, lockedDirectionsForDir});
     }
 
     return lockedDirectionsMap;
 }
 
-std::vector<Vector2> TilePatternDescriptor::GenerateLockedDirections(const std::vector<Vector2>& directions, const std::vector<Vector2>& excludedDirections)
+std::vector<Vector2> TilePatternDescriptor::GenerateLockedDirections(const std::vector<Vector2>& directions, const std::vector<Vector2>& exclusiveDirections)
 {
     std::vector<Vector2> lockedDirections = directions;
-    for(const auto excludedDir : excludedDirections)
-        VectorUtils::RemoveByValue(lockedDirections, excludedDir);
+    for(const auto exclusiveDir : exclusiveDirections)
+        VectorUtils::RemoveByValue(lockedDirections, exclusiveDir);
 
     return lockedDirections;
 }
