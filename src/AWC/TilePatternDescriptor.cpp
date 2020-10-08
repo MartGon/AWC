@@ -23,7 +23,7 @@ TilePatternDescriptor TilePatternDescriptor::CreateTilePatternDescriptorByExclus
 
 // Constructors
 TilePatternDescriptor::TilePatternDescriptor(const std::vector<Vector2>& directions) : 
-    directions_{directions}, lockedDirectionsMap_{GenerateDefaultLockedDirections(directions)}
+    directions_{directions}, lockedDirectionsMap_{GenerateDefaultLockedDirectionsMap(directions)}
 {
 
 }
@@ -71,7 +71,7 @@ std::vector<std::weak_ptr<TileNode>> TilePatternDescriptor::DiscoverNeighbours(c
     return neighbours;
 }
 
-std::unordered_map<Vector2, std::vector<Vector2>> TilePatternDescriptor::GenerateDefaultLockedDirections(const std::vector<Vector2>& directions)
+std::unordered_map<Vector2, std::vector<Vector2>> TilePatternDescriptor::GenerateDefaultLockedDirectionsMap(const std::vector<Vector2>& directions)
 {
     std::unordered_map<Vector2, std::vector<Vector2>> lockedDirectionsMap;
 
