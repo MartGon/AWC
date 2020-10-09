@@ -22,7 +22,7 @@ public:
 
 private:
     TilePatternDescriptor(const std::vector<Vector2>& directions);
-    TilePatternDescriptor(std::vector<Vector2> directions, std::unordered_map<Vector2, std::vector<Vector2>> lockedDirectionsMap);
+    TilePatternDescriptor(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& lockedDirectionsMap);
 
     static std::unordered_map<Vector2, std::vector<Vector2>> GenerateDefaultLockedDirectionsMap(const std::vector<Vector2>& directions);
     static std::unordered_map<Vector2, std::vector<Vector2>> GenerateLockedDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& exclusiveDirections);

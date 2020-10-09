@@ -28,8 +28,8 @@ TilePatternDescriptor::TilePatternDescriptor(const std::vector<Vector2>& directi
 
 }
 
-TilePatternDescriptor::TilePatternDescriptor(std::vector<Vector2> directions, 
-    std::unordered_map<Vector2, std::vector<Vector2>> lockedDirectionsMap) : 
+TilePatternDescriptor::TilePatternDescriptor(const std::vector<Vector2>& directions, 
+    const std::unordered_map<Vector2, std::vector<Vector2>>& lockedDirectionsMap) : 
     directions_{directions}, lockedDirectionsMap_{lockedDirectionsMap}
 {
 
