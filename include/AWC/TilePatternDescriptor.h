@@ -14,8 +14,8 @@ public:
     static TilePatternDescriptor CreateTilePatternDescriptorByLockedDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& lockedDirectionsMap);
     static TilePatternDescriptor CreateTilePatternDescriptorByExclusiveDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& exclusiveDirectionsMap);
 
-    std::shared_ptr<TilePattern> CalculateTilePattern(Vector2 origin, int range);
-    std::shared_ptr<TilePattern> CalculatePatternWithDestination(Vector2 origin, Vector2 destination);
+    std::shared_ptr<TilePattern> CalculateTilePattern(TilePatternConstraints constraints);
+    std::shared_ptr<TilePattern> CalculatePatternWithDestination(TilePatternConstraints constraints, Vector2 destination);
 
     std::vector<Vector2> GetDirections();
 

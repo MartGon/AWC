@@ -1,11 +1,13 @@
 add_library(AWCSource 
   Command.cpp
+  CostTable.cpp
   Map.cpp
   Tile.cpp
   TileType.cpp
   Unit.cpp
   UnitType.cpp
   TilePattern.cpp
+  TilePatternConstraints.cpp
   TilePatternDescriptor.cpp
   TileGraph.cpp
   TileNode.cpp

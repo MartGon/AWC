@@ -2,6 +2,7 @@ class Command;
 class Map;
 class Tile;
 class TilePattern;
+class TilePatternConstraints;
 class TilePatternDescriptor;
 class Unit;
 class TileGraph;

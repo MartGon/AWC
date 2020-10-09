@@ -98,3 +98,18 @@ TEST_CASE("Configuration interface tests")
         CHECK(manhattanTilePattern.GetLockedDirections(n) == std::vector{e, w});
     }
 }
+
+TEST_CASE("TilePattern creation tests")
+{
+    // Construct manhattan tile Pattern
+    Vector2 e = {1, 0};
+    Vector2 w = {-1, 0};
+    Vector2 n = {0, 1};
+    Vector2 s = {0, -1};
+    std::vector<Vector2> directions = {e, w, n, s};
+
+    // Map
+    Map map{10, 10};
+
+    auto manhattanTilePattern = TilePatternDescriptor::CreateTilePatternDescriptor(directions);
+}
