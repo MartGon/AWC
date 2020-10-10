@@ -10,7 +10,7 @@ class TileType
 public:
     TileType(unsigned int id, const std::string& name);
 
-    std::shared_ptr<Tile> CreateTile();
+    std::shared_ptr<Tile> CreateTile() const;
 
     unsigned int GetId() const;
     std::string GetName() const;

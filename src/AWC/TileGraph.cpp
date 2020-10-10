@@ -4,15 +4,18 @@
 
 // TileGraph
 
-TileGraph::TileGraph(TileGraph&& other)
+TileGraph::TileGraph(TileGraph& tg) : nodes_{tg.nodes_}
 {
-    nodes_ = std::move(other.nodes_);
+}
+
+TileGraph::TileGraph(TileGraph&& other) : nodes_{std::move(other.nodes_)}
+{
 #ifdef _DEBUG
     moved = true;
 #endif
 }
 
-std::weak_ptr<TileNode> TileGraph::CreateNode(const Vector2 pos, const int cost)
+std::weak_ptr<TileNode> TileGraph::CreateNode(const Vector2 pos, const unsigned int cost)
 {
     std::shared_ptr<TileNode> mapNode;
     if(!NodeExists(pos))
@@ -26,10 +29,12 @@ std::weak_ptr<TileNode> TileGraph::CreateNode(const Vector2 pos, const int cost)
     return mapNode;
 }
 
-std::weak_ptr<TileNode> TileGraph::CreateNode(const Vector2 pos, const int cost, const Vector2 nei)
+std::weak_ptr<TileNode> TileGraph::CreateNode(const Vector2 pos, const unsigned int cost, const Vector2 nei)
 {
     auto mapNode = CreateNode(pos, cost);
     SetNeighbour(pos, nei);
+
+    return mapNode;
 }
 
 std::weak_ptr<TileNode> TileGraph::GetNode(Vector2 pos)

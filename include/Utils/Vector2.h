@@ -31,6 +31,11 @@ inline Vector2T<T> operator-(const Vector2T<T>& a)
 {
     return Vector2T<T>{-a.x, -a.y};
 }
+template<typename T>
+inline Vector2T<T> operator-(const Vector2T<T>& a, const Vector2T<T>& b)
+{
+    return Vector2T<T>{a.x - b.x, a.y - b.y};
+}
 
 template <typename T>
 inline bool operator==(const Vector2T<T>& a, const Vector2T<T>& b)

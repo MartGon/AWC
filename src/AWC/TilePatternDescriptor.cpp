@@ -1,8 +1,12 @@
+#include <AWC/TilePattern.h>
 #include <AWC/TilePatternDescriptor.h>
+#include <AWC/TilePatternConstraints.h>
+#include <AWC/CostTable.h>
 #include <AWC/Map.h>
 #include <AWC/TileGraph.h>
 #include <Utils/STLUtils.h>
 
+#include <limits>
 #include <queue>
 #include <functional>
 
@@ -82,6 +86,59 @@ void TilePatternDescriptor::SetLockedDirections(Vector2 dir, const std::vector<V
     lockedDirectionsMap_[dir] = lockedDirections;
 }
 
+// Main methods
+
+std::shared_ptr<TilePattern> TilePatternDescriptor::CalculateTilePattern(Vector2 origin, TilePatternConstraints constraints)
+{
+    // Create mapGraph
+    TileGraph tg;
+    auto originNode = tg.CreateNode(origin, 0);
+
+    // Create prioQueue
+    // PrioQueue pop values in reverse order
+    auto greater = [](std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b) { return a.lock()->cost > b.lock()->cost;};
+    std::priority_queue<std::weak_ptr<TileNode>, std::vector<std::weak_ptr<TileNode>>, decltype(greater)> prioQueue{greater};
+    prioQueue.push(originNode);
+
+    while(!prioQueue.empty())
+    {
+        // Pop first member
+        auto node = prioQueue.top().lock();
+        prioQueue.pop();
+
+        // Get its neighbours
+        auto discoverDirections = GetDiscoverDirections(node);
+        auto neighbours = DiscoverNeighbours(constraints.map, tg, node->pos, discoverDirections);
+        for(const auto& nei : neighbours)
+        {
+            auto sharedNei = nei.lock();
+
+            // Check if accumulated cost to this neighbour is lower than previous
+            if(auto tile = constraints.map.GetTile(sharedNei->pos.x, sharedNei->pos.y))
+            {
+                int neiCost = constraints.tileCostTable.GetCost(tile->GetId());
+                int calculatedCost = node->cost + neiCost;
+                if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.maxRange)
+                {
+                    // Push it to queue if that's the case
+                    sharedNei->cost = calculatedCost;
+                    prioQueue.push(nei);
+                }
+            }
+        }
+    }
+
+    // Create TilePattern
+    auto tp = std::shared_ptr<TilePattern>(new TilePattern{origin, tg});
+
+    return tp;
+}
+
+std::shared_ptr<TilePattern> TilePatternDescriptor::CalculateTilePattern(Vector2 origin, Vector2 destination, TilePatternConstraints constraints)
+{
+
+}
+
 // Private
 
 std::unordered_map<Vector2, std::vector<Vector2>> TilePatternDescriptor::GenerateDefaultLockedDirectionsMap(const std::vector<Vector2>& directions)
@@ -127,16 +184,15 @@ std::vector<Vector2> TilePatternDescriptor::GenerateLockedDirections(const std::
 }
 
 std::vector<std::weak_ptr<TileNode>> TilePatternDescriptor::DiscoverNeighbours(const Map& map, TileGraph& mg, 
-    int x, int y, const std::vector<Vector2>& directions)
+    Vector2 pos, const std::vector<Vector2>& directions)
 {
     std::vector<std::weak_ptr<TileNode>> neighbours;
 
-    Vector2 pos{x, y};
-    auto current = mg.GetNode({x, y});
+    auto current = mg.GetNode(pos);
     for(const auto& dir : directions)
     {
         Vector2 tilePos = pos + dir;
-        
+    
         if(map.IsPositionValid(tilePos.x, tilePos.y))
         {
             std::weak_ptr<TileNode> neighbour;
@@ -144,7 +200,7 @@ std::vector<std::weak_ptr<TileNode>> TilePatternDescriptor::DiscoverNeighbours(c
                 neighbour = mg.GetNode(tilePos);
             else
             {
-                neighbour = mg.CreateNode(tilePos, -1, pos);
+                neighbour = mg.CreateNode(tilePos, std::numeric_limits<unsigned int>::max(), pos);
             }
 
             neighbours.push_back(neighbour);
@@ -152,6 +208,25 @@ std::vector<std::weak_ptr<TileNode>> TilePatternDescriptor::DiscoverNeighbours(c
     }
 
     return neighbours;
+}
+
+std::vector<Vector2> TilePatternDescriptor::GetDiscoverDirections(std::weak_ptr<TileNode> tileNode)
+{
+    auto directions = GetDirections();
+
+    auto sTileNode = tileNode.lock();
+
+    auto lowest = [](std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b) {
+            return a.lock()->cost < b.lock()->cost;
+        };
+    auto neighbour = sTileNode->GetNeighbourBySortCriteria(lowest);
+    if(auto sNeigbour = neighbour.lock())
+    {
+        Vector2 movement = sTileNode->pos - sNeigbour->pos;
+        directions = GetLockedDirections(movement);
+    }
+
+    return directions;
 }
 
 // Exceptions

@@ -1,4 +1,5 @@
 class Command;
+class CostTable;
 class Map;
 class Tile;
 class TilePattern;

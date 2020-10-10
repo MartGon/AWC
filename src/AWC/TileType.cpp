@@ -6,7 +6,7 @@ TileType::TileType(unsigned int id, const std::string& name) : id_{id}, name_{na
 
 }
 
-std::shared_ptr<Tile> TileType::CreateTile()
+std::shared_ptr<Tile> TileType::CreateTile() const
 {
     return std::make_shared<Tile>(Tile{*this});
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <AWC/AWCfwd.h>
+
 #include <AWC/TileGraph.h>
 #include <Utils/Vector2.h>
 
@@ -7,9 +9,12 @@
 
 class TilePattern
 {
+friend class TilePatternDescriptor;
+
 public:
-    TilePattern(Vector2 origin, TileGraph mg);
-    bool IsTileInRange(Vector2 dest);
+    unsigned int GetTileCost(Vector2 dest);
+    bool IsTileInPattern(Vector2 dest);
+    bool IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange = 0);
 
     // TODO: This may become a problem for AttackPatterns
     // Could still return the path but only with nodes with cost > minSteps;
@@ -18,6 +23,8 @@ public:
     Vector2 GetOrigin();
 
 private:
+    TilePattern(Vector2 origin, TileGraph mg);
+
     Vector2 origin_;
-    TileGraph mg_;
+    TileGraph tg_;
 };

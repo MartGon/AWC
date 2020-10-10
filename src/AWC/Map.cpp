@@ -1,4 +1,5 @@
 #include <AWC/Map.h>
+#include <AWC/TileType.h>
 
 #include <sstream>
 
@@ -121,4 +122,17 @@ const std::string MapInvalidUnitPosition::GetErrorMessage() const
     std::stringstream ss;
     ss << "MapInvalidUnitPosition: There was a unit already in Pos(" << _x << ", " << _y << ")\n";
     return ss.str();
+}
+
+// MapUtils
+
+void MapUtils::FillMap(Map& map, const TileType& tileType)
+{
+    for(auto i = 0; i < map.GetWidht(); i++)
+    {
+        for(auto j = 0; j < map.GetHeight(); j++)
+        {
+            map.SetTile(i, j, tileType.CreateTile());
+        }
+    }
 }

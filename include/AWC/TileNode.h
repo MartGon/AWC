@@ -21,13 +21,13 @@ public:
 
     bool NeighbourExists(Vector2 pos);
 
+    std::weak_ptr<TileNode> GetNeighbourBySortCriteria(std::function<bool(std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b)> sortCriteria);
+
     const Vector2 pos;
-    int cost;
-    int& steps;
-    bool visited;
+    unsigned int cost;
 private:
     void AddNeigbour(Vector2 pos, std::weak_ptr<TileNode> neighbour);
-    TileNode(const Vector2 pos, const int cost);
+    TileNode(const Vector2 pos, const unsigned int cost);
 
     std::unordered_map<Vector2, std::weak_ptr<TileNode>> neighbours_;
 };

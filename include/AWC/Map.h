@@ -5,6 +5,7 @@
 #include <exception>
 #include <string>
 
+#include <AWC/AWCfwd.h>
 #include <AWC/Unit.h>
 #include <AWC/Tile.h>
 
@@ -65,3 +66,10 @@ private:
     int _y;
     const std::string GetErrorMessage() const override;
 };
+
+// MapUtils
+
+namespace MapUtils
+{
+    void FillMap(Map& map, const TileType& tileType);
+}

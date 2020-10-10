@@ -1,6 +1,6 @@
 #include <AWC/TileNode.h>
 
-TileNode::TileNode(const Vector2 pos, const int cost) : pos{pos}, cost{cost}, steps{this->cost}, visited{false}
+TileNode::TileNode(const Vector2 pos, const unsigned int cost) : pos{pos}, cost{cost}
 {
 
 }
