@@ -199,4 +199,14 @@ TEST_CASE("GetNeigbours by criteria")
         auto match = sOrigin->GetNeighbourBySortCriteria(highest);
         CHECK(match.lock()->pos == neiUp.lock()->pos);
     }
+    SUBCASE("No neighbours")
+    {
+        auto otherNode = mg.CreateNode({1, 1}, 0);
+        auto whatever = [](std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b) {
+            return true;
+        };
+
+        auto noMatch = otherNode.lock()->GetNeighbourBySortCriteria(whatever);
+        CHECK(noMatch.lock() == nullptr);
+    }
 }
