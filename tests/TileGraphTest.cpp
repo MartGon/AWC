@@ -171,3 +171,32 @@ TEST_CASE("TileGraph test")
 #endif 
     }
 }
+
+TEST_CASE("GetNeigbours by criteria")
+{
+    TileGraph mg;
+    auto origin = mg.CreateNode({0, 0}, 0);
+    auto neiRight = mg.CreateNode({1, 0}, 1, {0, 0});
+    auto neiLeft = mg.CreateNode({-1, 0}, 2, {0, 0});
+    auto neiUp = mg.CreateNode({0, 1}, 3, {0, 0});
+    auto neiDown = mg.CreateNode({0, -1}, 2, {0, 0});
+
+    auto sOrigin = origin.lock();
+
+    SUBCASE("By lowest cost")
+    {
+        auto lowest = [](std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b) {
+            return a.lock()->cost < b.lock()->cost;
+        };
+        auto match = sOrigin->GetNeighbourBySortCriteria(lowest);
+        CHECK(match.lock()->pos == neiRight.lock()->pos);
+    }
+    SUBCASE("By highest cost")
+    {
+        auto highest = [](std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b) {
+            return a.lock()->cost > b.lock()->cost;
+        };
+        auto match = sOrigin->GetNeighbourBySortCriteria(highest);
+        CHECK(match.lock()->pos == neiUp.lock()->pos);
+    }
+}

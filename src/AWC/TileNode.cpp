@@ -38,6 +38,20 @@ bool TileNode::NeighbourExists(Vector2 pos)
     return neighbours_.find(pos) != neighbours_.end();
 }
 
+std::weak_ptr<TileNode> TileNode::GetNeighbourBySortCriteria(std::function<bool(std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b)> sortCriteria)
+{
+    std::weak_ptr<TileNode> match = std::shared_ptr<TileNode>{nullptr};
+
+    auto neighbours = GetNeighbours();
+    if(!neighbours.empty())
+    {
+        std::sort(neighbours.begin(), neighbours.end(), sortCriteria);
+        match = neighbours.front();
+    }
+
+    return match;
+}
+
 // Exceptions
 
 TileNodeException::TileNodeException(const std::string& msg, Vector2 pos) : msg_{msg}, pos{pos}
