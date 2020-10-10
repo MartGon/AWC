@@ -42,3 +42,8 @@ The number of tiles a unit can move isn't always unlimited. The **King** and the
 - **Decorator**: Create a common interface, which every decorator class inherits from. It makes changes to the params the main methods receives before calling the method in the main class.
     
 
+## To be added
+
+- **Composition**
+
+- Replace every *map* word for *set* where it fits.
