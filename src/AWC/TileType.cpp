@@ -1,7 +1,7 @@
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
 
-TileType::TileType(const std::string& name) : name_{name}
+TileType::TileType(unsigned int id, const std::string& name) : id_{id}, name_{name}
 {
 
 }
@@ -9,6 +9,11 @@ TileType::TileType(const std::string& name) : name_{name}
 std::shared_ptr<Tile> TileType::CreateTile()
 {
     return std::make_shared<Tile>(Tile{*this});
+}
+
+unsigned int TileType::GetId() const
+{
+    return id_;
 }
 
 std::string TileType::GetName() const

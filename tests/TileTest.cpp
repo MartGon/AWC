@@ -7,7 +7,7 @@
 TEST_CASE("Tiles have some properties")
 {
     std::string tileName = "Grass";
-    TileType grassTileType{tileName};
+    TileType grassTileType{0, tileName};
 
     SUBCASE("Tiles are of a given type")
     {

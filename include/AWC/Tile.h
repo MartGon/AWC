@@ -10,7 +10,8 @@ friend class TileType;
 
 public:
 
-    std::string GetName();
+    unsigned int GetId() const;
+    std::string GetName() const;
 
 private:
     Tile(const TileType& tileType);

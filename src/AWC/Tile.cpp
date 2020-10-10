@@ -6,7 +6,12 @@ Tile::Tile(const TileType& tileType) : tileType_{tileType}
 
 }
 
-std::string Tile::GetName()
+unsigned int Tile::GetId() const
+{
+     return tileType_.GetId();
+}
+
+std::string Tile::GetName() const
 {
     return tileType_.GetName();
 }

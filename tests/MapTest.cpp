@@ -64,7 +64,7 @@ TEST_CASE("Maps hold tiles")
 {
     Map map{10, 10};
 
-    TileType grassType{"Grass"};
+    TileType grassType{0, "Grass"};
     auto grass = grassType.CreateTile();
     map.SetTile(0, 0, grass);
 
@@ -76,7 +76,7 @@ TEST_CASE("Maps hold tiles")
     }
     SUBCASE("Or set a especific Tile in a given position")
     {
-        TileType seaType{"Sea"};
+        TileType seaType{1, "Sea"};
         auto sea = seaType.CreateTile();
         map.SetTile(0, 1, sea);
 
@@ -97,7 +97,7 @@ TEST_CASE("Maps follow some rules")
     auto soldier = soldierUnitType.CreateUnit();
     map.AddUnit(0, 0, soldier);
 
-    TileType grassType{"Grass"};
+    TileType grassType{0, "Grass"};
     auto grass = grassType.CreateTile();
 
     SUBCASE("Don't allow operations out of bounds")
