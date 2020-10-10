@@ -144,7 +144,7 @@ std::vector<std::weak_ptr<TileNode>> TilePatternDescriptor::DiscoverNeighbours(c
                 neighbour = mg.GetNode(tilePos);
             else
             {
-                neighbour = mg.CreateNode(tilePos, -1);
+                neighbour = mg.CreateNode(tilePos, -1, pos);
             }
 
             neighbours.push_back(neighbour);

@@ -17,13 +17,19 @@ std::weak_ptr<TileNode> TileGraph::CreateNode(const Vector2 pos, const int cost)
     std::shared_ptr<TileNode> mapNode;
     if(!NodeExists(pos))
     {
-        mapNode = std::shared_ptr<TileNode>( new TileNode{pos, cost});
+        mapNode = std::shared_ptr<TileNode>(new TileNode{pos, cost});
         nodes_.insert({pos, mapNode});
     }
     else
         throw TileGraphAlreadyExistingNode(pos);
 
     return mapNode;
+}
+
+std::weak_ptr<TileNode> TileGraph::CreateNode(const Vector2 pos, const int cost, const Vector2 nei)
+{
+    auto mapNode = CreateNode(pos, cost);
+    SetNeighbour(pos, nei);
 }
 
 std::weak_ptr<TileNode> TileGraph::GetNode(Vector2 pos)
