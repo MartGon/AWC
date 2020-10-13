@@ -129,7 +129,7 @@ std::shared_ptr<TilePattern> TilePatternDescriptor::CalculateTilePattern(Vector2
     }
 
     // Create TilePattern
-    auto tp = std::shared_ptr<TilePattern>(new TilePattern{origin, tg});
+    auto tp = std::shared_ptr<TilePattern>(new TilePattern{origin, tg, constraints.maxRange, constraints.minRange});
 
     return tp;
 }

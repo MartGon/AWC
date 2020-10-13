@@ -18,6 +18,11 @@ TEST_CASE("TilePattern pathfinding test")
     TileType seaTileType{1, "Sea"};
 
     MapUtils::FillMap(map, seaTileType);
+    
+    // Set a path of grass
+    std::vector<Vector2> path = {{0, 0}, {1, 0}, {1, 1}, {1, 2}, {0, 2}};
+    for(auto pos : path)
+        map.SetTile(pos.x, pos.y, grassTileType.CreateTile());
 
     // TilePatternDescriptor
     Vector2 e = {1, 0};
@@ -29,18 +34,22 @@ TEST_CASE("TilePattern pathfinding test")
 
     // CostTable
     CostTable tileCostTable;
-    tileCostTable.SetCost(seaTileType.GetId(), 1);
+    tileCostTable.SetCost(seaTileType.GetId(), 4);
     tileCostTable.SetCost(grassTileType.GetId(), 1);
 
     CostTable unitCostTable;
 
     // TilePatternConstraints
-    TilePatternConstraints tpc{map, 0, 3, tileCostTable, unitCostTable};
+    TilePatternConstraints tpc{map, tileCostTable, unitCostTable, 4};
 
     SUBCASE("Check if destination is in tp")
     {
         auto tp = manhattanDescriptor.CalculateTilePattern({0, 0}, tpc);
 
-        CHECK(tp->IsTileInPattern({1, 1}) == true);
+        CHECK(tp->IsTileInRange({1, 1}) == true);
+        CHECK(tp->IsTileInRange({0, 2}) == true);
+        CHECK(tp->GetTileCost({0, 2}) == 4);
+        CHECK(tp->IsTileInRange({0, 3}) == false);
+        CHECK(tp->GetPathToTile({0, 2}) == path);
     }
 }

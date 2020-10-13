@@ -5,8 +5,8 @@
 class TilePatternConstraints
 {
 public:
-    TilePatternConstraints(const Map& map, unsigned int minRange, unsigned int maxRange, 
-        const CostTable& tileCostTable, const CostTable& unitCostTable);
+    TilePatternConstraints(const Map& map, const CostTable& tileCostTable, const CostTable& unitCostTable, 
+    unsigned int maxRange, unsigned int minRange = 0);
 
     unsigned int minRange;
     unsigned int maxRange;
