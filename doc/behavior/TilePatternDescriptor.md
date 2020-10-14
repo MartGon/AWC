@@ -13,7 +13,7 @@ This class provides the following functionality
 - Give a set of directions the unit can move to. E.g. A **Rook** Chess piece can move in the following directions: **{(1, 0), (-1, 0), (0, 1), (0, -1)}**, which translates to: East, West, North and South.
 - Allows to specify a set of *locked* directions once a specific direction has been previously taken. E.g. Once a **Rook** moves north, its direction is *locked* to north.
 - Supports creating pattern by composition. E.g. This allows to describe the movement of a **Queen** by combining the movement of a **Rook** and a **Bishop**
-- Create a **TilePattern**, which the describes the possible movements/attack given certain **TilePatternConstraints**.
+- Create a **TilePattern**, which the describes the possible movements/attack given an origin and certain **TilePatternConstraints**.
 
 ## Design decisions
 
