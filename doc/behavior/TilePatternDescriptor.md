@@ -47,3 +47,5 @@ The number of tiles a unit can move isn't always unlimited. The **King** and the
 - **Composition**
 
 - Replace every *map* word for *set* where it fits.
+
+- Create another class (TileDirections) to wrap the std::unordered_map
