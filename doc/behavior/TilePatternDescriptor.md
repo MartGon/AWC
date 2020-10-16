@@ -48,4 +48,4 @@ The number of tiles a unit can move isn't always unlimited. The **King** and the
 
 - Replace every *map* word for *set* where it fits.
 
-- Create another class (TileDirections) to wrap the std::unordered_map
+- Create another class (TileDirections) to wrap the std::unordered_map. Should be better than using them raw.
