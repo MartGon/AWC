@@ -40,7 +40,12 @@ The number of tiles a unit can move isn't always unlimited. The **King** and the
 - **Array of unions**: They are struct-like pieces of data that are declared using and union and have a specific type so they can be identified. They work like flags, but they can also hold data.
 
 - **Decorator**: Create a common interface, which every decorator class inherits from. It makes changes to the params the main methods receives before calling the method in the main class.
-    
+
+**Neighbour Discovery**
+
+Neighbour discovery could already calculate the cost of the Node if it didn't exit, so it had to be created. However, doing so incurs some redundancy because the cost would be calculated right after it is created, when trying to find the shortest path.
+
+It is preferred to return a high value (std::uint::max) so it reprents more faithfully Dijkstra Algorithm. This doesn't incur redundancy, because the cost is calculated once, just after the Node is created. However, now TilePattern has the responsibility of hiding that Node with its interface. IsTileInPattern should return true only if the Tile is in minRange < range < MaxRange
 
 ## To be added
 
@@ -49,3 +54,4 @@ The number of tiles a unit can move isn't always unlimited. The **King** and the
 - Replace every *map* word for *set* where it fits.
 
 - Create another class (TileDirections) to wrap the std::unordered_map. Should be better than using them raw.
+
