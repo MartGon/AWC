@@ -13,8 +13,6 @@ friend class TilePatternDescriptor;
 
 public:
     unsigned int GetTileCost(Vector2 dest);
-    bool IsTileInRange(Vector2 dest);
-    bool IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange = 0);
     bool IsTileInPattern(Vector2 dest);
 
     // TODO: This may become a problem for AttackPatterns
@@ -25,6 +23,9 @@ public:
 
 private:
     TilePattern(Vector2 origin, TileGraph mg, unsigned int maxRange, unsigned int minRange);
+
+    bool IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange = 0);
+    bool IsTileInRange(Vector2 dest);
 
     Vector2 origin_;
     TileGraph tg_;

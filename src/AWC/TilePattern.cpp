@@ -19,21 +19,9 @@ unsigned int TilePattern::GetTileCost(Vector2 dest)
     return cost;
 }
 
-bool TilePattern::IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange)
+bool TilePattern::IsTileInPattern(Vector2 dest)
 {
-    bool isInPattern = false;
-    if(tg_.NodeExists(dest))
-    {
-        auto cost = tg_.GetNode(dest).lock()->cost;
-        isInPattern = cost <= maxRange && cost >= minRange;
-    }
-
-    return isInPattern; 
-}
-
-bool TilePattern::IsTileInRange(Vector2 dest)
-{
-    return IsTileInRange(dest, maxRange_, minRange_);
+    return IsTileInRange(dest);
 }
 
 std::vector<Vector2> TilePattern::GetPathToTile(Vector2 dest)
@@ -60,4 +48,23 @@ std::vector<Vector2> TilePattern::GetPathToTile(Vector2 dest)
 
     std::reverse(path.begin(), path.end());
     return path;
+}
+
+// private
+
+bool TilePattern::IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange)
+{
+    bool isInPattern = false;
+    if(tg_.NodeExists(dest))
+    {
+        auto cost = tg_.GetNode(dest).lock()->cost;
+        isInPattern = cost <= maxRange && cost >= minRange;
+    }
+
+    return isInPattern; 
+}
+
+bool TilePattern::IsTileInRange(Vector2 dest)
+{
+    return IsTileInRange(dest, maxRange_, minRange_);
 }
