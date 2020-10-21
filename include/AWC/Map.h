@@ -9,6 +9,8 @@
 #include <AWC/Unit.h>
 #include <AWC/Tile.h>
 
+#include <Utils/Vector2.h>
+
 class Map
 {
 public:
@@ -18,14 +20,25 @@ public:
     int GetHeight() const;
 
     void AddUnit(int x, int y, std::shared_ptr<Unit> unit);
+    void AddUnit(Vector2 pos, std::shared_ptr<Unit> unit);
+
     const std::shared_ptr<Unit> GetUnit(int x, int y) const;
+    const std::shared_ptr<Unit> GetUnit(Vector2 pos) const;
+
     void RemoveUnit(int x, int y);
+    void RemoveUnit(Vector2 pos);
 
     void SetTile(int x, int y, std::shared_ptr<Tile> tile);
+    void SetTile(Vector2 pos, std::shared_ptr<Tile> tile);
+
     const std::shared_ptr<Tile> GetTile(int x, int y) const;
+    const std::shared_ptr<Tile> GetTile(Vector2 pos) const;
 
     bool IsPositionFree(int x, int y) const;
+    bool IsPositionFree(Vector2 pos) const;
+
     bool IsPositionValid(int x, int y) const;
+    bool IsPositionValid(Vector2 pos) const;
 
 private:
 
