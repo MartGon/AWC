@@ -18,7 +18,7 @@ public:
     // TODO: This may become a problem for AttackPatterns
     // Could still return the path but only with nodes with cost > minRange;
     std::vector<Vector2> GetPathToTile(Vector2 dest);
-    std::vector<Vector2> GetTilePosInRange();
+    std::vector<Vector2> GetTilesPosInPattern();
     Vector2 GetOrigin();
 
 private:

@@ -37,6 +37,15 @@ std::weak_ptr<TileNode> TileGraph::CreateNode(const Vector2 pos, const unsigned 
     return mapNode;
 }
 
+std::vector<Vector2> TileGraph::GetNodesPos()
+{
+    std::vector<Vector2> nodesPos{nodes_.size()};
+    for(auto pair : nodes_)
+        nodesPos.push_back(pair.first);
+
+    return nodesPos;
+}
+
 std::weak_ptr<TileNode> TileGraph::GetNode(Vector2 pos)
 {
     std::weak_ptr<TileNode> mapNode;

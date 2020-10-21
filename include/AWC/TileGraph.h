@@ -18,8 +18,11 @@ public:
     TileGraph(){}
     TileGraph(TileGraph& tg);
     TileGraph(TileGraph&& mg);
+
     std::weak_ptr<TileNode> CreateNode(const Vector2 pos, const unsigned int cost);
     std::weak_ptr<TileNode> CreateNode(const Vector2 pos, const unsigned int cost, const Vector2 nei);
+
+    std::vector<Vector2> GetNodesPos();
     std::weak_ptr<TileNode> GetNode(Vector2 pos);
     bool NodeExists(Vector2 pos);
     

@@ -50,6 +50,16 @@ std::vector<Vector2> TilePattern::GetPathToTile(Vector2 dest)
     return path;
 }
 
+std::vector<Vector2> TilePattern::GetTilesPosInPattern()
+{
+    return tg_.GetNodesPos();
+}
+
+Vector2 TilePattern::GetOrigin()
+{
+    return origin_;
+}
+
 // private
 
 bool TilePattern::IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange)
