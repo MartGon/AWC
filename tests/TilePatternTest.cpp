@@ -52,4 +52,14 @@ TEST_CASE("TilePattern pathfinding test")
         CHECK(tp->IsTileInPattern({0, 3}) == false);
         CHECK(tp->GetPathToTile({0, 2}) == path);
     }
+    SUBCASE("Check if destination is in tp with Destination")
+    {
+        auto tp = manhattanDescriptor.CalculateTilePattern({0, 0}, Vector2{0, 2}, tpc);
+
+        CHECK(tp->IsTileInPattern({1, 1}) == true);
+        CHECK(tp->IsTileInPattern({0, 2}) == true);
+        CHECK(tp->GetTileCost({0, 2}) == 4);
+        CHECK(tp->IsTileInPattern({0, 3}) == false);
+        CHECK(tp->GetPathToTile({0, 2}) == path);
+    }
 }

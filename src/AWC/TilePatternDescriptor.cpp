@@ -9,6 +9,7 @@
 #include <limits>
 #include <queue>
 #include <functional>
+#include <optional>
 
 // Public
 
@@ -90,7 +91,12 @@ void TilePatternDescriptor::SetLockedDirections(Vector2 dir, const std::vector<V
 
 std::shared_ptr<TilePattern> TilePatternDescriptor::CalculateTilePattern(Vector2 origin, TilePatternConstraints constraints)
 {
-    // Create mapGraph
+    return CalculateTilePattern(origin, std::nullopt, constraints);
+}
+
+std::shared_ptr<TilePattern> TilePatternDescriptor::CalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, TilePatternConstraints constraints)
+{
+        // Create mapGraph
     TileGraph tg;
     auto originNode = tg.CreateNode(origin, 0);
 
@@ -105,6 +111,9 @@ std::shared_ptr<TilePattern> TilePatternDescriptor::CalculateTilePattern(Vector2
         // Pop first member
         auto node = prioQueue.top().lock();
         prioQueue.pop();
+
+        if(destination.has_value() && destination.value() == node->pos)
+            break;
 
         // Get its neighbours
         auto discoverDirections = GetDiscoverDirections(node);
@@ -132,11 +141,6 @@ std::shared_ptr<TilePattern> TilePatternDescriptor::CalculateTilePattern(Vector2
     auto tp = std::shared_ptr<TilePattern>(new TilePattern{origin, tg, constraints.maxRange, constraints.minRange});
 
     return tp;
-}
-
-std::shared_ptr<TilePattern> TilePatternDescriptor::CalculateTilePattern(Vector2 origin, Vector2 destination, TilePatternConstraints constraints)
-{
-
 }
 
 // Private
