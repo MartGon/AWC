@@ -6,7 +6,7 @@ TilePattern::TilePattern(Vector2 origin, TileGraph tg, unsigned int maxRange, un
     
 }
 
-unsigned int TilePattern::GetTileCost(Vector2 dest)
+unsigned int TilePattern::GetTileCost(Vector2 dest) const
 {
     unsigned int cost = std::numeric_limits<unsigned int>::max();
     if(TilePattern::IsTileInRange(dest))
@@ -19,12 +19,12 @@ unsigned int TilePattern::GetTileCost(Vector2 dest)
     return cost;
 }
 
-bool TilePattern::IsTileInPattern(Vector2 dest)
+bool TilePattern::IsTileInPattern(Vector2 dest) const
 {
     return IsTileInRange(dest);
 }
 
-std::vector<Vector2> TilePattern::GetPathToTile(Vector2 dest)
+std::vector<Vector2> TilePattern::GetPathToTile(Vector2 dest) const
 {
     std::vector<Vector2> path;
     if(IsTileInRange(dest))
@@ -50,19 +50,19 @@ std::vector<Vector2> TilePattern::GetPathToTile(Vector2 dest)
     return path;
 }
 
-std::vector<Vector2> TilePattern::GetTilesPosInPattern()
+std::vector<Vector2> TilePattern::GetTilesPosInPattern() const
 {
     return tg_.GetNodesPos();
 }
 
-Vector2 TilePattern::GetOrigin()
+Vector2 TilePattern::GetOrigin() const
 {
     return origin_;
 }
 
 // private
 
-bool TilePattern::IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange)
+bool TilePattern::IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange) const
 {
     bool isInPattern = false;
     if(tg_.NodeExists(dest))
@@ -74,7 +74,7 @@ bool TilePattern::IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned in
     return isInPattern; 
 }
 
-bool TilePattern::IsTileInRange(Vector2 dest)
+bool TilePattern::IsTileInRange(Vector2 dest) const
 {
     return IsTileInRange(dest, maxRange_, minRange_);
 }

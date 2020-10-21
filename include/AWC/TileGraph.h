@@ -22,9 +22,9 @@ public:
     std::weak_ptr<TileNode> CreateNode(const Vector2 pos, const unsigned int cost);
     std::weak_ptr<TileNode> CreateNode(const Vector2 pos, const unsigned int cost, const Vector2 nei);
 
-    std::vector<Vector2> GetNodesPos();
-    std::weak_ptr<TileNode> GetNode(Vector2 pos);
-    bool NodeExists(Vector2 pos);
+    std::vector<Vector2> GetNodesPos() const;
+    std::weak_ptr<TileNode> GetNode(Vector2 pos) const;
+    bool NodeExists(Vector2 pos) const;
     
     void SetNeighbour(Vector2 a, Vector2 b);
 
