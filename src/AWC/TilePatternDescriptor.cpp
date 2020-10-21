@@ -14,16 +14,16 @@
 // Public
 
 // Factory methods
-TilePatternDescriptor TilePatternDescriptor::CreateTilePatternDescriptorByLockedDirectionsMap(const std::vector<Vector2>& directions, 
+std::shared_ptr<TilePatternDescriptor> TilePatternDescriptor::CreateTilePatternDescriptorByLockedDirectionsMap(const std::vector<Vector2>& directions, 
     const std::unordered_map<Vector2, std::vector<Vector2>>& lockedDirectionsMap)
 {
-    return TilePatternDescriptor{directions, lockedDirectionsMap};
+    return std::shared_ptr<TilePatternDescriptor>{new TilePatternDescriptor{directions, lockedDirectionsMap}};
 }
 
-TilePatternDescriptor TilePatternDescriptor::CreateTilePatternDescriptorByExclusiveDirectionsMap(const std::vector<Vector2>& directions, 
+std::shared_ptr<TilePatternDescriptor>  TilePatternDescriptor::CreateTilePatternDescriptorByExclusiveDirectionsMap(const std::vector<Vector2>& directions, 
     const std::unordered_map<Vector2, std::vector<Vector2>>& exclusiveDirectionsMap)
 {
-    return TilePatternDescriptor{directions, GenerateLockedDirectionsMap(directions, exclusiveDirectionsMap)};
+    return std::shared_ptr<TilePatternDescriptor>{new TilePatternDescriptor{directions, GenerateLockedDirectionsMap(directions, exclusiveDirectionsMap)}};
 }
 
 // Constructors

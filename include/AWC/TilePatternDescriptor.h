@@ -11,9 +11,9 @@ class TilePatternDescriptor
 {
 public:
 
-    static TilePatternDescriptor CreateTilePatternDescriptor(const std::vector<Vector2>& directions) {return TilePatternDescriptor{directions};};
-    static TilePatternDescriptor CreateTilePatternDescriptorByLockedDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& lockedDirectionsMap);
-    static TilePatternDescriptor CreateTilePatternDescriptorByExclusiveDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& exclusiveDirectionsMap);
+    static std::shared_ptr<TilePatternDescriptor> CreateTilePatternDescriptor(const std::vector<Vector2>& directions) {return std::shared_ptr<TilePatternDescriptor>{new TilePatternDescriptor{directions}};};
+    static std::shared_ptr<TilePatternDescriptor> CreateTilePatternDescriptorByLockedDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& lockedDirectionsMap);
+    static std::shared_ptr<TilePatternDescriptor> CreateTilePatternDescriptorByExclusiveDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& exclusiveDirectionsMap);
 
     std::shared_ptr<TilePattern> CalculateTilePattern(Vector2 origin, TilePatternConstraints constraints);
     std::shared_ptr<TilePattern> CalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, TilePatternConstraints constraints);

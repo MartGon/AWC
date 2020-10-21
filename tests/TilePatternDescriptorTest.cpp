@@ -25,10 +25,10 @@ TEST_CASE("Manhattan TilePattern test")
         auto manhattanTilePatternImplicit = TilePatternDescriptor::CreateTilePatternDescriptor(directions);
 
         // Implicit
-        CHECK(manhattanTilePatternImplicit.GetLockedDirections(e) == eastLockedDirections);
-        CHECK(manhattanTilePatternImplicit.GetLockedDirections(w) == westLockedDirections);
-        CHECK(manhattanTilePatternImplicit.GetLockedDirections(n) == northLockedDirections);
-        CHECK(manhattanTilePatternImplicit.GetLockedDirections(s) == southLockedDirections);
+        CHECK(manhattanTilePatternImplicit->GetLockedDirections(e) == eastLockedDirections);
+        CHECK(manhattanTilePatternImplicit->GetLockedDirections(w) == westLockedDirections);
+        CHECK(manhattanTilePatternImplicit->GetLockedDirections(n) == northLockedDirections);
+        CHECK(manhattanTilePatternImplicit->GetLockedDirections(s) == southLockedDirections);
     }
     SUBCASE("Check constructing by excluding")
     {
@@ -41,10 +41,10 @@ TEST_CASE("Manhattan TilePattern test")
         };
         auto manhattanTilePattern = TilePatternDescriptor::CreateTilePatternDescriptorByExclusiveDirectionsMap(directions, exclusiveDirections);
 
-        CHECK(manhattanTilePattern.GetLockedDirections(e) == eastLockedDirections);
-        CHECK(manhattanTilePattern.GetLockedDirections(w) == westLockedDirections);
-        CHECK(manhattanTilePattern.GetLockedDirections(n) == northLockedDirections);
-        CHECK(manhattanTilePattern.GetLockedDirections(s) == southLockedDirections);
+        CHECK(manhattanTilePattern->GetLockedDirections(e) == eastLockedDirections);
+        CHECK(manhattanTilePattern->GetLockedDirections(w) == westLockedDirections);
+        CHECK(manhattanTilePattern->GetLockedDirections(n) == northLockedDirections);
+        CHECK(manhattanTilePattern->GetLockedDirections(s) == southLockedDirections);
     }
     SUBCASE("Check constructing by locking")
     {
@@ -57,10 +57,10 @@ TEST_CASE("Manhattan TilePattern test")
         };
         auto manhattanTilePattern = TilePatternDescriptor::CreateTilePatternDescriptorByLockedDirectionsMap(directions, exclusiveDirections);
 
-        CHECK(manhattanTilePattern.GetLockedDirections(e) == eastLockedDirections);
-        CHECK(manhattanTilePattern.GetLockedDirections(w) == westLockedDirections);
-        CHECK(manhattanTilePattern.GetLockedDirections(n) == northLockedDirections);
-        CHECK(manhattanTilePattern.GetLockedDirections(s) == southLockedDirections);
+        CHECK(manhattanTilePattern->GetLockedDirections(e) == eastLockedDirections);
+        CHECK(manhattanTilePattern->GetLockedDirections(w) == westLockedDirections);
+        CHECK(manhattanTilePattern->GetLockedDirections(n) == northLockedDirections);
+        CHECK(manhattanTilePattern->GetLockedDirections(s) == southLockedDirections);
     }
 }
 
@@ -77,25 +77,25 @@ TEST_CASE("Configuration interface tests")
 
     SUBCASE("Check configuration of directions")
     {
-        CHECK(manhattanTilePattern.IsDirection(e) == true);
-        CHECK(manhattanTilePattern.IsDirection({1, 1}) == false);
+        CHECK(manhattanTilePattern->IsDirection(e) == true);
+        CHECK(manhattanTilePattern->IsDirection({1, 1}) == false);
 
-        CHECK_THROWS_AS(manhattanTilePattern.RemoveDirection({1, 1}), const TilePatternDescriptorNoExistingDirection&);
-        CHECK_NOTHROW(manhattanTilePattern.RemoveDirection(e));
+        CHECK_THROWS_AS(manhattanTilePattern->RemoveDirection({1, 1}), const TilePatternDescriptorNoExistingDirection&);
+        CHECK_NOTHROW(manhattanTilePattern->RemoveDirection(e));
 
-        CHECK_THROWS_AS(manhattanTilePattern.AddDirection(n), const TilePatternDescriptorAlreadyExistingDirection&);
-        CHECK_NOTHROW(manhattanTilePattern.AddDirection({1, 1}));
+        CHECK_THROWS_AS(manhattanTilePattern->AddDirection(n), const TilePatternDescriptorAlreadyExistingDirection&);
+        CHECK_NOTHROW(manhattanTilePattern->AddDirection({1, 1}));
     }
 
     SUBCASE("Check configuration of locked directions")
     {
-        manhattanTilePattern.SetLockedDirections(n, {e, w});
+        manhattanTilePattern->SetLockedDirections(n, {e, w});
 
-        CHECK(manhattanTilePattern.GetLockedDirections(n) == std::vector{e, w});
+        CHECK(manhattanTilePattern->GetLockedDirections(n) == std::vector{e, w});
 
-        manhattanTilePattern.SetExclusiveDirections(n, {n, s});
+        manhattanTilePattern->SetExclusiveDirections(n, {n, s});
 
-        CHECK(manhattanTilePattern.GetLockedDirections(n) == std::vector{e, w});
+        CHECK(manhattanTilePattern->GetLockedDirections(n) == std::vector{e, w});
     }
 }
 
