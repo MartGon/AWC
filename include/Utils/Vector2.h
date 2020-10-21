@@ -7,6 +7,7 @@ class Vector2T
 {
 public:
     Vector2T(T x, T y) : x{x}, y{y} {};
+    Vector2T() : x{0}, y{0} {};
 
     T x;
     T y;
