@@ -89,11 +89,11 @@ TEST_CASE("Configuration interface tests")
 
     SUBCASE("Check configuration of locked directions")
     {
-        manhattan->TableLockedDirections(n, {e, w});
+        manhattan->SetLockedDirections(n, {e, w});
 
         CHECK(manhattan->GetLockedDirections(n) == std::vector{e, w});
 
-        manhattan->TableExclusiveDirections(n, {n, s});
+        manhattan->SetExclusiveDirections(n, {n, s});
 
         CHECK(manhattan->GetLockedDirections(n) == std::vector{e, w});
     }

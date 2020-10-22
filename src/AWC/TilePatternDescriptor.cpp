@@ -11,6 +11,10 @@
 #include <functional>
 #include <optional>
 
+// TilePatternDescriptorI
+
+
+
 // Public
 
 // Factory methods
@@ -77,67 +81,14 @@ Directions TilePatternDescriptor::GetLockedDirections(Vector2 dir)
     return lockedDirectionsTable_.at(dir);
 }
 
-void TilePatternDescriptor::TableExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections)
+void TilePatternDescriptor::SetExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections)
 {
     lockedDirectionsTable_[dir] = GenerateLockedDirections(directions_, exclusiveDirections);
 }
 
-void TilePatternDescriptor::TableLockedDirections(Vector2 dir, const Directions& lockedDirections)
+void TilePatternDescriptor::SetLockedDirections(Vector2 dir, const Directions& lockedDirections)
 {
     lockedDirectionsTable_[dir] = lockedDirections;
-}
-
-// Main methods
-
-TilePatternPtr TilePatternDescriptor::CalculateTilePattern(Vector2 origin, TilePatternConstraints constraints)
-{
-    return CalculateTilePattern(origin, std::nullopt, constraints);
-}
-
-TilePatternPtr TilePatternDescriptor::CalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, TilePatternConstraints constraints)
-{
-        // Create mapGraph
-    TileGraph tg;
-    auto originNode = tg.CreateNode(origin, 0);
-
-    // Create prioQueue
-    // PrioQueue pop values in reverse order
-    auto greater = [](TileNodePtr a, TileNodePtr b) { return a.lock()->cost > b.lock()->cost;};
-    std::priority_queue<TileNodePtr, std::vector<TileNodePtr>, decltype(greater)> prioQueue{greater};
-    prioQueue.push(originNode);
-
-    while(!prioQueue.empty())
-    {
-        // Pop first member
-        auto node = prioQueue.top().lock();
-        prioQueue.pop();
-
-        if(destination.has_value() && destination.value() == node->pos)
-            break;
-
-        // Get its neighbours
-        auto discoverDirections = GetDiscoverDirections(node);
-        auto neighbours = tg.DiscoverNeighbours(node->pos, discoverDirections, constraints);
-        for(const auto& nei : neighbours)
-        {
-            auto sharedNei = nei.lock();
-
-            // Check if accumulated cost to this neighbour is lower than previous
-            int neiCost = constraints.GetTileCost(sharedNei->pos);
-            int calculatedCost = node->cost + neiCost;
-            if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.maxRange)
-            {
-                // Push it to queue if that's the case
-                sharedNei->cost = calculatedCost;
-                prioQueue.push(nei);
-            }
-        }
-    }
-
-    // Create TilePattern
-    auto tp = TilePatternPtr(new TilePattern{origin, tg, constraints.maxRange, constraints.minRange});
-
-    return tp;
 }
 
 // Private
@@ -182,6 +133,53 @@ Directions TilePatternDescriptor::GenerateLockedDirections(const Directions& dir
         VectorUtils::RemoveByValue(lockedDirections, exclusiveDir);
 
     return lockedDirections;
+}
+
+TilePatternPtr TilePatternDescriptor::DoCalculateTilePattern(Vector2 origin, 
+    std::optional<Vector2> destination, const TilePatternConstraints& constraints)
+{
+        // Create mapGraph
+    TileGraph tg;
+    auto originNode = tg.CreateNode(origin, 0);
+
+    // Create prioQueue
+    // PrioQueue pop values in reverse order
+    auto greater = [](TileNodePtr a, TileNodePtr b) { return a.lock()->cost > b.lock()->cost;};
+    std::priority_queue<TileNodePtr, std::vector<TileNodePtr>, decltype(greater)> prioQueue{greater};
+    prioQueue.push(originNode);
+
+    while(!prioQueue.empty())
+    {
+        // Pop first member
+        auto node = prioQueue.top().lock();
+        prioQueue.pop();
+
+        if(destination.has_value() && destination.value() == node->pos)
+            break;
+
+        // Get its neighbours
+        auto discoverDirections = GetDiscoverDirections(node);
+        auto neighbours = tg.DiscoverNeighbours(node->pos, discoverDirections, constraints);
+        for(const auto& nei : neighbours)
+        {
+            auto sharedNei = nei.lock();
+
+            // Check if accumulated cost to this neighbour is lower than previous
+            int neiCost = constraints.GetTileCost(sharedNei->pos);
+            int calculatedCost = node->cost + neiCost;
+            if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.maxRange)
+            {
+                // Push it to queue if that's the case
+                sharedNei->cost = calculatedCost;
+                prioQueue.push(nei);
+            }
+        }
+    }
+
+    // Create TilePattern
+    auto tp = TilePatternPtr(new TilePattern{origin, tg, constraints.maxRange, constraints.minRange});
+
+    return tp;
 }
 
 Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode)

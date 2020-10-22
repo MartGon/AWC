@@ -2,6 +2,7 @@
 
 #include <AWC/AWCfwd.h>
 #include <AWC/Directions.h>
+#include <AWC/TilePatternDescriptorI.h>
 #include <AWC/TileNode.h>
 
 #include <unordered_map>
@@ -13,7 +14,7 @@ using TilePatternDescriptorPtr = std::shared_ptr<TilePatternDescriptor>;
 using TilePatternPtr = std::shared_ptr<TilePattern>;
 using DirectionsTable = std::unordered_map<Vector2, Directions>;
 
-class TilePatternDescriptor
+class TilePatternDescriptor : public TilePatternDescriptorI
 {
 public:
 
@@ -21,9 +22,6 @@ public:
         {return TilePatternDescriptorPtr{new TilePatternDescriptor{directions}};}
     static TilePatternDescriptorPtr CreateByLocked(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
     static TilePatternDescriptorPtr CreateByExclusive(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
-
-    TilePatternPtr CalculateTilePattern(Vector2 origin, TilePatternConstraints constraints);
-    TilePatternPtr CalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, TilePatternConstraints constraints);
 
     Directions GetDirections();
 
@@ -33,8 +31,8 @@ public:
 
     Directions GetLockedDirections(Vector2 dir);
 
-    void TableExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections);
-    void TableLockedDirections(Vector2 dir, const Directions& lockedDirections);
+    void SetExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections);
+    void SetLockedDirections(Vector2 dir, const Directions& lockedDirections);
 
 private:
     TilePatternDescriptor(const Directions& directions);
@@ -43,6 +41,8 @@ private:
     static DirectionsTable GenerateDefaultLockedDirectionsTable(const Directions& directions);
     static DirectionsTable GenerateLockedDirectionsTable(const Directions& directions, const DirectionsTable& exclusiveDirections);
     static Directions GenerateLockedDirections(const Directions& directions, const Directions& exclusiveDirections);
+
+    TilePatternPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) override;
 
     Directions GetDiscoverDirections(TileNodePtr tileNode);
 
