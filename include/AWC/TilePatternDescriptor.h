@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Utils/Vector2.h>
 
 #include <AWC/AWCfwd.h>
@@ -42,7 +44,7 @@ private:
     static DirectionsTable GenerateLockedDirectionsTable(const Directions& directions, const DirectionsTable& exclusiveDirections);
     static Directions GenerateLockedDirections(const Directions& directions, const Directions& exclusiveDirections);
 
-    TilePatternPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) override;
+    TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) override;
 
     Directions GetDiscoverDirections(TileNodePtr tileNode);
 

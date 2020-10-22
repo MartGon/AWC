@@ -10,7 +10,7 @@ unsigned int TilePattern::GetTileCost(Vector2 dest) const
 {
     unsigned int cost = std::numeric_limits<unsigned int>::max();
     if(TilePattern::IsTileInRange(dest))
-        return tg_.GetNode(dest).lock()->cost;
+        cost = tg_.GetNode(dest).lock()->cost;
     /*
     else
         throw std::exception()

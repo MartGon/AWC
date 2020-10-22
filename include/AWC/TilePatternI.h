@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Utils/Vector2.h>
 
 class TilePatternI

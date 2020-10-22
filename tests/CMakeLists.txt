@@ -10,7 +10,7 @@ add_executable(AWCTest
     STLUtilsTest.cpp
 )
 
-target_compile_features(AWCTest PRIVATE cxx_std_17)
+# target_compile_features(AWCTest PRIVATE cxx_std_20)
 target_include_directories(AWCTest PUBLIC ${DOCTEST_INCLUDE_DIR} ../include)
 target_link_libraries(AWCTest AWCLibrary)
 

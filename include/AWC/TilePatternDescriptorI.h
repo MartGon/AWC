@@ -5,16 +5,16 @@
 #include <memory>
 #include <optional>
 
-using TilePatternPtr = std::shared_ptr<TilePattern>;
+using TilePatternIPtr = std::shared_ptr<TilePatternI>;
 
 class TilePatternDescriptorI
 {
 public:
     virtual ~TilePatternDescriptorI() {}
 
-    TilePatternPtr CalculateTilePattern(Vector2 origin, const TilePatternConstraints& constraints);
-    TilePatternPtr CalculateTilePattern(Vector2 origin, Vector2 destination, const TilePatternConstraints& constraints);
+    TilePatternIPtr CalculateTilePattern(Vector2 origin, const TilePatternConstraints& constraints);
+    TilePatternIPtr CalculateTilePattern(Vector2 origin, Vector2 destination, const TilePatternConstraints& constraints);
 
 private:
-    virtual TilePatternPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) = 0;
+    virtual TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) = 0;
 };
