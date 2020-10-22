@@ -7,9 +7,11 @@ add_library(AWCSource
   Unit.cpp
   UnitType.cpp
   TilePattern.cpp
+  TilePatternI.cpp
   TilePatternConstraints.cpp
   TilePatternDescriptor.cpp
   TilePatternDescriptorI.cpp
+  TilePatternDescriptorComp.cpp
   TileGraph.cpp
   TileNode.cpp
 )

@@ -4,22 +4,23 @@
 
 #include <AWC/TileGraph.h>
 #include <Utils/Vector2.h>
+#include <AWC/TilePatternI.h>
 
 #include <vector>
 
-class TilePattern
+class TilePattern : public TilePatternI
 {
 friend class TilePatternDescriptor;
 
 public:
-    unsigned int GetTileCost(Vector2 dest) const;
-    bool IsTileInPattern(Vector2 dest) const;
+    unsigned int GetTileCost(Vector2 dest) const override;
+    bool IsTileInPattern(Vector2 dest) const override;
 
     // TODO: This may become a problem for AttackPatterns
     // Could still return the path but only with nodes with cost > minRange;
-    std::vector<Vector2> GetPathToTile(Vector2 dest) const;
-    std::vector<Vector2> GetTilesPosInPattern() const;
-    Vector2 GetOrigin() const;
+    std::vector<Vector2> GetPathToTile(Vector2 dest) const override;
+    std::vector<Vector2> GetTilesPosInPattern() const override;
+    Vector2 GetOrigin() const override;
 
 private:
     TilePattern(Vector2 origin, TileGraph mg, unsigned int maxRange, unsigned int minRange);
