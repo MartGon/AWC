@@ -1,6 +1,7 @@
 #include "doctest.h"
 
 #include <Utils/Vector2.h>
+#include <Utils/STLUtils.h>
 #include <AWC/CostTable.h>
 #include <AWC/Map.h>
 #include <AWC/TileType.h>
@@ -42,24 +43,56 @@ TEST_CASE("TilePattern pathfinding test")
     // TilePatternConstraints
     TilePatternConstraints tpc{map, tileCostTable, unitCostTable, 4};
 
-    SUBCASE("Check if destination is in tp")
+    SUBCASE("Check CalculateTilePattern")
     {
         auto tp = manhattanDescriptor->CalculateTilePattern({0, 0}, tpc);
+        std::vector<Vector2> tiles = {{0, 0}, {0, 1}, {1, 0}, {1, 1}, {1, 2}, {0, 2}};
 
+        CHECK(tp->IsTileInPattern({0, 0}) == true);
+        CHECK(tp->IsTileInPattern({1, 0}) == true);
         CHECK(tp->IsTileInPattern({1, 1}) == true);
+        CHECK(tp->IsTileInPattern({1, 2}) == true);
         CHECK(tp->IsTileInPattern({0, 2}) == true);
-        CHECK(tp->GetTileCost({0, 2}) == 4);
+
         CHECK(tp->IsTileInPattern({0, 3}) == false);
+
+        CHECK(tp->GetTileCost({0, 0}) == 0);
+        CHECK(tp->GetTileCost({1, 0}) == 1);
+        CHECK(tp->GetTileCost({1, 1}) == 2);
+        CHECK(tp->GetTileCost({1, 2}) == 3);
+        CHECK(tp->GetTileCost({0, 2}) == 4);
+
         CHECK(tp->GetPathToTile({0, 2}) == path);
+
+        CHECK(tp->GetOrigin() == Vector2{0, 0});
+
+        for(auto tile : tiles)
+            CHECK(VectorUtils::IsInside(tp->GetTilesPosInPattern(), tile) == true);
     }
-    SUBCASE("Check if destination is in tp with Destination")
+    SUBCASE("Check CalculateTilePattern with destitnation")
     {
-        auto tp = manhattanDescriptor->CalculateTilePattern({0, 0}, Vector2{0, 2}, tpc);
+        auto tp = manhattanDescriptor->CalculateTilePattern({0, 0}, Vector2{1, 2}, tpc);
+        std::vector<Vector2> tiles = {{0, 0}, {0, 1}, {1, 0}, {1, 1}, {1, 2}};
+        std::vector<Vector2> path = {{0, 0}, {1, 0}, {1, 1}, {1, 2}};
 
+        CHECK(tp->IsTileInPattern({0, 0}) == true);
+        CHECK(tp->IsTileInPattern({1, 0}) == true);
         CHECK(tp->IsTileInPattern({1, 1}) == true);
-        CHECK(tp->IsTileInPattern({0, 2}) == true);
-        CHECK(tp->GetTileCost({0, 2}) == 4);
+        CHECK(tp->IsTileInPattern({1, 2}) == true);
+
+        CHECK(tp->IsTileInPattern({0, 2}) == false);
         CHECK(tp->IsTileInPattern({0, 3}) == false);
-        CHECK(tp->GetPathToTile({0, 2}) == path);
+
+        CHECK(tp->GetTileCost({0, 0}) == 0);
+        CHECK(tp->GetTileCost({1, 0}) == 1);
+        CHECK(tp->GetTileCost({1, 1}) == 2);
+        CHECK(tp->GetTileCost({1, 2}) == 3);
+
+        CHECK(tp->GetPathToTile({1, 2}) == path);
+
+        CHECK(tp->GetOrigin() == Vector2{0, 0});
+
+        for(auto tile : tiles)
+            CHECK(VectorUtils::IsInside(tp->GetTilesPosInPattern(), tile) == true);
     }
 }
