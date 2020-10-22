@@ -1,9 +1,9 @@
 #include <Utils/Vector2.h>
 
 #include <AWC/AWCfwd.h>
+#include <AWC/Directions.h>
 #include <AWC/TileNode.h>
 
-#include <vector>
 #include <unordered_map>
 #include <memory>
 #include <exception>
@@ -11,14 +11,14 @@
 
 using TilePatternDescriptorPtr = std::shared_ptr<TilePatternDescriptor>;
 using TilePatternPtr = std::shared_ptr<TilePattern>;
-using Directions = std::vector<Vector2>;
 using DirectionsTable = std::unordered_map<Vector2, Directions>;
 
 class TilePatternDescriptor
 {
 public:
 
-    static TilePatternDescriptorPtr Create(const Directions& directions) {return TilePatternDescriptorPtr{new TilePatternDescriptor{directions}};};
+    static TilePatternDescriptorPtr Create(const Directions& directions) 
+        {return TilePatternDescriptorPtr{new TilePatternDescriptor{directions}};}
     static TilePatternDescriptorPtr CreateByLocked(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
     static TilePatternDescriptorPtr CreateByExclusive(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
 

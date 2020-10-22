@@ -3,15 +3,13 @@
 #include <Utils/Vector2.h>
 #include <AWC/AWCfwd.h>
 #include <AWC/TileNode.h>
+#include <AWC/Directions.h>
 
 #include <exception>
 #include <memory>
 #include <unordered_map>
-#include <vector>
 #include <string>
 
-
-using Directions = std::vector<Vector2>;
 using TileNodePtr = std::weak_ptr<TileNode>;
 
 // MapGraph
