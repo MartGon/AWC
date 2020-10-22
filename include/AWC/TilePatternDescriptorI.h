@@ -1,3 +1,4 @@
+#pragma once
 #include <AWC/AWCfwd.h>
 #include <Utils/Vector2.h>
 
@@ -9,7 +10,7 @@ using TilePatternPtr = std::shared_ptr<TilePattern>;
 class TilePatternDescriptorI
 {
 public:
-    ~TilePatternDescriptorI() {}
+    virtual ~TilePatternDescriptorI() {}
 
     TilePatternPtr CalculateTilePattern(Vector2 origin, const TilePatternConstraints& constraints);
     TilePatternPtr CalculateTilePattern(Vector2 origin, Vector2 destination, const TilePatternConstraints& constraints);
