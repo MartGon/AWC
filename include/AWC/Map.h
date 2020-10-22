@@ -11,6 +11,9 @@
 
 #include <Utils/Vector2.h>
 
+using UnitPtr = std::shared_ptr<Unit>;
+using TilePtr = std::shared_ptr<Tile>;
+
 class Map
 {
 public:
@@ -19,20 +22,20 @@ public:
     int GetWidht() const;
     int GetHeight() const;
 
-    void AddUnit(int x, int y, std::shared_ptr<Unit> unit);
-    void AddUnit(Vector2 pos, std::shared_ptr<Unit> unit);
+    void AddUnit(int x, int y, UnitPtr unit);
+    void AddUnit(Vector2 pos, UnitPtr unit);
 
-    const std::shared_ptr<Unit> GetUnit(int x, int y) const;
-    const std::shared_ptr<Unit> GetUnit(Vector2 pos) const;
+    const UnitPtr GetUnit(int x, int y) const;
+    const UnitPtr GetUnit(Vector2 pos) const;
 
     void RemoveUnit(int x, int y);
     void RemoveUnit(Vector2 pos);
 
-    void SetTile(int x, int y, std::shared_ptr<Tile> tile);
-    void SetTile(Vector2 pos, std::shared_ptr<Tile> tile);
+    void SetTile(int x, int y, TilePtr tile);
+    void SetTile(Vector2 pos, TilePtr tile);
 
-    const std::shared_ptr<Tile> GetTile(int x, int y) const;
-    const std::shared_ptr<Tile> GetTile(Vector2 pos) const;
+    const TilePtr GetTile(int x, int y) const;
+    const TilePtr GetTile(Vector2 pos) const;
 
     bool IsPositionFree(int x, int y) const;
     bool IsPositionFree(Vector2 pos) const;
@@ -45,8 +48,8 @@ private:
     int x_;
     int y_;
 
-    std::vector<std::vector<std::shared_ptr<Unit>>> units_;
-    std::vector<std::vector<std::shared_ptr<Tile>>> tiles_; 
+    std::vector<std::vector<UnitPtr>> units_;
+    std::vector<std::vector<TilePtr>> tiles_; 
 };
 
 class MapException : public std::exception

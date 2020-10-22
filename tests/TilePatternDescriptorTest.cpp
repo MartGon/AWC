@@ -13,54 +13,54 @@ TEST_CASE("Manhattan TilePattern test")
     Vector2 w = {-1, 0};
     Vector2 n = {0, 1};
     Vector2 s = {0, -1};
-    std::vector<Vector2> directions = {e, w, n, s};
+    Directions directions = {e, w, n, s};
 
-    std::vector<Vector2> eastLockedDirections = {e, n, s};
-    std::vector<Vector2> westLockedDirections = {w, n, s};
-    std::vector<Vector2> northLockedDirections = {e, w, n};
-    std::vector<Vector2> southLockedDirections = {e, w, s};
+    Directions eastLockedDirections = {e, n, s};
+    Directions westLockedDirections = {w, n, s};
+    Directions northLockedDirections = {e, w, n};
+    Directions southLockedDirections = {e, w, s};
 
     SUBCASE("Check constructing without exclusive")
     {
-        auto manhattanTilePatternImplicit = TilePatternDescriptor::Create(directions);
+        auto manhattanImplicit = TilePatternDescriptor::Create(directions);
 
         // Implicit
-        CHECK(manhattanTilePatternImplicit->GetLockedDirections(e) == eastLockedDirections);
-        CHECK(manhattanTilePatternImplicit->GetLockedDirections(w) == westLockedDirections);
-        CHECK(manhattanTilePatternImplicit->GetLockedDirections(n) == northLockedDirections);
-        CHECK(manhattanTilePatternImplicit->GetLockedDirections(s) == southLockedDirections);
+        CHECK(manhattanImplicit->GetLockedDirections(e) == eastLockedDirections);
+        CHECK(manhattanImplicit->GetLockedDirections(w) == westLockedDirections);
+        CHECK(manhattanImplicit->GetLockedDirections(n) == northLockedDirections);
+        CHECK(manhattanImplicit->GetLockedDirections(s) == southLockedDirections);
     }
     SUBCASE("Check constructing by exclusive")
     {
-        std::unordered_map<Vector2, std::vector<Vector2>> exclusiveDirections = 
+        DirectionsTable exclusiveDirections = 
         {
             {e, {w}},
             {w, {e}},
             {n, {s}},
             {s, {n}}
         };
-        auto manhattanTilePattern = TilePatternDescriptor::CreateByExclusiveDirectionsTable(directions, exclusiveDirections);
+        auto manhattan = TilePatternDescriptor::CreateByExclusive(directions, exclusiveDirections);
 
-        CHECK(manhattanTilePattern->GetLockedDirections(e) == eastLockedDirections);
-        CHECK(manhattanTilePattern->GetLockedDirections(w) == westLockedDirections);
-        CHECK(manhattanTilePattern->GetLockedDirections(n) == northLockedDirections);
-        CHECK(manhattanTilePattern->GetLockedDirections(s) == southLockedDirections);
+        CHECK(manhattan->GetLockedDirections(e) == eastLockedDirections);
+        CHECK(manhattan->GetLockedDirections(w) == westLockedDirections);
+        CHECK(manhattan->GetLockedDirections(n) == northLockedDirections);
+        CHECK(manhattan->GetLockedDirections(s) == southLockedDirections);
     }
     SUBCASE("Check constructing by locking")
     {
-        std::unordered_map<Vector2, std::vector<Vector2>> exclusiveDirections = 
+        DirectionsTable lockedDirections = 
         {
             {e, eastLockedDirections},
             {w, westLockedDirections},
             {n, northLockedDirections},
             {s, southLockedDirections}
         };
-        auto manhattanTilePattern = TilePatternDescriptor::CreateByLockedDirectionsTable(directions, exclusiveDirections);
+        auto manhattan = TilePatternDescriptor::CreateByLocked(directions, lockedDirections);
 
-        CHECK(manhattanTilePattern->GetLockedDirections(e) == eastLockedDirections);
-        CHECK(manhattanTilePattern->GetLockedDirections(w) == westLockedDirections);
-        CHECK(manhattanTilePattern->GetLockedDirections(n) == northLockedDirections);
-        CHECK(manhattanTilePattern->GetLockedDirections(s) == southLockedDirections);
+        CHECK(manhattan->GetLockedDirections(e) == eastLockedDirections);
+        CHECK(manhattan->GetLockedDirections(w) == westLockedDirections);
+        CHECK(manhattan->GetLockedDirections(n) == northLockedDirections);
+        CHECK(manhattan->GetLockedDirections(s) == southLockedDirections);
     }
 }
 
@@ -71,31 +71,31 @@ TEST_CASE("Configuration interface tests")
     Vector2 w = {-1, 0};
     Vector2 n = {0, 1};
     Vector2 s = {0, -1};
-    std::vector<Vector2> directions = {e, w, n, s};
+    Directions directions = {e, w, n, s};
 
-    auto manhattanTilePattern = TilePatternDescriptor::Create(directions);
+    auto manhattan = TilePatternDescriptor::Create(directions);
 
     SUBCASE("Check configuration of directions")
     {
-        CHECK(manhattanTilePattern->IsDirection(e) == true);
-        CHECK(manhattanTilePattern->IsDirection({1, 1}) == false);
+        CHECK(manhattan->IsDirection(e) == true);
+        CHECK(manhattan->IsDirection({1, 1}) == false);
 
-        CHECK_THROWS_AS(manhattanTilePattern->RemoveDirection({1, 1}), const TilePatternDescriptorNoExistingDirection&);
-        CHECK_NOTHROW(manhattanTilePattern->RemoveDirection(e));
+        CHECK_THROWS_AS(manhattan->RemoveDirection({1, 1}), const TilePatternDescriptorNoExistingDirection&);
+        CHECK_NOTHROW(manhattan->RemoveDirection(e));
 
-        CHECK_THROWS_AS(manhattanTilePattern->AddDirection(n), const TilePatternDescriptorAlreadyExistingDirection&);
-        CHECK_NOTHROW(manhattanTilePattern->AddDirection({1, 1}));
+        CHECK_THROWS_AS(manhattan->AddDirection(n), const TilePatternDescriptorAlreadyExistingDirection&);
+        CHECK_NOTHROW(manhattan->AddDirection({1, 1}));
     }
 
     SUBCASE("Check configuration of locked directions")
     {
-        manhattanTilePattern->TableLockedDirections(n, {e, w});
+        manhattan->TableLockedDirections(n, {e, w});
 
-        CHECK(manhattanTilePattern->GetLockedDirections(n) == std::vector{e, w});
+        CHECK(manhattan->GetLockedDirections(n) == std::vector{e, w});
 
-        manhattanTilePattern->TableExclusiveDirections(n, {n, s});
+        manhattan->TableExclusiveDirections(n, {n, s});
 
-        CHECK(manhattanTilePattern->GetLockedDirections(n) == std::vector{e, w});
+        CHECK(manhattan->GetLockedDirections(n) == std::vector{e, w});
     }
 }
 
@@ -106,10 +106,10 @@ TEST_CASE("TilePattern creation tests")
     Vector2 w = {-1, 0};
     Vector2 n = {0, 1};
     Vector2 s = {0, -1};
-    std::vector<Vector2> directions = {e, w, n, s};
+    Directions directions = {e, w, n, s};
 
     // Map
     Map map{10, 10};
 
-    auto manhattanTilePattern = TilePatternDescriptor::Create(directions);
+    auto manhattan = TilePatternDescriptor::Create(directions);
 }

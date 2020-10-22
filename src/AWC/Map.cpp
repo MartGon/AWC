@@ -10,11 +10,11 @@ Map::Map(int x, int y) : x_{x}, y_{y}
     // TODO: Should change to not use std::vector<std::vector<T>>. [x + y * xSize]
     units_.resize(x);
     for(int i = 0; i < x; i++)
-        units_[i] = std::vector<std::shared_ptr<Unit>>{(long unsigned int)y};
+        units_[i] = std::vector<UnitPtr>{(long unsigned int)y};
     
     tiles_.resize(x);
     for(int i = 0; i < x; i++)
-        tiles_[i] = std::vector<std::shared_ptr<Tile>>{(long unsigned int)y};
+        tiles_[i] = std::vector<TilePtr>{(long unsigned int)y};
     
 }
 
@@ -28,7 +28,7 @@ int Map::GetHeight() const
     return y_;
 }
 
-void Map::AddUnit(int x, int y, std::shared_ptr<Unit> unit)
+void Map::AddUnit(int x, int y, UnitPtr unit)
 {
     if(IsPositionFree(x, y))
         units_[x][y] = unit;
@@ -36,14 +36,14 @@ void Map::AddUnit(int x, int y, std::shared_ptr<Unit> unit)
         throw MapInvalidUnitPosition(*this, x, y);
 }
 
-void Map::AddUnit(Vector2 pos, std::shared_ptr<Unit> unit)
+void Map::AddUnit(Vector2 pos, UnitPtr unit)
 {
     AddUnit(pos.x, pos.y, unit);
 }
 
-const std::shared_ptr<Unit> Map::GetUnit(int x, int y) const
+const UnitPtr Map::GetUnit(int x, int y) const
 {
-    std::shared_ptr<Unit> unit = nullptr;
+    UnitPtr unit = nullptr;
     if(IsPositionValid(x, y))
         unit = units_[x][y];
     else
@@ -52,7 +52,7 @@ const std::shared_ptr<Unit> Map::GetUnit(int x, int y) const
     return unit;
 }
 
-const std::shared_ptr<Unit> Map::GetUnit(Vector2 pos) const
+const UnitPtr Map::GetUnit(Vector2 pos) const
 {
     return GetUnit(pos.x, pos.y);
 }
@@ -60,7 +60,7 @@ const std::shared_ptr<Unit> Map::GetUnit(Vector2 pos) const
 void Map::RemoveUnit(int x, int y)
 {
     if(IsPositionValid(x, y))
-        units_[x][y] = std::shared_ptr<Unit>{nullptr};
+        units_[x][y] = UnitPtr{nullptr};
     else
         throw MapIndexOutOfBounds(*this, x, y);
 }
@@ -70,7 +70,7 @@ void Map::RemoveUnit(Vector2 pos)
     RemoveUnit(pos.x, pos.y);
 }
 
-void Map::SetTile(int x, int y, std::shared_ptr<Tile> tile)
+void Map::SetTile(int x, int y, TilePtr tile)
 {
     if(IsPositionValid(x, y))
         tiles_[x][y] = tile;
@@ -78,14 +78,14 @@ void Map::SetTile(int x, int y, std::shared_ptr<Tile> tile)
         throw MapIndexOutOfBounds(*this, x, y);
 }
 
-void Map::SetTile(Vector2 pos, std::shared_ptr<Tile> tile)
+void Map::SetTile(Vector2 pos, TilePtr tile)
 {
     SetTile(pos.x, pos.y, tile);
 }
 
-const std::shared_ptr<Tile> Map::GetTile(int x, int y) const
+const TilePtr Map::GetTile(int x, int y) const
 {
-    std::shared_ptr<Tile> tile = nullptr;
+    TilePtr tile = nullptr;
     if(IsPositionValid(x, y))
         tile = tiles_[x][y];
     else
@@ -94,7 +94,7 @@ const std::shared_ptr<Tile> Map::GetTile(int x, int y) const
     return tile;
 }
 
-const std::shared_ptr<Tile> Map::GetTile(Vector2 pos) const
+const TilePtr Map::GetTile(Vector2 pos) const
 {
     return GetTile(pos.x, pos.y);
 }

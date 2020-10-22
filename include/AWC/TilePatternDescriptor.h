@@ -19,8 +19,8 @@ class TilePatternDescriptor
 public:
 
     static TilePatternDescriptorPtr Create(const Directions& directions) {return TilePatternDescriptorPtr{new TilePatternDescriptor{directions}};};
-    static TilePatternDescriptorPtr CreateByLockedDirectionsTable(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
-    static TilePatternDescriptorPtr CreateByExclusiveDirectionsTable(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
+    static TilePatternDescriptorPtr CreateByLocked(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
+    static TilePatternDescriptorPtr CreateByExclusive(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
 
     TilePatternPtr CalculateTilePattern(Vector2 origin, TilePatternConstraints constraints);
     TilePatternPtr CalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, TilePatternConstraints constraints);

@@ -14,13 +14,13 @@
 // Public
 
 // Factory methods
-std::shared_ptr<TilePatternDescriptor> TilePatternDescriptor::CreateByLockedDirectionsTable(const Directions& directions, 
+TilePatternDescriptorPtr TilePatternDescriptor::CreateByLocked(const Directions& directions, 
     const DirectionsTable& lockedDirectionsTable)
 {
     return std::shared_ptr<TilePatternDescriptor>{new TilePatternDescriptor{directions, lockedDirectionsTable}};
 }
 
-std::shared_ptr<TilePatternDescriptor>  TilePatternDescriptor::CreateByExclusiveDirectionsTable(const Directions& directions, 
+TilePatternDescriptorPtr  TilePatternDescriptor::CreateByExclusive(const Directions& directions, 
     const DirectionsTable& exclusiveDirectionsTable)
 {
     return std::shared_ptr<TilePatternDescriptor>{new TilePatternDescriptor{directions, GenerateLockedDirectionsTable(directions, exclusiveDirectionsTable)}};
