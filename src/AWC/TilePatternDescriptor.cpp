@@ -117,22 +117,19 @@ TilePatternPtr TilePatternDescriptor::CalculateTilePattern(Vector2 origin, std::
 
         // Get its neighbours
         auto discoverDirections = GetDiscoverDirections(node);
-        auto neighbours = DiscoverNeighbours(constraints.map, tg, node->pos, discoverDirections);
+        auto neighbours = DiscoverNeighbours(constraints.GetMap(), tg, node->pos, discoverDirections);
         for(const auto& nei : neighbours)
         {
             auto sharedNei = nei.lock();
 
             // Check if accumulated cost to this neighbour is lower than previous
-            if(auto tile = constraints.map.GetTile(sharedNei->pos.x, sharedNei->pos.y))
+            int neiCost = constraints.GetTileCost(sharedNei->pos);
+            int calculatedCost = node->cost + neiCost;
+            if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.maxRange)
             {
-                int neiCost = constraints.tileCostTable.GetCost(tile->GetId());
-                int calculatedCost = node->cost + neiCost;
-                if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.maxRange)
-                {
-                    // Push it to queue if that's the case
-                    sharedNei->cost = calculatedCost;
-                    prioQueue.push(nei);
-                }
+                // Push it to queue if that's the case
+                sharedNei->cost = calculatedCost;
+                prioQueue.push(nei);
             }
         }
     }
