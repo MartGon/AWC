@@ -117,7 +117,7 @@ TilePatternPtr TilePatternDescriptor::CalculateTilePattern(Vector2 origin, std::
 
         // Get its neighbours
         auto discoverDirections = GetDiscoverDirections(node);
-        auto neighbours = DiscoverNeighbours(constraints.GetMap(), tg, node->pos, discoverDirections);
+        auto neighbours = tg.DiscoverNeighbours(node->pos, discoverDirections, constraints);
         for(const auto& nei : neighbours)
         {
             auto sharedNei = nei.lock();
@@ -182,33 +182,6 @@ Directions TilePatternDescriptor::GenerateLockedDirections(const Directions& dir
         VectorUtils::RemoveByValue(lockedDirections, exclusiveDir);
 
     return lockedDirections;
-}
-
-std::vector<TileNodePtr> TilePatternDescriptor::DiscoverNeighbours(const Map& map, TileGraph& mg, 
-    Vector2 pos, const Directions& directions)
-{
-    std::vector<TileNodePtr> neighbours;
-
-    auto current = mg.GetNode(pos);
-    for(const auto& dir : directions)
-    {
-        Vector2 tilePos = pos + dir;
-    
-        if(map.IsPositionValid(tilePos.x, tilePos.y))
-        {
-            TileNodePtr neighbour;
-            if(mg.NodeExists(tilePos))
-                neighbour = mg.GetNode(tilePos);
-            else
-            {
-                neighbour = mg.CreateNode(tilePos, std::numeric_limits<unsigned int>::max(), pos);
-            }
-
-            neighbours.push_back(neighbour);
-        }
-    }
-
-    return neighbours;
 }
 
 Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode)

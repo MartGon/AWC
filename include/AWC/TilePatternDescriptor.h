@@ -44,7 +44,6 @@ private:
     static DirectionsTable GenerateLockedDirectionsTable(const Directions& directions, const DirectionsTable& exclusiveDirections);
     static Directions GenerateLockedDirections(const Directions& directions, const Directions& exclusiveDirections);
 
-    std::vector<TileNodePtr> DiscoverNeighbours(const Map& map, TileGraph& mg, Vector2 pos, const Directions& directions);    
     Directions GetDiscoverDirections(TileNodePtr tileNode);
 
     Directions directions_;

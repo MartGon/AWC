@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Utils/Vector2.h>
+#include <AWC/AWCfwd.h>
 #include <AWC/TileNode.h>
 
 #include <exception>
@@ -10,6 +11,7 @@
 #include <string>
 
 
+using Directions = std::vector<Vector2>;
 using TileNodePtr = std::weak_ptr<TileNode>;
 
 // MapGraph
@@ -29,6 +31,8 @@ public:
     bool NodeExists(Vector2 pos) const;
     
     void SetNeighbour(Vector2 a, Vector2 b);
+
+    std::vector<TileNodePtr> DiscoverNeighbours(Vector2 pos, const Directions& directions, const TilePatternConstraints& tpc);    
 
 #ifdef _DEBUG
     bool moved = false;

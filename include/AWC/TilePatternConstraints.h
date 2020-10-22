@@ -8,8 +8,8 @@ public:
     TilePatternConstraints(const Map& map, const CostTable& tileCostTable, const CostTable& unitCostTable, 
     unsigned int maxRange, unsigned int minRange = 0);
 
-    bool IsPositionValid(Vector2 pos);
-    unsigned int GetTileCost(Vector2 pos);
+    bool IsPositionValid(Vector2 pos) const;
+    unsigned int GetTileCost(Vector2 pos) const;
 
     const Map& GetMap() {return map;}
 

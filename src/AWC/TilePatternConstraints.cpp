@@ -10,12 +10,12 @@ TilePatternConstraints::TilePatternConstraints(const Map& map, const CostTable& 
 
 }
 
-bool TilePatternConstraints::IsPositionValid(Vector2 pos)
+bool TilePatternConstraints::IsPositionValid(Vector2 pos) const
 {
     return map.IsPositionValid(pos);
 }
 
-unsigned int TilePatternConstraints::GetTileCost(Vector2 pos)
+unsigned int TilePatternConstraints::GetTileCost(Vector2 pos) const
 {
     auto tile = map.GetTile(pos);
     auto cost = tileCostTable.GetCost(tile->GetId());
