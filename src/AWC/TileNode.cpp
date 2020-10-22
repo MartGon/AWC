@@ -5,7 +5,7 @@ TileNode::TileNode(const Vector2 pos, const unsigned int cost) : pos{pos}, cost{
 
 }
 
-void TileNode::AddNeigbour(Vector2 pos, std::weak_ptr<TileNode> neighbour)
+void TileNode::AddNeigbour(Vector2 pos, TileNodePtr neighbour)
 {
     if(!NeighbourExists(pos))
         neighbours_.insert({pos, neighbour});
@@ -13,9 +13,9 @@ void TileNode::AddNeigbour(Vector2 pos, std::weak_ptr<TileNode> neighbour)
         throw MapNodeAlreadyExistingNeigbour(pos);
 }
 
-std::weak_ptr<TileNode> TileNode::GetNeighbour(Vector2 pos)
+TileNodePtr TileNode::GetNeighbour(Vector2 pos)
 {
-    std::weak_ptr<TileNode> nei;
+    TileNodePtr nei;
     if(NeighbourExists(pos))
         nei = neighbours_[pos];
     else
@@ -24,9 +24,9 @@ std::weak_ptr<TileNode> TileNode::GetNeighbour(Vector2 pos)
     return nei;
 }
 
-std::vector<std::weak_ptr<TileNode>> TileNode::GetNeighbours()
+std::vector<TileNodePtr> TileNode::GetNeighbours()
 {
-    std::vector<std::weak_ptr<TileNode>> neighbours;
+    std::vector<TileNodePtr> neighbours;
     for(auto nei : neighbours_)
         neighbours.push_back(nei.second);
 
@@ -38,9 +38,9 @@ bool TileNode::NeighbourExists(Vector2 pos)
     return neighbours_.find(pos) != neighbours_.end();
 }
 
-std::weak_ptr<TileNode> TileNode::GetNeighbourBySortCriteria(std::function<bool(std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b)> sortCriteria)
+TileNodePtr TileNode::GetNeighbourBySortCriteria(std::function<bool(TileNodePtr a, TileNodePtr b)> sortCriteria)
 {
-    std::weak_ptr<TileNode> match = std::shared_ptr<TileNode>{nullptr};
+    TileNodePtr match = std::shared_ptr<TileNode>{nullptr};
 
     auto neighbours = GetNeighbours();
     if(!neighbours.empty())

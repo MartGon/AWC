@@ -9,6 +9,9 @@
 #include <string>
 
 class TileGraph;
+class TileNode;
+
+using TileNodePtr = std::weak_ptr<TileNode>;
 
 class TileNode
 {
@@ -16,20 +19,20 @@ class TileNode
 friend class TileGraph;
 
 public:
-    std::weak_ptr<TileNode> GetNeighbour(Vector2 pos);
-    std::vector<std::weak_ptr<TileNode>> GetNeighbours();
+    TileNodePtr GetNeighbour(Vector2 pos);
+    std::vector<TileNodePtr> GetNeighbours();
 
     bool NeighbourExists(Vector2 pos);
 
-    std::weak_ptr<TileNode> GetNeighbourBySortCriteria(std::function<bool(std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b)> sortCriteria);
+    TileNodePtr GetNeighbourBySortCriteria(std::function<bool(TileNodePtr a, TileNodePtr b)> sortCriteria);
 
     const Vector2 pos;
     unsigned int cost;
 private:
-    void AddNeigbour(Vector2 pos, std::weak_ptr<TileNode> neighbour);
+    void AddNeigbour(Vector2 pos, TileNodePtr neighbour);
     TileNode(const Vector2 pos, const unsigned int cost);
 
-    std::unordered_map<Vector2, std::weak_ptr<TileNode>> neighbours_;
+    std::unordered_map<Vector2, TileNodePtr> neighbours_;
 };
 
 // Exceptions

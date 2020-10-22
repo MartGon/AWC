@@ -31,7 +31,7 @@ TEST_CASE("TilePattern pathfinding test")
     Vector2 n = {0, 1};
     Vector2 s = {0, -1};
     std::vector<Vector2> directions = {e, w, n, s};
-    auto manhattanDescriptor = TilePatternDescriptor::CreateTilePatternDescriptor(directions);
+    auto manhattanDescriptor = TilePatternDescriptor::Create(directions);
 
     // CostTable
     CostTable tileCostTable;

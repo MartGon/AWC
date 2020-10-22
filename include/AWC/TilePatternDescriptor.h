@@ -1,5 +1,7 @@
 #include <Utils/Vector2.h>
+
 #include <AWC/AWCfwd.h>
+#include <AWC/TileNode.h>
 
 #include <vector>
 #include <unordered_map>
@@ -7,41 +9,46 @@
 #include <exception>
 #include <optional>
 
+using TilePatternDescriptorPtr = std::shared_ptr<TilePatternDescriptor>;
+using TilePatternPtr = std::shared_ptr<TilePattern>;
+using Directions = std::vector<Vector2>;
+using DirectionsTable = std::unordered_map<Vector2, Directions>;
+
 class TilePatternDescriptor
 {
 public:
 
-    static std::shared_ptr<TilePatternDescriptor> CreateTilePatternDescriptor(const std::vector<Vector2>& directions) {return std::shared_ptr<TilePatternDescriptor>{new TilePatternDescriptor{directions}};};
-    static std::shared_ptr<TilePatternDescriptor> CreateTilePatternDescriptorByLockedDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& lockedDirectionsMap);
-    static std::shared_ptr<TilePatternDescriptor> CreateTilePatternDescriptorByExclusiveDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& exclusiveDirectionsMap);
+    static TilePatternDescriptorPtr Create(const Directions& directions) {return TilePatternDescriptorPtr{new TilePatternDescriptor{directions}};};
+    static TilePatternDescriptorPtr CreateByLockedDirectionsTable(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
+    static TilePatternDescriptorPtr CreateByExclusiveDirectionsTable(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
 
-    std::shared_ptr<TilePattern> CalculateTilePattern(Vector2 origin, TilePatternConstraints constraints);
-    std::shared_ptr<TilePattern> CalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, TilePatternConstraints constraints);
+    TilePatternPtr CalculateTilePattern(Vector2 origin, TilePatternConstraints constraints);
+    TilePatternPtr CalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, TilePatternConstraints constraints);
 
-    std::vector<Vector2> GetDirections();
+    Directions GetDirections();
 
     bool IsDirection(Vector2 dir);
     void AddDirection(Vector2 dir);
     void RemoveDirection(Vector2 dir);
 
-    std::vector<Vector2> GetLockedDirections(Vector2 dir);
+    Directions GetLockedDirections(Vector2 dir);
 
-    void SetExclusiveDirections(Vector2 dir, const std::vector<Vector2>& exclusiveDirections);
-    void SetLockedDirections(Vector2 dir, const std::vector<Vector2>& lockedDirections);
+    void TableExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections);
+    void TableLockedDirections(Vector2 dir, const Directions& lockedDirections);
 
 private:
-    TilePatternDescriptor(const std::vector<Vector2>& directions);
-    TilePatternDescriptor(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& lockedDirectionsMap);
+    TilePatternDescriptor(const Directions& directions);
+    TilePatternDescriptor(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
 
-    static std::unordered_map<Vector2, std::vector<Vector2>> GenerateDefaultLockedDirectionsMap(const std::vector<Vector2>& directions);
-    static std::unordered_map<Vector2, std::vector<Vector2>> GenerateLockedDirectionsMap(const std::vector<Vector2>& directions, const std::unordered_map<Vector2, std::vector<Vector2>>& exclusiveDirections);
-    static std::vector<Vector2> GenerateLockedDirections(const std::vector<Vector2>& directions, const std::vector<Vector2>& exclusiveDirections);
+    static DirectionsTable GenerateDefaultLockedDirectionsTable(const Directions& directions);
+    static DirectionsTable GenerateLockedDirectionsTable(const Directions& directions, const DirectionsTable& exclusiveDirections);
+    static Directions GenerateLockedDirections(const Directions& directions, const Directions& exclusiveDirections);
 
-    std::vector<std::weak_ptr<TileNode>> DiscoverNeighbours(const Map& map, TileGraph& mg, Vector2 pos, const std::vector<Vector2>& directions);    
-    std::vector<Vector2> GetDiscoverDirections(std::weak_ptr<TileNode> tileNode);
+    std::vector<TileNodePtr> DiscoverNeighbours(const Map& map, TileGraph& mg, Vector2 pos, const Directions& directions);    
+    Directions GetDiscoverDirections(TileNodePtr tileNode);
 
-    std::vector<Vector2> directions_;
-    std::unordered_map<Vector2, std::vector<Vector2>> lockedDirectionsMap_;
+    Directions directions_;
+    DirectionsTable lockedDirectionsTable_;
 };
 
 class TilePatternDescriptorException : public std::exception
