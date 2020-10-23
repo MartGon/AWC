@@ -40,17 +40,8 @@ std::vector<Vector2> TilePatternUnion::GetTilesPosInPattern() const
 {
     auto tilesA = a_->GetTilesPosInPattern();
     auto tilesB = b_->GetTilesPosInPattern();
-    std::vector<Vector2> result;
-
-    for(auto tile : tilesA)
-        if(!VectorUtils::IsInside(result, tile))
-            result.push_back(tile);
-
-    for(auto tile : tilesB)
-        if(!VectorUtils::IsInside(result, tile))
-            result.push_back(tile);
-
-    return result;
+    
+    return VectorUtils::Union(tilesA, tilesB);
 }
 
 Vector2 TilePatternUnion::GetOrigin() const
