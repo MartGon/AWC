@@ -11,7 +11,7 @@ void TileNode::AddNeigbour(Vector2 pos, TileNodePtr neighbour)
     if(!NeighbourExists(pos))
         neighbours_.insert({pos, neighbour});
     else
-        throw AWCAlreadyExistingIndexException(pos);
+        throw AWCAlreadyExistingIndexException("TileNode::AddNeighbour", pos);
 }
 
 TileNodePtr TileNode::GetNeighbour(Vector2 pos)
@@ -20,7 +20,7 @@ TileNodePtr TileNode::GetNeighbour(Vector2 pos)
     if(NeighbourExists(pos))
         nei = neighbours_[pos];
     else
-        throw AWCNoExistingIndexException(pos);
+        throw AWCNoExistingIndexException("TileNode::GetNeighbour", pos);
 
     return nei;
 }

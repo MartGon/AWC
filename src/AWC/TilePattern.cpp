@@ -8,15 +8,7 @@ TilePattern::TilePattern(Vector2 origin, TileGraph tg, unsigned int maxRange, un
 
 unsigned int TilePattern::GetTileCost(Vector2 dest) const
 {
-    unsigned int cost = std::numeric_limits<unsigned int>::max();
-    if(TilePattern::IsTileInRange(dest))
-        cost = tg_.GetNode(dest).lock()->cost;
-    /*
-    else
-        throw std::exception()
-    */
-    
-    return cost;
+    return tg_.GetNode(dest).lock()->cost;
 }
 
 bool TilePattern::IsTileInPattern(Vector2 dest) const

@@ -1,5 +1,9 @@
+#pragma once
+
 #include <vector>
 #include <algorithm>
+#include <array>
+#include <string>
 
 namespace VectorUtils
 {
@@ -27,4 +31,9 @@ namespace VectorUtils
 
         return result;
     }
+}
+
+namespace StringUtils
+{
+    std::string Replace(std::string string, const std::string& token, const std::string& replacer);
 }

@@ -1,5 +1,7 @@
 #include <AWC/AWCException.h>
+
 #include <Utils/Vector2.h>
+#include <Utils/STLUtils.h>
 
 #include <algorithm>
 
@@ -17,29 +19,58 @@ const char* AWCException::what() const noexcept
 
 // AWCInvalidIndexException
 
-AWCInvalidIndexException::AWCInvalidIndexException(std::string formattedMsg, Vector2 index) : index{index}, AWCException{GetMessage(formattedMsg)}
+const std::string AWCInvalidIndexException::INDEX_TOKEN = "%i";
+const std::string AWCInvalidIndexException::PREFIX_TOKEN = "%p";
+
+AWCInvalidIndexException::AWCInvalidIndexException(std::string formattedMsg, std::string prefix, Vector2 pos) 
+    : index{pos}, AWCException{GetMessage(formattedMsg, prefix, pos)}
+{
+    
+}
+
+AWCInvalidIndexException::AWCInvalidIndexException(std::string formattedMsg, std::string prefix, int x, int y) 
+    : index{Vector2{x, y}}, AWCException{GetMessage(formattedMsg, prefix, {x, y})}
+{
+    
+}
+
+AWCInvalidIndexException::AWCInvalidIndexException(std::string formattedMsg, Vector2 pos) 
+    : index{pos}, AWCException{GetMessage(formattedMsg, std::string{}, pos)}
 {
 
 }
 
-AWCInvalidIndexException::AWCInvalidIndexException(std::string formattedMsg, int x, int y) : AWCInvalidIndexException(formattedMsg, Vector2{x, y})
+AWCInvalidIndexException::AWCInvalidIndexException(std::string formattedMsg, int x, int y) 
+    : AWCInvalidIndexException(formattedMsg, Vector2{x, y})
 {
 
 }
 
-std::string AWCInvalidIndexException::GetMessage(std::string formattedMsg) const
+std::string AWCInvalidIndexException::GetMessage(std::string formattedMsg, std::string prefix, Vector2 index) const
 {
-    auto tokenPos = formattedMsg.find(FORMAT_TOKEN);
-    auto indexStr = index.ToString();
-    formattedMsg.replace(tokenPos, FORMAT_TOKEN.size(), indexStr);
+    // Replace index
+    formattedMsg = StringUtils::Replace(formattedMsg, INDEX_TOKEN, index.ToString());
+    formattedMsg = StringUtils::Replace(formattedMsg, PREFIX_TOKEN, prefix);
 
     return formattedMsg;
 }
 
 // NoExistingIndex
 
+AWCNoExistingIndexException::AWCNoExistingIndexException(std::string prefix, Vector2 index) 
+    : AWCInvalidIndexException("%p: Index %i did not exist", prefix, index)
+{
+
+}
+
+AWCNoExistingIndexException::AWCNoExistingIndexException(std::string prefix, int x, int y) 
+    : AWCNoExistingIndexException(prefix, Vector2{x, y})
+{
+
+}
+
 AWCNoExistingIndexException::AWCNoExistingIndexException(Vector2 index) 
-    : AWCInvalidIndexException("Index %p did not exist", index)
+    : AWCInvalidIndexException("Index %i did not exist", index)
 {
 
 }
@@ -52,8 +83,20 @@ AWCNoExistingIndexException::AWCNoExistingIndexException(int x, int y)
 
 // Already existing
 
-AWCAlreadyExistingIndexException::AWCAlreadyExistingIndexException(Vector2 index)
-    : AWCInvalidIndexException("Index %p already exists", index)
+AWCAlreadyExistingIndexException::AWCAlreadyExistingIndexException(std::string prefix, Vector2 index)
+    : AWCInvalidIndexException("%p: Index %i already exists", prefix, index)
+{
+
+}
+
+AWCAlreadyExistingIndexException::AWCAlreadyExistingIndexException(std::string prefix, int x, int y)
+    : AWCAlreadyExistingIndexException(prefix, Vector2{x, y})
+{
+
+}
+
+AWCAlreadyExistingIndexException::AWCAlreadyExistingIndexException(Vector2 index) 
+    : AWCInvalidIndexException("Index %i already exists", index)
 {
 
 }

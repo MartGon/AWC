@@ -63,7 +63,7 @@ void TilePatternDescriptor::AddDirection(Vector2 dir)
     if(!IsDirection(dir))
         directions_.push_back(dir);
     else
-        throw AWCAlreadyExistingIndexException(dir);
+        throw AWCAlreadyExistingIndexException("TilePatternDescriptor::AddDirection", dir);
 }
 
 void TilePatternDescriptor::RemoveDirection(Vector2 dir)
@@ -74,7 +74,7 @@ void TilePatternDescriptor::RemoveDirection(Vector2 dir)
         lockedDirectionsTable_.erase(dir);
     }
     else
-        throw AWCNoExistingIndexException(dir);
+        throw AWCNoExistingIndexException("TilePatternDescriptor::RemoveDirection", dir);
 
 }
 

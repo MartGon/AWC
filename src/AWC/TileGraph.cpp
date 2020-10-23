@@ -26,7 +26,7 @@ TileNodePtr TileGraph::CreateNode(const Vector2 pos, const unsigned int cost)
         nodes_.insert({pos, mapNode});
     }
     else
-        throw AWCAlreadyExistingIndexException(pos);
+        throw AWCAlreadyExistingIndexException("TileGraph::CreateNode", pos);;
 
     return mapNode;
 }
@@ -54,7 +54,7 @@ TileNodePtr TileGraph::GetNode(Vector2 pos) const
     if(NodeExists(pos))
         mapNode = nodes_.at(pos);
     else
-        throw AWCNoExistingIndexException(pos);
+        throw AWCNoExistingIndexException("TileGraph::GetNode", pos);
 
     return mapNode;
 }

@@ -34,7 +34,7 @@ void Map::AddUnit(int x, int y, UnitPtr unit)
     if(IsPositionFree(x, y))
         units_[x][y] = unit;
     else
-        throw AWCAlreadyExistingIndexException(x, y);
+        throw AWCAlreadyExistingIndexException("Map::AddUnit", x, y);
 }
 
 void Map::AddUnit(Vector2 pos, UnitPtr unit)
@@ -48,7 +48,7 @@ const UnitPtr Map::GetUnit(int x, int y) const
     if(IsPositionValid(x, y))
         unit = units_[x][y];
     else
-        throw AWCNoExistingIndexException(x, y);
+        throw AWCNoExistingIndexException("Map::GetUnit", x, y);
 
     return unit;
 }
@@ -63,7 +63,7 @@ void Map::RemoveUnit(int x, int y)
     if(IsPositionValid(x, y))
         units_[x][y] = UnitPtr{nullptr};
     else
-        throw AWCNoExistingIndexException(x, y);
+        throw AWCNoExistingIndexException("Map::RemoveUnit", x, y);
 }
 
 void Map::RemoveUnit(Vector2 pos)
@@ -76,7 +76,7 @@ void Map::SetTile(int x, int y, TilePtr tile)
     if(IsPositionValid(x, y))
         tiles_[x][y] = tile;
     else
-        throw AWCNoExistingIndexException(x, y);
+        throw AWCNoExistingIndexException("Map::SetTile", x, y);
 }
 
 void Map::SetTile(Vector2 pos, TilePtr tile)
@@ -90,7 +90,7 @@ const TilePtr Map::GetTile(int x, int y) const
     if(IsPositionValid(x, y))
         tile = tiles_[x][y];
     else
-        throw AWCNoExistingIndexException(x, y);
+        throw AWCNoExistingIndexException("Map::GetTile", x, y);
 
     return tile;
 }
