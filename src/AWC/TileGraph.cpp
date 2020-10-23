@@ -1,5 +1,6 @@
 #include <AWC/TileGraph.h>
 #include <AWC/TilePatternConstraints.h>
+#include <AWC/AWCException.h>
 
 #include <iostream>
 
@@ -25,7 +26,7 @@ TileNodePtr TileGraph::CreateNode(const Vector2 pos, const unsigned int cost)
         nodes_.insert({pos, mapNode});
     }
     else
-        throw TileGraphAlreadyExistingNode(pos);
+        throw AWCAlreadyExistingIndexException(pos);
 
     return mapNode;
 }
@@ -53,7 +54,7 @@ TileNodePtr TileGraph::GetNode(Vector2 pos) const
     if(NodeExists(pos))
         mapNode = nodes_.at(pos);
     else
-        throw TileGraphNoExistingNode(pos);
+        throw AWCNoExistingIndexException(pos);
 
     return mapNode;
 }
@@ -96,16 +97,4 @@ std::vector<TileNodePtr> TileGraph::DiscoverNeighbours(Vector2 pos, const Direct
     }
 
     return neighbours;
-}
-
-// Exceptions
-
-TileGraphException::TileGraphException(const std::string& msg, Vector2 pos) : msg_{msg}, pos{pos}
-{
-
-}
-
-const char* TileGraphException::what() const noexcept
-{
-    return msg_.c_str();
 }

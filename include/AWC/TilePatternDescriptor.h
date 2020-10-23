@@ -51,26 +51,3 @@ private:
     Directions directions_;
     DirectionsTable lockedDirectionsTable_;
 };
-
-class TilePatternDescriptorException : public std::exception
-{
-public:
-    TilePatternDescriptorException(const std::string& msg, Vector2 pos);
-    const char* what() const noexcept;
-
-    Vector2 pos;
-private:
-    std::string msg_;
-};
-
-class TilePatternDescriptorNoExistingDirection : public TilePatternDescriptorException
-{
-public:
-    TilePatternDescriptorNoExistingDirection(Vector2 pos) : TilePatternDescriptorException(std::string("Neighbour at pos ") + pos + " does not exist", pos) {};
-};
-
-class TilePatternDescriptorAlreadyExistingDirection : public TilePatternDescriptorException
-{
-public:
-    TilePatternDescriptorAlreadyExistingDirection(Vector2 pos) : TilePatternDescriptorException(std::string("Neighbour at pos ") + pos + " already exists", pos) {};
-};

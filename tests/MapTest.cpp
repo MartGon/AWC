@@ -7,6 +7,7 @@
 #include <AWC/UnitType.h>
 #include <AWC/Tile.h>
 #include <AWC/TileType.h>
+#include <AWC/AWCException.h>
 
 // Size checking
 TEST_CASE("Maps have a specific size")
@@ -102,14 +103,14 @@ TEST_CASE("Maps follow some rules")
 
     SUBCASE("Don't allow operations out of bounds")
     {
-        CHECK_THROWS_AS(map.AddUnit(xSize + 1, ySize + 1, soldier), const MapIndexOutOfBounds&);
-        CHECK_THROWS_AS(map.SetTile(xSize + 1, ySize + 1, grass), const MapIndexOutOfBounds&);
-        CHECK_THROWS_AS(map.GetUnit(-1, -1), const MapIndexOutOfBounds&);
-        CHECK_THROWS_AS(map.GetTile(-1, -1), const MapIndexOutOfBounds&);
+        CHECK_THROWS_AS(map.AddUnit(xSize + 1, ySize + 1, soldier), const AWCNoExistingIndexException&);
+        CHECK_THROWS_AS(map.SetTile(xSize + 1, ySize + 1, grass), const AWCNoExistingIndexException&);
+        CHECK_THROWS_AS(map.GetUnit(-1, -1), const AWCNoExistingIndexException&);
+        CHECK_THROWS_AS(map.GetTile(-1, -1), const AWCNoExistingIndexException&);
     }
     SUBCASE("Only one unit can be in a given position")
     {
         auto soldier2 = soldierUnitType.CreateUnit();
-        CHECK_THROWS_AS(map.AddUnit(0, 0, soldier2), const MapInvalidUnitPosition&);
+        CHECK_THROWS_AS(map.AddUnit(0, 0, soldier2), const AWCAlreadyExistingIndexException&);
     }
 }

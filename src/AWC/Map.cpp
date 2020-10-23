@@ -1,5 +1,6 @@
 #include <AWC/Map.h>
 #include <AWC/TileType.h>
+#include <AWC/AWCException.h>
 
 #include <sstream>
 
@@ -33,7 +34,7 @@ void Map::AddUnit(int x, int y, UnitPtr unit)
     if(IsPositionFree(x, y))
         units_[x][y] = unit;
     else
-        throw MapInvalidUnitPosition(*this, x, y);
+        throw AWCAlreadyExistingIndexException(x, y);
 }
 
 void Map::AddUnit(Vector2 pos, UnitPtr unit)
@@ -47,7 +48,7 @@ const UnitPtr Map::GetUnit(int x, int y) const
     if(IsPositionValid(x, y))
         unit = units_[x][y];
     else
-        throw MapIndexOutOfBounds(*this, x, y);
+        throw AWCNoExistingIndexException(x, y);
 
     return unit;
 }
@@ -62,7 +63,7 @@ void Map::RemoveUnit(int x, int y)
     if(IsPositionValid(x, y))
         units_[x][y] = UnitPtr{nullptr};
     else
-        throw MapIndexOutOfBounds(*this, x, y);
+        throw AWCNoExistingIndexException(x, y);
 }
 
 void Map::RemoveUnit(Vector2 pos)
@@ -75,7 +76,7 @@ void Map::SetTile(int x, int y, TilePtr tile)
     if(IsPositionValid(x, y))
         tiles_[x][y] = tile;
     else
-        throw MapIndexOutOfBounds(*this, x, y);
+        throw AWCNoExistingIndexException(x, y);
 }
 
 void Map::SetTile(Vector2 pos, TilePtr tile)
@@ -89,7 +90,7 @@ const TilePtr Map::GetTile(int x, int y) const
     if(IsPositionValid(x, y))
         tile = tiles_[x][y];
     else
-        throw MapIndexOutOfBounds(*this, x, y);
+        throw AWCNoExistingIndexException(x, y);
 
     return tile;
 }
@@ -119,44 +120,6 @@ bool Map::IsPositionValid(int x, int y) const
 bool Map::IsPositionValid(Vector2 pos) const
 {
     return IsPositionValid(pos.x, pos.y);
-}
-
-// Exceptions
-
-MapException::MapException(const Map& map) : _map{map}
-{
-
-}
-
-const char* MapException::what() const noexcept
-{
-    return GetErrorMessage().c_str();
-}
-
-MapIndexOutOfBounds::MapIndexOutOfBounds(const Map& map, int x, int y) : _x{x}, _y{y}, MapException(map)
-{
-
-}
-
-const std::string MapIndexOutOfBounds::GetErrorMessage() const
-{
-    std::stringstream ss;
-    ss << "IndexOutOfBounds: Target(" << _x << ", " << _y << ")";
-    ss << " vs " << "MapSize(" << _map.GetWidht() << ", " << _map.GetHeight() << ")\n";
-    return ss.str();
-}
-
-
-MapInvalidUnitPosition::MapInvalidUnitPosition(const Map& map, int x, int y) : _x{x}, _y{y}, MapException(map)
-{
-
-}
-
-const std::string MapInvalidUnitPosition::GetErrorMessage() const
-{
-    std::stringstream ss;
-    ss << "MapInvalidUnitPosition: There was a unit already in Pos(" << _x << ", " << _y << ")\n";
-    return ss.str();
 }
 
 // MapUtils

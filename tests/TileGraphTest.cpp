@@ -1,6 +1,7 @@
 #include "doctest.h"
 
 #include <AWC/TileGraph.h>
+#include <AWC/AWCException.h>
 
 #include <iostream>
 
@@ -43,20 +44,20 @@ TEST_CASE("TileNode tests")
         {
             sOrigin->GetNeighbour({-1, -1});
         }
-        catch(const TileNodeNoExistingNeighbour& e)
+        catch(const AWCNoExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
-            CHECK(e.pos == Vector2{-1, -1});
+            CHECK(e.index == Vector2{-1, -1});
         }
         
         try
         {
             mg.SetNeighbour({-1, 0}, {0, 0});
         }
-        catch(const MapNodeAlreadyExistingNeigbour& e)
+        catch(const AWCAlreadyExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
-            CHECK(e.pos == Vector2{0, 0});
+            CHECK(e.index == Vector2{0, 0});
         }
     }
 }
@@ -100,10 +101,10 @@ TEST_CASE("TileGraph test")
         {
             mg.GetNode({-1, -1});
         }
-        catch(const TileGraphNoExistingNode& e)
+        catch(const AWCNoExistingIndexException& e)
         {
             std::cout << e.what() << '\n';
-            CHECK(e.pos == Vector2{-1, -1});
+            CHECK(e.index == Vector2{-1, -1});
         }  
     }
     SUBCASE("Test AlreadyExistingNode exception")
@@ -112,10 +113,10 @@ TEST_CASE("TileGraph test")
         {
             mg.CreateNode({0, 0}, 0);
         }
-        catch(const TileGraphAlreadyExistingNode& e)
+        catch(const AWCAlreadyExistingIndexException& e)
         {
             std::cout << e.what() << '\n';
-            CHECK(e.pos == Vector2{0, 0});
+            CHECK(e.index == Vector2{0, 0});
         }  
     }
     SUBCASE("Test SetNeighbour NoExistingNodes exceptions")
@@ -124,40 +125,40 @@ TEST_CASE("TileGraph test")
         {
             mg.SetNeighbour({-1, -1}, {1, 0});
         }
-        catch(const TileGraphNoExistingNode& e)
+        catch(const AWCNoExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
-            CHECK(e.pos == Vector2{-1, -1});
+            CHECK(e.index == Vector2{-1, -1});
         }
 
         try
         {
             mg.SetNeighbour({1, 0}, {-1, -1});
         }
-        catch(const TileGraphNoExistingNode& e)
+        catch(const AWCNoExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
-            CHECK(e.pos == Vector2{-1, -1});
+            CHECK(e.index == Vector2{-1, -1});
         }
 
         try
         {
             mg.SetNeighbour({0, 0}, {1, 0});
         }
-        catch(const MapNodeAlreadyExistingNeigbour& e)
+        catch(const AWCAlreadyExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
-            CHECK(e.pos == Vector2{1, 0});
+            CHECK(e.index == Vector2{1, 0});
         }   
 
         try
         {
             mg.SetNeighbour({1, 0}, {0, 0});
         }
-        catch(const MapNodeAlreadyExistingNeigbour& e)
+        catch(const AWCAlreadyExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
-            CHECK(e.pos == Vector2{0, 0});
+            CHECK(e.index == Vector2{0, 0});
         }
     }
     SUBCASE("Check move constructor")

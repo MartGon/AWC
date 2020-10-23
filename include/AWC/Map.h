@@ -52,37 +52,6 @@ private:
     std::vector<std::vector<TilePtr>> tiles_; 
 };
 
-class MapException : public std::exception
-{
-public:
-    MapException(const Map& map);
-    virtual char const* what() const noexcept override;
-protected:
-    const Map& _map;
-private:
-    virtual const std::string GetErrorMessage() const = 0;
-};
-
-class MapIndexOutOfBounds : public MapException
-{
-public:
-    MapIndexOutOfBounds(const Map&, int x, int y);
-private:
-    int _x;
-    int _y;
-    const std::string GetErrorMessage() const override;
-};
-
-class MapInvalidUnitPosition : public MapException
-{
-public:
-    MapInvalidUnitPosition(const Map& map, int x, int y);
-private:
-    int _x;
-    int _y;
-    const std::string GetErrorMessage() const override;
-};
-
 // MapUtils
 
 namespace MapUtils

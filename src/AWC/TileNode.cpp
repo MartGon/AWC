@@ -1,4 +1,5 @@
 #include <AWC/TileNode.h>
+#include <AWC/AWCException.h>
 
 TileNode::TileNode(const Vector2 pos, const unsigned int cost) : pos{pos}, cost{cost}
 {
@@ -10,7 +11,7 @@ void TileNode::AddNeigbour(Vector2 pos, TileNodePtr neighbour)
     if(!NeighbourExists(pos))
         neighbours_.insert({pos, neighbour});
     else
-        throw MapNodeAlreadyExistingNeigbour(pos);
+        throw AWCAlreadyExistingIndexException(pos);
 }
 
 TileNodePtr TileNode::GetNeighbour(Vector2 pos)
@@ -19,7 +20,7 @@ TileNodePtr TileNode::GetNeighbour(Vector2 pos)
     if(NeighbourExists(pos))
         nei = neighbours_[pos];
     else
-        throw TileNodeNoExistingNeighbour(pos);
+        throw AWCNoExistingIndexException(pos);
 
     return nei;
 }
@@ -50,15 +51,4 @@ TileNodePtr TileNode::GetNeighbourBySortCriteria(std::function<bool(TileNodePtr 
     }
 
     return match;
-}
-
-// Exceptions
-
-TileNodeException::TileNodeException(const std::string& msg, Vector2 pos) : msg_{msg}, pos{pos}
-{
-}
-
-const char* TileNodeException::what() const noexcept
-{
-    return msg_.c_str();
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <exception>
+#include <AWC/AWCException.h>
 #include <string>
 
 class Map;
@@ -32,11 +32,8 @@ private:
     const int destY_;
 };
 
-class InvalidCommandException : public std::exception
+class InvalidCommandException : public AWCException
 {
 public:
     InvalidCommandException(const std::string error);
-    virtual char const* what() const noexcept override;
-private:
-    const std::string error_;
 };

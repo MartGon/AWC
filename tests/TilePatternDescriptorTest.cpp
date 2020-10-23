@@ -5,6 +5,7 @@
 #include <AWC/TilePatternDescriptor.h>
 #include <AWC/TilePattern.h>
 #include <AWC/Map.h>
+#include <AWC/AWCException.h>
 
 TEST_CASE("Manhattan TilePattern test")
 {
@@ -80,10 +81,10 @@ TEST_CASE("Configuration interface tests")
         CHECK(manhattan->IsDirection(e) == true);
         CHECK(manhattan->IsDirection({1, 1}) == false);
 
-        CHECK_THROWS_AS(manhattan->RemoveDirection({1, 1}), const TilePatternDescriptorNoExistingDirection&);
+        CHECK_THROWS_AS(manhattan->RemoveDirection({1, 1}), const AWCNoExistingIndexException&);
         CHECK_NOTHROW(manhattan->RemoveDirection(e));
 
-        CHECK_THROWS_AS(manhattan->AddDirection(n), const TilePatternDescriptorAlreadyExistingDirection&);
+        CHECK_THROWS_AS(manhattan->AddDirection(n), const AWCAlreadyExistingIndexException&);
         CHECK_NOTHROW(manhattan->AddDirection({1, 1}));
     }
 

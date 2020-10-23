@@ -4,6 +4,8 @@
 #include <AWC/CostTable.h>
 #include <AWC/Map.h>
 #include <AWC/TileGraph.h>
+#include <AWC/AWCException.h>
+
 #include <Utils/STLUtils.h>
 
 #include <limits>
@@ -61,7 +63,7 @@ void TilePatternDescriptor::AddDirection(Vector2 dir)
     if(!IsDirection(dir))
         directions_.push_back(dir);
     else
-        throw TilePatternDescriptorAlreadyExistingDirection(dir);
+        throw AWCAlreadyExistingIndexException(dir);
 }
 
 void TilePatternDescriptor::RemoveDirection(Vector2 dir)
@@ -72,7 +74,7 @@ void TilePatternDescriptor::RemoveDirection(Vector2 dir)
         lockedDirectionsTable_.erase(dir);
     }
     else
-        throw TilePatternDescriptorNoExistingDirection(dir);
+        throw AWCNoExistingIndexException(dir);
 
 }
 
@@ -199,15 +201,4 @@ Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode)
     }
 
     return directions;
-}
-
-// Exceptions
-
-TilePatternDescriptorException::TilePatternDescriptorException(const std::string& msg, Vector2 pos) : msg_{msg}, pos{pos}
-{
-}
-
-const char* TilePatternDescriptorException::what() const noexcept
-{
-    return msg_.c_str();
 }

@@ -52,13 +52,7 @@ bool MoveCommand::CanBeExecuted()
 
 // Exceptions
 
-InvalidCommandException::InvalidCommandException(const std::string error) : error_{error}
+InvalidCommandException::InvalidCommandException(const std::string error) : AWCException(error)
 {
 
-}
-
-const char* InvalidCommandException::what() const noexcept
-{
-    // TODO: GetLastError from command itself
-    return error_.c_str();
 }

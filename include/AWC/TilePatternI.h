@@ -2,6 +2,8 @@
 
 #include <Utils/Vector2.h>
 
+#include <AWC/AWCException.h>
+
 class TilePatternI
 {
 public:
@@ -16,3 +18,5 @@ public:
     virtual std::vector<Vector2> GetTilesPosInPattern() const = 0;
     virtual Vector2 GetOrigin() const = 0;
 };
+
+// Exceptions

@@ -1,4 +1,5 @@
-add_library(AWCSource 
+add_library(AWCSource
+  AWCException.cpp
   Command.cpp
   CostTable.cpp
   Map.cpp

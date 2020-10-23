@@ -9,6 +9,11 @@ public:
     Vector2T(T x, T y) : x{x}, y{y} {};
     Vector2T() : x{0}, y{0} {};
 
+    std::string ToString() const
+    {
+        return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
+    }
+
     T x;
     T y;
 };
@@ -24,7 +29,7 @@ inline Vector2T<T> operator+(const Vector2T<T>& a, const Vector2T<T>& b)
 template <typename T>
 inline std::string operator+(const std::string& str, const Vector2T<T>& vec)
 {
-    return str + "(" + std::to_string(vec.x) + ", " + std::to_string(vec.y) + ")";
+    return str + vec.ToString();
 }
 
 template <typename T>

@@ -39,28 +39,3 @@ public:
 private:
     std::unordered_map<Vector2, std::shared_ptr<TileNode>> nodes_;
 };
-
-// Exceptions
-
-class TileGraphException : public std::exception
-{
-public:
-    TileGraphException(const std::string& msg, Vector2 pos);
-    const char* what() const noexcept override;
-
-    Vector2 pos;
-private:
-    std::string msg_;
-};
-
-class TileGraphNoExistingNode : public TileGraphException
-{
-public:
-    TileGraphNoExistingNode(Vector2 pos) : TileGraphException(std::string("Node at pos ") + pos + std::string(" didn't exist"), pos) {};
-};
-
-class TileGraphAlreadyExistingNode : public TileGraphException
-{
-public:
-    TileGraphAlreadyExistingNode(Vector2 pos) : TileGraphException(std::string("Node at pos ") + pos + std::string(" already existed"), pos) {};
-};
