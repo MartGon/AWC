@@ -11,7 +11,7 @@ TilePatternUnion::TilePatternUnion(TilePatternIPtr a, TilePatternIPtr b) : a_{a}
 
 unsigned int TilePatternUnion::GetTileCost(Vector2 dest) const
 {
-    unsigned int cost;
+    unsigned int cost = std::numeric_limits<unsigned int>::max();
     if(a_->IsTileInPattern(dest))
         cost = a_->GetTileCost(dest);
     else if(b_->IsTileInPattern(dest))
