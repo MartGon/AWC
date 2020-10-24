@@ -1,5 +1,4 @@
 #include <AWC/TileGraph.h>
-#include <AWC/TilePatternConstraints.h>
 #include <AWC/AWCException.h>
 
 #include <iostream>
@@ -73,7 +72,7 @@ void TileGraph::SetNeighbour(Vector2 a, Vector2 b)
     nodeB.lock()->AddNeigbour(a, nodeA);
 }
 
-std::vector<TileNodePtr> TileGraph::DiscoverNeighbours(Vector2 pos, const Directions& directions, const TilePatternConstraints& tpc)
+std::vector<TileNodePtr> TileGraph::DiscoverNeighbours(Vector2 pos, const Directions& directions)
 {
     std::vector<TileNodePtr> neighbours;
 
@@ -81,19 +80,16 @@ std::vector<TileNodePtr> TileGraph::DiscoverNeighbours(Vector2 pos, const Direct
     for(const auto& dir : directions)
     {
         Vector2 tilePos = pos + dir;
-    
-        if(tpc.IsPositionValid(tilePos))
-        {
-            TileNodePtr neighbour;
-            if(NodeExists(tilePos))
-                neighbour = GetNode(tilePos);
-            else
-            {
-                neighbour = CreateNode(tilePos, std::numeric_limits<unsigned int>::max(), pos);
-            }
 
-            neighbours.push_back(neighbour);
+        TileNodePtr neighbour;
+        if(NodeExists(tilePos))
+            neighbour = GetNode(tilePos);
+        else
+        {
+            neighbour = CreateNode(tilePos, std::numeric_limits<unsigned int>::max(), pos);
         }
+
+        neighbours.push_back(neighbour);
     }
 
     return neighbours;

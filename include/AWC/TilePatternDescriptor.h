@@ -37,16 +37,22 @@ public:
     void SetLockedDirections(Vector2 dir, const Directions& lockedDirections);
 
 private:
+
+    static const Vector2 NULL_MOVEMENT;
+
     TilePatternDescriptor(const Directions& directions);
     TilePatternDescriptor(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
 
     static DirectionsTable GenerateDefaultLockedDirectionsTable(const Directions& directions);
+    static DirectionsTable PrepareLockedDirectionsTable(const Directions& directions, const DirectionsTable& lockedDirections);
     static DirectionsTable GenerateLockedDirectionsTable(const Directions& directions, const DirectionsTable& exclusiveDirections);
     static Directions GenerateLockedDirections(const Directions& directions, const Directions& exclusiveDirections);
 
     TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) override;
 
-    Directions GetDiscoverDirections(TileNodePtr tileNode);
+    Directions GetDiscoverDirections(TileNodePtr tileNode, const TilePatternConstraints& constraints);
+    Vector2 GetMovementToOrigin(TileNodePtr tileNode);
+    Directions GetValidDirections(TileNodePtr tileNode, Directions directions, const TilePatternConstraints& constraints);
 
     Directions directions_;
     DirectionsTable lockedDirectionsTable_;

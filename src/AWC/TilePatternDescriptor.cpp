@@ -13,23 +13,23 @@
 #include <functional>
 #include <optional>
 
-// TilePatternDescriptorI
-
-
-
 // Public
 
 // Factory methods
 TilePatternDescriptorPtr TilePatternDescriptor::CreateByLocked(const Directions& directions, 
     const DirectionsTable& lockedDirectionsTable)
 {
-    return std::shared_ptr<TilePatternDescriptor>{new TilePatternDescriptor{directions, lockedDirectionsTable}};
+    return std::shared_ptr<TilePatternDescriptor>{
+        new TilePatternDescriptor{directions, PrepareLockedDirectionsTable(directions, lockedDirectionsTable)
+        }};
 }
 
 TilePatternDescriptorPtr  TilePatternDescriptor::CreateByExclusive(const Directions& directions, 
     const DirectionsTable& exclusiveDirectionsTable)
 {
-    return std::shared_ptr<TilePatternDescriptor>{new TilePatternDescriptor{directions, GenerateLockedDirectionsTable(directions, exclusiveDirectionsTable)}};
+    return std::shared_ptr<TilePatternDescriptor>{
+        new TilePatternDescriptor{directions, GenerateLockedDirectionsTable(directions, exclusiveDirectionsTable)
+        }};
 }
 
 // Constructors
@@ -95,9 +95,12 @@ void TilePatternDescriptor::SetLockedDirections(Vector2 dir, const Directions& l
 
 // Private
 
+const Vector2 TilePatternDescriptor::NULL_MOVEMENT = Vector2{0, 0};
+
 DirectionsTable TilePatternDescriptor::GenerateDefaultLockedDirectionsTable(const Directions& directions)
 {
     DirectionsTable lockedDirectionsTable;
+    lockedDirectionsTable.insert({NULL_MOVEMENT, directions});
 
     for(const auto dir : directions)
     {
@@ -110,10 +113,18 @@ DirectionsTable TilePatternDescriptor::GenerateDefaultLockedDirectionsTable(cons
     return lockedDirectionsTable;
 }
 
+DirectionsTable TilePatternDescriptor::PrepareLockedDirectionsTable(const Directions& directions, const DirectionsTable& lockedDirections)
+{
+    auto finalLockedDirectionsTable = lockedDirections;
+    finalLockedDirectionsTable.insert({NULL_MOVEMENT, directions});
+    return finalLockedDirectionsTable;
+}
+
 DirectionsTable TilePatternDescriptor::GenerateLockedDirectionsTable(const Directions& directions, 
     const DirectionsTable& exclusiveDirectionsTable)
 {
     DirectionsTable lockedDirectionsTable;
+    lockedDirectionsTable.insert({NULL_MOVEMENT, directions});
 
     for(const auto pair : exclusiveDirectionsTable)
     {
@@ -160,8 +171,8 @@ TilePatternIPtr TilePatternDescriptor::DoCalculateTilePattern(Vector2 origin,
             break;
 
         // Get its neighbours
-        auto discoverDirections = GetDiscoverDirections(node);
-        auto neighbours = tg.DiscoverNeighbours(node->pos, discoverDirections, constraints);
+        auto discoverDirections = GetDiscoverDirections(node, constraints);
+        auto neighbours = tg.DiscoverNeighbours(node->pos, discoverDirections);
         for(const auto& nei : neighbours)
         {
             auto sharedNei = nei.lock();
@@ -184,21 +195,44 @@ TilePatternIPtr TilePatternDescriptor::DoCalculateTilePattern(Vector2 origin,
     return tp;
 }
 
-Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode)
+Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode, const TilePatternConstraints& constraints)
 {
     auto directions = GetDirections();
 
-    auto sTileNode = tileNode.lock();
-
-    auto lowest = [](TileNodePtr a, TileNodePtr b) {
-            return a.lock()->cost < b.lock()->cost;
-        };
-    auto neighbour = sTileNode->GetNeighbourBySortCriteria(lowest);
-    if(auto sNeigbour = neighbour.lock())
-    {
-        Vector2 movement = sTileNode->pos - sNeigbour->pos;
-        directions = GetLockedDirections(movement);
-    }
+    auto movement = GetMovementToOrigin(tileNode);
+    directions = GetLockedDirections(movement);
+    directions = GetValidDirections(tileNode, directions, constraints);
 
     return directions;
+}
+
+Vector2 TilePatternDescriptor::GetMovementToOrigin(TileNodePtr tileNode)
+{
+    Vector2 movement{0, 0};
+
+    auto sTileNode = tileNode.lock();
+    auto lowestCost = [](TileNodePtr a, TileNodePtr b) {
+            return a.lock()->cost < b.lock()->cost;
+        };
+
+    auto neighbour = sTileNode->GetNeighbourBySortCriteria(lowestCost);
+    if(auto sNeigbour = neighbour.lock())
+        movement = sTileNode->pos - sNeigbour->pos;
+    
+    return movement;
+}
+
+Directions TilePatternDescriptor::GetValidDirections(TileNodePtr tileNode, Directions directions, const TilePatternConstraints& constraints)
+{
+    auto nodePos = tileNode.lock()->pos;
+
+    std::vector<Vector2> validDirections;
+    for(auto dir : directions)
+    {
+        auto neigbourPos = nodePos + dir;
+        if(constraints.IsPositionValid(neigbourPos))
+            validDirections.push_back(dir);
+    }
+
+    return validDirections;
 }

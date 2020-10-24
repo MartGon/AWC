@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Utils/Vector2.h>
+
 #include <AWC/AWCfwd.h>
 #include <AWC/TileNode.h>
 #include <AWC/Directions.h>
@@ -30,7 +31,7 @@ public:
     
     void SetNeighbour(Vector2 a, Vector2 b);
 
-    std::vector<TileNodePtr> DiscoverNeighbours(Vector2 pos, const Directions& directions, const TilePatternConstraints& tpc);    
+    std::vector<TileNodePtr> DiscoverNeighbours(Vector2 pos, const Directions& directions);    
 
 #ifdef _DEBUG
     bool moved = false;
