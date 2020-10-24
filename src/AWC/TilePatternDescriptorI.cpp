@@ -1,12 +1,12 @@
 #include <AWC/TilePatternDescriptorI.h>
 
-TilePatternIPtr TilePatternDescriptorI::CalculateTilePattern(Vector2 origin, const TilePatternConstraints& constraints)
+TilePatternIPtr TilePatternDescriptorI::CalculateTilePattern(Vector2 origin, const Map& map, const TilePatternConstraints& constraints)
 {
-    return DoCalculateTilePattern(origin, std::nullopt, constraints);
+    return DoCalculateTilePattern(origin, std::nullopt, map, constraints);
 }
 
 TilePatternIPtr TilePatternDescriptorI::CalculateTilePattern(Vector2 origin, Vector2 destination, 
-    const TilePatternConstraints& constraints)
+    const Map& map, const TilePatternConstraints& constraints)
 {
-    return DoCalculateTilePattern(origin, destination, constraints);
+    return DoCalculateTilePattern(origin, destination, map, constraints);
 }

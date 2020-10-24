@@ -149,7 +149,7 @@ Directions TilePatternDescriptor::GenerateLockedDirections(const Directions& dir
 }
 
 TilePatternIPtr TilePatternDescriptor::DoCalculateTilePattern(Vector2 origin, 
-    std::optional<Vector2> destination, const TilePatternConstraints& constraints)
+    std::optional<Vector2> destination, const Map& map, const TilePatternConstraints& constraints)
 {
         // Create mapGraph
     TileGraph tg;
@@ -171,14 +171,14 @@ TilePatternIPtr TilePatternDescriptor::DoCalculateTilePattern(Vector2 origin,
             break;
 
         // Get its neighbours
-        auto discoverDirections = GetDiscoverDirections(node, constraints);
+        auto discoverDirections = GetDiscoverDirections(node, map);
         auto neighbours = tg.DiscoverNeighbours(node->pos, discoverDirections);
         for(const auto& nei : neighbours)
         {
             auto sharedNei = nei.lock();
 
             // Check if accumulated cost to this neighbour is lower than previous
-            int neiCost = constraints.GetTileCost(sharedNei->pos);
+            int neiCost = GetTileCost(map, constraints, sharedNei->pos);
             int calculatedCost = node->cost + neiCost;
             if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.maxRange)
             {
@@ -195,13 +195,13 @@ TilePatternIPtr TilePatternDescriptor::DoCalculateTilePattern(Vector2 origin,
     return tp;
 }
 
-Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode, const TilePatternConstraints& constraints)
+Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode, const Map& map)
 {
     auto directions = GetOriginDirections();
 
     auto movement = GetMovementToOrigin(tileNode);
     directions = GetLockedDirections(movement);
-    directions = GetValidDirections(tileNode, directions, constraints);
+    directions = GetValidDirections(tileNode, directions, map);
 
     return directions;
 }
@@ -222,7 +222,7 @@ Vector2 TilePatternDescriptor::GetMovementToOrigin(TileNodePtr tileNode)
     return movement;
 }
 
-Directions TilePatternDescriptor::GetValidDirections(TileNodePtr tileNode, Directions directions, const TilePatternConstraints& constraints)
+Directions TilePatternDescriptor::GetValidDirections(TileNodePtr tileNode, Directions directions, const Map& map)
 {
     auto nodePos = tileNode.lock()->pos;
 
@@ -230,9 +230,17 @@ Directions TilePatternDescriptor::GetValidDirections(TileNodePtr tileNode, Direc
     for(auto dir : directions)
     {
         auto neigbourPos = nodePos + dir;
-        if(constraints.IsPositionValid(neigbourPos))
+        if(map.IsPositionValid(neigbourPos))
             validDirections.push_back(dir);
     }
 
     return validDirections;
+}
+
+unsigned int TilePatternDescriptor::GetTileCost(const Map& map, const TilePatternConstraints& tpc, Vector2 pos)
+{
+    auto tile = map.GetTile(pos);
+    auto cost = tpc.GetTileCost(tile->GetId());
+
+    return cost;
 }

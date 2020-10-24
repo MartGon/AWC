@@ -3,13 +3,13 @@
 
 // Union
 
-TilePatternDescriptorUnion::TilePatternDescriptorUnion(TilePatternDescriptorPtr a, TilePatternDescriptorPtr b) : a_{a}, b_{b}
+TilePatternDescriptorUnion::TilePatternDescriptorUnion(TilePatternDescriptorIPtr a, TilePatternDescriptorIPtr b) : a_{a}, b_{b}
 {
 
 }
 
 TilePatternIPtr TilePatternDescriptorUnion::DoCalculateTilePattern(Vector2 origin, 
-    std::optional<Vector2> destination, const TilePatternConstraints& constraints)
+    std::optional<Vector2> destination, const Map& map, const TilePatternConstraints& constraints)
 {
     // There is redundancy here
     // It can be solved by these two options
@@ -20,14 +20,14 @@ TilePatternIPtr TilePatternDescriptorUnion::DoCalculateTilePattern(Vector2 origi
     TilePatternIPtr tilePattern;
     if(destination.has_value())
     {
-        auto tilePatternA = a_->CalculateTilePattern(origin, destination.value(), constraints);
-        auto tilePatternB = b_->CalculateTilePattern(origin, destination.value(), constraints);
+        auto tilePatternA = a_->CalculateTilePattern(origin, destination.value(), map, constraints);
+        auto tilePatternB = b_->CalculateTilePattern(origin, destination.value(), map,  constraints);
         tilePattern = std::make_shared<TilePatternUnion>(tilePatternA, tilePatternB);
     }
     else
     {
-        auto tilePatternA = a_->CalculateTilePattern(origin, constraints);
-        auto tilePatternB = b_->CalculateTilePattern(origin, constraints);
+        auto tilePatternA = a_->CalculateTilePattern(origin, map, constraints);
+        auto tilePatternB = b_->CalculateTilePattern(origin, map, constraints);
         tilePattern = std::make_shared<TilePatternUnion>(tilePatternA, tilePatternB);
     }
         

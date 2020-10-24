@@ -12,9 +12,10 @@ class TilePatternDescriptorI
 public:
     virtual ~TilePatternDescriptorI() {}
 
-    TilePatternIPtr CalculateTilePattern(Vector2 origin, const TilePatternConstraints& constraints);
-    TilePatternIPtr CalculateTilePattern(Vector2 origin, Vector2 destination, const TilePatternConstraints& constraints);
+    TilePatternIPtr CalculateTilePattern(Vector2 origin, const Map& map, const TilePatternConstraints& constraints);
+    TilePatternIPtr CalculateTilePattern(Vector2 origin, Vector2 destination, const Map& map, const TilePatternConstraints& constraints);
 
 private:
-    virtual TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) = 0;
+    virtual TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, 
+        const Map& map, const TilePatternConstraints& constraints) = 0;
 };

@@ -40,7 +40,7 @@ TileNodePtr TileGraph::CreateNode(const Vector2 pos, const unsigned int cost, co
 
 std::vector<Vector2> TileGraph::GetNodesPos() const
 {
-    std::vector<Vector2> nodesPos{nodes_.size()};
+    std::vector<Vector2> nodesPos;
     for(auto pair : nodes_)
         nodesPos.push_back(pair.first);
 

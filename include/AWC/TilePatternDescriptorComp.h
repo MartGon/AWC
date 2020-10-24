@@ -4,15 +4,17 @@
 #include <AWC/TilePatternDescriptorI.h>
 #include <AWC/TilePatternDescriptor.h>
 
+using TilePatternDescriptorIPtr = std::shared_ptr<TilePatternDescriptorI>;
+
 class TilePatternDescriptorUnion : public TilePatternDescriptorI
 {
 public:
-    TilePatternDescriptorUnion(TilePatternDescriptorPtr a, TilePatternDescriptorPtr b);
+    TilePatternDescriptorUnion(TilePatternDescriptorIPtr a, TilePatternDescriptorIPtr b);
 
 private:
 
-    TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) override;
+    TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const Map& map, const TilePatternConstraints& constraints) override;
 
-    TilePatternDescriptorPtr a_;
-    TilePatternDescriptorPtr b_;
+    TilePatternDescriptorIPtr a_;
+    TilePatternDescriptorIPtr b_;
 };
