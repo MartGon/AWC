@@ -78,14 +78,14 @@ TEST_CASE("Configuration interface tests")
 
     SUBCASE("Check configuration of directions")
     {
-        CHECK(manhattan->IsDirection(e) == true);
-        CHECK(manhattan->IsDirection({1, 1}) == false);
+        CHECK(manhattan->IsOriginDirection(e) == true);
+        CHECK(manhattan->IsOriginDirection({1, 1}) == false);
 
-        CHECK_THROWS_AS(manhattan->RemoveDirection({1, 1}), const AWCNoExistingIndexException&);
-        CHECK_NOTHROW(manhattan->RemoveDirection(e));
+        CHECK_THROWS_AS(manhattan->RemoveOriginDirection({1, 1}), const AWCNoExistingIndexException&);
+        CHECK_NOTHROW(manhattan->RemoveOriginDirection(e));
 
-        CHECK_THROWS_AS(manhattan->AddDirection(n), const AWCAlreadyExistingIndexException&);
-        CHECK_NOTHROW(manhattan->AddDirection({1, 1}));
+        CHECK_THROWS_AS(manhattan->AddOriginDirection(n), const AWCAlreadyExistingIndexException&);
+        CHECK_NOTHROW(manhattan->AddOriginDirection({1, 1}));
     }
 
     SUBCASE("Check configuration of locked directions")

@@ -34,47 +34,47 @@ TilePatternDescriptorPtr  TilePatternDescriptor::CreateByExclusive(const Directi
 
 // Constructors
 TilePatternDescriptor::TilePatternDescriptor(const Directions& directions) : 
-    directions_{directions}, lockedDirectionsTable_{GenerateDefaultLockedDirectionsTable(directions)}
+    originDirections_{directions}, lockedDirectionsTable_{GenerateDefaultLockedDirectionsTable(directions)}
 {
 
 }
 
 TilePatternDescriptor::TilePatternDescriptor(const Directions& directions, 
     const DirectionsTable& lockedDirectionsTable) : 
-    directions_{directions}, lockedDirectionsTable_{lockedDirectionsTable}
+    originDirections_{directions}, lockedDirectionsTable_{lockedDirectionsTable}
 {
 
 }
 
 // Methods
 
-Directions TilePatternDescriptor::GetDirections()
+Directions TilePatternDescriptor::GetOriginDirections()
 {
-    return directions_;
+    return originDirections_;
 }
 
-bool TilePatternDescriptor::IsDirection(Vector2 dir)
+bool TilePatternDescriptor::IsOriginDirection(Vector2 dir)
 {
-    return VectorUtils::IsInside(directions_, dir);
+    return VectorUtils::IsInside(originDirections_, dir);
 }
 
-void TilePatternDescriptor::AddDirection(Vector2 dir)
+void TilePatternDescriptor::AddOriginDirection(Vector2 dir)
 {
-    if(!IsDirection(dir))
-        directions_.push_back(dir);
+    if(!IsOriginDirection(dir))
+        originDirections_.push_back(dir);
     else
-        throw AWCAlreadyExistingIndexException("TilePatternDescriptor::AddDirection", dir);
+        throw AWCAlreadyExistingIndexException("TilePatternDescriptor::AddOriginDirection", dir);
 }
 
-void TilePatternDescriptor::RemoveDirection(Vector2 dir)
+void TilePatternDescriptor::RemoveOriginDirection(Vector2 dir)
 {
-    if(IsDirection(dir))
+    if(IsOriginDirection(dir))
     {
-        VectorUtils::RemoveByValue(directions_, dir);
+        VectorUtils::RemoveByValue(originDirections_, dir);
         lockedDirectionsTable_.erase(dir);
     }
     else
-        throw AWCNoExistingIndexException("TilePatternDescriptor::RemoveDirection", dir);
+        throw AWCNoExistingIndexException("TilePatternDescriptor::RemoveOriginDirection", dir);
 
 }
 
@@ -85,7 +85,7 @@ Directions TilePatternDescriptor::GetLockedDirections(Vector2 dir)
 
 void TilePatternDescriptor::SetExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections)
 {
-    lockedDirectionsTable_[dir] = GenerateLockedDirections(directions_, exclusiveDirections);
+    lockedDirectionsTable_[dir] = GenerateLockedDirections(originDirections_, exclusiveDirections);
 }
 
 void TilePatternDescriptor::SetLockedDirections(Vector2 dir, const Directions& lockedDirections)
@@ -197,7 +197,7 @@ TilePatternIPtr TilePatternDescriptor::DoCalculateTilePattern(Vector2 origin,
 
 Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode, const TilePatternConstraints& constraints)
 {
-    auto directions = GetDirections();
+    auto directions = GetOriginDirections();
 
     auto movement = GetMovementToOrigin(tileNode);
     directions = GetLockedDirections(movement);

@@ -25,14 +25,12 @@ public:
     static TilePatternDescriptorPtr CreateByLocked(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
     static TilePatternDescriptorPtr CreateByExclusive(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
 
-    Directions GetDirections();
-
-    bool IsDirection(Vector2 dir);
-    void AddDirection(Vector2 dir);
-    void RemoveDirection(Vector2 dir);
+    Directions GetOriginDirections();
+    bool IsOriginDirection(Vector2 dir);
+    void AddOriginDirection(Vector2 dir);
+    void RemoveOriginDirection(Vector2 dir);
 
     Directions GetLockedDirections(Vector2 dir);
-
     void SetExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections);
     void SetLockedDirections(Vector2 dir, const Directions& lockedDirections);
 
@@ -54,6 +52,6 @@ private:
     Vector2 GetMovementToOrigin(TileNodePtr tileNode);
     Directions GetValidDirections(TileNodePtr tileNode, Directions directions, const TilePatternConstraints& constraints);
 
-    Directions directions_;
+    Directions originDirections_;
     DirectionsTable lockedDirectionsTable_;
 };
