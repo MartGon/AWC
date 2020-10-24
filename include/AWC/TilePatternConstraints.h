@@ -5,7 +5,7 @@
 class TilePatternConstraints
 {
 public:
-    TilePatternConstraints(const Map& map, const CostTable& tileCostTable, const CostTable& unitCostTable, 
+    TilePatternConstraints(const Map& map, const CostTableI& tileCostTable, const CostTableI& unitCostTable, 
     unsigned int maxRange, unsigned int minRange = 0);
 
     bool IsPositionValid(Vector2 pos) const;
@@ -17,7 +17,7 @@ public:
     const unsigned int maxRange;
 
 private:
-    const CostTable& tileCostTable;
-    const CostTable& unitCostTable;
+    const CostTableI& tileCostTable;
+    const CostTableI& unitCostTable;
     const Map& map;
 };

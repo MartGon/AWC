@@ -14,6 +14,7 @@ add_library(AWCSource
   TilePatternDescriptor.cpp
   TilePatternDescriptorI.cpp
   TilePatternDescriptorComp.cpp
+  TilePatternDescriptorDecorator.cpp
   TileGraph.cpp
   TileNode.cpp
 )

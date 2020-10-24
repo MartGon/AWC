@@ -3,7 +3,7 @@
 #include <AWC/Map.h>
 #include <AWC/CostTable.h>
 
-TilePatternConstraints::TilePatternConstraints(const Map& map, const CostTable& tileCostTable, const CostTable& unitCostTable,
+TilePatternConstraints::TilePatternConstraints(const Map& map, const CostTableI& tileCostTable, const CostTableI& unitCostTable,
  unsigned int maxRange, unsigned int minRange) :
     minRange{minRange}, maxRange{maxRange}, tileCostTable{tileCostTable}, unitCostTable{unitCostTable}, map{map}
 {

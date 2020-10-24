@@ -1,9 +1,10 @@
 add_executable(AWCTest 
     AWCTest.cpp
+    CommandTest.cpp
+    CostTableTest.cpp
     MapTest.cpp
     TileTest.cpp
     UnitTest.cpp
-    CommandTest.cpp
     TilePatternTest.cpp
     TilePatternDescriptorTest.cpp
     TileGraphTest.cpp
