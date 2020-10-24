@@ -11,6 +11,23 @@
 #include <AWC/TilePattern.h>
 #include <AWC/TilePatternConstraints.h>
 
+std::vector<Vector2> GetUnreachableTiles(const Map& map, const Directions& reachableTiles)
+{
+    std::vector<Vector2> unreachableTiles;
+
+    for(int x = 0; x < map.GetWidht(); x++)
+    {
+        for(int y = 0; y < map.GetHeight(); y++)
+        {
+            Vector2 pos{x, y};
+            if(!VectorUtils::IsInside(reachableTiles, pos))
+                unreachableTiles.push_back(pos);
+        }
+    }
+
+    return unreachableTiles;
+}
+
 TEST_CASE("TilePattern pathfinding test")
 {   
     // Map 
@@ -48,6 +65,7 @@ TEST_CASE("TilePattern pathfinding test")
     {
         auto tp = manhattanDescriptor->CalculateTilePattern({0, 0}, tpc);
         std::vector<Vector2> tiles = {{0, 0}, {0, 1}, {1, 0}, {1, 1}, {1, 2}, {0, 2}};
+        auto unreachableTiles = GetUnreachableTiles(map, tiles);
 
         CHECK(tp->IsTileInPattern({0, 0}) == true);
         CHECK(tp->IsTileInPattern({1, 0}) == true);
@@ -67,13 +85,18 @@ TEST_CASE("TilePattern pathfinding test")
 
         CHECK(tp->GetOrigin() == Vector2{0, 0});
 
+        // Tiles in pattern range
+        auto tilePatternReachableTiles = tp->GetTilesPosInPattern();
         for(auto tile : tiles)
-            CHECK(VectorUtils::IsInside(tp->GetTilesPosInPattern(), tile) == true);
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == true);
+        for(auto tile : unreachableTiles)
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == false);
     }
     SUBCASE("Check CalculateTilePattern with destitnation")
     {
         auto tp = manhattanDescriptor->CalculateTilePattern({0, 0}, Vector2{1, 2}, tpc);
         std::vector<Vector2> tiles = {{0, 0}, {0, 1}, {1, 0}, {1, 1}, {1, 2}};
+        auto unreachableTiles = GetUnreachableTiles(map, tiles);
         std::vector<Vector2> path = {{0, 0}, {1, 0}, {1, 1}, {1, 2}};
 
         CHECK(tp->IsTileInPattern({0, 0}) == true);
@@ -93,8 +116,12 @@ TEST_CASE("TilePattern pathfinding test")
 
         CHECK(tp->GetOrigin() == Vector2{0, 0});
 
+        // Tiles in pattern range
+        auto tilePatternReachableTiles = tp->GetTilesPosInPattern();
         for(auto tile : tiles)
-            CHECK(VectorUtils::IsInside(tp->GetTilesPosInPattern(), tile) == true);
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == true);
+        for(auto tile : unreachableTiles)
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == false);
     }
 }
 
@@ -147,10 +174,11 @@ TEST_CASE("TilePattern Composition test")
     // TilePatternConstraints
     TilePatternConstraints tpc{map, tileCostTable, unitCostTable, 10};
 
-    SUBCASE("Check CalculateTilePattern")
+    SUBCASE("Check CalculateTilePattern with composition")
     {
         auto tp = queenDescriptor->CalculateTilePattern({0, 0}, tpc);
         std::vector<Vector2> tiles = {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {2, 0}, {2, 2}};
+        std::vector<Vector2> unreachableTiles = GetUnreachableTiles(map, tiles);
 
         // Rook part
         CHECK(tp->IsTileInPattern({0, 0}) == true);
@@ -183,7 +211,10 @@ TEST_CASE("TilePattern Composition test")
         CHECK(tp->GetOrigin() == Vector2{0, 0});
 
         // Tiles in pattern range
+        auto tilePatternReachableTiles = tp->GetTilesPosInPattern();
         for(auto tile : tiles)
-            CHECK(VectorUtils::IsInside(tp->GetTilesPosInPattern(), tile) == true);
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == true);
+        for(auto tile : unreachableTiles)
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == false);
     }
 }

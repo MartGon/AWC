@@ -44,7 +44,14 @@ std::vector<Vector2> TilePattern::GetPathToTile(Vector2 dest) const
 
 std::vector<Vector2> TilePattern::GetTilesPosInPattern() const
 {
-    return tg_.GetNodesPos();
+    auto tilesPos = tg_.GetNodesPos();
+    std::vector<Vector2> tilesInPattern;
+
+    for(auto pos : tilesPos)
+        if(IsTileInPattern(pos))
+            tilesInPattern.push_back(pos);
+
+    return tilesInPattern;
 }
 
 Vector2 TilePattern::GetOrigin() const
