@@ -6,24 +6,38 @@
 
 using TilePatternIPtr = std::shared_ptr<TilePatternI>;
 
-class TilePatternUnion : public TilePatternI
+class TilePatternComp : public TilePatternI
 {
-friend class TilePatternDescriptorUnion;
+public:
+    TilePatternComp(TilePatternIPtr a, TilePatternIPtr b);
 
+    virtual Vector2 GetOrigin() const override;
+
+protected:
+    TilePatternIPtr a_;
+    TilePatternIPtr b_;
+};
+
+class TilePatternUnion : public TilePatternComp
+{
 public:
     TilePatternUnion(TilePatternIPtr a, TilePatternIPtr b);
 
     unsigned int GetTileCost(Vector2 dest) const override;
     bool IsTileInPattern(Vector2 dest) const override;
 
-    // TODO: This may become a problem for AttackPatterns
-    // Could still return the path but only with nodes with cost > minRange;
     std::vector<Vector2> GetPathToTile(Vector2 dest) const override;
     std::vector<Vector2> GetTilesPosInPattern() const override;
-    Vector2 GetOrigin() const override;
+};
 
-private:
+class TilePatternDiff : public TilePatternComp
+{
+public:
+    TilePatternDiff(TilePatternIPtr left, TilePatternIPtr right);
 
-    TilePatternIPtr a_;
-    TilePatternIPtr b_;
+    unsigned int GetTileCost(Vector2 dest) const override;
+    bool IsTileInPattern(Vector2 dest) const override;
+
+    std::vector<Vector2> GetPathToTile(Vector2 dest) const override;
+    std::vector<Vector2> GetTilesPosInPattern() const override;
 };

@@ -31,6 +31,17 @@ namespace VectorUtils
 
         return result;
     }
+
+    template <typename T>
+    std::vector<T> Diff(std::vector<T>& left, std::vector<T> right)
+    {
+        std::vector<T> result;
+        for(const auto& value : left)
+            if(!IsInside(right, value))
+                result.push_back(value);
+
+        return result;
+    }
 }
 
 namespace StringUtils

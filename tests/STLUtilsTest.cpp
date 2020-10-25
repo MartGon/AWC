@@ -50,6 +50,23 @@ TEST_CASE("Vector test")
         CHECK(VectorUtils::IsInside(res, 8) == false);
         CHECK(VectorUtils::IsInside(res, 9) == false);
     }
+    SUBCASE("Diff")
+    {
+        std::vector<int> left{1, 2, 3, 4, 5};
+        std::vector<int> right{1, 3, 5};
+        std::vector<int> expectedResult{2, 4};
+
+        auto res = VectorUtils::Diff(left, right);
+
+        CHECK(VectorUtils::IsInside(res, 2) == true);
+        CHECK(VectorUtils::IsInside(res, 4) == true);
+        CHECK(VectorUtils::IsInside(res, 1) == false);
+        CHECK(VectorUtils::IsInside(res, 3) == false);
+        CHECK(VectorUtils::IsInside(res, 5) == false);
+
+        CHECK(res == expectedResult);
+
+    }
 }
 
 TEST_CASE("String test")

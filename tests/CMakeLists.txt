@@ -6,13 +6,15 @@ add_executable(AWCTest
     TileTest.cpp
     UnitTest.cpp
     TilePatternTest.cpp
+    TilePatternCompTest.cpp
     TilePatternDescriptorTest.cpp
+    TilePatternDescriptorDecoratorTest.cpp
     TileGraphTest.cpp
     STLUtilsTest.cpp
 )
 
 # target_compile_features(AWCTest PRIVATE cxx_std_20)
-target_include_directories(AWCTest PUBLIC ${DOCTEST_INCLUDE_DIR} ../include)
+target_include_directories(AWCTest PUBLIC ${DOCTEST_INCLUDE_DIR} ../include include)
 target_link_libraries(AWCTest AWCLibrary)
 
 add_test(NAME BasicTest COMMAND AWCTest)

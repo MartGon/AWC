@@ -1,0 +1,214 @@
+#include "doctest.h"
+
+#include <Utils/Vector2.h>
+#include <Utils/STLUtils.h>
+#include <AWC/CostTable.h>
+#include <AWC/Map.h>
+#include <AWC/TileType.h>
+#include <AWC/Tile.h>
+#include <AWC/TilePatternDescriptor.h>
+#include <AWC/TilePatternDescriptorComp.h>
+#include <AWC/TilePatternDescriptorDecorator.h>
+#include <AWC/TilePattern.h>
+#include <AWC/TilePatternComp.h>
+#include <AWC/TilePatternConstraints.h>
+
+#include <TilePatternTest.h>
+
+#include <iostream>
+
+TEST_CASE("TilePattern Composition Union test")
+{   
+    // Map 
+    Map map{3, 3};
+    
+    TileType grassTileType{0, "Grass"};
+
+    MapUtils::FillMap(map, grassTileType);
+
+    // TilePatternDescriptor - Rook
+    Vector2 e = {1, 0};
+    Vector2 w = {-1, 0};
+    Vector2 n = {0, 1};
+    Vector2 s = {0, -1};
+    std::vector<Vector2> directionsR = {e, w, n, s};
+    DirectionsTable lockedDirTableR = {
+        {e, {e}},
+        {w, {w}},
+        {n, {n}},
+        {s, {s}}
+    };
+    auto rookDescriptor = TilePatternDescriptor::CreateByLocked(directionsR, lockedDirTableR);
+
+    // TilePatternDescriptor - Bishop
+    Vector2 ne = {1, 1};
+    Vector2 nw = {-1, 1};
+    Vector2 se = {1, -1};
+    Vector2 sw = {-1, -1};
+    std::vector<Vector2> directionsB = {ne, nw, se, sw};
+    DirectionsTable lockedDirTableB = {
+        {ne, {ne}},
+        {nw, {nw}},
+        {se, {se}},
+        {sw, {sw}}
+    };
+    auto bishopDescriptor = TilePatternDescriptor::CreateByLocked(directionsB, lockedDirTableB);
+
+    // TilePatternDescriptor - Queen
+    auto queenDescriptor = std::make_shared<TilePatternDescriptorUnion>(rookDescriptor, bishopDescriptor);
+
+    // CostTable
+    CostTable tileCostTable;
+    tileCostTable.SetCost(grassTileType.GetId(), 1);
+
+    CostTable unitCostTable;
+
+    // TilePatternConstraints
+    TilePatternConstraints tpc{tileCostTable, unitCostTable, 10};
+
+    SUBCASE("Check CalculateTilePattern with composition")
+    {
+        auto tp = queenDescriptor->CalculateTilePattern({0, 0}, map, tpc);
+        std::vector<Vector2> tiles = {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {2, 0}, {2, 2}};
+        std::vector<Vector2> unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
+
+        // Rook part
+        CHECK(tp->IsTileInPattern({0, 0}) == true);
+        CHECK(tp->IsTileInPattern({1, 0}) == true);
+        CHECK(tp->IsTileInPattern({0, 1}) == true);
+        CHECK(tp->IsTileInPattern({2, 0}) == true);
+        CHECK(tp->IsTileInPattern({0, 2}) == true);
+
+        // Bishop part
+        CHECK(tp->IsTileInPattern({1, 1}) == true);
+        CHECK(tp->IsTileInPattern({2, 2}) == true);
+
+        // Not reachable tiles
+        CHECK(tp->IsTileInPattern({1, 2}) == false);
+        CHECK(tp->IsTileInPattern({2, 1}) == false);
+
+        // Cost 
+        CHECK(tp->GetTileCost({1, 1}) == 1);
+        CHECK(tp->GetTileCost({2, 2}) == 2);
+
+        // Paths - Rook
+        CHECK(tp->GetPathToTile({0, 1}) == std::vector<Vector2>{{0, 0}, {0, 1}});
+        CHECK(tp->GetPathToTile({0, 2}) == std::vector<Vector2>{{0, 0}, {0, 1}, {0, 2}});
+
+        // Paths - Bishop
+        CHECK(tp->GetPathToTile({1, 1}) == std::vector<Vector2>{{0, 0}, {1, 1}});
+        CHECK(tp->GetPathToTile({2, 2}) == std::vector<Vector2>{{0, 0}, {1, 1}, {2, 2}});
+
+        // Origin
+        CHECK(tp->GetOrigin() == Vector2{0, 0});
+
+        // Tiles in pattern range
+        auto tilePatternReachableTiles = tp->GetTilesPosInPattern();
+        CHECK(tilePatternReachableTiles.size() == tiles.size());
+
+        for(auto tile : tiles)
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == true);
+        for(auto tile : unreachableTiles)
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == false);
+    }
+}
+
+TEST_CASE("TilePattern Composition Diff test")
+{   
+    // Map 
+    Map map{5, 5};
+    
+    TileType grassTileType{0, "Grass"};
+    TileType seaTileType{1, "Sea"};
+
+    MapUtils::FillMap(map, grassTileType);
+
+     // TilePatternDescriptor - Moore
+    Vector2 e = {1, 0};
+    Vector2 ne = {1, 1};
+    Vector2 se = {1, -1};
+    Vector2 w = {-1, 0};
+    Vector2 nw = {-1, 1};
+    Vector2 sw = {-1, -1};
+    Vector2 n = {0, 1};
+    Vector2 s = {0, -1};
+    std::vector<Vector2> directions = {e, ne, se, w, nw, sw, n, s};
+    auto mooreDescriptor = TilePatternDescriptor::Create(directions);
+    auto towRangeMooreDesc = std::make_shared<TPDFixedRange>(mooreDescriptor, 2);
+
+    // TilePatternDescriptor - One Range Diagonal
+    std::vector<Vector2> dDirections = {ne, nw, se, sw};
+    DirectionsTable lockedDT = {
+        {ne, {ne}},
+        {nw, {nw}},
+        {se, {se}},
+        {sw, {sw}}
+    };
+    auto diagonalDescriptor = TilePatternDescriptor::CreateByLocked(dDirections, lockedDT);
+    auto oneDiagonalDesc = std::make_shared<TPDFixedRange>(diagonalDescriptor, 1, 1);
+
+    // TilePatternDescriptorDiff
+    auto tpdd = std::make_shared<TilePatternDescriptorDiff>(towRangeMooreDesc, oneDiagonalDesc);
+
+    // CostTable
+    CostTable tileCostTable;
+    tileCostTable.SetCost(grassTileType.GetId(), 1);
+
+    CostTable unitCostTable;
+
+    // TilePatternConstraints
+    TilePatternConstraints tpc{tileCostTable, unitCostTable, 2};
+
+    SUBCASE("Check CalculateTilePattern with composition")
+    {
+        auto tp = tpdd->CalculateTilePattern({2, 2}, map, tpc);
+        std::vector<Vector2> tiles = {
+                                      {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}, 
+                                      {0, 3},         {2, 3},         {4, 3},   
+                                      {0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}, 
+                                      {0, 1},         {2, 1},         {4, 1},
+                                      {0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}
+                                     };
+        std::vector<Vector2> unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
+
+        // Moore part
+        CHECK(tp->IsTileInPattern({0, 4}) == true);
+        CHECK(tp->IsTileInPattern({4, 4}) == true);
+        CHECK(tp->IsTileInPattern({0, 0}) == true);
+        CHECK(tp->IsTileInPattern({4, 0}) == true);
+
+        CHECK(tp->IsTileInPattern({2, 3}) == true);
+        CHECK(tp->IsTileInPattern({2, 2}) == true);
+        CHECK(tp->IsTileInPattern({1, 2}) == true);
+        CHECK(tp->IsTileInPattern({3, 2}) == true);
+
+        // Diagonal part
+        CHECK(tp->IsTileInPattern({1, 1}) == false);
+        CHECK(tp->IsTileInPattern({1, 3}) == false);
+        CHECK(tp->IsTileInPattern({3, 1}) == false);
+        CHECK(tp->IsTileInPattern({3, 3}) == false);
+
+        // Cost 
+        CHECK(tp->GetTileCost({0, 4}) == 2);
+        CHECK(tp->GetTileCost({2, 3}) == 1);
+
+        // Paths
+        CHECK(tp->GetPathToTile({2, 3}) == std::vector<Vector2>{{2, 2}, {2, 3}});
+        CHECK(tp->GetPathToTile({2, 4}) == std::vector<Vector2>{{2, 2}, {2, 3}, {2 ,4}});
+
+        // Should walk through {1, 3} despite the fact that it cannot go to it.
+        CHECK(tp->GetPathToTile({0, 4}) == std::vector<Vector2>{{2, 2}, {1, 3}, {0, 4}});
+
+        // Origin
+        CHECK(tp->GetOrigin() == Vector2{2, 2});
+
+        // Tiles in pattern range
+        auto tilePatternReachableTiles = tp->GetTilesPosInPattern();
+        CHECK(tilePatternReachableTiles.size() == tiles.size());
+
+        for(auto tile : tiles)
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == true);
+        for(auto tile : unreachableTiles)
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == false);
+    }
+}
