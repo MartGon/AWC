@@ -16,15 +16,16 @@ private:
 
     TilePatternIPtr GetTilePattern(TilePatternDescriptorIPtr tpdip, Vector2 origin, std::optional<Vector2> destination, 
         const Map& map, const TilePatternConstraints& constraints)
-        {
-            TilePatternIPtr res;
-            if(destination.has_value())
-                res = tpdip->CalculateTilePattern(origin, destination.value(), map, constraints);
-            else
-                res = tpdip->CalculateTilePattern(origin, map, constraints);
-            
-            return res;
-        }
+    {
+        TilePatternIPtr res;
+        if(destination.has_value())
+            res = tpdip->CalculateTilePattern(origin, destination.value(), map, constraints);
+        else
+            res = tpdip->CalculateTilePattern(origin, map, constraints);
+        
+        return res;
+    }
+
     virtual TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, 
         const Map& map, const TilePatternConstraints& constraints)
     {
@@ -42,3 +43,4 @@ private:
 
 using TilePatternDescriptorUnion = TilePatternDescriptorComp<TilePatternUnion>;
 using TilePatternDescriptorDiff = TilePatternDescriptorComp<TilePatternDiff>;
+using TilePatternDescriptorIntersect = TilePatternDescriptorComp<TilePatternIntersect>;

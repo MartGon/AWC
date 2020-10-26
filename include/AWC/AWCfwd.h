@@ -8,6 +8,7 @@ class TilePattern;
 class TilePatternI;
 class TilePatternUnion;
 class TilePatternDiff;
+class TilePatternIntersect;
 class TilePatternConstraints;
 class TilePatternDescriptor;
 class TilePatternDescriptorI;

@@ -20,7 +20,7 @@ namespace VectorUtils
     }
 
     template<typename T>
-    std::vector<T> Union(std::vector<T>& a, std::vector<T> b)
+    std::vector<T> Union(const std::vector<T>& a, const std::vector<T> b)
     {
         std::vector<T> result;
         std::array<std::vector<T>, 2> vecs{a, b};
@@ -33,13 +33,24 @@ namespace VectorUtils
     }
 
     template <typename T>
-    std::vector<T> Diff(std::vector<T>& left, std::vector<T> right)
+    std::vector<T> Diff(const std::vector<T>& left, const std::vector<T> right)
     {
         std::vector<T> result;
         for(const auto& value : left)
             if(!IsInside(right, value))
                 result.push_back(value);
 
+        return result;
+    }
+
+    template <typename T>
+    std::vector<T> Intersect(const std::vector<T>& a, const std::vector<T>& b)
+    {
+        std::vector<T> result;
+        for(const auto& value : a)
+            if(IsInside(b, value))
+                result.push_back(value);
+            
         return result;
     }
 }

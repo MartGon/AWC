@@ -212,3 +212,87 @@ TEST_CASE("TilePattern Composition Diff test")
             CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == false);
     }
 }
+
+TEST_CASE("TilePattern Composition Intersect test")
+{   
+    // Map 
+    Map map{5, 5};
+    
+    TileType grassTileType{0, "Grass"};
+
+    MapUtils::FillMap(map, grassTileType);
+
+     // TilePatternDescriptor - Moore
+    Vector2 e = {1, 0};
+    Vector2 ne = {1, 1};
+    Vector2 se = {1, -1};
+    Vector2 w = {-1, 0};
+    Vector2 nw = {-1, 1};
+    Vector2 sw = {-1, -1};
+    Vector2 n = {0, 1};
+    Vector2 s = {0, -1};
+    std::vector<Vector2> directions = {e, ne, se, w, nw, sw, n, s};
+    auto mooreDescriptor = TilePatternDescriptor::Create(directions);
+    auto oneRangeMoore = std::make_shared<TPDFixedRange>(mooreDescriptor, 1);
+
+    // TilePatternDescriptor - Manhattan
+    std::vector<Vector2> dDirections = {e, w, s, n};
+    auto manhattan = TilePatternDescriptor::Create(dDirections);
+    auto oneRangeManhattan = std::make_shared<TPDFixedRange>(manhattan, 1);
+
+    // TilePatternDescriptorDiff
+    auto tpdd = std::make_shared<TilePatternDescriptorIntersect>(oneRangeMoore, oneRangeManhattan);
+
+    // CostTable
+    CostTable tileCostTable;
+    tileCostTable.SetCost(grassTileType.GetId(), 1);
+
+    CostTable unitCostTable;
+
+    // TilePatternConstraints
+    TilePatternConstraints tpc{tileCostTable, unitCostTable, 2};
+
+    SUBCASE("Check CalculateTilePattern with composition")
+    {
+        auto tp = tpdd->CalculateTilePattern({2, 2}, map, tpc);
+        std::vector<Vector2> tiles = {
+                                                {2, 3},         
+                                        {1, 2}, {2, 2}, {3, 2},
+                                                {2, 1},              
+                                     };
+        std::vector<Vector2> unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
+
+        // Manhattan
+        CHECK(tp->IsTileInPattern({2, 3}) == true);
+        CHECK(tp->IsTileInPattern({1, 2}) == true);
+        CHECK(tp->IsTileInPattern({2, 2}) == true);
+        CHECK(tp->IsTileInPattern({3, 2}) == true);
+        CHECK(tp->IsTileInPattern({2, 1}) == true);
+
+        // Diagonal is unreachable
+        CHECK(tp->IsTileInPattern({1, 3}) == false);
+        CHECK(tp->IsTileInPattern({3, 3}) == false);
+        CHECK(tp->IsTileInPattern({1, 1}) == false);
+        CHECK(tp->IsTileInPattern({3, 1}) == false);
+
+        // Cost 
+        CHECK(tp->GetTileCost({2, 3}) == 1);
+        CHECK(tp->GetTileCost({2, 2}) == 0);
+
+        // Paths
+        CHECK(tp->GetPathToTile({2, 3}) == std::vector<Vector2>{{2, 2}, {2, 3}});
+        CHECK(tp->GetPathToTile({3, 2}) == std::vector<Vector2>{{2, 2}, {3, 2}});
+
+        // Origin
+        CHECK(tp->GetOrigin() == Vector2{2, 2});
+
+        // Tiles in pattern range
+        auto tilePatternReachableTiles = tp->GetTilesPosInPattern();
+        CHECK(tilePatternReachableTiles.size() == tiles.size());
+
+        for(auto tile : tiles)
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == true);
+        for(auto tile : unreachableTiles)
+            CHECK(VectorUtils::IsInside(tilePatternReachableTiles, tile) == false);
+    }
+}

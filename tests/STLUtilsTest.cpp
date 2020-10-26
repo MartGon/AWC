@@ -52,11 +52,10 @@ TEST_CASE("Vector test")
     }
     SUBCASE("Diff")
     {
-        std::vector<int> left{1, 2, 3, 4, 5};
         std::vector<int> right{1, 3, 5};
         std::vector<int> expectedResult{2, 4};
 
-        auto res = VectorUtils::Diff(left, right);
+        auto res = VectorUtils::Diff(vec, right);
 
         CHECK(VectorUtils::IsInside(res, 2) == true);
         CHECK(VectorUtils::IsInside(res, 4) == true);
@@ -65,7 +64,21 @@ TEST_CASE("Vector test")
         CHECK(VectorUtils::IsInside(res, 5) == false);
 
         CHECK(res == expectedResult);
+    }
+    SUBCASE("Intersect")
+    {
+        std::vector<int> b{-2, -1, 1, 3, 5, 7};
+        std::vector<int> expectedResult{1, 3, 5};
 
+        auto res = VectorUtils::Intersect(vec, b);
+
+        CHECK(VectorUtils::IsInside(res, 1) == true);
+        CHECK(VectorUtils::IsInside(res, 3) == true);
+        CHECK(VectorUtils::IsInside(res, 5) == true);
+        CHECK(VectorUtils::IsInside(res, 2) == false);
+        CHECK(VectorUtils::IsInside(res, 7) == false);
+
+        CHECK(res == expectedResult);
     }
 }
 

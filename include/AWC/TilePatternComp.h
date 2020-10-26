@@ -41,3 +41,15 @@ public:
     std::vector<Vector2> GetPathToTile(Vector2 dest) const override;
     std::vector<Vector2> GetTilesPosInPattern() const override;
 };
+
+class TilePatternIntersect : public TilePatternComp
+{
+public:
+    TilePatternIntersect(TilePatternIPtr a, TilePatternIPtr b);
+
+    unsigned int GetTileCost(Vector2 dest) const override;
+    bool IsTileInPattern(Vector2 dest) const override;
+
+    std::vector<Vector2> GetPathToTile(Vector2 dest) const override;
+    std::vector<Vector2> GetTilesPosInPattern() const override;
+};
