@@ -12,6 +12,8 @@ class TilePatternIntersect;
 class TilePatternConstraints;
 class TilePatternDescriptor;
 class TilePatternDescriptorI;
+class TPDFixedRange;
+class TPDFixedCost;
 class Unit;
 class TileGraph;
 class TileNode;
