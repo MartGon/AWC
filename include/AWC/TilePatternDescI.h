@@ -7,10 +7,10 @@
 
 using TilePatternIPtr = std::shared_ptr<TilePatternI>;
 
-class TilePatternDescriptorI
+class TilePatternDescI
 {
 public:
-    virtual ~TilePatternDescriptorI() {}
+    virtual ~TilePatternDescI() {}
 
     TilePatternIPtr CalculateTilePattern(Vector2 origin, const Map& map, const TilePatternConstraints& constraints);
     TilePatternIPtr CalculateTilePattern(Vector2 origin, Vector2 destination, const Map& map, const TilePatternConstraints& constraints);

@@ -6,9 +6,9 @@
 #include <AWC/Map.h>
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
-#include <AWC/TilePatternDescriptor.h>
-#include <AWC/TilePatternDescriptorComp.h>
-#include <AWC/TilePatternDescriptorDecorator.h>
+#include <AWC/TilePatternDesc.h>
+#include <AWC/TilePatternDescComp.h>
+#include <AWC/TilePatternDescDecorator.h>
 #include <AWC/TilePattern.h>
 #include <AWC/TilePatternComp.h>
 #include <AWC/TilePatternConstraints.h>
@@ -26,7 +26,7 @@ TEST_CASE("TilePattern Composition Union test")
 
     MapUtils::FillMap(map, grassTileType);
 
-    // TilePatternDescriptor - Rook
+    // TilePatternDesc - Rook
     Vector2 e = {1, 0};
     Vector2 w = {-1, 0};
     Vector2 n = {0, 1};
@@ -38,9 +38,9 @@ TEST_CASE("TilePattern Composition Union test")
         {n, {n}},
         {s, {s}}
     };
-    auto rookDescriptor = TilePatternDescriptor::CreateByLocked(directionsR, lockedDirTableR);
+    auto rookDesc = TilePatternDesc::CreateByLocked(directionsR, lockedDirTableR);
 
-    // TilePatternDescriptor - Bishop
+    // TilePatternDesc - Bishop
     Vector2 ne = {1, 1};
     Vector2 nw = {-1, 1};
     Vector2 se = {1, -1};
@@ -52,10 +52,10 @@ TEST_CASE("TilePattern Composition Union test")
         {se, {se}},
         {sw, {sw}}
     };
-    auto bishopDescriptor = TilePatternDescriptor::CreateByLocked(directionsB, lockedDirTableB);
+    auto bishopDesc = TilePatternDesc::CreateByLocked(directionsB, lockedDirTableB);
 
-    // TilePatternDescriptor - Queen
-    auto queenDescriptor = std::make_shared<TilePatternDescriptorUnion>(rookDescriptor, bishopDescriptor);
+    // TilePatternDesc - Queen
+    auto queenDesc = std::make_shared<TilePatternDescUnion>(rookDesc, bishopDesc);
 
     // CostTable
     CostTable tileCostTable;
@@ -68,7 +68,7 @@ TEST_CASE("TilePattern Composition Union test")
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
-        auto tp = queenDescriptor->CalculateTilePattern({0, 0}, map, tpc);
+        auto tp = queenDesc->CalculateTilePattern({0, 0}, map, tpc);
         std::vector<Vector2> tiles = {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {2, 0}, {2, 2}};
         std::vector<Vector2> unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
 
@@ -123,7 +123,7 @@ TEST_CASE("TilePattern Composition Diff test")
 
     MapUtils::FillMap(map, grassTileType);
 
-     // TilePatternDescriptor - Moore
+     // TilePatternDesc - Moore
     Vector2 e = {1, 0};
     Vector2 ne = {1, 1};
     Vector2 se = {1, -1};
@@ -133,10 +133,10 @@ TEST_CASE("TilePattern Composition Diff test")
     Vector2 n = {0, 1};
     Vector2 s = {0, -1};
     std::vector<Vector2> directions = {e, ne, se, w, nw, sw, n, s};
-    auto mooreDescriptor = TilePatternDescriptor::Create(directions);
-    auto towRangeMooreDesc = std::make_shared<TPDFixedRange>(mooreDescriptor, 2);
+    auto mooreDesc = TilePatternDesc::Create(directions);
+    auto towRangeMooreDesc = std::make_shared<TPDFixedRange>(mooreDesc, 2);
 
-    // TilePatternDescriptor - One Range Diagonal
+    // TilePatternDesc - One Range Diagonal
     std::vector<Vector2> dDirections = {ne, nw, se, sw};
     DirectionsTable lockedDT = {
         {ne, {ne}},
@@ -144,11 +144,11 @@ TEST_CASE("TilePattern Composition Diff test")
         {se, {se}},
         {sw, {sw}}
     };
-    auto diagonalDescriptor = TilePatternDescriptor::CreateByLocked(dDirections, lockedDT);
-    auto oneDiagonalDesc = std::make_shared<TPDFixedRange>(diagonalDescriptor, 1, 1);
+    auto diagonalDesc = TilePatternDesc::CreateByLocked(dDirections, lockedDT);
+    auto oneDiagonalDesc = std::make_shared<TPDFixedRange>(diagonalDesc, 1, 1);
 
-    // TilePatternDescriptorDiff
-    auto tpdd = std::make_shared<TilePatternDescriptorDiff>(towRangeMooreDesc, oneDiagonalDesc);
+    // TilePatternDescDiff
+    auto tpdd = std::make_shared<TilePatternDescDiff>(towRangeMooreDesc, oneDiagonalDesc);
 
     // CostTable
     CostTable tileCostTable;
@@ -222,7 +222,7 @@ TEST_CASE("TilePattern Composition Intersect test")
 
     MapUtils::FillMap(map, grassTileType);
 
-     // TilePatternDescriptor - Moore
+     // TilePatternDesc - Moore
     Vector2 e = {1, 0};
     Vector2 ne = {1, 1};
     Vector2 se = {1, -1};
@@ -232,16 +232,16 @@ TEST_CASE("TilePattern Composition Intersect test")
     Vector2 n = {0, 1};
     Vector2 s = {0, -1};
     std::vector<Vector2> directions = {e, ne, se, w, nw, sw, n, s};
-    auto mooreDescriptor = TilePatternDescriptor::Create(directions);
-    auto oneRangeMoore = std::make_shared<TPDFixedRange>(mooreDescriptor, 1);
+    auto mooreDesc = TilePatternDesc::Create(directions);
+    auto oneRangeMoore = std::make_shared<TPDFixedRange>(mooreDesc, 1);
 
-    // TilePatternDescriptor - Manhattan
+    // TilePatternDesc - Manhattan
     std::vector<Vector2> dDirections = {e, w, s, n};
-    auto manhattan = TilePatternDescriptor::Create(dDirections);
+    auto manhattan = TilePatternDesc::Create(dDirections);
     auto oneRangeManhattan = std::make_shared<TPDFixedRange>(manhattan, 1);
 
-    // TilePatternDescriptorDiff
-    auto tpdd = std::make_shared<TilePatternDescriptorIntersect>(oneRangeMoore, oneRangeManhattan);
+    // TilePatternDescDiff
+    auto tpdd = std::make_shared<TilePatternDescIntersect>(oneRangeMoore, oneRangeManhattan);
 
     // CostTable
     CostTable tileCostTable;

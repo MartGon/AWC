@@ -1,4 +1,4 @@
-# TilePatternDescriptor
+# TilePatternDesc
 
 Represents how a **Unit** moves/attacks ignoring the state of the **Map**.
 

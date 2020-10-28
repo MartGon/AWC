@@ -11,10 +11,10 @@ add_library(AWCSource
   TilePatternI.cpp
   TilePatternComp.cpp
   TilePatternConstraints.cpp
-  TilePatternDescriptor.cpp
-  TilePatternDescriptorI.cpp
-  TilePatternDescriptorComp.cpp
-  TilePatternDescriptorDecorator.cpp
+  TilePatternDesc.cpp
+  TilePatternDescI.cpp
+  TilePatternDescComp.cpp
+  TilePatternDescDecorator.cpp
   TileGraph.cpp
   TileNode.cpp
 )

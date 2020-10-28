@@ -7,8 +7,8 @@ add_executable(AWCTest
     UnitTest.cpp
     TilePatternTest.cpp
     TilePatternCompTest.cpp
-    TilePatternDescriptorTest.cpp
-    TilePatternDescriptorDecoratorTest.cpp
+    TilePatternDescTest.cpp
+    TilePatternDescDecoratorTest.cpp
     TileGraphTest.cpp
     STLUtilsTest.cpp
 )

@@ -19,6 +19,8 @@ class Map
 public:
     Map(int x, int y);
 
+    
+
     int GetWidht() const;
     int GetHeight() const;
 
@@ -30,6 +32,8 @@ public:
 
     void RemoveUnit(int x, int y);
     void RemoveUnit(Vector2 pos);
+
+    // Tiles
 
     void SetTile(int x, int y, TilePtr tile);
     void SetTile(Vector2 pos, TilePtr tile);

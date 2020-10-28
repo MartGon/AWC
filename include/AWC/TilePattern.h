@@ -10,7 +10,7 @@
 
 class TilePattern : public TilePatternI
 {
-friend class TilePatternDescriptor;
+friend class TilePatternDesc;
 
 public:
     unsigned int GetTileCost(Vector2 dest) const override;

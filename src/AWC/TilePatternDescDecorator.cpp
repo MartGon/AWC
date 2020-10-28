@@ -1,18 +1,18 @@
-#include <AWC/TilePatternDescriptorDecorator.h>
+#include <AWC/TilePatternDescDecorator.h>
 #include <AWC/TilePatternConstraints.h>
 
 
 // TPD Decorator
 
-TilePatternDescriptorDecorator::TilePatternDescriptorDecorator(TilePatternDescriptorIPtr child) : child_{child}
+TilePatternDescDecorator::TilePatternDescDecorator(TilePatternDescIPtr child) : child_{child}
 {
 
 }
 
 // TPD FixedRange
 
-TPDFixedRange::TPDFixedRange(TilePatternDescriptorIPtr child, unsigned int maxRange, unsigned int minRange)
-     : maxRange_{maxRange}, minRange_{minRange}, TilePatternDescriptorDecorator{child}
+TPDFixedRange::TPDFixedRange(TilePatternDescIPtr child, unsigned int maxRange, unsigned int minRange)
+     : maxRange_{maxRange}, minRange_{minRange}, TilePatternDescDecorator{child}
 {
 
 }
@@ -35,8 +35,8 @@ TilePatternIPtr TPDFixedRange::DoCalculateTilePattern(Vector2 origin,
 
 // TPD FixedCost
 
-TPDFixedCost::TPDFixedCost(TilePatternDescriptorIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable) 
-    : tileCostTable_{tileCostTable}, unitCostTable_{unitCostTable_},  TilePatternDescriptorDecorator{child}
+TPDFixedCost::TPDFixedCost(TilePatternDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable) 
+    : tileCostTable_{tileCostTable}, unitCostTable_{unitCostTable_},  TilePatternDescDecorator{child}
 {
 
 }

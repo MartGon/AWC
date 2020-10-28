@@ -1,20 +1,20 @@
 #pragma once
 
 #include <AWC/AWCfwd.h>
-#include <AWC/TilePatternDescriptorI.h>
-#include <AWC/TilePatternDescriptor.h>
+#include <AWC/TilePatternDescI.h>
+#include <AWC/TilePatternDesc.h>
 
-using TilePatternDescriptorIPtr = std::shared_ptr<TilePatternDescriptorI>;
+using TilePatternDescIPtr = std::shared_ptr<TilePatternDescI>;
 
 template<typename T>
-class TilePatternDescriptorComp : public TilePatternDescriptorI
+class TilePatternDescComp : public TilePatternDescI
 {
 public:
-    TilePatternDescriptorComp(TilePatternDescriptorIPtr a, TilePatternDescriptorIPtr b) : a_{a}, b_{b} {};
+    TilePatternDescComp(TilePatternDescIPtr a, TilePatternDescIPtr b) : a_{a}, b_{b} {};
 
 private:
 
-    TilePatternIPtr GetTilePattern(TilePatternDescriptorIPtr tpdip, Vector2 origin, std::optional<Vector2> destination, 
+    TilePatternIPtr GetTilePattern(TilePatternDescIPtr tpdip, Vector2 origin, std::optional<Vector2> destination, 
         const Map& map, const TilePatternConstraints& constraints)
     {
         TilePatternIPtr res;
@@ -37,10 +37,10 @@ private:
         return tilePattern;
     }
 
-    TilePatternDescriptorIPtr a_;
-    TilePatternDescriptorIPtr b_;
+    TilePatternDescIPtr a_;
+    TilePatternDescIPtr b_;
 };
 
-using TilePatternDescriptorUnion = TilePatternDescriptorComp<TilePatternUnion>;
-using TilePatternDescriptorDiff = TilePatternDescriptorComp<TilePatternDiff>;
-using TilePatternDescriptorIntersect = TilePatternDescriptorComp<TilePatternIntersect>;
+using TilePatternDescUnion = TilePatternDescComp<TilePatternUnion>;
+using TilePatternDescDiff = TilePatternDescComp<TilePatternDiff>;
+using TilePatternDescIntersect = TilePatternDescComp<TilePatternIntersect>;

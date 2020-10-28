@@ -6,9 +6,9 @@
 #include <AWC/Map.h>
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
-#include <AWC/TilePatternDescriptor.h>
-#include <AWC/TilePatternDescriptorComp.h>
-#include <AWC/TilePatternDescriptorDecorator.h>
+#include <AWC/TilePatternDesc.h>
+#include <AWC/TilePatternDescComp.h>
+#include <AWC/TilePatternDescDecorator.h>
 #include <AWC/TilePattern.h>
 #include <AWC/TilePatternComp.h>
 #include <AWC/TilePatternConstraints.h>
@@ -49,13 +49,13 @@ TEST_CASE("TilePattern pathfinding test")
     for(auto pos : path)
         map.SetTile(pos.x, pos.y, grassTileType.CreateTile());
 
-    // TilePatternDescriptor
+    // TilePatternDesc
     Vector2 e = {1, 0};
     Vector2 w = {-1, 0};
     Vector2 n = {0, 1};
     Vector2 s = {0, -1};
     std::vector<Vector2> directions = {e, w, n, s};
-    auto manhattanDescriptor = TilePatternDescriptor::Create(directions);
+    auto manhattanDesc = TilePatternDesc::Create(directions);
 
     // CostTable
     CostTable tileCostTable;
@@ -69,7 +69,7 @@ TEST_CASE("TilePattern pathfinding test")
 
     SUBCASE("Check CalculateTilePattern")
     {
-        auto tp = manhattanDescriptor->CalculateTilePattern({0, 0}, map, tpc);
+        auto tp = manhattanDesc->CalculateTilePattern({0, 0}, map, tpc);
         std::vector<Vector2> tiles = {{0, 0}, {0, 1}, {1, 0}, {1, 1}, {1, 2}, {0, 2}};
         auto unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
 
@@ -100,7 +100,7 @@ TEST_CASE("TilePattern pathfinding test")
     }
     SUBCASE("Check CalculateTilePattern with destitnation")
     {
-        auto tp = manhattanDescriptor->CalculateTilePattern({0, 0}, Vector2{1, 2}, map, tpc);
+        auto tp = manhattanDesc->CalculateTilePattern({0, 0}, Vector2{1, 2}, map, tpc);
         std::vector<Vector2> tiles = {{0, 0}, {0, 1}, {1, 0}, {1, 1}, {1, 2}};
         auto unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
         std::vector<Vector2> path = {{0, 0}, {1, 0}, {1, 1}, {1, 2}};

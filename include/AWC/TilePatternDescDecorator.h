@@ -1,27 +1,27 @@
 #include <AWC/AWCfwd.h>
-#include <AWC/TilePatternDescriptorI.h>
+#include <AWC/TilePatternDescI.h>
 
 #include <memory>
 
 using TilePatternConstraintsPtr = std::shared_ptr<TilePatternConstraints>;
-using TilePatternDescriptorIPtr = std::shared_ptr<TilePatternDescriptorI>;
+using TilePatternDescIPtr = std::shared_ptr<TilePatternDescI>;
 
 using CostTableIPtr = std::shared_ptr<CostTableI>;
 
-class TilePatternDescriptorDecorator : public TilePatternDescriptorI
+class TilePatternDescDecorator : public TilePatternDescI
 {
 public:
-    ~TilePatternDescriptorDecorator() {};
-    TilePatternDescriptorDecorator(TilePatternDescriptorIPtr child);
+    ~TilePatternDescDecorator() {};
+    TilePatternDescDecorator(TilePatternDescIPtr child);
 
 protected:
-    TilePatternDescriptorIPtr child_;
+    TilePatternDescIPtr child_;
 };
 
-class TPDFixedRange : public TilePatternDescriptorDecorator
+class TPDFixedRange : public TilePatternDescDecorator
 {
 public:
-    TPDFixedRange(TilePatternDescriptorIPtr child, unsigned int maxRange, unsigned int minRange = 0);
+    TPDFixedRange(TilePatternDescIPtr child, unsigned int maxRange, unsigned int minRange = 0);
 
 private:
     TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, 
@@ -31,10 +31,10 @@ private:
     unsigned int maxRange_;
 };
 
-class TPDFixedCost : public TilePatternDescriptorDecorator
+class TPDFixedCost : public TilePatternDescDecorator
 {
 public:
-    TPDFixedCost(TilePatternDescriptorIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable);
+    TPDFixedCost(TilePatternDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable);
 
 private:
     TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, 

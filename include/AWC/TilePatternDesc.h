@@ -4,7 +4,7 @@
 
 #include <AWC/AWCfwd.h>
 #include <AWC/Directions.h>
-#include <AWC/TilePatternDescriptorI.h>
+#include <AWC/TilePatternDescI.h>
 #include <AWC/TileNode.h>
 
 #include <unordered_map>
@@ -12,18 +12,18 @@
 #include <exception>
 #include <optional>
 
-using TilePatternDescriptorPtr = std::shared_ptr<TilePatternDescriptor>;
+using TilePatternDescPtr = std::shared_ptr<TilePatternDesc>;
 using TilePatternPtr = std::shared_ptr<TilePattern>;
 using DirectionsTable = std::unordered_map<Vector2, Directions>;
 
-class TilePatternDescriptor : public TilePatternDescriptorI
+class TilePatternDesc : public TilePatternDescI
 {
 public:
 
-    static TilePatternDescriptorPtr Create(const Directions& directions) 
-        {return TilePatternDescriptorPtr{new TilePatternDescriptor{directions}};}
-    static TilePatternDescriptorPtr CreateByLocked(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
-    static TilePatternDescriptorPtr CreateByExclusive(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
+    static TilePatternDescPtr Create(const Directions& directions) 
+        {return TilePatternDescPtr{new TilePatternDesc{directions}};}
+    static TilePatternDescPtr CreateByLocked(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
+    static TilePatternDescPtr CreateByExclusive(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
 
     Directions GetOriginDirections();
     bool IsOriginDirection(Vector2 dir);
@@ -38,8 +38,8 @@ private:
 
     static const Vector2 NULL_MOVEMENT;
 
-    TilePatternDescriptor(const Directions& directions);
-    TilePatternDescriptor(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
+    TilePatternDesc(const Directions& directions);
+    TilePatternDesc(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
 
     static DirectionsTable GenerateDefaultLockedDirectionsTable(const Directions& directions);
     static DirectionsTable PrepareLockedDirectionsTable(const Directions& directions, const DirectionsTable& lockedDirections);

@@ -6,9 +6,9 @@
 #include <AWC/Map.h>
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
-#include <AWC/TilePatternDescriptor.h>
-#include <AWC/TilePatternDescriptorComp.h>
-#include <AWC/TilePatternDescriptorDecorator.h>
+#include <AWC/TilePatternDesc.h>
+#include <AWC/TilePatternDescComp.h>
+#include <AWC/TilePatternDescDecorator.h>
 #include <AWC/TilePattern.h>
 #include <AWC/TilePatternComp.h>
 #include <AWC/TilePatternConstraints.h>
@@ -32,7 +32,7 @@ TEST_CASE("TilePattern Fixed Range Decorator test")
     for(auto pos : diagonalPos)
         map.SetTile(pos, seaTileType.CreateTile());
 
-    // TilePatternDescriptor - Moore
+    // TilePatternDesc - Moore
     Vector2 e = {1, 0};
     Vector2 ne = {1, 1};
     Vector2 se = {1, -1};
@@ -42,21 +42,21 @@ TEST_CASE("TilePattern Fixed Range Decorator test")
     Vector2 n = {0, 1};
     Vector2 s = {0, -1};
     std::vector<Vector2> directions = {e, ne, se, w, nw, sw, n, s};
-    auto mooreDescriptor = TilePatternDescriptor::Create(directions);
+    auto mooreDesc = TilePatternDesc::Create(directions);
     
     // Fixed CostTable
     FixedCostTable fixedTileCostTable{1};
 
     // Fixed Range TPD
     CostTable unitCostTable;
-    auto mooreDescriptorFixedRange = std::make_shared<TPDFixedRange>(mooreDescriptor, 1, 0);
+    auto mooreDescFixedRange = std::make_shared<TPDFixedRange>(mooreDesc, 1, 0);
 
     // Normal TPC
     TilePatternConstraints constraints{fixedTileCostTable, unitCostTable, 8, 0};
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
-        auto tp = mooreDescriptorFixedRange->CalculateTilePattern({1, 1}, map, constraints);
+        auto tp = mooreDescFixedRange->CalculateTilePattern({1, 1}, map, constraints);
         std::vector<Vector2> tiles = {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {2, 0}, {2, 2}, {1, 2}, {2, 1}};
         std::vector<Vector2> unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
 
@@ -110,7 +110,7 @@ TEST_CASE("TilePattern Fixed Cost Decorator test")
     for(auto pos : diagonalPos)
         map.SetTile(pos, seaTileType.CreateTile());
 
-    // TilePatternDescriptor - Moore
+    // TilePatternDesc - Moore
     Vector2 e = {1, 0};
     Vector2 ne = {1, 1};
     Vector2 se = {1, -1};
@@ -120,7 +120,7 @@ TEST_CASE("TilePattern Fixed Cost Decorator test")
     Vector2 n = {0, 1};
     Vector2 s = {0, -1};
     std::vector<Vector2> directions = {e, ne, se, w, nw, sw, n, s};
-    auto mooreDescriptor = TilePatternDescriptor::Create(directions);
+    auto mooreDesc = TilePatternDesc::Create(directions);
     
     // Fixed CostTable
     auto fixedTileCostTable = std::make_shared<FixedCostTable>(1);
@@ -128,8 +128,8 @@ TEST_CASE("TilePattern Fixed Cost Decorator test")
 
     // Fixed Range TPD
     CostTable unitCostTable;
-    auto mooreDescriptorFixedRange = std::make_shared<TPDFixedRange>(mooreDescriptor, 1, 0);
-    auto mooreDescriptorFixedCost = std::make_shared<TPDFixedCost>(mooreDescriptorFixedRange, fixedTileCostTable, unitTileCostTable);
+    auto mooreDescFixedRange = std::make_shared<TPDFixedRange>(mooreDesc, 1, 0);
+    auto mooreDescFixedCost = std::make_shared<TPDFixedCost>(mooreDescFixedRange, fixedTileCostTable, unitTileCostTable);
 
     // Normal TPC
     CostTable normalCostTable;
@@ -139,7 +139,7 @@ TEST_CASE("TilePattern Fixed Cost Decorator test")
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
-        auto tp = mooreDescriptorFixedCost->CalculateTilePattern({1, 1}, map, constraints);
+        auto tp = mooreDescFixedCost->CalculateTilePattern({1, 1}, map, constraints);
         std::vector<Vector2> tiles = {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {2, 0}, {2, 2}, {1, 2}, {2, 1}};
         std::vector<Vector2> unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
 

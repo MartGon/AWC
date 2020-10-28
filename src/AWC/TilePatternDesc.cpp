@@ -1,5 +1,5 @@
 #include <AWC/TilePattern.h>
-#include <AWC/TilePatternDescriptor.h>
+#include <AWC/TilePatternDesc.h>
 #include <AWC/TilePatternConstraints.h>
 #include <AWC/CostTable.h>
 #include <AWC/Map.h>
@@ -16,30 +16,30 @@
 // Public
 
 // Factory methods
-TilePatternDescriptorPtr TilePatternDescriptor::CreateByLocked(const Directions& directions, 
+TilePatternDescPtr TilePatternDesc::CreateByLocked(const Directions& directions, 
     const DirectionsTable& lockedDirectionsTable)
 {
-    return std::shared_ptr<TilePatternDescriptor>{
-        new TilePatternDescriptor{directions, PrepareLockedDirectionsTable(directions, lockedDirectionsTable)
+    return std::shared_ptr<TilePatternDesc>{
+        new TilePatternDesc{directions, PrepareLockedDirectionsTable(directions, lockedDirectionsTable)
         }};
 }
 
-TilePatternDescriptorPtr  TilePatternDescriptor::CreateByExclusive(const Directions& directions, 
+TilePatternDescPtr  TilePatternDesc::CreateByExclusive(const Directions& directions, 
     const DirectionsTable& exclusiveDirectionsTable)
 {
-    return std::shared_ptr<TilePatternDescriptor>{
-        new TilePatternDescriptor{directions, GenerateLockedDirectionsTable(directions, exclusiveDirectionsTable)
+    return std::shared_ptr<TilePatternDesc>{
+        new TilePatternDesc{directions, GenerateLockedDirectionsTable(directions, exclusiveDirectionsTable)
         }};
 }
 
 // Constructors
-TilePatternDescriptor::TilePatternDescriptor(const Directions& directions) : 
+TilePatternDesc::TilePatternDesc(const Directions& directions) : 
     originDirections_{directions}, lockedDirectionsTable_{GenerateDefaultLockedDirectionsTable(directions)}
 {
 
 }
 
-TilePatternDescriptor::TilePatternDescriptor(const Directions& directions, 
+TilePatternDesc::TilePatternDesc(const Directions& directions, 
     const DirectionsTable& lockedDirectionsTable) : 
     originDirections_{directions}, lockedDirectionsTable_{lockedDirectionsTable}
 {
@@ -48,25 +48,25 @@ TilePatternDescriptor::TilePatternDescriptor(const Directions& directions,
 
 // Methods
 
-Directions TilePatternDescriptor::GetOriginDirections()
+Directions TilePatternDesc::GetOriginDirections()
 {
     return originDirections_;
 }
 
-bool TilePatternDescriptor::IsOriginDirection(Vector2 dir)
+bool TilePatternDesc::IsOriginDirection(Vector2 dir)
 {
     return VectorUtils::IsInside(originDirections_, dir);
 }
 
-void TilePatternDescriptor::AddOriginDirection(Vector2 dir)
+void TilePatternDesc::AddOriginDirection(Vector2 dir)
 {
     if(!IsOriginDirection(dir))
         originDirections_.push_back(dir);
     else
-        throw AWCAlreadyExistingIndexException("TilePatternDescriptor::AddOriginDirection", dir);
+        throw AWCAlreadyExistingIndexException("TilePatternDesc::AddOriginDirection", dir);
 }
 
-void TilePatternDescriptor::RemoveOriginDirection(Vector2 dir)
+void TilePatternDesc::RemoveOriginDirection(Vector2 dir)
 {
     if(IsOriginDirection(dir))
     {
@@ -74,30 +74,30 @@ void TilePatternDescriptor::RemoveOriginDirection(Vector2 dir)
         lockedDirectionsTable_.erase(dir);
     }
     else
-        throw AWCNoExistingIndexException("TilePatternDescriptor::RemoveOriginDirection", dir);
+        throw AWCNoExistingIndexException("TilePatternDesc::RemoveOriginDirection", dir);
 
 }
 
-Directions TilePatternDescriptor::GetLockedDirections(Vector2 dir)
+Directions TilePatternDesc::GetLockedDirections(Vector2 dir)
 {
     return lockedDirectionsTable_.at(dir);
 }
 
-void TilePatternDescriptor::SetExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections)
+void TilePatternDesc::SetExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections)
 {
     lockedDirectionsTable_[dir] = GenerateLockedDirections(originDirections_, exclusiveDirections);
 }
 
-void TilePatternDescriptor::SetLockedDirections(Vector2 dir, const Directions& lockedDirections)
+void TilePatternDesc::SetLockedDirections(Vector2 dir, const Directions& lockedDirections)
 {
     lockedDirectionsTable_[dir] = lockedDirections;
 }
 
 // Private
 
-const Vector2 TilePatternDescriptor::NULL_MOVEMENT = Vector2{0, 0};
+const Vector2 TilePatternDesc::NULL_MOVEMENT = Vector2{0, 0};
 
-DirectionsTable TilePatternDescriptor::GenerateDefaultLockedDirectionsTable(const Directions& directions)
+DirectionsTable TilePatternDesc::GenerateDefaultLockedDirectionsTable(const Directions& directions)
 {
     DirectionsTable lockedDirectionsTable;
     lockedDirectionsTable.insert({NULL_MOVEMENT, directions});
@@ -113,14 +113,14 @@ DirectionsTable TilePatternDescriptor::GenerateDefaultLockedDirectionsTable(cons
     return lockedDirectionsTable;
 }
 
-DirectionsTable TilePatternDescriptor::PrepareLockedDirectionsTable(const Directions& directions, const DirectionsTable& lockedDirections)
+DirectionsTable TilePatternDesc::PrepareLockedDirectionsTable(const Directions& directions, const DirectionsTable& lockedDirections)
 {
     auto finalLockedDirectionsTable = lockedDirections;
     finalLockedDirectionsTable.insert({NULL_MOVEMENT, directions});
     return finalLockedDirectionsTable;
 }
 
-DirectionsTable TilePatternDescriptor::GenerateLockedDirectionsTable(const Directions& directions, 
+DirectionsTable TilePatternDesc::GenerateLockedDirectionsTable(const Directions& directions, 
     const DirectionsTable& exclusiveDirectionsTable)
 {
     DirectionsTable lockedDirectionsTable;
@@ -138,7 +138,7 @@ DirectionsTable TilePatternDescriptor::GenerateLockedDirectionsTable(const Direc
     return lockedDirectionsTable;
 }
 
-Directions TilePatternDescriptor::GenerateLockedDirections(const Directions& directions, 
+Directions TilePatternDesc::GenerateLockedDirections(const Directions& directions, 
     const Directions& exclusiveDirections)
 {
     Directions lockedDirections = directions;
@@ -148,7 +148,7 @@ Directions TilePatternDescriptor::GenerateLockedDirections(const Directions& dir
     return lockedDirections;
 }
 
-TilePatternIPtr TilePatternDescriptor::DoCalculateTilePattern(Vector2 origin, 
+TilePatternIPtr TilePatternDesc::DoCalculateTilePattern(Vector2 origin, 
     std::optional<Vector2> destination, const Map& map, const TilePatternConstraints& constraints)
 {
         // Create mapGraph
@@ -195,7 +195,7 @@ TilePatternIPtr TilePatternDescriptor::DoCalculateTilePattern(Vector2 origin,
     return tp;
 }
 
-Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode, const Map& map)
+Directions TilePatternDesc::GetDiscoverDirections(TileNodePtr tileNode, const Map& map)
 {
     auto directions = GetOriginDirections();
 
@@ -206,7 +206,7 @@ Directions TilePatternDescriptor::GetDiscoverDirections(TileNodePtr tileNode, co
     return directions;
 }
 
-Vector2 TilePatternDescriptor::GetMovementToOrigin(TileNodePtr tileNode)
+Vector2 TilePatternDesc::GetMovementToOrigin(TileNodePtr tileNode)
 {
     Vector2 movement{0, 0};
 
@@ -222,7 +222,7 @@ Vector2 TilePatternDescriptor::GetMovementToOrigin(TileNodePtr tileNode)
     return movement;
 }
 
-Directions TilePatternDescriptor::GetValidDirections(TileNodePtr tileNode, Directions directions, const Map& map)
+Directions TilePatternDesc::GetValidDirections(TileNodePtr tileNode, Directions directions, const Map& map)
 {
     auto nodePos = tileNode.lock()->pos;
 
@@ -237,7 +237,7 @@ Directions TilePatternDescriptor::GetValidDirections(TileNodePtr tileNode, Direc
     return validDirections;
 }
 
-unsigned int TilePatternDescriptor::GetTileCost(const Map& map, const TilePatternConstraints& tpc, Vector2 pos)
+unsigned int TilePatternDesc::GetTileCost(const Map& map, const TilePatternConstraints& tpc, Vector2 pos)
 {
     auto tile = map.GetTile(pos);
     auto cost = tpc.GetTileCost(tile->GetId());

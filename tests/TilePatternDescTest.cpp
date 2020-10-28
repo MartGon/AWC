@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <AWC/TilePatternDescriptor.h>
+#include <AWC/TilePatternDesc.h>
 #include <AWC/TilePattern.h>
 #include <AWC/Map.h>
 #include <AWC/AWCException.h>
@@ -23,7 +23,7 @@ TEST_CASE("Manhattan TilePattern test")
 
     SUBCASE("Check constructing without exclusive")
     {
-        auto manhattanImplicit = TilePatternDescriptor::Create(directions);
+        auto manhattanImplicit = TilePatternDesc::Create(directions);
 
         // Implicit
         CHECK(manhattanImplicit->GetLockedDirections(e) == eastLockedDirections);
@@ -40,7 +40,7 @@ TEST_CASE("Manhattan TilePattern test")
             {n, {s}},
             {s, {n}}
         };
-        auto manhattan = TilePatternDescriptor::CreateByExclusive(directions, exclusiveDirections);
+        auto manhattan = TilePatternDesc::CreateByExclusive(directions, exclusiveDirections);
 
         CHECK(manhattan->GetLockedDirections(e) == eastLockedDirections);
         CHECK(manhattan->GetLockedDirections(w) == westLockedDirections);
@@ -56,7 +56,7 @@ TEST_CASE("Manhattan TilePattern test")
             {n, northLockedDirections},
             {s, southLockedDirections}
         };
-        auto manhattan = TilePatternDescriptor::CreateByLocked(directions, lockedDirections);
+        auto manhattan = TilePatternDesc::CreateByLocked(directions, lockedDirections);
 
         CHECK(manhattan->GetLockedDirections(e) == eastLockedDirections);
         CHECK(manhattan->GetLockedDirections(w) == westLockedDirections);
@@ -74,7 +74,7 @@ TEST_CASE("Configuration interface tests")
     Vector2 s = {0, -1};
     Directions directions = {e, w, n, s};
 
-    auto manhattan = TilePatternDescriptor::Create(directions);
+    auto manhattan = TilePatternDesc::Create(directions);
 
     SUBCASE("Check configuration of directions")
     {
