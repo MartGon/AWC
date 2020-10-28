@@ -6,7 +6,7 @@
 
 // UnitMovementDesc
 
-UnitMovementDesc::UnitMovementDesc(TilePatternDescIPtr tilePatternDesc, CostTableIPtr tileCost, CostTableIPtr unitCost, unsigned int minRange, unsigned int maxRange) 
+UnitMovementDesc::UnitMovementDesc(TilePatternDescIPtr tilePatternDesc, CostTableIPtr tileCost, CostTableIPtr unitCost, unsigned int maxRange, unsigned int minRange) 
     : tilePatternDesc_{tilePatternDesc}, tileCost_{tileCost}, unitCost_{unitCost}, minRange_{minRange}, maxRange_{maxRange}
 {
 

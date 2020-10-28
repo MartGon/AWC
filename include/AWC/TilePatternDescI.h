@@ -1,11 +1,9 @@
 #pragma once
-#include <AWC/AWCfwd.h>
+#include <AWC/AWCusing.h>
 #include <Utils/Vector2.h>
 
 #include <memory>
 #include <optional>
-
-using TilePatternIPtr = std::shared_ptr<TilePatternI>;
 
 class TilePatternDescI
 {

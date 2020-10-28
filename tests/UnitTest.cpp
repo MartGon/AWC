@@ -19,7 +19,7 @@ UnitType UnitTest::CreateSoldierType()
     CostTableIPtr tileCostTable{new CostTable};
 
     // Movement
-    UnitMovementDesc movementDesc{manhattan, unitCostTable, tileCostTable, 0, 3};
+    UnitMovementDesc movementDesc{manhattan, unitCostTable, tileCostTable, 3};
 
     UnitType soldierType{"Soldier", movementDesc};
 

@@ -1,10 +1,8 @@
 #pragma once
 
-#include <AWC/AWCfwd.h>
+#include <AWC/AWCusing.h>
 #include <AWC/TilePatternDescI.h>
 #include <AWC/TilePatternDesc.h>
-
-using TilePatternDescIPtr = std::shared_ptr<TilePatternDescI>;
 
 template<typename T>
 class TilePatternDescComp : public TilePatternDescI

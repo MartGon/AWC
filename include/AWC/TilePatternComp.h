@@ -1,10 +1,10 @@
-#include <AWC/AWCfwd.h>
+#pragma once
+
+#include <AWC/AWCusing.h>
 #include <AWC/TilePatternI.h>
 #include <AWC/TilePattern.h>
 
 #include <memory>
-
-using TilePatternIPtr = std::shared_ptr<TilePatternI>;
 
 class TilePatternComp : public TilePatternI
 {

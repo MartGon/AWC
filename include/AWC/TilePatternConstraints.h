@@ -1,10 +1,10 @@
+#pragma once
+
 #include <Utils/Vector2.h>
 
-#include <AWC/AWCfwd.h>
+#include <AWC/AWCusing.h>
 
 #include <memory>
-
-using CostTableIPtr = std::shared_ptr<CostTableI>;
 
 class TilePatternConstraints
 {

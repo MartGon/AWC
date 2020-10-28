@@ -1,6 +1,8 @@
 #pragma once
 
+#include <AWC/AWCusing.h>
 #include <Utils/Vector2.h>
+
 
 #include <exception>
 #include <memory>
@@ -10,8 +12,6 @@
 
 class TileGraph;
 class TileNode;
-
-using TileNodePtr = std::weak_ptr<TileNode>;
 
 class TileNode
 {

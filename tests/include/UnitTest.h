@@ -1,3 +1,4 @@
+#pragma once
 #include <AWC/AWCfwd.h>
 
 #include <memory>

@@ -190,7 +190,7 @@ TilePatternIPtr TilePatternDesc::DoCalculateTilePattern(Vector2 origin,
     }
 
     // Create TilePattern
-    auto tp = TilePatternPtr(new TilePattern{origin, tg, constraints.maxRange, constraints.minRange});
+    auto tp = TilePatternIPtr(new TilePattern{origin, tg, constraints.maxRange, constraints.minRange});
 
     return tp;
 }

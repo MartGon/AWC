@@ -5,14 +5,11 @@
 #include <exception>
 #include <string>
 
-#include <AWC/AWCfwd.h>
+#include <AWC/AWCusing.h>
 #include <AWC/Unit.h>
 #include <AWC/Tile.h>
 
 #include <Utils/Vector2.h>
-
-using UnitPtr = std::shared_ptr<Unit>;
-using TilePtr = std::shared_ptr<Tile>;
 
 class Map
 {

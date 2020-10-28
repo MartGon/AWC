@@ -1,12 +1,9 @@
-#include <AWC/AWCfwd.h>
+#pragma once
+
+#include <AWC/AWCusing.h>
 #include <AWC/TilePatternDescI.h>
 
 #include <memory>
-
-using TilePatternConstraintsPtr = std::shared_ptr<TilePatternConstraints>;
-using TilePatternDescIPtr = std::shared_ptr<TilePatternDescI>;
-
-using CostTableIPtr = std::shared_ptr<CostTableI>;
 
 class TilePatternDescDecorator : public TilePatternDescI
 {

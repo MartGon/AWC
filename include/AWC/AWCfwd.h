@@ -1,9 +1,13 @@
+#pragma once
+
 class Command;
 class CostTable;
 class CostTableI;
 class FixedCostTable;
 class Map;
 class Tile;
+class TileGraph;
+class TileNode;
 class TilePattern;
 class TilePatternI;
 class TilePatternUnion;
@@ -14,9 +18,9 @@ class TilePatternDesc;
 class TilePatternDescI;
 class TPDFixedRange;
 class TPDFixedCost;
-class TileGraph;
-class TileNode;
 class Unit;
+class UnitAttack;
 class UnitMovement;
 class UnitMovementDesc;
 class UnitType;
+class UnitWeapon;

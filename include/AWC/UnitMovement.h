@@ -1,19 +1,19 @@
+#pragma once
 
-#include <AWC/AWCfwd.h>
+#include <AWC/AWCusing.h>
 
 #include <Utils/Vector2.h>
 
 #include <memory>
 #include <vector>
 
-using TilePatternDescIPtr = std::shared_ptr<TilePatternDescI>;
-using TilePatternIPtr = std::shared_ptr<TilePatternI>;
-using CostTableIPtr = std::shared_ptr<CostTableI>;
+// TODO: What if the unit movement range is increased by a buff or reduces by a weather type?
+
 
 class UnitMovementDesc
 {
 public:
-    UnitMovementDesc(TilePatternDescIPtr tilePatternDesc, CostTableIPtr tileCost, CostTableIPtr unitCost, unsigned int minRange, unsigned int maxRange);
+    UnitMovementDesc(TilePatternDescIPtr tilePatternDesc, CostTableIPtr tileCost, CostTableIPtr unitCost, unsigned int maxRange, unsigned int minRange = 0);
 
     UnitMovement CalculateUnitMovement(const Map& map, Vector2 origin, Vector2 dest) const;
     UnitMovement CalculateUnitMovement(const Map& map, Vector2 origin) const;
@@ -27,9 +27,6 @@ private:
     CostTableIPtr unitCost_;
     unsigned int minRange_;
     unsigned int maxRange_;
-
-    // Game properties
-    // uint gasLeft, etc.;
 };
 
 class UnitMovement

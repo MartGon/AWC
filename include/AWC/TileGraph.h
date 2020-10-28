@@ -11,12 +11,11 @@
 #include <unordered_map>
 #include <string>
 
-using TileNodePtr = std::weak_ptr<TileNode>;
-
 // MapGraph
 
 class TileGraph
 {
+using TileNodePtr = std::weak_ptr<TileNode>;
 public:
     TileGraph(){}
     TileGraph(TileGraph& tg);

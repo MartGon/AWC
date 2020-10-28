@@ -2,7 +2,7 @@
 
 #include <Utils/Vector2.h>
 
-#include <AWC/AWCfwd.h>
+#include <AWC/AWCusing.h>
 #include <AWC/Directions.h>
 #include <AWC/TilePatternDescI.h>
 #include <AWC/TileNode.h>
@@ -11,10 +11,6 @@
 #include <memory>
 #include <exception>
 #include <optional>
-
-using TilePatternDescPtr = std::shared_ptr<TilePatternDesc>;
-using TilePatternPtr = std::shared_ptr<TilePattern>;
-using DirectionsTable = std::unordered_map<Vector2, Directions>;
 
 class TilePatternDesc : public TilePatternDescI
 {
