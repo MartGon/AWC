@@ -1,8 +1,18 @@
 #include <AWC/TilePatternDescriptorDecorator.h>
 #include <AWC/TilePatternConstraints.h>
 
+
+// TPD Decorator
+
+TilePatternDescriptorDecorator::TilePatternDescriptorDecorator(TilePatternDescriptorIPtr child) : child_{child}
+{
+
+}
+
+// TPD FixedRange
+
 TPDFixedRange::TPDFixedRange(TilePatternDescriptorIPtr child, unsigned int maxRange, unsigned int minRange)
-     : child_{child}, maxRange_{maxRange}, minRange_{minRange}
+     : maxRange_{maxRange}, minRange_{minRange}, TilePatternDescriptorDecorator{child}
 {
 
 }
@@ -23,8 +33,10 @@ TilePatternIPtr TPDFixedRange::DoCalculateTilePattern(Vector2 origin,
     return result;
 }
 
+// TPD FixedCost
+
 TPDFixedCost::TPDFixedCost(TilePatternDescriptorIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable) 
-    : child_{child}, tileCostTable_{tileCostTable}, unitCostTable_{unitCostTable_}
+    : tileCostTable_{tileCostTable}, unitCostTable_{unitCostTable_},  TilePatternDescriptorDecorator{child}
 {
 
 }
