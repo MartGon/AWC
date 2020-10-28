@@ -15,3 +15,8 @@ const std::string UnitType::GetName() const
 {
     return name_;
 }
+
+const UnitMovementDesc UnitType::GetUnitMovementDesc() const
+{
+    return unitMovementDesc_;
+}

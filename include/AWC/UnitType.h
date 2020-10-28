@@ -1,5 +1,7 @@
 #pragma once
 
+#include <AWC/UnitMovement.h>
+
 #include <memory>
 #include <string>
 
@@ -15,6 +17,10 @@ public:
     std::shared_ptr<Unit> CreateUnit() const;
 
     const std::string GetName() const;
+    const UnitMovementDesc GetUnitMovementDesc() const;
+
 private:
+
+    UnitMovementDesc unitMovementDesc_;
     std::string name_;
 };

@@ -1,5 +1,6 @@
 #include <AWC/Command.h>
 #include <AWC/Map.h>
+#include <AWC/UnitMovement.h>
 
 void Command::Execute()
 {
@@ -39,11 +40,11 @@ bool MoveCommand::CanBeExecuted()
     {
         if(auto unit = map_.GetUnit(originX_, originY_))
         {
-            // Mock code for movePattern check
-            // auto movePattern = unit->GetMovePattern()
-            // bool canMove = movePattern->CanMove(map_, originX, originY, destX, destY)
-            // Alternative : unit->CanMove(map_, originX, originY, destX, destY)
-            canBeExecuted = true;
+            Vector2 origin{originX_, originY_};
+            Vector2 dest{destX_, destY_};
+            
+            auto unitMovement = unit->CalculateMovement(map_, origin, dest);
+            canBeExecuted = unitMovement.CanMove(dest);;
         }
     }
 
