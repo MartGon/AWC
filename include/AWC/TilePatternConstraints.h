@@ -2,10 +2,14 @@
 
 #include <AWC/AWCfwd.h>
 
+#include <memory>
+
+using CostTableIPtr = std::shared_ptr<CostTableI>;
+
 class TilePatternConstraints
 {
 public:
-    TilePatternConstraints(const CostTableI& tileCostTable, const CostTableI& unitCostTable, 
+    TilePatternConstraints(CostTableIPtr tileCostTable, CostTableIPtr unitCostTable, 
     unsigned int maxRange, unsigned int minRange = 0);
     
     unsigned int GetTileCost(unsigned int id) const;
@@ -13,6 +17,6 @@ public:
     unsigned int minRange;
     unsigned int maxRange;
 private:
-    const CostTableI& tileCostTable;
-    const CostTableI& unitCostTable;
+    CostTableIPtr tileCostTable;
+    CostTableIPtr unitCostTable;
 };

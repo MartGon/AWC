@@ -45,7 +45,7 @@ TilePatternIPtr TPDFixedCost::DoCalculateTilePattern(Vector2 origin, std::option
     const Map& map, const TilePatternConstraints& constraints)
 {
     TilePatternIPtr result;
-    TilePatternConstraints tpc{*tileCostTable_, *unitCostTable_, constraints.maxRange, constraints.minRange};
+    TilePatternConstraints tpc{tileCostTable_, unitCostTable_, constraints.maxRange, constraints.minRange};
 
     if(destination.has_value())
         result = child_->CalculateTilePattern(origin, destination.value(), map, tpc);

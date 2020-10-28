@@ -58,11 +58,11 @@ TEST_CASE("TilePattern pathfinding test")
     auto manhattanDesc = TilePatternDesc::Create(directions);
 
     // CostTable
-    CostTable tileCostTable;
-    tileCostTable.SetCost(seaTileType.GetId(), 4);
-    tileCostTable.SetCost(grassTileType.GetId(), 1);
+    std::shared_ptr<CostTable> tileCostTable{new CostTable};
+    tileCostTable->SetCost(seaTileType.GetId(), 4);
+    tileCostTable->SetCost(grassTileType.GetId(), 1);
 
-    CostTable unitCostTable;
+    std::shared_ptr<CostTable> unitCostTable{new CostTable};
 
     // TilePatternConstraints
     TilePatternConstraints tpc{tileCostTable, unitCostTable, 4};

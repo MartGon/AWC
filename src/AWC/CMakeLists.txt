@@ -5,6 +5,8 @@ add_library(AWCSource
   Map.cpp
   Tile.cpp
   TileType.cpp
+  UnitMovement.cpp
+  UnitWeapon.cpp
   Unit.cpp
   UnitType.cpp
   TilePattern.cpp

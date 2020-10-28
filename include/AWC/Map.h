@@ -19,8 +19,6 @@ class Map
 public:
     Map(int x, int y);
 
-    
-
     int GetWidht() const;
     int GetHeight() const;
 

@@ -11,7 +11,7 @@ using CostTableIPtr = std::shared_ptr<CostTableI>;
 class TilePatternDescDecorator : public TilePatternDescI
 {
 public:
-    ~TilePatternDescDecorator() {};
+    virtual ~TilePatternDescDecorator() {};
     TilePatternDescDecorator(TilePatternDescIPtr child);
 
 protected:

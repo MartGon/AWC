@@ -45,14 +45,14 @@ TEST_CASE("TilePattern Fixed Range Decorator test")
     auto mooreDesc = TilePatternDesc::Create(directions);
     
     // Fixed CostTable
-    FixedCostTable fixedTileCostTable{1};
+    CostTableIPtr tileCostTable{new FixedCostTable{1}};
 
     // Fixed Range TPD
-    CostTable unitCostTable;
+    CostTableIPtr unitCostTable{new CostTable};
     auto mooreDescFixedRange = std::make_shared<TPDFixedRange>(mooreDesc, 1, 0);
 
     // Normal TPC
-    TilePatternConstraints constraints{fixedTileCostTable, unitCostTable, 8, 0};
+    TilePatternConstraints constraints{tileCostTable, unitCostTable, 8, 0};
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
@@ -127,14 +127,14 @@ TEST_CASE("TilePattern Fixed Cost Decorator test")
     auto unitTileCostTable = std::make_shared<FixedCostTable>(0);
 
     // Fixed Range TPD
-    CostTable unitCostTable;
+    CostTableIPtr unitCostTable{new CostTable};
     auto mooreDescFixedRange = std::make_shared<TPDFixedRange>(mooreDesc, 1, 0);
     auto mooreDescFixedCost = std::make_shared<TPDFixedCost>(mooreDescFixedRange, fixedTileCostTable, unitTileCostTable);
 
     // Normal TPC
-    CostTable normalCostTable;
-    normalCostTable.SetCost(0, 1);
-    normalCostTable.SetCost(1, 4);
+    std::shared_ptr<CostTable> normalCostTable{new CostTable};
+    normalCostTable->SetCost(0, 1);
+    normalCostTable->SetCost(1, 4);
     TilePatternConstraints constraints{normalCostTable, unitCostTable, 8, 0};
 
     SUBCASE("Check CalculateTilePattern with composition")

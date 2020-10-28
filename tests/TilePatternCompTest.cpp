@@ -58,10 +58,10 @@ TEST_CASE("TilePattern Composition Union test")
     auto queenDesc = std::make_shared<TilePatternDescUnion>(rookDesc, bishopDesc);
 
     // CostTable
-    CostTable tileCostTable;
-    tileCostTable.SetCost(grassTileType.GetId(), 1);
+    std::shared_ptr<CostTable> tileCostTable{new CostTable};
+    tileCostTable->SetCost(grassTileType.GetId(), 1);
 
-    CostTable unitCostTable;
+    std::shared_ptr<CostTable> unitCostTable{new CostTable};
 
     // TilePatternConstraints
     TilePatternConstraints tpc{tileCostTable, unitCostTable, 10};
@@ -151,10 +151,10 @@ TEST_CASE("TilePattern Composition Diff test")
     auto tpdd = std::make_shared<TilePatternDescDiff>(towRangeMooreDesc, oneDiagonalDesc);
 
     // CostTable
-    CostTable tileCostTable;
-    tileCostTable.SetCost(grassTileType.GetId(), 1);
+    std::shared_ptr<CostTable> tileCostTable{new CostTable};
+    tileCostTable->SetCost(grassTileType.GetId(), 1);
 
-    CostTable unitCostTable;
+    std::shared_ptr<CostTable> unitCostTable{new CostTable};
 
     // TilePatternConstraints
     TilePatternConstraints tpc{tileCostTable, unitCostTable, 2};
@@ -244,10 +244,10 @@ TEST_CASE("TilePattern Composition Intersect test")
     auto tpdd = std::make_shared<TilePatternDescIntersect>(oneRangeMoore, oneRangeManhattan);
 
     // CostTable
-    CostTable tileCostTable;
-    tileCostTable.SetCost(grassTileType.GetId(), 1);
+    std::shared_ptr<CostTable> tileCostTable{new CostTable};
+    tileCostTable->SetCost(grassTileType.GetId(), 1);
 
-    CostTable unitCostTable;
+    std::shared_ptr<CostTable> unitCostTable{new CostTable};
 
     // TilePatternConstraints
     TilePatternConstraints tpc{tileCostTable, unitCostTable, 2};
