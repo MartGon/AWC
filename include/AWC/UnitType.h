@@ -12,7 +12,7 @@ class UnitType
 friend class Unit;
 
 public:
-    UnitType(const std::string& name);
+    UnitType(const std::string& name, UnitMovementDesc unitMovementDesc);
 
     std::shared_ptr<Unit> CreateUnit() const;
 

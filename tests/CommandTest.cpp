@@ -4,17 +4,27 @@
 
 #include <AWC/Command.h>
 #include <AWC/Map.h>
+#include <AWC/TileType.h>
+#include <AWC/Tile.h>
 #include <AWC/UnitType.h>
 #include <AWC/Unit.h>
+#include <AWC/TilePatternDesc.h>
+#include <AWC/CostTable.h>
+
+#include <UnitTest.h>
 
 // Size checking
 TEST_CASE("MoveCommands")
 {
+    // Map
     int xSize = 10;
     int ySize = 10;
     Map map{xSize, ySize};
 
-    UnitType soldierType{"Soldier"};
+    TileType grassType{0, "Grass"};
+    MapUtils::FillMap(map, grassType);
+
+    UnitType soldierType = UnitTest::CreateSoldierType();
     auto soldier = soldierType.CreateUnit();
     map.AddUnit(0, 0, soldier);
 

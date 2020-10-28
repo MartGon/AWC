@@ -2,6 +2,9 @@
 
 #include <string>
 
+#include <Utils/Vector2.h>
+#include <AWC/AWCfwd.h>
+
 class UnitType;
 
 class Unit

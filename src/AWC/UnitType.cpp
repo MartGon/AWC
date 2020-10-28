@@ -1,7 +1,7 @@
 #include <AWC/UnitType.h>
 #include <AWC/Unit.h>
 
-UnitType::UnitType(const std::string& name) : name_{name}
+UnitType::UnitType(const std::string& name, UnitMovementDesc unitMovementDesc) : name_{name}, unitMovementDesc_{unitMovementDesc}
 {
 
 }

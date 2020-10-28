@@ -9,6 +9,8 @@
 #include <AWC/TileType.h>
 #include <AWC/AWCException.h>
 
+#include <UnitTest.h>
+
 // Size checking
 TEST_CASE("Maps have a specific size")
 {
@@ -29,7 +31,7 @@ TEST_CASE("Maps have a specific size")
 // Access
 TEST_CASE("Maps hold units in a given position") 
 {
-    UnitType soldierUnitType{"Soldier"};
+    UnitType soldierUnitType = UnitTest::CreateSoldierType();
     auto soldier = soldierUnitType.CreateUnit();
 
     Map map{10, 10};
@@ -94,7 +96,7 @@ TEST_CASE("Maps follow some rules")
     int ySize = 10;
     Map map{xSize, ySize};
 
-    UnitType soldierUnitType{"Soldier"};
+    UnitType soldierUnitType = UnitTest::CreateSoldierType();
     auto soldier = soldierUnitType.CreateUnit();
     map.AddUnit(0, 0, soldier);
 

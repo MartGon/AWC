@@ -13,7 +13,7 @@ using CostTableIPtr = std::shared_ptr<CostTableI>;
 class UnitMovementDesc
 {
 public:
-    UnitMovementDesc(CostTableIPtr tileCost, CostTableIPtr unitCost, unsigned int minRange, unsigned int maxRange);
+    UnitMovementDesc(TilePatternDescIPtr tilePatternDesc, CostTableIPtr tileCost, CostTableIPtr unitCost, unsigned int minRange, unsigned int maxRange);
 
     UnitMovement CalculateUnitMovement(const Map& map, Vector2 origin, Vector2 dest) const;
     UnitMovement CalculateUnitMovement(const Map& map, Vector2 origin) const;
