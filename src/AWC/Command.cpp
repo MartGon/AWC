@@ -43,7 +43,7 @@ bool MoveCommand::CanBeExecuted()
             Vector2 origin{originX_, originY_};
             Vector2 dest{destX_, destY_};
             
-            auto unitMovement = unit->CalculateMovement(map_, origin, dest);
+            auto unitMovement = unit->CalculateMovement(map_, origin);
             canBeExecuted = unitMovement.CanMove(dest);;
         }
     }

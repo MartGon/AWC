@@ -3,12 +3,11 @@ add_library(AWCSource
   Command.cpp
   CostTable.cpp
   Map.cpp
+  MovementDescType.cpp
+  MovementDesc.cpp
+  Range.cpp
   Tile.cpp
   TileType.cpp
-  UnitMovement.cpp
-  UnitWeapon.cpp
-  Unit.cpp
-  UnitType.cpp
   TilePattern.cpp
   TilePatternI.cpp
   TilePatternComp.cpp
@@ -19,6 +18,11 @@ add_library(AWCSource
   TilePatternDescDecorator.cpp
   TileGraph.cpp
   TileNode.cpp
+  Unit.cpp
+  UnitType.cpp
+  UnitMovement.cpp
+  Weapon.cpp
+  WeaponType.cpp
 )
 
 target_include_directories(AWCSource PUBLIC ${CMAKE_SOURCE_DIR}/include)

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <AWC/UnitMovement.h>
-
+#include <AWC/AWCusing.h>
 #include <memory>
 #include <string>
 
@@ -12,15 +11,17 @@ class UnitType
 friend class Unit;
 
 public:
-    UnitType(const std::string& name, UnitMovementDesc unitMovementDesc);
+    UnitType(uint id, const std::string& name, MovementDecTypePtr moveType, WeaponTypePtr weaponType);
 
     std::shared_ptr<Unit> CreateUnit() const;
 
     const std::string GetName() const;
-    const UnitMovementDesc GetUnitMovementDesc() const;
+    const uint GetId() const;
 
 private:
-
-    UnitMovementDesc unitMovementDesc_;
     std::string name_;
+    uint id_;
+
+    MovementDecTypePtr moveType_;
+    WeaponTypePtr weaponType_;
 };
