@@ -11,7 +11,7 @@ class UnitType
 friend class Unit;
 
 public:
-    UnitType(uint id, const std::string& name, MovementDecTypePtr moveType, WeaponTypePtr weaponType);
+    UnitType(uint id, const std::string& name, MovementDecTypePtr moveType, std::vector<WeaponTypePtr> weaponTypes);
 
     std::shared_ptr<Unit> CreateUnit() const;
 
@@ -19,9 +19,12 @@ public:
     const uint GetId() const;
 
 private:
+
+    std::vector<WeaponPtr> GetWeapons() const;
+
     std::string name_;
     uint id_;
 
     MovementDecTypePtr moveType_;
-    WeaponTypePtr weaponType_;
+    std::vector<WeaponTypePtr> weaponTypes_;
 };

@@ -19,6 +19,7 @@ add_library(AWCSource
   TileGraph.cpp
   TileNode.cpp
   Unit.cpp
+  UnitAttack.cpp
   UnitType.cpp
   UnitMovement.cpp
   Weapon.cpp
