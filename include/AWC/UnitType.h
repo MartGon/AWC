@@ -8,8 +8,6 @@ class Unit;
 
 class UnitType
 {
-friend class Unit;
-
 public:
     UnitType(uint id, const std::string& name, MovementDecTypePtr moveType, std::vector<WeaponTypePtr> weaponTypes);
 

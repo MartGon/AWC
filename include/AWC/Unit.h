@@ -9,6 +9,8 @@ class UnitType;
 
 class Unit
 {
+friend class UnitType;
+
 public:
     Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons);
 

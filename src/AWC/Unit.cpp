@@ -74,10 +74,10 @@ uint Unit::GetWeaponCount()
 TilePatternConstraints Unit::GetMoveConstraints() const
 {
     // Note: Some of these could be modified by buffs/powerups
-    auto tileCost = unitType_.moveType_->tileCostTable;
-    auto unitCost = unitType_.moveType_->unitCostTable;
-    auto minRange = unitType_.moveType_->range.minRange;
-    auto maxRange = unitType_.moveType_->range.maxRange;
+    auto tileCost = moveDesc_->moveType.tileCostTable;
+    auto unitCost = moveDesc_->moveType.unitCostTable;
+    auto minRange = moveDesc_->moveType.range.minRange;
+    auto maxRange = moveDesc_->moveType.range.maxRange;
 
     TilePatternConstraints tpc{tileCost, unitCost, maxRange, minRange};
     return tpc;

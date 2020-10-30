@@ -12,7 +12,7 @@ UnitType::UnitType(uint id, const std::string& name, MovementDecTypePtr moveType
 
 std::shared_ptr<Unit> UnitType::CreateUnit() const
 {
-    return std::make_shared<Unit>(Unit{*this, moveType_->CreateMovementDesc(), GetWeapons()});
+    return UnitPtr( new Unit{*this, moveType_->CreateMovementDesc(), GetWeapons()});
 }
 
 const std::string UnitType::GetName() const
