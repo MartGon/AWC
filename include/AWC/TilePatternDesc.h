@@ -42,7 +42,7 @@ private:
     static DirectionsTable GenerateLockedDirectionsTable(const Directions& directions, const DirectionsTable& exclusiveDirections);
     static Directions GenerateLockedDirections(const Directions& directions, const Directions& exclusiveDirections);
 
-    TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, const Map& map, const TilePatternConstraints& constraints) override;
+    TilePatternIPtr DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) override;
 
     Directions GetDiscoverDirections(TileNodePtr tileNode, const Map& map);
     Vector2 GetMovementToOrigin(TileNodePtr tileNode);

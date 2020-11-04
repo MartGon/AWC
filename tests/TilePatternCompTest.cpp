@@ -68,7 +68,7 @@ TEST_CASE("TilePattern Composition Union test")
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
-        auto tp = queenDesc->CalculateTilePattern({0, 0}, map, tpc);
+        auto tp = queenDesc->CalculateTilePattern(map, {0, 0}, tpc);
         std::vector<Vector2> tiles = {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {2, 0}, {2, 2}};
         std::vector<Vector2> unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
 
@@ -161,7 +161,7 @@ TEST_CASE("TilePattern Composition Diff test")
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
-        auto tp = tpdd->CalculateTilePattern({2, 2}, map, tpc);
+        auto tp = tpdd->CalculateTilePattern(map, {2, 2}, tpc);
         std::vector<Vector2> tiles = {
                                       {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}, 
                                       {0, 3},         {2, 3},         {4, 3},   
@@ -254,7 +254,7 @@ TEST_CASE("TilePattern Composition Intersect test")
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
-        auto tp = tpdd->CalculateTilePattern({2, 2}, map, tpc);
+        auto tp = tpdd->CalculateTilePattern(map, {2, 2}, tpc);
         std::vector<Vector2> tiles = {
                                                 {2, 3},         
                                         {1, 2}, {2, 2}, {3, 2},

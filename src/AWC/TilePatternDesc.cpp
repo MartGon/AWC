@@ -148,8 +148,8 @@ Directions TilePatternDesc::GenerateLockedDirections(const Directions& direction
     return lockedDirections;
 }
 
-TilePatternIPtr TilePatternDesc::DoCalculateTilePattern(Vector2 origin, 
-    std::optional<Vector2> destination, const Map& map, const TilePatternConstraints& constraints)
+TilePatternIPtr TilePatternDesc::DoCalculateTilePattern(const Map& map, Vector2 origin, 
+    std::optional<Vector2> destination, const TilePatternConstraints& constraints)
 {
         // Create mapGraph
     TileGraph tg;

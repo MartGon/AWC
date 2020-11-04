@@ -56,7 +56,7 @@ TEST_CASE("TilePattern Fixed Range Decorator test")
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
-        auto tp = mooreDescFixedRange->CalculateTilePattern({1, 1}, map, constraints);
+        auto tp = mooreDescFixedRange->CalculateTilePattern(map, {1, 1}, constraints);
         std::vector<Vector2> tiles = {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {2, 0}, {2, 2}, {1, 2}, {2, 1}};
         std::vector<Vector2> unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
 
@@ -139,7 +139,7 @@ TEST_CASE("TilePattern Fixed Cost Decorator test")
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
-        auto tp = mooreDescFixedCost->CalculateTilePattern({1, 1}, map, constraints);
+        auto tp = mooreDescFixedCost->CalculateTilePattern(map, {1, 1}, constraints);
         std::vector<Vector2> tiles = {{0, 0}, {1, 0}, {0, 1}, {1, 1}, {0, 2}, {2, 0}, {2, 2}, {1, 2}, {2, 1}};
         std::vector<Vector2> unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
 

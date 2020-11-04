@@ -17,8 +17,8 @@ TPDFixedRange::TPDFixedRange(TilePatternDescIPtr child, unsigned int maxRange, u
 
 }
 
-TilePatternIPtr TPDFixedRange::DoCalculateTilePattern(Vector2 origin, 
-    std::optional<Vector2> destination, const Map& map, const TilePatternConstraints& constraints)
+TilePatternIPtr TPDFixedRange::DoCalculateTilePattern(const Map& map, Vector2 origin, 
+    std::optional<Vector2> destination, const TilePatternConstraints& constraints)
 {
     TilePatternIPtr result;
     TilePatternConstraints tpc = constraints;
@@ -26,9 +26,9 @@ TilePatternIPtr TPDFixedRange::DoCalculateTilePattern(Vector2 origin,
     tpc.maxRange = maxRange_;
 
     if(destination.has_value())
-        result = child_->CalculateTilePattern(origin, destination.value(), map, tpc);
+        result = child_->CalculateTilePattern(map, origin, destination.value(), tpc);
     else
-        result = child_->CalculateTilePattern(origin, map, tpc);
+        result = child_->CalculateTilePattern(map, origin, tpc);
 
     return result;
 }
@@ -41,16 +41,16 @@ TPDFixedCost::TPDFixedCost(TilePatternDescIPtr child, CostTableIPtr tileCostTabl
 
 }
 
-TilePatternIPtr TPDFixedCost::DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, 
-    const Map& map, const TilePatternConstraints& constraints)
+TilePatternIPtr TPDFixedCost::DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, 
+    const TilePatternConstraints& constraints)
 {
     TilePatternIPtr result;
     TilePatternConstraints tpc{tileCostTable_, unitCostTable_, constraints.maxRange, constraints.minRange};
 
     if(destination.has_value())
-        result = child_->CalculateTilePattern(origin, destination.value(), map, tpc);
+        result = child_->CalculateTilePattern(map, origin, destination.value(), tpc);
     else
-        result = child_->CalculateTilePattern(origin, map, tpc);
+        result = child_->CalculateTilePattern(map, origin, tpc);
 
     return result;
 }

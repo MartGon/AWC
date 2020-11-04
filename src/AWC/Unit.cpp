@@ -33,7 +33,7 @@ UnitMovement Unit::CalculateMovement(const Map& map, Vector2 origin)
 {
     auto moveDesc = moveDesc_->moveType.tpd;
     auto moveConstraints = GetMoveConstraints();
-    auto tp = moveDesc->CalculateTilePattern(origin, map, moveConstraints);
+    auto tp = moveDesc->CalculateTilePattern(map, origin, moveConstraints);
     return UnitMovement{tp};
 }
 

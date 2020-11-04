@@ -21,8 +21,8 @@ public:
     TPDFixedRange(TilePatternDescIPtr child, unsigned int maxRange, unsigned int minRange = 0);
 
 private:
-    TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, 
-        const Map& map, const TilePatternConstraints& constraints) override;
+    TilePatternIPtr DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, 
+        const TilePatternConstraints& constraints) override;
 
     unsigned int minRange_;
     unsigned int maxRange_;
@@ -34,8 +34,8 @@ public:
     TPDFixedCost(TilePatternDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable);
 
 private:
-    TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, 
-        const Map& map, const TilePatternConstraints& constraints) override;
+    TilePatternIPtr DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, 
+        const TilePatternConstraints& constraints) override;
 
     CostTableIPtr tileCostTable_;
     CostTableIPtr unitCostTable_;

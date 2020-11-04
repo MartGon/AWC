@@ -69,7 +69,7 @@ TEST_CASE("TilePattern pathfinding test")
 
     SUBCASE("Check CalculateTilePattern")
     {
-        auto tp = manhattanDesc->CalculateTilePattern({0, 0}, map, tpc);
+        auto tp = manhattanDesc->CalculateTilePattern(map, {0, 0}, tpc);
         std::vector<Vector2> tiles = {{0, 0}, {0, 1}, {1, 0}, {1, 1}, {1, 2}, {0, 2}};
         auto unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
 
@@ -100,7 +100,7 @@ TEST_CASE("TilePattern pathfinding test")
     }
     SUBCASE("Check CalculateTilePattern with destitnation")
     {
-        auto tp = manhattanDesc->CalculateTilePattern({0, 0}, Vector2{1, 2}, map, tpc);
+        auto tp = manhattanDesc->CalculateTilePattern(map, {0, 0}, Vector2{1, 2}, tpc);
         std::vector<Vector2> tiles = {{0, 0}, {0, 1}, {1, 0}, {1, 1}, {1, 2}};
         auto unreachableTiles = TilePatternTest::GetUnreachableTiles(map, tiles);
         std::vector<Vector2> path = {{0, 0}, {1, 0}, {1, 1}, {1, 2}};

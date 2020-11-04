@@ -17,15 +17,15 @@ private:
     {
         TilePatternIPtr res;
         if(destination.has_value())
-            res = tpdip->CalculateTilePattern(origin, destination.value(), map, constraints);
+            res = tpdip->CalculateTilePattern(map, origin, destination.value(), constraints);
         else
-            res = tpdip->CalculateTilePattern(origin, map, constraints);
+            res = tpdip->CalculateTilePattern(map, origin, constraints);
         
         return res;
     }
 
-    virtual TilePatternIPtr DoCalculateTilePattern(Vector2 origin, std::optional<Vector2> destination, 
-        const Map& map, const TilePatternConstraints& constraints)
+    virtual TilePatternIPtr DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, 
+        const TilePatternConstraints& constraints)
     {
         TilePatternIPtr tilePattern;
         auto tilePatternA = GetTilePattern(a_, origin, destination, map, constraints);
