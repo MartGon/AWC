@@ -18,6 +18,23 @@ void AttackTable::SetAttackable(uint id, bool attackable)
     innerMap_[id] = attackable;
 }
 
+// DamageTable
+
+bool DamageTable::IsInTable(uint id) const
+{
+    return innerMap_.find(id) != innerMap_.end();
+}
+
+float DamageTable::GetDamageToUnit(uint unitId) const
+{
+    return innerMap_.at(unitId);
+}
+
+void DamageTable::SetDamageToUnit(uint unitId, float damage)
+{
+    innerMap_[unitId] = damage;
+}
+
 // Weapon type
 
 WeaponType::WeaponType(TilePatternDescIPtr tpd, Range range, AttackTable attackTable, uint maxAmmo, uint damage) :

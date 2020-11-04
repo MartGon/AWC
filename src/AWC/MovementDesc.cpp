@@ -12,12 +12,17 @@ MovementDesc::MovementDesc(const MovementDescType& moveType) : moveType{moveType
 
 void MovementDesc::Move(unsigned int cost)
 {
-    currentGas = currentGas - cost;
+    currentGas = currentGas >= cost ? currentGas - cost : 0;
 }
 
 unsigned int MovementDesc::GetCurrentGas()
 {
     return currentGas;
+}
+
+void MovementDesc::IncreaseGas(unsigned int amount)
+{
+    currentGas = std::min(currentGas + amount, GetMaxGas());
 }
 
 void MovementDesc::RefillGas()

@@ -11,9 +11,10 @@ public:
     // Instance specific
     void Move(unsigned int cost);
     unsigned int GetCurrentGas();
+    void IncreaseGas(unsigned int amount);
     void RefillGas();
 
-    // Static data forwarded from moveType
+    // Static data forwarded from Type
     TilePatternDescIPtr GetMovePattern();
     Range GetRange();
     unsigned int GetMaxGas();
@@ -23,9 +24,8 @@ public:
     unsigned int GetBaseTileCost(unsigned int tileId);
 
 private:
+    MovementDesc(const MovementDescType& moveType);
 
     unsigned int currentGas;
     const MovementDescType& moveType;
-
-    MovementDesc(const MovementDescType& moveType);
 };
