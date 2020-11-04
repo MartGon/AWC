@@ -31,7 +31,7 @@ const uint Unit::GetId() const
 
 UnitMovement Unit::CalculateMovement(const Map& map, Vector2 origin)
 {
-    auto moveDesc = moveDesc_->moveType.tpd;
+    auto moveDesc = moveDesc_->GetMovePattern();
     auto moveConstraints = GetMoveConstraints();
     auto tp = moveDesc->CalculateTilePattern(map, origin, moveConstraints);
     return UnitMovement{tp};
@@ -74,12 +74,11 @@ uint Unit::GetWeaponCount()
 TilePatternConstraints Unit::GetMoveConstraints() const
 {
     // Note: Some of these could be modified by buffs/powerups
-    auto tileCost = moveDesc_->moveType.tileCostTable;
-    auto unitCost = moveDesc_->moveType.unitCostTable;
-    auto minRange = moveDesc_->moveType.range.minRange;
-    auto maxRange = moveDesc_->moveType.range.maxRange;
+    auto tileCost = moveDesc_->GetTileCostTable();
+    auto unitCost = moveDesc_->GetUnitCostTable();
+    auto range = moveDesc_->GetRange();
 
-    TilePatternConstraints tpc{tileCost, unitCost, maxRange, minRange};
+    TilePatternConstraints tpc{tileCost, unitCost, range};
     return tpc;
 }
 

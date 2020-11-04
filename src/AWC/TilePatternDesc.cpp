@@ -180,7 +180,7 @@ TilePatternIPtr TilePatternDesc::DoCalculateTilePattern(const Map& map, Vector2 
             // Check if accumulated cost to this neighbour is lower than previous
             int neiCost = GetTileCost(map, constraints, sharedNei->pos);
             int calculatedCost = node->cost + neiCost;
-            if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.maxRange)
+            if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.range.maxRange)
             {
                 // Push it to queue if that's the case
                 sharedNei->cost = calculatedCost;
@@ -190,7 +190,7 @@ TilePatternIPtr TilePatternDesc::DoCalculateTilePattern(const Map& map, Vector2 
     }
 
     // Create TilePattern
-    auto tp = TilePatternIPtr(new TilePattern{origin, tg, constraints.maxRange, constraints.minRange});
+    auto tp = TilePatternIPtr(new TilePattern{origin, tg, constraints.range});
 
     return tp;
 }

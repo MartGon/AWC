@@ -1,7 +1,13 @@
 #include <AWC/TilePattern.h>
 
 TilePattern::TilePattern(Vector2 origin, TileGraph tg, unsigned int maxRange, unsigned int minRange) : 
-    origin_{origin}, tg_{tg}, maxRange_{maxRange}, minRange_{minRange}
+    origin_{origin}, tg_{tg}, range_{maxRange, minRange}
+{
+    
+}
+
+TilePattern::TilePattern(Vector2 origin, TileGraph tg, Range range) : 
+    origin_{origin}, tg_{tg}, range_{range}
 {
     
 }
@@ -75,5 +81,5 @@ bool TilePattern::IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned in
 
 bool TilePattern::IsTileInRange(Vector2 dest) const
 {
-    return IsTileInRange(dest, maxRange_, minRange_);
+    return IsTileInRange(dest, range_.maxRange, range_.minRange);
 }

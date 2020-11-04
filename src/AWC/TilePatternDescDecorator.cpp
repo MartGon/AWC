@@ -12,7 +12,13 @@ TilePatternDescDecorator::TilePatternDescDecorator(TilePatternDescIPtr child) : 
 // TPD FixedRange
 
 TPDFixedRange::TPDFixedRange(TilePatternDescIPtr child, unsigned int maxRange, unsigned int minRange)
-     : maxRange_{maxRange}, minRange_{minRange}, TilePatternDescDecorator{child}
+     : range_{maxRange, minRange}, TilePatternDescDecorator{child}
+{
+
+}
+
+TPDFixedRange::TPDFixedRange(TilePatternDescIPtr child, Range range)
+     : range_{range}, TilePatternDescDecorator{child}
 {
 
 }
@@ -22,8 +28,7 @@ TilePatternIPtr TPDFixedRange::DoCalculateTilePattern(const Map& map, Vector2 or
 {
     TilePatternIPtr result;
     TilePatternConstraints tpc = constraints;
-    tpc.minRange = minRange_;
-    tpc.maxRange = maxRange_;
+    tpc.range = range_;
 
     if(destination.has_value())
         result = child_->CalculateTilePattern(map, origin, destination.value(), tpc);
@@ -45,7 +50,7 @@ TilePatternIPtr TPDFixedCost::DoCalculateTilePattern(const Map& map, Vector2 ori
     const TilePatternConstraints& constraints)
 {
     TilePatternIPtr result;
-    TilePatternConstraints tpc{tileCostTable_, unitCostTable_, constraints.maxRange, constraints.minRange};
+    TilePatternConstraints tpc{tileCostTable_, unitCostTable_, constraints.range};
 
     if(destination.has_value())
         result = child_->CalculateTilePattern(map, origin, destination.value(), tpc);

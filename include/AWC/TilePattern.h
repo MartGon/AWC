@@ -1,10 +1,9 @@
 #pragma once
 
-#include <AWC/AWCfwd.h>
-
+#include <AWC/AWCusing.h>
 #include <AWC/TileGraph.h>
-#include <Utils/Vector2.h>
 #include <AWC/TilePatternI.h>
+#include <AWC/Range.h>
 
 #include <vector>
 
@@ -24,12 +23,12 @@ public:
 
 private:
     TilePattern(Vector2 origin, TileGraph mg, unsigned int maxRange, unsigned int minRange);
+    TilePattern(Vector2 origin, TileGraph mg, Range range);
 
     bool IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange = 0) const;
     bool IsTileInRange(Vector2 dest) const;
 
     Vector2 origin_;
     TileGraph tg_;
-    unsigned int minRange_;
-    unsigned int maxRange_;
+    Range range_;
 };

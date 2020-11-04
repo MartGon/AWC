@@ -5,7 +5,14 @@
 
 TilePatternConstraints::TilePatternConstraints(CostTableIPtr tileCostTable, CostTableIPtr unitCostTable,
  unsigned int maxRange, unsigned int minRange) :
-    minRange{minRange}, maxRange{maxRange}, tileCostTable{tileCostTable}, unitCostTable{unitCostTable}
+    range{maxRange, minRange}, tileCostTable{tileCostTable}, unitCostTable{unitCostTable}
+{
+
+}
+
+TilePatternConstraints::TilePatternConstraints(CostTableIPtr tileCostTable, CostTableIPtr unitCostTable,
+ Range range) :
+    range{range}, tileCostTable{tileCostTable}, unitCostTable{unitCostTable}
 {
 
 }

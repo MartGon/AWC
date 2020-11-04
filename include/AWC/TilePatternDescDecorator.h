@@ -2,6 +2,7 @@
 
 #include <AWC/AWCusing.h>
 #include <AWC/TilePatternDescI.h>
+#include <AWC/Range.h>
 
 #include <memory>
 
@@ -19,13 +20,13 @@ class TPDFixedRange : public TilePatternDescDecorator
 {
 public:
     TPDFixedRange(TilePatternDescIPtr child, unsigned int maxRange, unsigned int minRange = 0);
+    TPDFixedRange(TilePatternDescIPtr child, Range range);
 
 private:
     TilePatternIPtr DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, 
         const TilePatternConstraints& constraints) override;
 
-    unsigned int minRange_;
-    unsigned int maxRange_;
+    Range range_;
 };
 
 class TPDFixedCost : public TilePatternDescDecorator
