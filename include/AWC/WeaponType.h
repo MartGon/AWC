@@ -32,7 +32,7 @@ private:
 class WeaponType
 {
 public:
-    WeaponType(TilePatternDescIPtr tpd, Range range, AttackTable attackTable, uint maxAmmo, uint damage);
+    WeaponType(TilePatternDescIPtr tpd, Range range, AttackTable attackTable, DamageTable damageTable, uint maxAmmo);
 
     WeaponPtr CreateWeapon() const;
 
@@ -42,5 +42,4 @@ public:
     DamageTable damageTable;
 
     unsigned int maxAmmo;
-    unsigned int damage;
 };

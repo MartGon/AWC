@@ -33,7 +33,8 @@ UnitType UnitTest::CreateSoldierType()
 
     // Weapon
     AttackTable attackTable{ {{id, true}} };
-    WeaponTypePtr weaponType{ new WeaponType{manhattan, {1, 1}, attackTable, 99, 10}};
+    DamageTable damageTable{ {{id, 50}} };
+    WeaponTypePtr weaponType{ new WeaponType{manhattan, {1, 1}, attackTable, damageTable, 99}};
 
     UnitType soldierType{id, "Soldier", moveType, {weaponType}};
 

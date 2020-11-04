@@ -54,7 +54,7 @@ bool Unit::CanAttackWith(UnitPtr unit, uint weaponId)
     if(IsWeaponIdValid(weaponId))
     {
         auto weapon = weapons_[weaponId];
-        canAttack = weapon->weaponType.attackTable.CanAttack(unit->GetId());
+        canAttack = weapon->CanAttackUnit(unit->GetId());
     }
     else    
         throw std::out_of_range{"Invalid weaponId: " + std::to_string(weaponId)};
