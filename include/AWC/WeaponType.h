@@ -38,6 +38,8 @@ public:
 
     TilePatternDescIPtr tpd;
     Range range;
+
+    // TODO: This two tables could become one and have AttackInfo
     AttackTable attackTable;
     DamageTable damageTable;
 

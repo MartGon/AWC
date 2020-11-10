@@ -40,6 +40,17 @@ UnitMovement Unit::CalculateMovement(const Map& map, Vector2 origin)
     return UnitMovement{tp};
 }
 
+void Unit::Move(unsigned int moveCost)
+{
+    //TODO: Could check if that moveCost is possible. Check current gas and maxRange;
+    moveDesc_->Move(moveCost);
+}
+
+uint Unit::GetCurrentGas()
+{
+    return moveDesc_->GetCurrentGas();
+}
+
 // Attack
 
 UnitAttack Unit::CalculateAttack(unsigned int weaponId, const Map& map, Vector2 origin)
@@ -114,6 +125,17 @@ void Unit::UseWeapon(unsigned int weaponId)
         ThrowInvalidWeaponIdException(weaponId);
 }
 
+uint Unit::GetWeaponAmmo(unsigned int weaponId)
+{
+    uint ammo = 0;
+    if(IsWeaponIdValid(weaponId))
+        ammo = weapons_[weaponId]->GetCurrentAmmo();
+    else
+        ThrowInvalidWeaponIdException(weaponId);
+
+    return ammo;
+}
+
 // Defense
 
 float Unit::GetDmgTaken(float incomingDmg)
@@ -158,8 +180,9 @@ TilePatternConstraints Unit::GetAttackConstraints(unsigned int weaponId) const
     CostTableIPtr unitFixedCost{ new FixedCostTable{0} };
 
     // Range could be affected by mods;
+    auto range = weapon->GetAttackRange();
 
-    TilePatternConstraints{fixedCost, unitFixedCost, weapon->GetAttackRange()};
+    return TilePatternConstraints{fixedCost, unitFixedCost, range};
 }
 
 bool Unit::IsWeaponIdValid(uint weaponId)
