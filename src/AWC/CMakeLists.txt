@@ -2,6 +2,7 @@ add_library(AWCSource
   AWCException.cpp
   Command.cpp
   CostTable.cpp
+  Game.cpp
   Map.cpp
   MovementDescType.cpp
   MovementDesc.cpp
