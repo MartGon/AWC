@@ -66,7 +66,13 @@ public:
     void TakeRawDamage(float incomingDmg);
 
     // Reduces this unit's health by a given amount. Takes defense mods into account.
-    void TakeDamge(float incomingRawDmg);
+    void TakeDamage(float incomingRawDmg);
+
+    // Returns unit current health
+    float GetHealth();
+
+    // Returns whether this unit is dead (health <= 0)
+    bool IsDead();
 
 private:
 
@@ -83,6 +89,9 @@ private:
     void ThrowInvalidWeaponIdException(uint weaponId);
 
     // TODO: Add GUID.
+
+    // State
+    float health = 100;
 
     const UnitType& unitType_;
     const MovementDescPtr moveDesc_;

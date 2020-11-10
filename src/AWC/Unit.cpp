@@ -147,12 +147,24 @@ float Unit::GetDmgTaken(float incomingDmg)
 void Unit::TakeRawDamage(float incomingDmg)
 {
     // Reduces health by exact amount. Ignoring buffs
+    health -= incomingDmg;
 }
 
-void Unit::TakeDamge(float incomingRawDmg)
+void Unit::TakeDamage(float incomingRawDmg)
 {
     // Uses defense mods to calculate final health reduction. C
-    GetDmgTaken(incomingRawDmg);
+    float dmg = GetDmgTaken(incomingRawDmg);
+    TakeRawDamage(dmg);
+}
+
+float Unit::GetHealth()
+{
+    return health;
+}
+
+bool Unit::IsDead()
+{
+    return health <= 0;
 }
 
 // private

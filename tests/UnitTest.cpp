@@ -128,6 +128,33 @@ TEST_CASE("Unit attack tests")
     }
 }
 
+// Defense tests
+
+TEST_CASE("Unit defense tests")
+{
+    UnitType soldierType = UnitTest::CreateSoldierType();
+    auto soldier = soldierType.CreateUnit();
+
+    SUBCASE("Unit damage taken test")
+    {
+        float startingHealth = soldier->GetHealth();
+
+        CHECK(startingHealth == 100);
+        float rawDmg = 20;
+        soldier->TakeRawDamage(rawDmg);
+        CHECK(soldier->GetHealth() == 80);
+
+        float dmgTaken = soldier->GetDmgTaken(rawDmg);
+        float expectedHealth = soldier->GetHealth() - dmgTaken;
+        soldier->TakeDamage(rawDmg);
+        CHECK(soldier->GetHealth() == expectedHealth);
+        
+        soldier->TakeRawDamage(100);
+        CHECK(soldier->GetHealth() <= 0);
+        CHECK(soldier->IsDead() == true);
+    }
+}
+
 UnitType UnitTest::CreateSoldierType()
 {
     // Name and id
