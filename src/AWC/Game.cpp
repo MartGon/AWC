@@ -99,7 +99,7 @@ void Game::CheckMapIndex(uint mapIndex) const
 
 void Game::Start()
 {
-
+    currentTurn = Turn(0);
 }
 
 // Turn history

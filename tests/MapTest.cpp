@@ -20,7 +20,7 @@ TEST_CASE("Maps have a specific size")
 
     SUBCASE("They have a given widht and height")
     {
-        auto x = map.GetWidht();
+        auto x = map.GetWidth();
         auto y = map.GetHeight();
 
         CHECK(x == xSize);

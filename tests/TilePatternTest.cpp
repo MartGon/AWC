@@ -21,7 +21,7 @@ std::vector<Vector2> TilePatternTest::GetUnreachableTiles(const Map& map, const 
 {
     std::vector<Vector2> unreachableTiles;
 
-    for(int x = 0; x < map.GetWidht(); x++)
+    for(int x = 0; x < map.GetWidth(); x++)
     {
         for(int y = 0; y < map.GetHeight(); y++)
         {

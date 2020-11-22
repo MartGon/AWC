@@ -19,7 +19,7 @@ Map::Map(int x, int y) : x_{x}, y_{y}
     
 }
 
-int Map::GetWidht() const
+int Map::GetWidth() const
 {
     return x_;
 }
@@ -126,7 +126,7 @@ bool Map::IsPositionValid(Vector2 pos) const
 
 void MapUtils::FillMap(Map& map, const TileType& tileType)
 {
-    for(auto i = 0; i < map.GetWidht(); i++)
+    for(auto i = 0; i < map.GetWidth(); i++)
     {
         for(auto j = 0; j < map.GetHeight(); j++)
         {

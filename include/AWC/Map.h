@@ -16,7 +16,7 @@ class Map
 public:
     Map(int x, int y);
 
-    int GetWidht() const;
+    int GetWidth() const;
     int GetHeight() const;
 
     void AddUnit(int x, int y, UnitPtr unit);
