@@ -7,6 +7,7 @@ add_library(AWCSource
   MovementDescType.cpp
   MovementDesc.cpp
   Range.cpp
+  Player.cpp
   Tile.cpp
   TileType.cpp
   TilePattern.cpp

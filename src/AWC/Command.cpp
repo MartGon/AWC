@@ -44,7 +44,7 @@ bool MoveCommand::CanBeExecuted()
             Vector2 dest{destX_, destY_};
             
             auto unitMovement = unit->CalculateMovement(map_, origin);
-            canBeExecuted = unitMovement.CanMove(dest);;
+            canBeExecuted = unitMovement.CanMove(dest);
         }
     }
 

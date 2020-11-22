@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <string>
+#include <cassert>
 
 namespace VectorUtils
 {
@@ -17,6 +18,13 @@ namespace VectorUtils
     void RemoveByValue(std::vector<T>& vector, T value)
     {
         vector.erase(std::remove(vector.begin(), vector.end(), value), vector.end());
+    }
+
+    template<typename T>
+    void RemoveByIndex(std::vector<T>& vector, uint index)
+    {
+        assert(("Index is greater than vector size", index < vector.size()));
+        vector.erase(vector.begin() + index);
     }
 
     template<typename T>
