@@ -56,7 +56,17 @@ bool Game::CanExecuteCommand(CommandPtr command, uint playerIndex)
     return IsPlayerIndexValid(playerIndex) && command->CanBeExecuted();
 }
 
+bool Game::CanExecuteCommand(CommandPtr command)
+{
+    return command->CanBeExecuted();
+}
+
 void Game::ExecuteCommand(CommandPtr command, uint playerIndex)
+{
+    command->Execute();
+}
+
+void Game::ExecuteCommand(CommandPtr command)
 {
     command->Execute();
 }
@@ -76,11 +86,32 @@ bool Game::IsMapIndexValid(uint mapIndex) const
 void Game::CheckPlayerIndex(uint playerIndex) const
 {
     if(!IsPlayerIndexValid(playerIndex))
-        throw AWCInvalidIndexException("Player index out of range: %i", {playerIndex, 0});
+        throw std::out_of_range("Player index out of range:" + std::to_string(playerIndex));
 }
 
 void Game::CheckMapIndex(uint mapIndex) const
 {
     if(!IsMapIndexValid(mapIndex))
-        throw AWCInvalidIndexException("Map index out of range: %i", {mapIndex, 0});
+        throw std::out_of_range("Map index out of range:" + std::to_string(mapIndex));
+}
+
+// State
+
+void Game::Start()
+{
+
+}
+
+// Turn history
+
+const Turn& Game::GetCurrentTurn() const
+{
+    return currentTurn;
+}
+
+void Game::PassTurn()
+{
+    auto lastPlayer = currentTurn.playerIndex;
+    auto nextPlayer = (lastPlayer + 1) % players_.size();
+    currentTurn = Turn(nextPlayer);
 }

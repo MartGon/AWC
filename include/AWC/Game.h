@@ -2,6 +2,7 @@
 #include <AWC/AWCusing.h>
 #include <AWC/Map.h>
 #include <AWC/Player.h>
+#include <AWC/Turn.h>
 
 class Game
 {
@@ -21,7 +22,16 @@ public:
 
     // Commands
     bool CanExecuteCommand(CommandPtr command, uint playerIndex);
+    bool CanExecuteCommand(CommandPtr command);
     void ExecuteCommand(CommandPtr command, uint playerIndex);
+    void ExecuteCommand(CommandPtr command);
+
+    // State
+    void Start();
+
+    // Turn history
+    const Turn& GetCurrentTurn() const;
+    void PassTurn();
 
 private:
     
@@ -33,4 +43,5 @@ private:
 
     std::vector<Player> players_;
     std::vector<Map> maps_;
+    Turn currentTurn;
 };

@@ -21,6 +21,7 @@ class TilePatternDesc;
 class TilePatternDescI;
 class TPDFixedRange;
 class TPDFixedCost;
+class Turn;
 class Unit;
 class UnitAttack;
 class UnitMovement;

@@ -20,6 +20,7 @@ add_library(AWCSource
   TilePatternDescDecorator.cpp
   TileGraph.cpp
   TileNode.cpp
+  Turn.cpp
   Unit.cpp
   UnitAttack.cpp
   UnitType.cpp
