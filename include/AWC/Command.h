@@ -1,31 +1,30 @@
 #pragma once
 
 #include <AWC/AWCException.h>
+#include <AWC/AWCfwd.h>
 #include <string>
-
-class Map;
 
 class Command
 {
 public:
     virtual ~Command(){};
-    void Execute();
-    virtual bool CanBeExecuted() = 0;
+    void Execute(Game& game, uint playerIndex);
+    virtual bool CanBeExecuted(Game& game, uint playerIndex) = 0;
 private:
-    virtual void DoExecute() = 0;
+    virtual void DoExecute(Game& game, uint playerIndex) = 0;
 };
 
 class MoveCommand : public Command
 {
 public:
-    MoveCommand(Map& map, int originX, int originY, int destX, int destY);
+    MoveCommand(uint mapIndex, int originX, int originY, int destX, int destY);
 
-    bool CanBeExecuted() override;
+    bool CanBeExecuted(Game& game, uint playerIndex) override;
 private:
 
-    virtual void DoExecute() override;
+    virtual void DoExecute(Game& game, uint playerIndex) override;
 
-    Map& map_;
+    const uint mapIndex_;
     const int originX_;
     const int originY_;
     const int destX_;

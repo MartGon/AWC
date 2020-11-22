@@ -4,6 +4,7 @@ class Command;
 class CostTable;
 class CostTableI;
 class FixedCostTable;
+class Game;
 class Map;
 class MovementDescType;
 class MovementDesc;

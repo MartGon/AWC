@@ -53,22 +53,22 @@ uint Game::GetMapCount() const
 
 bool Game::CanExecuteCommand(CommandPtr command, uint playerIndex)
 {
-    return IsPlayerIndexValid(playerIndex) && command->CanBeExecuted();
+    return IsPlayerIndexValid(playerIndex) && command->CanBeExecuted(*this, playerIndex);
 }
 
 bool Game::CanExecuteCommand(CommandPtr command)
 {
-    return command->CanBeExecuted();
+    return command->CanBeExecuted(*this, currentTurn.playerIndex);
 }
 
 void Game::ExecuteCommand(CommandPtr command, uint playerIndex)
 {
-    command->Execute();
+    command->Execute(*this, playerIndex);
 }
 
 void Game::ExecuteCommand(CommandPtr command)
 {
-    command->Execute();
+    command->Execute(*this, currentTurn.playerIndex);
 }
 
 // Private
