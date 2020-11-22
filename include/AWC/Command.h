@@ -31,6 +31,22 @@ private:
     const int destY_;
 };
 
+class AttackCommand : public Command
+{
+public:
+    AttackCommand(uint mapIndex, Vector2 unitIndex, Vector2 targetPos, uint weaponIndex = 0);
+
+    bool CanBeExecuted(Game& game, uint playerIndex) override;
+private:
+
+    virtual void DoExecute(Game& game, uint playerIndex) override;
+
+    const uint mapIndex_;
+    const Vector2 unitIndex_;
+    const Vector2 targetPos_;
+    const uint weaponIndex_;
+};
+
 class InvalidCommandException : public AWCException
 {
 public:

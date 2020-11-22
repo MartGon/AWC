@@ -28,7 +28,6 @@ TEST_CASE("MoveCommands")
     TileType grassType{0, "Grass"};
     MapUtils::FillMap(map, grassType);
     
-
     // Player
     Player player{0, 0, 100};
     game.AddPlayer(player);
@@ -54,8 +53,8 @@ TEST_CASE("MoveCommands")
     SUBCASE("Valid commands can be executed and yield correct results")
     {
         validMoveCommand->Execute(game, 0);
-        
-        auto gameMap  = game.GetMap(0);
+
+        auto& gameMap  = game.GetMap(0);
         // Unit should now be at (1, 0)
         auto unit = gameMap.GetUnit(1, 0);
 
@@ -64,5 +63,64 @@ TEST_CASE("MoveCommands")
 
         CHECK(unit.get() == soldier.get());
         CHECK(noUnit.get() == nullptr);
+    }
+}
+
+TEST_CASE("AttackCommands")
+{
+    // Game
+    Game game;
+
+    // Map
+    int xSize = 10;
+    int ySize = 10;
+    Map map{xSize, ySize};
+
+    TileType grassType{0, "Grass"};
+    MapUtils::FillMap(map, grassType);
+    
+    // Player
+    Player playerOne{0, 0, 100};
+    Player playerTwo{1, 1, 100};
+    game.AddPlayer(playerOne);
+    game.AddPlayer(playerTwo);
+
+    UnitType soldierType = UnitTest::CreateSoldierType();
+    auto soldierOne = soldierType.CreateUnit();
+    auto soldierTwo = soldierType.CreateUnit();
+    auto soldierThree = soldierType.CreateUnit();
+
+    map.AddUnit(0, 0, soldierOne);
+    map.AddUnit(1, 0, soldierTwo);
+    map.AddUnit(9, 9, soldierThree);
+
+    // Add map to game
+    game.AddMap(map);
+
+    std::unique_ptr<Command> validAttackCommand = std::make_unique<AttackCommand>(0, Vector2{0, 0}, Vector2{1, 0}, 0);
+
+    SUBCASE("Some of them are valid or not")
+    {
+        std::unique_ptr<Command> invalidAttackCommand = std::make_unique<AttackCommand>(0, Vector2{-1, -1}, Vector2{1, 0}, 0); // Invalid map origin index
+        std::unique_ptr<Command> invalidAttackCommand2 = std::make_unique<AttackCommand>(0, Vector2{0, 0}, Vector2{11, 11}, 0); // Invalid map target index
+        CommandPtr invalidAttackCommand3 = std::make_unique<AttackCommand>(0, Vector2{1, 1}, Vector2{1, 0}, 0); // No unit there
+        CommandPtr invalidAttackCommand4 = std::make_unique<AttackCommand>(0, Vector2{0, 0}, Vector2{9, 9}, 0); // Unit out of range
+
+        CHECK(validAttackCommand->CanBeExecuted(game, 0) == true);
+        CHECK(invalidAttackCommand->CanBeExecuted(game, 0) == false);
+        CHECK(invalidAttackCommand2->CanBeExecuted(game, 0) == false);
+        CHECK(invalidAttackCommand3->CanBeExecuted(game, 0) == false);
+        CHECK(invalidAttackCommand4->CanBeExecuted(game, 0) == false);
+    }
+    SUBCASE("Valid commands can be executed and yield correct results")
+    {
+        validAttackCommand->Execute(game, 0);
+
+        auto& gameMap  = game.GetMap(0);
+
+        // Unit at (1, 0) should be damaged
+        auto unit = gameMap.GetUnit(1, 0);
+
+        CHECK(unit->GetHealth() < 100);
     }
 }
