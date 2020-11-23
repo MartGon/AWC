@@ -1,7 +1,13 @@
 #include "doctest.h"
 
 #include <AWC/Game.h>
+
+#include <AWC/TileType.h>
+#include <AWC/UnitType.h>
+#include <AWC/Command.h>
+
 #include <GameTest.h>
+#include <UnitTest.h>
 
 TEST_CASE("Game Configuration")
 {
@@ -67,15 +73,52 @@ TEST_CASE("Game State")
         CHECK(secondTurn.playerIndex == 1);
         CHECK(firstTurn.playerIndex == 0);
     }
+    SUBCASE("Commands: Player One's soldier moves and attacks player's two soldier")
+    {   
+        // Units and tiles
+        // Note: Types must exist, otherwise the references to them break.
+        auto soldierType = UnitTest::CreateSoldierType();
+        TileType grassType{0, "Grass"}; 
+
+        auto soldierOne = soldierType.CreateUnit();
+        auto soldierTwo = soldierType.CreateUnit();
+        
+        auto& map = game.GetMap(0);
+
+        map.AddUnit({0, 0}, soldierOne);
+        map.AddUnit({1, 1}, soldierTwo);
+
+        MapUtils::FillMap(map, grassType);
+
+        // Set of Commands checks
+        CommandPtr moveCommand{new MoveCommand{0, Vector2{0, 0}, Vector2{0, 1}}};
+        CommandPtr attackCommand{new AttackCommand{0, Vector2{0, 1}, Vector2{1, 1}, 0}};
+
+        CHECK(game.CanExecuteCommand(moveCommand) == true);
+        CHECK(game.CanExecuteCommand(attackCommand) == false);
+
+        game.ExecuteCommand(moveCommand);
+        
+        CHECK(game.CanExecuteCommand(attackCommand) == true);
+        CHECK(game.CanExecuteCommand(moveCommand) == false);
+
+        game.ExecuteCommand(attackCommand);
+
+        auto enemySoldier = map.GetUnit({1, 1});
+        CHECK(enemySoldier->GetHealth() < 100);
+    }
 }
 
 Game GameTest::PrepareGame()
 {
     Game game;
 
+    // Prepare map
     Map mapOne{5, 5};
+
     game.AddMap(mapOne);
 
+    // Prepare players
     Player playerOne{0, 0, 1000};
     Player playerTwo{1, 1, 1000};
 

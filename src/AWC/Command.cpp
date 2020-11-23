@@ -21,7 +21,13 @@ void Command::Execute(Game& game, uint playerIndex)
 // MoveCommand
 
 MoveCommand::MoveCommand(uint mapIndex, int originX, int originY, int destX, int destY) : 
-    mapIndex_{mapIndex}, originX_{originX}, originY_{originY}, destX_{destX}, destY_{destY}
+    mapIndex_{mapIndex}, origin_{originX, originY}, dest_{destX, destY}
+{
+
+}
+
+MoveCommand::MoveCommand(uint mapIndex, Vector2 origin, Vector2 dest) : 
+    mapIndex_{mapIndex}, origin_{origin}, dest_{dest}
 {
 
 }
@@ -29,9 +35,9 @@ MoveCommand::MoveCommand(uint mapIndex, int originX, int originY, int destX, int
 void MoveCommand::DoExecute(Game& game, uint playerIndex)
 {
     auto& map = game.GetMap(mapIndex_);
-    auto unit = map.GetUnit(originX_, originY_);
-    map.RemoveUnit(originX_, originY_);
-    map.AddUnit(destX_, destY_, unit);
+    auto unit = map.GetUnit(origin_);
+    map.RemoveUnit(origin_);
+    map.AddUnit(dest_, unit);
 }
 
 bool MoveCommand::CanBeExecuted(Game& game, uint playerIndex)
@@ -39,18 +45,15 @@ bool MoveCommand::CanBeExecuted(Game& game, uint playerIndex)
     bool canBeExecuted = false;
 
     auto map = game.GetMap(mapIndex_);
-    bool mapOK = map.IsPositionValid(originX_, originY_) && map.IsPositionValid(destX_, destY_) && map.IsPositionFree(destX_, destY_);
+    bool mapOK = map.IsPositionValid(origin_) && map.IsPositionValid(dest_) && map.IsPositionFree(dest_);
     if(mapOK)
     {
-        if(auto unit = map.GetUnit(originX_, originY_))
+        if(auto unit = map.GetUnit(origin_))
         {
             // TODO: Check player owns the units
-
-            Vector2 origin{originX_, originY_};
-            Vector2 dest{destX_, destY_};
             
-            auto unitMovement = unit->CalculateMovement(map, origin);
-            canBeExecuted = unitMovement.CanMove(dest);
+            auto unitMovement = unit->CalculateMovement(map, origin_);
+            canBeExecuted = unitMovement.CanMove(dest_);
         }
     }
 

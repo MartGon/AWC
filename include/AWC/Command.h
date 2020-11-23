@@ -18,6 +18,7 @@ class MoveCommand : public Command
 {
 public:
     MoveCommand(uint mapIndex, int originX, int originY, int destX, int destY);
+    MoveCommand(uint mapIndex, Vector2 origin, Vector2 dest);
 
     bool CanBeExecuted(Game& game, uint playerIndex) override;
 private:
@@ -25,10 +26,8 @@ private:
     virtual void DoExecute(Game& game, uint playerIndex) override;
 
     const uint mapIndex_;
-    const int originX_;
-    const int originY_;
-    const int destX_;
-    const int destY_;
+    const Vector2 origin_;
+    const Vector2 dest_;
 };
 
 class AttackCommand : public Command
