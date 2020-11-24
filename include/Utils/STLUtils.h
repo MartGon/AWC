@@ -61,6 +61,13 @@ namespace VectorUtils
             
         return result;
     }
+
+    template <typename T>
+    std::vector<T> Slice(std::vector<T> items, const uint startIndex, const uint size)
+    {
+        uint end = startIndex + size;
+        return std::vector<T>(items.begin() + startIndex, items.begin() + end);
+    }
 }
 
 namespace StringUtils

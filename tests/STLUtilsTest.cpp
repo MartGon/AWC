@@ -80,6 +80,25 @@ TEST_CASE("Vector test")
 
         CHECK(res == expectedResult);
     }
+    SUBCASE("Slice")
+    {
+        std::vector<int> a{1, 2, 3, 4};
+        std::vector<int> expectedResult1{3, 4};
+        std::vector<int> expectedResult2{2, 3, 4};
+        std::vector<int> expectedResult3{1, 2, 3, 4};
+        std::vector<int> expectedResult4{2, 3};
+
+        auto result1 = VectorUtils::Slice(a, 2, a.size() - 2);
+        auto result2 = VectorUtils::Slice(a, 1, a.size() - 1);
+        auto result3 = VectorUtils::Slice(a, 0, a.size());
+        auto result4 = VectorUtils::Slice(a, 1, 2);
+
+        CHECK(result1 == expectedResult1);
+        CHECK(result2 == expectedResult2);
+        CHECK(result3 == expectedResult3);
+        CHECK(result4 == expectedResult4);
+
+    }
 }
 
 TEST_CASE("String test")
@@ -101,5 +120,28 @@ TEST_CASE("String test")
 
         std::string resB = StringUtils::Replace(string, tokenB, replacerB);
         CHECK(resB == expectedResultB);
+    }
+    SUBCASE("Split")
+    {
+        std::string source = "Is the end of the world";
+        char delim = ' ';
+        std::vector<std::string> expectedResult = {"Is", "the", "end", "of", "the", "world"};
+        std::vector<std::string> expectedResult2 = {"Is the end o", " the world"};
+
+        CHECK(expectedResult == StringUtils::Split(source, delim));
+        CHECK(expectedResult2 == StringUtils::Split(source, 'f'));
+    }
+}
+
+TEST_CASE("Unordered map test")
+{
+    std::unordered_map<int, std::string> map{{1, "Hola"}, {2, "Adios"}};
+    SUBCASE("Contains")
+    {
+        CHECK(UnorderedMapUtils::Contains(map, 1) == true);
+        CHECK(UnorderedMapUtils::Contains(map, 2) == true);
+
+        CHECK(UnorderedMapUtils::Contains(map, 3) == false);
+        CHECK(UnorderedMapUtils::Contains(map, 4) == false);
     }
 }

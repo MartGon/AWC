@@ -27,7 +27,8 @@ void Console::Prompt()
     std::getline(std::cin >> std::ws, line);
 
     std::cout << '\n';
-    ParseCommand(line);
+    auto ci = ParseCommand(line);
+    ExecuteCommand(ci);
 }
 
 bool Console::IsOpen()
@@ -39,8 +40,15 @@ bool Console::IsOpen()
 
 CommandInfo Console::ParseCommand(std::string line)
 {
+    
+    char delim = ' ';
+    auto items = StringUtils::Split(line, delim);
+
     CommandInfo ci;
-    // TODO
+    ci.commandRef = items[0];
+    ci.args = VectorUtils::Slice(items, 1, items.size() - 1);
+
+    return ci;
 }
 
 void Console::ExecuteCommand(CommandInfo ci)
