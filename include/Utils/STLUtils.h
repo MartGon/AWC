@@ -5,6 +5,7 @@
 #include <array>
 #include <string>
 #include <cassert>
+#include <unordered_map>
 
 namespace VectorUtils
 {
