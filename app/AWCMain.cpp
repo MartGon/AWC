@@ -12,16 +12,9 @@
 #include <AWC/CostTable.h>
 #include <AWC/WeaponType.h>
 
-#define RESET "\033[0m"
-
-// Foregrounds
-#define RED_FG "\x1B[31m"
-#define BLUE_FG "\x1B[34m"
-
-// Backgrounds
-#define GREEN_BG "\033[42m"
-
-#define ESCAPE_SIZE 5
+// App
+#include <Console.h>
+#include <ConsoleCommand.h>
 
 UnitType CreateSoldierType()
 {
@@ -54,55 +47,7 @@ UnitType CreateSoldierType()
     return soldierType;
 }
 
-void PrintMap(const Map& map)
-{
-    auto mapSize = Vector2{map.GetWidth(), map.GetHeight()};
 
-    // Init char matrix
-    std::vector<std::vector<std::string>> charMatrix;
-    charMatrix.resize(mapSize.x);
-    for(int i = 0; i < mapSize.x; i++)
-        charMatrix[i] = std::vector<std::string>(mapSize.y);
-
-    // Edit matrix with tiles
-    for(int i = 0; i < mapSize.x; i++)
-    {
-        for(int j = 0; j < mapSize.y; j++)
-        {
-            auto tile = map.GetTile(i, j);
-            std::string str = GREEN_BG + std::string(1, ' ');
-            charMatrix[i][j] = str;
-        }
-    }
-
-    // Edit matrix with units
-    for(int i = 0; i < mapSize.x; i++)
-    {
-        for(int j = 0; j < mapSize.y; j++)
-        {
-            auto unit = map.GetUnit(i, j);
-            if(unit)
-            {
-                char c = unit->GetName()[0];
-                std::string color = i > 2 ? BLUE_FG : RED_FG;
-                std::string str = color + std::string(1, c);
-                auto substr = charMatrix[i][j].substr(0, ESCAPE_SIZE);
-                charMatrix[i][j] = substr + str;
-            }
-        }
-    }
-
-    // Print matrix
-    for(int i = 0; i < mapSize.y; i++)
-    {   
-        for(int j = 0; j < mapSize.x; j++)
-        {
-            auto str = charMatrix[j][i];
-            std::cout << str + RESET;
-        }
-        std::cout << '\n';
-    }
-}
 
 int main()
 {
@@ -134,7 +79,23 @@ int main()
     game.AddPlayer(Player{1, 1, 1000});
 
     // Finish prepare game
-    PrintMap(game.GetMap(0));
+    Console console(game);
+
+    // Prompt message
+    std::string promptMsg = R"(
+Welcome to AWC console.
+Please, type a command.
+)";
+    console.SetPromptMsg(promptMsg);
+
+    // Commands
+    Padding padding{2, 2, 4, 2};
+    std::shared_ptr<ConsoleCommand> printMapComm{new PrintMapCommand{padding}};
+    console.AddCommand("Print", printMapComm);
+    console.AddCommand("PrintMap", printMapComm);
+
+    while(console.IsOpen())
+        console.Prompt();
 
     return 0;
 }

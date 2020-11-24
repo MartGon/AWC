@@ -66,4 +66,14 @@ namespace VectorUtils
 namespace StringUtils
 {
     std::string Replace(std::string string, const std::string& token, const std::string& replacer);
+    std::vector<std::string> Split(const std::string& string, char delim);
+}
+
+namespace UnorderedMapUtils
+{   
+    template<typename Key, typename Value>
+    bool Contains(std::unordered_map<Key, Value> map, Key key)
+    {
+        return map.find(key) != map.end();
+    }
 }

@@ -1,3 +1,4 @@
+#pragma once
 
 #include <AWC/AWCusing.h>
 #include <AWC/Map.h>
