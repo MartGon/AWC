@@ -8,8 +8,37 @@
 class ConsoleCommand
 {
 public:
+    virtual ~ConsoleCommand() {};
 
-    virtual void Execute(Game& game, std::vector<std::string> args) = 0;
+    virtual void Execute(std::vector<std::string> args) = 0;
+};
+
+class ExitConsoleCommand : public ConsoleCommand
+{
+public:
+    ExitConsoleCommand(Console& console) : console_{console}
+    {
+
+    }
+
+    void Execute(std::vector<std::string> args) override;
+private:
+    Console& console_;
+};
+
+class GameCommand : public ConsoleCommand
+{
+public:
+    virtual ~GameCommand() {};
+    GameCommand(Game& game) : game_{game}{};
+
+    virtual void Execute(std::vector<std::string> args) override
+    {
+
+    };
+
+protected:
+    Game& game_;
 };
 
 struct Padding
@@ -20,21 +49,36 @@ struct Padding
     uint right;
 };
 
-class PrintMapCommand : public ConsoleCommand
+class PrintMapCommand : public GameCommand
 {
 public:
-    PrintMapCommand(Padding padding);
+    PrintMapCommand(Game& game, Padding padding) : padding_{padding}, GameCommand{game} {}; 
 
-    void Execute(Game& game, std::vector<std::string> args) override;
+    void Execute(std::vector<std::string> args) override;
 private:
 
     void PrintPadding(uint length, char c);
-
     Padding padding_;
 };
 
-class MoveUnitConsoleCommand : public ConsoleCommand
+class MoveUnitGameCommand : public GameCommand
 {
 public:
-    void Execute(Game& game, std::vector<std::string> args);
+    MoveUnitGameCommand(Game& game) : GameCommand(game){}
+
+    void Execute(std::vector<std::string> args) override;
+private:
+    const unsigned int ARGS_SIZE = 4;
 };
+
+class UnitReportCommand : public GameCommand
+{
+public:
+    UnitReportCommand(Game& game) : GameCommand(game){}
+
+    void Execute(std::vector<std::string> args);
+
+private:
+    const unsigned int ARGS_SIZE = 2;
+};
+

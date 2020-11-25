@@ -3,7 +3,7 @@
 
 #include <Utils/STLUtils.h>
 
-Console::Console(Game& game) : game_{game}, open_{true}
+Console::Console(Game& game) : open_{true}
 {
 
 }
@@ -36,6 +36,11 @@ bool Console::IsOpen()
     return open_;
 }
 
+void Console::Close()
+{
+    open_ = false;
+}
+
 // Private
 
 CommandInfo Console::ParseCommand(std::string line)
@@ -54,7 +59,7 @@ CommandInfo Console::ParseCommand(std::string line)
 void Console::ExecuteCommand(CommandInfo ci)
 {
     if(UnorderedMapUtils::Contains(commands_, ci.commandRef))
-        commands_[ci.commandRef]->Execute(game_, {});
+        commands_[ci.commandRef]->Execute(ci.args);
     else
         std::cout << "Sorry, command " << ci.commandRef << " does not exist";
 }

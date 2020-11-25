@@ -37,13 +37,12 @@ public:
 
     void Prompt();
     bool IsOpen();
+    void Close();
 
 private:
 
     CommandInfo ParseCommand(std::string line);
     void ExecuteCommand(CommandInfo ci);
-
-    Game& game_;
 
     // Config
     std::string promptMsg_;

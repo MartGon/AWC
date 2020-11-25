@@ -1,13 +1,19 @@
 #include <ConsoleCommand.h>
 
-PrintMapCommand::PrintMapCommand(Padding padding) : padding_{padding}
-{
+#include <AWC/Command.h>
 
+// Exit
+
+void ExitConsoleCommand::Execute(std::vector<std::string> args)
+{
+    console_.Close();
 }
 
-void PrintMapCommand::Execute(Game& game, std::vector<std::string> args)
+// Print Map
+
+void PrintMapCommand::Execute(std::vector<std::string> args)
 {
-    auto& map = game.GetMap(0);
+    auto& map = game_.GetMap(0);
     auto mapSize = Vector2{map.GetWidth(), map.GetHeight()};
 
     // Init char matrix
@@ -47,10 +53,19 @@ void PrintMapCommand::Execute(Game& game, std::vector<std::string> args)
     // Upper padding
     PrintPadding(padding_.up, '\n');
 
+    // Print X coords
+    PrintPadding(padding_.left + 1, ' ');
+    for(int j = 0; j < mapSize.x; j++)
+    {
+        std::cout << j;
+    }
+    std::cout << '\n';
+
     // Print matrix
     for(int i = 0; i < mapSize.y; i++)
     {   
         PrintPadding(padding_.left, ' ');
+        std::cout << i;
 
         for(int j = 0; j < mapSize.x; j++)
         {
@@ -69,4 +84,73 @@ void PrintMapCommand::PrintPadding(uint length, char c)
 {
     for(int i = 0; i < length; i++)
         std::cout << c;
+}
+
+// Move Unit
+
+void MoveUnitGameCommand::Execute(std::vector<std::string> args)
+{
+    if(args.size() >= ARGS_SIZE)
+    {
+        int originX = std::atoi(args[0].c_str());
+        int originY = std::atoi(args[1].c_str());
+        Vector2 origin{originX, originY};
+
+        int destX = std::atoi(args[2].c_str());
+        int destY = std::atoi(args[3].c_str());
+        Vector2 dest{destX, destY};
+
+        CommandPtr moveCommand{new MoveCommand{0, {origin}, {dest}}};
+        if(game_.CanExecuteCommand(moveCommand))
+        {
+            game_.ExecuteCommand(moveCommand);
+
+            auto& map = game_.GetMap(0);
+            auto unit = map.GetUnit(destX, destY);
+
+            std::cout << unit->GetName() << " moved successfully from " + origin + " to " + dest + "\n";
+        }
+        else
+            std::cout << "Sorry move command could not be executed\n";
+    }
+    else
+        std::cout << "Incorrect number of arguments for MoveCommand\n";
+}
+
+// Unit report command
+
+void UnitReportCommand::Execute(std::vector<std::string> args)
+{
+    if(args.size() >= ARGS_SIZE)
+    {
+        int originX = std::atoi(args[0].c_str());
+        int originY = std::atoi(args[1].c_str());
+        Vector2 origin{originX, originY};
+
+        auto& map = game_.GetMap(0);
+        if(map.IsPositionValid(origin))
+        {
+            if(auto unit = map.GetUnit(origin))
+            {
+                auto name = unit->GetName();
+                auto health = unit->GetHealth();
+                auto ammo = unit->GetWeaponAmmo(0);
+                auto gas = unit->GetCurrentGas();
+
+                std::cout << '\n';
+                std::cout << "Unit name: " << name << '\n';
+                std::cout << "Unit health: " << health << '\n';
+                std::cout << "Unit ammo: " << ammo << '\n';
+                std::cout << "Unit gas: " << gas << '\n';
+                std::cout << '\n';
+            }
+            else
+                std::cout << "Could not find Unit at " + origin << '\n';
+        }
+        else
+            std::cout << "Error: Invalid position\n";
+    }
+    else
+        std::cout << "Incorrect number of arguments for UnitReportCommand\n";
+    
 }

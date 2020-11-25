@@ -90,9 +90,15 @@ Please, type a command.
 
     // Commands
     Padding padding{2, 2, 4, 2};
-    std::shared_ptr<ConsoleCommand> printMapComm{new PrintMapCommand{padding}};
-    console.AddCommand("Print", printMapComm);
-    console.AddCommand("PrintMap", printMapComm);
+    std::shared_ptr<ConsoleCommand> printMapComm{new PrintMapCommand{game, padding}};
+    std::shared_ptr<ConsoleCommand> exitComm{new ExitConsoleCommand{console}};
+    std::shared_ptr<ConsoleCommand> moveComm{new MoveUnitGameCommand(game)};
+    std::shared_ptr<ConsoleCommand> reportComm{new UnitReportCommand(game)};
+    console.AddCommand("print", printMapComm);
+    console.AddCommand("print-map", printMapComm);
+    console.AddCommand("exit", exitComm);
+    console.AddCommand("move", moveComm);
+    console.AddCommand("report", reportComm);
 
     while(console.IsOpen())
         console.Prompt();
