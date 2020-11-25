@@ -52,17 +52,20 @@ TEST_CASE("MoveCommands")
     }
     SUBCASE("Valid commands can be executed and yield correct results")
     {
+        auto startingGas = soldier->GetCurrentGas();
         validMoveCommand->Execute(game, 0);
 
         auto& gameMap  = game.GetMap(0);
         // Unit should now be at (1, 0)
         auto unit = gameMap.GetUnit(1, 0);
+        auto currentGas = unit->GetCurrentGas();
 
         // No unit should be in previous pos
         auto noUnit = gameMap.GetUnit(0, 0);
 
         CHECK(unit.get() == soldier.get());
         CHECK(noUnit.get() == nullptr);
+        CHECK(currentGas < startingGas);
     }
 }
 

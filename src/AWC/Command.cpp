@@ -38,6 +38,9 @@ void MoveCommand::DoExecute(Game& game, uint playerIndex)
     auto unit = map.GetUnit(origin_);
     map.RemoveUnit(origin_);
     map.AddUnit(dest_, unit);
+
+    auto unitMovement = unit->CalculateMovement(map, origin_);
+    unit->Move(unitMovement.GetMoveCostTo(dest_));
 }
 
 bool MoveCommand::CanBeExecuted(Game& game, uint playerIndex)
