@@ -88,7 +88,7 @@ void PrintMapCommand::PrintPadding(uint length, char c)
 
 // Move Unit
 
-void MoveUnitGameCommand::Execute(std::vector<std::string> args)
+void UnitMoveCommand::Execute(std::vector<std::string> args)
 {
     if(args.size() >= ARGS_SIZE)
     {
@@ -115,6 +115,42 @@ void MoveUnitGameCommand::Execute(std::vector<std::string> args)
     }
     else
         std::cout << "Incorrect number of arguments for MoveCommand\n";
+}
+
+// Unit attack
+
+void UnitAttackCommand::Execute(std::vector<std::string> args)
+{
+    if(args.size() >= ARGS_SIZE)
+    {
+        int originX = std::atoi(args[0].c_str());
+        int originY = std::atoi(args[1].c_str());
+        Vector2 origin{originX, originY};
+
+        int destX = std::atoi(args[2].c_str());
+        int destY = std::atoi(args[3].c_str());
+        Vector2 dest{destX, destY};
+
+        CommandPtr attackComm{new AttackCommand{0, origin, dest}};
+        if(game_.CanExecuteCommand(attackComm))
+        {
+            game_.ExecuteCommand(attackComm);
+
+            // Info
+            auto& map = game_.GetMap(0);
+            auto attacker = map.GetUnit(origin);
+            auto victim = map.GetUnit(dest);
+
+            auto rawDmg = attacker->GetDmgToUnit(0, victim);
+            auto realDmg = victim->GetDmgTaken(rawDmg);
+
+            std::cout << attacker->GetName() << " attacks " << victim->GetName() << " dealing " << realDmg << " to it\n";
+        }
+        else
+            std::cout << "Sorry. AttackCommand could not be executed\n";
+    }
+    else
+        std::cout << "Sorry, not enough arguments for that command\n";
 }
 
 // Unit report command

@@ -61,12 +61,23 @@ private:
     Padding padding_;
 };
 
-class MoveUnitGameCommand : public GameCommand
+class UnitMoveCommand : public GameCommand
 {
 public:
-    MoveUnitGameCommand(Game& game) : GameCommand(game){}
+    UnitMoveCommand(Game& game) : GameCommand(game){}
 
     void Execute(std::vector<std::string> args) override;
+private:
+    const unsigned int ARGS_SIZE = 4;
+};
+
+class UnitAttackCommand : public GameCommand
+{
+public:
+    UnitAttackCommand(Game& game) : GameCommand{game} {}
+
+    void Execute(std::vector<std::string> args) override;
+
 private:
     const unsigned int ARGS_SIZE = 4;
 };

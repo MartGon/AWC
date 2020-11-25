@@ -92,12 +92,14 @@ Please, type a command.
     Padding padding{2, 2, 4, 2};
     std::shared_ptr<ConsoleCommand> printMapComm{new PrintMapCommand{game, padding}};
     std::shared_ptr<ConsoleCommand> exitComm{new ExitConsoleCommand{console}};
-    std::shared_ptr<ConsoleCommand> moveComm{new MoveUnitGameCommand(game)};
+    std::shared_ptr<ConsoleCommand> moveComm{new UnitMoveCommand(game)};
+    std::shared_ptr<ConsoleCommand> attackComm{new UnitAttackCommand(game)};
     std::shared_ptr<ConsoleCommand> reportComm{new UnitReportCommand(game)};
     console.AddCommand("print", printMapComm);
     console.AddCommand("print-map", printMapComm);
     console.AddCommand("exit", exitComm);
     console.AddCommand("move", moveComm);
+    console.AddCommand("attack", attackComm);
     console.AddCommand("report", reportComm);
 
     while(console.IsOpen())
