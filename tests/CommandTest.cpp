@@ -33,7 +33,7 @@ TEST_CASE("MoveCommands")
     game.AddPlayer(player);
 
     UnitType soldierType = UnitTest::CreateSoldierType();
-    auto soldier = soldierType.CreateUnit();
+    auto soldier = soldierType.CreateUnit(0);
     map.AddUnit(0, 0, soldier);
 
     // Add map to game
@@ -89,9 +89,9 @@ TEST_CASE("AttackCommands")
     game.AddPlayer(playerTwo);
 
     UnitType soldierType = UnitTest::CreateSoldierType();
-    auto soldierOne = soldierType.CreateUnit();
-    auto soldierTwo = soldierType.CreateUnit();
-    auto soldierThree = soldierType.CreateUnit();
+    auto soldierOne = soldierType.CreateUnit(0);
+    auto soldierTwo = soldierType.CreateUnit(1);
+    auto soldierThree = soldierType.CreateUnit(1);
 
     map.AddUnit(0, 0, soldierOne);
     map.AddUnit(1, 0, soldierTwo);

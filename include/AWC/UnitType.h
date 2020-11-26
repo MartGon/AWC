@@ -11,7 +11,7 @@ class UnitType
 public:
     UnitType(uint id, const std::string& name, MovementDecTypePtr moveType, std::vector<WeaponTypePtr> weaponTypes);
 
-    std::shared_ptr<Unit> CreateUnit() const;
+    std::shared_ptr<Unit> CreateUnit(uint ownerId) const;
 
     const std::string GetName() const;
     const uint GetId() const;

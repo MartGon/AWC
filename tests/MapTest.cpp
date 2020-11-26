@@ -32,7 +32,7 @@ TEST_CASE("Maps have a specific size")
 TEST_CASE("Maps hold units in a given position") 
 {
     UnitType soldierUnitType = UnitTest::CreateSoldierType();
-    auto soldier = soldierUnitType.CreateUnit();
+    auto soldier = soldierUnitType.CreateUnit(0);
 
     Map map{10, 10};
 
@@ -54,7 +54,7 @@ TEST_CASE("Maps hold units in a given position")
     }
     SUBCASE("Should get the exact unit in a given position")
     {
-        auto soldier2 = soldierUnitType.CreateUnit();
+        auto soldier2 = soldierUnitType.CreateUnit(0);
         map.AddUnit(1, 1, soldier2);
 
         auto unit = map.GetUnit(xPos, yPos);
@@ -97,7 +97,7 @@ TEST_CASE("Maps follow some rules")
     Map map{xSize, ySize};
 
     UnitType soldierUnitType = UnitTest::CreateSoldierType();
-    auto soldier = soldierUnitType.CreateUnit();
+    auto soldier = soldierUnitType.CreateUnit(0);
     map.AddUnit(0, 0, soldier);
 
     TileType grassType{0, "Grass"};
@@ -112,7 +112,7 @@ TEST_CASE("Maps follow some rules")
     }
     SUBCASE("Only one unit can be in a given position")
     {
-        auto soldier2 = soldierUnitType.CreateUnit();
+        auto soldier2 = soldierUnitType.CreateUnit(0);
         CHECK_THROWS_AS(map.AddUnit(0, 0, soldier2), const AWCAlreadyExistingIndexException&);
     }
 }

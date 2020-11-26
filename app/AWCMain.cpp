@@ -54,6 +54,10 @@ int main()
     // Prepare game
     Game game;
 
+        // Players
+    game.AddPlayer(Player{0, 0, 1000});
+    game.AddPlayer(Player{1, 1, 1000});
+
     // Tiles
     Map map{6, 3};
     TileType grassType{0, "Grass"};
@@ -63,20 +67,16 @@ int main()
     auto soldierType = CreateSoldierType();
     
         // Red units
-    map.AddUnit({1, 0}, soldierType.CreateUnit());
-    map.AddUnit({2, 1}, soldierType.CreateUnit());
-    map.AddUnit({1, 2}, soldierType.CreateUnit());
+    map.AddUnit({1, 0}, soldierType.CreateUnit(0));
+    map.AddUnit({2, 1}, soldierType.CreateUnit(0));
+    map.AddUnit({1, 2}, soldierType.CreateUnit(0));
 
         // Blue units
-    map.AddUnit({4, 0}, soldierType.CreateUnit());
-    map.AddUnit({4, 2}, soldierType.CreateUnit());
+    map.AddUnit({4, 0}, soldierType.CreateUnit(1));
+    map.AddUnit({4, 2}, soldierType.CreateUnit(1));
 
     // Set map
     game.AddMap(map);
-
-    // Players
-    game.AddPlayer(Player{0, 0, 1000});
-    game.AddPlayer(Player{1, 1, 1000});
 
     // Finish prepare game
     Console console(game);

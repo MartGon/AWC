@@ -80,8 +80,8 @@ TEST_CASE("Game State")
         auto soldierType = UnitTest::CreateSoldierType();
         TileType grassType{0, "Grass"}; 
 
-        auto soldierOne = soldierType.CreateUnit();
-        auto soldierTwo = soldierType.CreateUnit();
+        auto soldierOne = soldierType.CreateUnit(0);
+        auto soldierTwo = soldierType.CreateUnit(1);
         
         auto& map = game.GetMap(0);
 

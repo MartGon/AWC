@@ -144,7 +144,7 @@ void UnitAttackCommand::Execute(std::vector<std::string> args)
             auto rawDmg = attacker->GetDmgToUnit(0, victim);
             auto realDmg = victim->GetDmgTaken(rawDmg);
 
-            std::cout << attacker->GetName() << " attacks " << victim->GetName() << " dealing " << realDmg << " to it\n";
+            std::cout << attacker->GetName() << " attacks " << victim->GetName() << " dealing " << realDmg << " damage to it\n";
         }
         else
             std::cout << "Sorry. AttackCommand could not be executed\n";

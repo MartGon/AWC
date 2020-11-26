@@ -15,7 +15,7 @@
 
 #include <AWC/AWCException.h>
 
-Unit::Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons) : unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}
+Unit::Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, uint ownerId) : unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}, ownerId_{ownerId}
 {
 
 }
@@ -28,6 +28,11 @@ const std::string Unit::GetName() const
 const uint Unit::GetId() const
 {
     return unitType_.GetId();
+}
+
+const uint Unit::GetOwnerId() const
+{
+    return ownerId_;
 }
 
 // Movement
