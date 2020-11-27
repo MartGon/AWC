@@ -34,21 +34,30 @@ TEST_CASE("MoveCommands")
 
     UnitType soldierType = UnitTest::CreateSoldierType();
     auto soldier = soldierType.CreateUnit(0);
+    auto enemySoldier = soldierType.CreateUnit(1);
     map.AddUnit(0, 0, soldier);
+    map.AddUnit({2, 2}, enemySoldier);
 
     // Add map to game
     game.AddMap(map);
 
-    std::unique_ptr<Command> validMoveCommand = std::make_unique<MoveCommand>(0, 0, 0, 1, 0);
+    CommandPtr validMoveCommand = std::make_unique<MoveCommand>(0, 0, 0, 1, 0);
 
     SUBCASE("Some of them are valid or not")
     {
-        std::unique_ptr<Command> invalidMoveCommand = std::make_unique<MoveCommand>(0, -1, -1, 1, 0);
-        std::unique_ptr<Command> invalidMoveCommand2 = std::make_unique<MoveCommand>(0, 0, 0, 11, 11);
+        CommandPtr outOfBounds{new MoveCommand{0, {-1, -1}, {1, 0}}}; // Out of bounds 
+        CommandPtr outOfBounds2 {new MoveCommand{0, {0, 0}, {11, 11}}}; // Out of bound2
+        CommandPtr noUnit{new MoveCommand{0, {1, 1}, {1, 2}}};
+        CommandPtr tooFar{new MoveCommand{0, {0, 0}, {3, 3}}};
+        CommandPtr notMyUnit{new MoveCommand{0, {2, 2}, {2, 3}}};
 
         CHECK(validMoveCommand->CanBeExecuted(game, 0) == true);
-        CHECK(invalidMoveCommand->CanBeExecuted(game, 0) == false);
-        CHECK(invalidMoveCommand2->CanBeExecuted(game, 0) == false);
+        
+        CHECK(outOfBounds->CanBeExecuted(game, 0) == false);
+        CHECK(outOfBounds2->CanBeExecuted(game, 0) == false);
+        CHECK(noUnit->CanBeExecuted(game, 0) == false);
+        CHECK(tooFar->CanBeExecuted(game, 0) == false);
+        CHECK(notMyUnit->CanBeExecuted(game, 0) == false);
     }
     SUBCASE("Valid commands can be executed and yield correct results")
     {
@@ -90,30 +99,35 @@ TEST_CASE("AttackCommands")
 
     UnitType soldierType = UnitTest::CreateSoldierType();
     auto soldierOne = soldierType.CreateUnit(0);
+    auto friendlySoldier = soldierType.CreateUnit(0);
     auto soldierTwo = soldierType.CreateUnit(1);
     auto soldierThree = soldierType.CreateUnit(1);
 
     map.AddUnit(0, 0, soldierOne);
+    map.AddUnit(0, 1, friendlySoldier);
     map.AddUnit(1, 0, soldierTwo);
     map.AddUnit(9, 9, soldierThree);
 
     // Add map to game
     game.AddMap(map);
 
-    std::unique_ptr<Command> validAttackCommand = std::make_unique<AttackCommand>(0, Vector2{0, 0}, Vector2{1, 0}, 0);
+    CommandPtr validAttackCommand{new AttackCommand(0, Vector2{0, 0}, Vector2{1, 0}, 0)};
 
     SUBCASE("Some of them are valid or not")
     {
-        std::unique_ptr<Command> invalidAttackCommand = std::make_unique<AttackCommand>(0, Vector2{-1, -1}, Vector2{1, 0}, 0); // Invalid map origin index
-        std::unique_ptr<Command> invalidAttackCommand2 = std::make_unique<AttackCommand>(0, Vector2{0, 0}, Vector2{11, 11}, 0); // Invalid map target index
-        CommandPtr invalidAttackCommand3 = std::make_unique<AttackCommand>(0, Vector2{1, 1}, Vector2{1, 0}, 0); // No unit there
-        CommandPtr invalidAttackCommand4 = std::make_unique<AttackCommand>(0, Vector2{0, 0}, Vector2{9, 9}, 0); // Unit out of range
+        CommandPtr outOfBounds{new AttackCommand(0, Vector2{-1, -1}, Vector2{1, 0}, 0)}; // Invalid map origin index
+        CommandPtr outOfBounds2{new AttackCommand(0, Vector2{0, 0}, Vector2{11, 11}, 0)}; // Invalid map target index
+        CommandPtr noUnit{ new AttackCommand(0, Vector2{1, 1}, Vector2{1, 0}, 0)}; // No unit there
+        CommandPtr tooFar{new AttackCommand(0, Vector2{0, 0}, Vector2{9, 9}, 0)}; // Unit out of range
+        CommandPtr notMyUnit{ new AttackCommand(0, Vector2{1, 0}, Vector2{9, 9}, 0)}; // Not my unit
+        CommandPtr notAnEnemy{ new AttackCommand{0,{0, 0}, {0, 1}}};
 
         CHECK(validAttackCommand->CanBeExecuted(game, 0) == true);
-        CHECK(invalidAttackCommand->CanBeExecuted(game, 0) == false);
-        CHECK(invalidAttackCommand2->CanBeExecuted(game, 0) == false);
-        CHECK(invalidAttackCommand3->CanBeExecuted(game, 0) == false);
-        CHECK(invalidAttackCommand4->CanBeExecuted(game, 0) == false);
+        CHECK(outOfBounds->CanBeExecuted(game, 0) == false);
+        CHECK(outOfBounds2->CanBeExecuted(game, 0) == false);
+        CHECK(tooFar->CanBeExecuted(game, 0) == false);
+        CHECK(noUnit->CanBeExecuted(game, 0) == false);
+        CHECK(notAnEnemy->CanBeExecuted(game, 0) == false);
     }
     SUBCASE("Valid commands can be executed and yield correct results")
     {
