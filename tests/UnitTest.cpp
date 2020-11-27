@@ -1,11 +1,12 @@
 #include <doctest.h>
 
 #include <AWC/AWCusing.h>
-#include <AWC/UnitType.h>
-#include <AWC/Unit.h>
-#include <AWC/TilePatternDesc.h>
 #include <AWC/CostTable.h>
 #include <AWC/MovementDescType.h>
+#include <AWC/Player.h>
+#include <AWC/TilePatternDesc.h>
+#include <AWC/UnitType.h>
+#include <AWC/Unit.h>
 #include <AWC/WeaponType.h>
 
 #include <UnitTest.h>
@@ -15,10 +16,11 @@ TEST_CASE("Units have some properties")
 {
     std::string unitName = "Soldier";
     UnitType soldierType = UnitTest::CreateSoldierType();
+    Player player{0, 0, 1000};
 
     SUBCASE("Units are of a given type")
     {
-        auto soldier = soldierType.CreateUnit(0);
+        auto soldier = soldierType.CreateUnit(player);
         CHECK(soldier->GetName() == unitName);
     }
 }
@@ -27,7 +29,8 @@ TEST_CASE("Units have some properties")
 TEST_CASE("Unit movement test")
 {
     UnitType soldierType = UnitTest::CreateSoldierType();
-    auto soldier = soldierType.CreateUnit(0);
+    Player player{0, 0, 1000};
+    auto soldier = soldierType.CreateUnit(player);
 
     SUBCASE("Unit::Move and Unit::GetCurrentGas")
     {
@@ -48,9 +51,10 @@ TEST_CASE("Unit attack tests")
     UnitType soldierType = UnitTest::CreateSoldierType();
     UnitType mechType = UnitTest::CreateMechType();
     UnitType fighterType = UnitTest::CreateFighter();
-    auto soldier = soldierType.CreateUnit(0);
-    auto mech = mechType.CreateUnit(0);
-    auto fighter = fighterType.CreateUnit(0);
+    Player player{0, 0, 1000};
+    auto soldier = soldierType.CreateUnit(player);
+    auto mech = mechType.CreateUnit(player);
+    auto fighter = fighterType.CreateUnit(player);
 
     uint mainWeapon = 0;
     uint secondWeapon = 1;
@@ -133,7 +137,8 @@ TEST_CASE("Unit attack tests")
 TEST_CASE("Unit defense tests")
 {
     UnitType soldierType = UnitTest::CreateSoldierType();
-    auto soldier = soldierType.CreateUnit(0);
+    Player player{0, 0, 1000};
+    auto soldier = soldierType.CreateUnit(player);
 
     SUBCASE("Unit damage taken test")
     {

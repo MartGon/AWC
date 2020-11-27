@@ -9,6 +9,7 @@ class Map;
 class MovementDescType;
 class MovementDesc;
 struct Range;
+class Player;
 class Tile;
 class TileGraph;
 class TileNode;

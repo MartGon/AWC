@@ -5,6 +5,7 @@
 #include <AWC/TileType.h>
 #include <AWC/UnitType.h>
 #include <AWC/Command.h>
+#include <AWC/Player.h>
 
 #include <GameTest.h>
 #include <UnitTest.h>
@@ -80,8 +81,10 @@ TEST_CASE("Game State")
         auto soldierType = UnitTest::CreateSoldierType();
         TileType grassType{0, "Grass"}; 
 
-        auto soldierOne = soldierType.CreateUnit(0);
-        auto soldierTwo = soldierType.CreateUnit(1);
+        Player player{0, 0, 1000};
+        Player playerTwo{1, 1, 1000};
+        auto soldierOne = soldierType.CreateUnit(player);
+        auto soldierTwo = soldierType.CreateUnit(playerTwo);
         
         auto& map = game.GetMap(0);
 

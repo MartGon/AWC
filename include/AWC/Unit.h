@@ -12,11 +12,11 @@ class Unit
 friend class UnitType;
 
 public:
-    Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, uint ownerId);
+    Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& ownerId);
 
     const std::string GetName() const;
     const uint GetId() const;
-    const uint GetOwnerId() const;
+    const Player& GetOwner() const;
 
     // Misc
     // TODO: Future release. Needs WeaponType and MovementType interface implementation.
@@ -94,7 +94,7 @@ private:
     // State
     float health = 100;
 
-    const uint ownerId_;
+    Player& owner_;
 
     const UnitType& unitType_;
     const MovementDescPtr moveDesc_;

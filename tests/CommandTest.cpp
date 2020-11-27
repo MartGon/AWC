@@ -30,11 +30,13 @@ TEST_CASE("MoveCommands")
     
     // Player
     Player player{0, 0, 100};
+    Player enemy{1, 1, 1000};
     game.AddPlayer(player);
+    game.AddPlayer(enemy);
 
     UnitType soldierType = UnitTest::CreateSoldierType();
-    auto soldier = soldierType.CreateUnit(0);
-    auto enemySoldier = soldierType.CreateUnit(1);
+    auto soldier = soldierType.CreateUnit(game.GetPlayer(0));
+    auto enemySoldier = soldierType.CreateUnit(game.GetPlayer(1));
     map.AddUnit(0, 0, soldier);
     map.AddUnit({2, 2}, enemySoldier);
 
@@ -98,10 +100,10 @@ TEST_CASE("AttackCommands")
     game.AddPlayer(playerTwo);
 
     UnitType soldierType = UnitTest::CreateSoldierType();
-    auto soldierOne = soldierType.CreateUnit(0);
-    auto friendlySoldier = soldierType.CreateUnit(0);
-    auto soldierTwo = soldierType.CreateUnit(1);
-    auto soldierThree = soldierType.CreateUnit(1);
+    auto soldierOne = soldierType.CreateUnit(game.GetPlayer(0));
+    auto friendlySoldier = soldierType.CreateUnit(game.GetPlayer(0));
+    auto soldierTwo = soldierType.CreateUnit(game.GetPlayer(1));
+    auto soldierThree = soldierType.CreateUnit(game.GetPlayer(1));
 
     map.AddUnit(0, 0, soldierOne);
     map.AddUnit(0, 1, friendlySoldier);
