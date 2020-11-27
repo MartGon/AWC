@@ -15,6 +15,7 @@ public:
     TilePatternConstraints(CostTableIPtr tileCostTable, CostTableIPtr unitCosttable, Range range);
     
     unsigned int GetTileCost(unsigned int id) const;
+    unsigned int GetUnitCost(unsigned int id) const;
 
     Range range;
 private:

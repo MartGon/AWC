@@ -21,3 +21,8 @@ unsigned int TilePatternConstraints::GetTileCost(unsigned int id) const
 {
     return tileCostTable->GetCost(id);
 }
+
+unsigned int TilePatternConstraints::GetUnitCost(unsigned int id) const
+{
+    return unitCostTable->GetCost(id);
+}

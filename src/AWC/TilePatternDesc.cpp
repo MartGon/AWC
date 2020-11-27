@@ -242,5 +242,18 @@ unsigned int TilePatternDesc::GetTileCost(const Map& map, const TilePatternConst
     auto tile = map.GetTile(pos);
     auto cost = tpc.GetTileCost(tile->GetId());
 
+    
+    if(auto unit = map.GetUnit(pos))
+    {
+        auto extraCost = tpc.GetUnitCost(unit->GetId());
+        const uint maxCost = std::numeric_limits<unsigned int>::max();
+
+        // Prevent overflow
+        if(cost <= maxCost - extraCost)
+            cost = cost + extraCost;
+        else
+            cost = maxCost;
+    }
+
     return cost;
 }
