@@ -64,7 +64,7 @@ TEST_CASE("TilePattern Composition Union test")
     std::shared_ptr<CostTable> unitCostTable{new CostTable};
 
     // TilePatternConstraints
-    TilePatternConstraints tpc{tileCostTable, unitCostTable, 10};
+    TilePatternConstraints tpc{tileCostTable, unitCostTable, 0, 10};
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
@@ -157,7 +157,7 @@ TEST_CASE("TilePattern Composition Diff test")
     std::shared_ptr<CostTable> unitCostTable{new CostTable};
 
     // TilePatternConstraints
-    TilePatternConstraints tpc{tileCostTable, unitCostTable, 2};
+    TilePatternConstraints tpc{tileCostTable, unitCostTable, 0, 2};
 
     SUBCASE("Check CalculateTilePattern with composition")
     {
@@ -250,7 +250,7 @@ TEST_CASE("TilePattern Composition Intersect test")
     std::shared_ptr<CostTable> unitCostTable{new CostTable};
 
     // TilePatternConstraints
-    TilePatternConstraints tpc{tileCostTable, unitCostTable, 2};
+    TilePatternConstraints tpc{tileCostTable, unitCostTable, 0, 2};
 
     SUBCASE("Check CalculateTilePattern with composition")
     {

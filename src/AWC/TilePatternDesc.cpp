@@ -178,8 +178,8 @@ TilePatternIPtr TilePatternDesc::DoCalculateTilePattern(const Map& map, Vector2 
             auto sharedNei = nei.lock();
 
             // Check if accumulated cost to this neighbour is lower than previous
-            int neiCost = GetTileCost(map, constraints, sharedNei->pos);
-            int calculatedCost = node->cost + neiCost;
+            uint neiCost = GetTileCost(map, constraints, sharedNei->pos);
+            uint calculatedCost = PrimitiveUtils::NoOverflowSum(node->cost, neiCost);
             if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.range.maxRange)
             {
                 // Push it to queue if that's the case
@@ -241,18 +241,11 @@ unsigned int TilePatternDesc::GetTileCost(const Map& map, const TilePatternConst
 {
     auto tile = map.GetTile(pos);
     auto cost = tpc.GetTileCost(tile->GetId());
-
-    
+  
     if(auto unit = map.GetUnit(pos))
-    {
+    {   
         auto extraCost = tpc.GetUnitCost(unit->GetId());
-        const uint maxCost = std::numeric_limits<unsigned int>::max();
-
-        // Prevent overflow
-        if(cost <= maxCost - extraCost)
-            cost = cost + extraCost;
-        else
-            cost = maxCost;
+        cost = PrimitiveUtils::NoOverflowSum(cost, extraCost);
     }
 
     return cost;

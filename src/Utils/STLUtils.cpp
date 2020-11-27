@@ -22,3 +22,9 @@ std::vector<std::string> StringUtils::Split(const std::string& string, char deli
 
     return items;
 }
+
+unsigned int PrimitiveUtils::NoOverflowSum(unsigned int a, unsigned int b)
+{   
+    unsigned int max = std::numeric_limits<unsigned int>::max();
+    return a <= max - b ? a + b : max;
+}

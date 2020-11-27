@@ -37,7 +37,9 @@ TEST_CASE("MoveCommands")
     UnitType soldierType = UnitTest::CreateSoldierType();
     auto soldier = soldierType.CreateUnit(game.GetPlayer(0));
     auto enemySoldier = soldierType.CreateUnit(game.GetPlayer(1));
+    auto enemySoldier2 = soldierType.CreateUnit(game.GetPlayer(1));
     map.AddUnit(0, 0, soldier);
+    map.AddUnit({0, 1}, enemySoldier2);
     map.AddUnit({2, 2}, enemySoldier);
 
     // Add map to game
@@ -52,6 +54,7 @@ TEST_CASE("MoveCommands")
         CommandPtr noUnit{new MoveCommand{0, {1, 1}, {1, 2}}};
         CommandPtr tooFar{new MoveCommand{0, {0, 0}, {3, 3}}};
         CommandPtr notMyUnit{new MoveCommand{0, {2, 2}, {2, 3}}};
+        CommandPtr alreadyAUnit{new MoveCommand{0, {0, 0}, {0, 1}}};
 
         CHECK(validMoveCommand->CanBeExecuted(game, 0) == true);
         
@@ -60,6 +63,11 @@ TEST_CASE("MoveCommands")
         CHECK(noUnit->CanBeExecuted(game, 0) == false);
         CHECK(tooFar->CanBeExecuted(game, 0) == false);
         CHECK(notMyUnit->CanBeExecuted(game, 0) == false);
+        CHECK(alreadyAUnit->CanBeExecuted(game, 0) == false);
+
+        // Enemy soldier is on the way
+        CommandPtr enemyOnTheWay{new MoveCommand{0, {0, 0}, {0, 2}}};
+        CHECK(enemyOnTheWay->CanBeExecuted(game, 0) == false); 
     }
     SUBCASE("Valid commands can be executed and yield correct results")
     {
@@ -122,7 +130,7 @@ TEST_CASE("AttackCommands")
         CommandPtr noUnit{ new AttackCommand(0, Vector2{1, 1}, Vector2{1, 0}, 0)}; // No unit there
         CommandPtr tooFar{new AttackCommand(0, Vector2{0, 0}, Vector2{9, 9}, 0)}; // Unit out of range
         CommandPtr notMyUnit{ new AttackCommand(0, Vector2{1, 0}, Vector2{9, 9}, 0)}; // Not my unit
-        CommandPtr notAnEnemy{ new AttackCommand{0,{0, 0}, {0, 1}}};
+        CommandPtr notAnEnemy{ new AttackCommand{0, {0, 0}, {0, 1}}};
 
         CHECK(validAttackCommand->CanBeExecuted(game, 0) == true);
         CHECK(outOfBounds->CanBeExecuted(game, 0) == false);

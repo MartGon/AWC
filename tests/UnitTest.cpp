@@ -172,7 +172,7 @@ UnitType UnitTest::CreateSoldierType()
 
     // CostTables
     std::shared_ptr<CostTable> unitCostTable{new CostTable};
-    unitCostTable->SetCost(0, 0);
+    unitCostTable->SetCost(id, std::numeric_limits<uint>::max());
 
     CostTablePtr tileCostTable{new CostTable};
     uint grassId = 0;

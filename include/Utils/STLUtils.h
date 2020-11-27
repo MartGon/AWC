@@ -85,3 +85,8 @@ namespace UnorderedMapUtils
         return map.find(key) != map.end();
     }
 }
+
+namespace PrimitiveUtils
+{
+    unsigned int NoOverflowSum(unsigned int a, unsigned int b);
+}

@@ -12,6 +12,7 @@
 #include <AWC/TilePatternDesc.h>
 #include <AWC/TilePattern.h>
 #include <AWC/CostTable.h>
+#include <AWC/Player.h>
 
 #include <AWC/AWCException.h>
 
@@ -182,8 +183,9 @@ TilePatternConstraints Unit::GetMoveConstraints() const
     auto tileCost = moveDesc_->GetTileCostTable();
     auto unitCost = moveDesc_->GetUnitCostTable();
     auto range = moveDesc_->GetRange();
+    auto teamId = owner_.GetTeamId();
 
-    TilePatternConstraints tpc{tileCost, unitCost, range};
+    TilePatternConstraints tpc{tileCost, unitCost, teamId, range};
     return tpc;
 }
 
@@ -198,8 +200,9 @@ TilePatternConstraints Unit::GetAttackConstraints(unsigned int weaponId) const
 
     // Range could be affected by mods;
     auto range = weapon->GetAttackRange();
+    auto teamId = owner_.GetTeamId();
 
-    return TilePatternConstraints{fixedCost, unitFixedCost, range};
+    return TilePatternConstraints{fixedCost, unitFixedCost, teamId, range};
 }
 
 bool Unit::IsWeaponIdValid(uint weaponId)

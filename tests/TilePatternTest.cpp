@@ -65,7 +65,7 @@ TEST_CASE("TilePattern pathfinding test")
     std::shared_ptr<CostTable> unitCostTable{new CostTable};
 
     // TilePatternConstraints
-    TilePatternConstraints tpc{tileCostTable, unitCostTable, 4};
+    TilePatternConstraints tpc{tileCostTable, unitCostTable, 0, 4};
 
     SUBCASE("Check CalculateTilePattern")
     {
