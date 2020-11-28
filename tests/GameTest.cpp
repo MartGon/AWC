@@ -109,6 +109,13 @@ TEST_CASE("Game State")
 
         auto enemySoldier = map.GetUnit({1, 1});
         CHECK(enemySoldier->GetHealth() < 100);
+
+        // Cannot attack again until next player turn
+        CHECK(game.CanExecuteCommand(attackCommand) == false);
+        
+        game.PassTurn();
+        game.PassTurn();
+        CHECK(game.CanExecuteCommand(attackCommand) == true);
     }
 }
 

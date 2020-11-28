@@ -29,6 +29,11 @@ int Map::GetHeight() const
     return y_;
 }
 
+Vector2 Map::GetSize() const
+{
+    return Vector2{x_, y_};
+}
+
 void Map::AddUnit(int x, int y, UnitPtr unit)
 {
     if(IsPositionFree(x, y))

@@ -7,6 +7,13 @@
 
 class UnitType;
 
+enum UnitFlags : uint
+{
+    NONE        = 0x0,
+    MOVED       = 0x1,
+    ATTACKED    = 0x2
+};
+
 class Unit
 {
 friend class UnitType;
@@ -32,7 +39,10 @@ public:
     void Move(unsigned int moveCost);
 
     // Returns how much gas this Unit has left
-    uint GetCurrentGas();
+    uint GetCurrentGas() const;
+
+    // Returns whether this unit can move this turn
+    bool CanMove() const;
 
     // Attack
 
@@ -40,23 +50,26 @@ public:
     // Returns information about the attacks this unit can perform with a given weapon
     UnitAttack CalculateAttack(unsigned int weaponId, const Map& map, Vector2 origin);
 
+    // Returns whether this unit can attack this turn
+    bool CanAttack() const;
+
     // Can this unit attack given unit? Takes currentAmmo into account
-    bool CanAttack(UnitPtr unit);
+    bool CanAttack(UnitPtr unit) const;
 
     // Can this unit attack a given unit with a specific weapon? Takes current ammo into account
-    bool CanAttackUnitWith(UnitPtr unit, uint weaponId);
+    bool CanAttackUnitWith(UnitPtr unit, uint weaponId) const;
 
     // How many weapons this unit has?
-    uint GetWeaponCount();
+    uint GetWeaponCount() const;
 
     // How much damage the weapon of this unit deals to a given unit. Takes into account dmg mods but ignores defense mods.
-    float GetDmgToUnit(unsigned int weaponId, UnitPtr unit);
+    float GetDmgToUnit(unsigned int weaponId, UnitPtr unit) const;
 
     // Uses weapon with given id, consuming ammo.
     void UseWeapon(unsigned int weaponId);
 
     // Returns how much ammo a given weapon has left
-    uint GetWeaponAmmo(unsigned int weaponId);
+    uint GetWeaponAmmo(unsigned int weaponId) const;
 
     // Defense
 
@@ -75,6 +88,11 @@ public:
     // Returns whether this unit is dead (health <= 0)
     bool IsDead();
 
+    // State
+
+    // Callback to be called on pass turn
+    void OnPassTurn(Turn& turn);
+
 private:
 
     // Movement
@@ -84,18 +102,29 @@ private:
     // Attack
     // TODO: This should become public once CalculateAttack does
     TilePatternConstraints GetAttackConstraints(unsigned int weaponId) const;
-    bool IsWeaponIdValid(uint weaponId);
+    bool IsWeaponIdValid(uint weaponId) const;
+
+    // State
+
+    // Sets a UnitFlag
+    void SetFlag(UnitFlags flag);
+
+    // Clears a UnitFlag
+    void RemoveFlag(UnitFlags flag);
+
+    // Checks a UnitFlag
+    bool HasFlag(UnitFlags flag) const;
 
     // Utils
-    void ThrowInvalidWeaponIdException(uint weaponId);
+    void ThrowInvalidWeaponIdException(uint weaponId) const;
 
     // TODO: Add GUID.
 
     // State
     float health = 100;
+    uint flags;
 
-    Player& owner_;
-
+    const Player& owner_;
     const UnitType& unitType_;
     const MovementDescPtr moveDesc_;
     const std::vector<WeaponPtr> weapons_;

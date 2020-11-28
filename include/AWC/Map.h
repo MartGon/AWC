@@ -18,6 +18,7 @@ public:
 
     int GetWidth() const;
     int GetHeight() const;
+    Vector2 GetSize() const;
 
     void AddUnit(int x, int y, UnitPtr unit);
     void AddUnit(Vector2 pos, UnitPtr unit);

@@ -13,10 +13,12 @@
 #include <AWC/TilePattern.h>
 #include <AWC/CostTable.h>
 #include <AWC/Player.h>
+#include <AWC/Turn.h>
 
 #include <AWC/AWCException.h>
 
-Unit::Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& owner) : unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}, owner_{owner}
+Unit::Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& owner) 
+    : unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}, owner_{owner}, flags{UnitFlags::NONE}
 {
 
 }
@@ -50,11 +52,18 @@ void Unit::Move(unsigned int moveCost)
 {
     //TODO: Could check if that moveCost is possible. Check current gas and maxRange;
     moveDesc_->Move(moveCost);
+
+    SetFlag(UnitFlags::MOVED);
 }
 
-uint Unit::GetCurrentGas()
+uint Unit::GetCurrentGas() const
 {
     return moveDesc_->GetCurrentGas();
+}
+
+bool Unit::CanMove() const
+{
+    return !HasFlag(UnitFlags::MOVED);
 }
 
 // Attack
@@ -76,7 +85,12 @@ UnitAttack Unit::CalculateAttack(unsigned int weaponId, const Map& map, Vector2 
     return unitAttack;
 }
 
-bool Unit::CanAttack(UnitPtr unit)
+bool Unit::CanAttack() const
+{
+    return !HasFlag(UnitFlags::ATTACKED);
+}
+
+bool Unit::CanAttack(UnitPtr unit) const
 {
     for(uint weaponId = 0; weaponId < GetWeaponCount(); weaponId++)
         if(CanAttackUnitWith(unit, weaponId))
@@ -85,7 +99,7 @@ bool Unit::CanAttack(UnitPtr unit)
     return false;
 }
 
-bool Unit::CanAttackUnitWith(UnitPtr unit, uint weaponId)
+bool Unit::CanAttackUnitWith(UnitPtr unit, uint weaponId) const
 {
     bool canAttack = false;
     if(IsWeaponIdValid(weaponId))
@@ -99,12 +113,12 @@ bool Unit::CanAttackUnitWith(UnitPtr unit, uint weaponId)
     return canAttack;
 }
 
-uint Unit::GetWeaponCount()
+uint Unit::GetWeaponCount() const
 {
     return weapons_.size();
 }
 
-float Unit::GetDmgToUnit(unsigned int weaponId, UnitPtr unit)
+float Unit::GetDmgToUnit(unsigned int weaponId, UnitPtr unit) const
 {
     // This can be modified by dmg buffs
     float dmg = 0.0f;
@@ -126,12 +140,14 @@ void Unit::UseWeapon(unsigned int weaponId)
     {
         auto weapon = weapons_[weaponId];
         weapon->Use();
+
+        SetFlag(UnitFlags::ATTACKED);
     }
     else
         ThrowInvalidWeaponIdException(weaponId);
 }
 
-uint Unit::GetWeaponAmmo(unsigned int weaponId)
+uint Unit::GetWeaponAmmo(unsigned int weaponId) const
 {
     uint ammo = 0;
     if(IsWeaponIdValid(weaponId))
@@ -173,6 +189,17 @@ bool Unit::IsDead()
     return health <= 0;
 }
 
+// State
+
+void Unit::OnPassTurn(Turn& turn)
+{
+    if(turn.playerIndex == owner_.GetId())
+    {
+        RemoveFlag(UnitFlags::MOVED);
+        RemoveFlag(UnitFlags::ATTACKED);
+    }
+}
+
 // private
 
     // Movement
@@ -205,12 +232,30 @@ TilePatternConstraints Unit::GetAttackConstraints(unsigned int weaponId) const
     return TilePatternConstraints{fixedCost, unitFixedCost, teamId, range};
 }
 
-bool Unit::IsWeaponIdValid(uint weaponId)
+bool Unit::IsWeaponIdValid(uint weaponId) const
 {
     return weaponId < weapons_.size();
 }
 
-void Unit::ThrowInvalidWeaponIdException(uint weaponId)
+    // State
+
+void Unit::SetFlag(UnitFlags flag)
+{
+    flags |= flag;
+}
+
+void Unit::RemoveFlag(UnitFlags flag)
+{
+    flags = flags & ~flag;
+}
+
+bool Unit::HasFlag(UnitFlags flag) const
+{
+    return flags & flag;
+}
+
+
+void Unit::ThrowInvalidWeaponIdException(uint weaponId) const
 {
     throw std::out_of_range{"Invalid weaponId: " + std::to_string(weaponId)};
 }

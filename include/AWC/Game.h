@@ -36,9 +36,12 @@ public:
 
 private:
     
+    // Events
+    void NotifyPassTurn(Turn& turn);
+
+    // Index checks
     bool IsPlayerIndexValid(uint playerIndex) const;
     bool IsMapIndexValid(uint mapIndex) const;
-
     void CheckPlayerIndex(uint playerIndex) const;
     void CheckMapIndex(uint mapIndex) const;
 

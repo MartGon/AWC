@@ -75,16 +75,21 @@ TEST_CASE("MoveCommands")
         validMoveCommand->Execute(game, 0);
 
         auto& gameMap  = game.GetMap(0);
-        // Unit should now be at (1, 0)
-        auto unit = gameMap.GetUnit(1, 0);
-        auto currentGas = unit->GetCurrentGas();
 
         // No unit should be in previous pos
         auto noUnit = gameMap.GetUnit(0, 0);
 
+        // Unit should now be at (1, 0)
+        auto unit = gameMap.GetUnit(1, 0);
+        auto currentGas = unit->GetCurrentGas();
+
         CHECK(unit.get() == soldier.get());
         CHECK(noUnit.get() == nullptr);
         CHECK(currentGas < startingGas);
+
+        // Cannot move again this turn
+        CommandPtr moveAgain{ new MoveCommand{0, {1, 0}, {0, 0}}};
+        CHECK(moveAgain->CanBeExecuted(game, 0) == false);
     }
 }
 
@@ -149,5 +154,8 @@ TEST_CASE("AttackCommands")
         auto unit = gameMap.GetUnit(1, 0);
 
         CHECK(unit->GetHealth() < 100);
+
+        // Cannot attack again this turn
+        CHECK(validAttackCommand->CanBeExecuted(game, 0) == false);
     }
 }

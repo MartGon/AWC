@@ -71,7 +71,52 @@ void Game::ExecuteCommand(CommandPtr command)
     command->Execute(*this, currentTurn.playerIndex);
 }
 
+// State
+
+void Game::Start()
+{
+    currentTurn = Turn(0);
+}
+
+// Turn history
+
+const Turn& Game::GetCurrentTurn() const
+{
+    return currentTurn;
+}
+
+void Game::PassTurn()
+{
+    // Increase turn
+    auto lastPlayer = currentTurn.playerIndex;
+    auto nextPlayer = (lastPlayer + 1) % players_.size();
+    currentTurn = Turn(nextPlayer);
+
+    // TODO: This is an example of possible event on an event system
+    NotifyPassTurn(currentTurn);
+}
+
 // Private
+
+    // Events
+
+void Game::NotifyPassTurn(Turn &turn)
+{
+    for(auto map : maps_)
+    {
+        Vector2 mapSize = map.GetSize();
+        for(int x = 0; x < mapSize.x; x++)
+        {
+            for(int y = 0; y < mapSize.y; y++)
+            {
+                if(auto unit = map.GetUnit(x, y))
+                    unit->OnPassTurn(turn);
+            }
+        }
+    }
+}
+
+    // Index checks
 
 bool Game::IsPlayerIndexValid(uint playerIndex) const
 {
@@ -93,25 +138,4 @@ void Game::CheckMapIndex(uint mapIndex) const
 {
     if(!IsMapIndexValid(mapIndex))
         throw std::out_of_range("Map index out of range:" + std::to_string(mapIndex));
-}
-
-// State
-
-void Game::Start()
-{
-    currentTurn = Turn(0);
-}
-
-// Turn history
-
-const Turn& Game::GetCurrentTurn() const
-{
-    return currentTurn;
-}
-
-void Game::PassTurn()
-{
-    auto lastPlayer = currentTurn.playerIndex;
-    auto nextPlayer = (lastPlayer + 1) % players_.size();
-    currentTurn = Turn(nextPlayer);
 }

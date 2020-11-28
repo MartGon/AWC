@@ -37,10 +37,14 @@ TEST_CASE("Unit movement test")
         uint cost = 2;
         uint soldierBaseGas = 99;
         uint startingGas = soldier->GetCurrentGas();
+
+        CHECK(soldier->CanMove() == true);
+
         soldier->Move(cost);
 
         CHECK(startingGas == soldierBaseGas);
         CHECK(soldier->GetCurrentGas() == soldierBaseGas - cost);
+        CHECK(soldier->CanMove() == false);
     }
 }
 
@@ -129,6 +133,10 @@ TEST_CASE("Unit attack tests")
         CHECK(mech->GetWeaponAmmo(mainWeapon) == 98);
         CHECK(fighter->GetWeaponAmmo(mainWeapon) == 4);
         CHECK(fighter->GetWeaponAmmo(secondWeapon) == 98);
+
+        CHECK(soldier->CanAttack() == false);
+        CHECK(mech->CanAttack() == false);
+        CHECK(fighter->CanAttack() == false);
     }
 }
 

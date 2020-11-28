@@ -53,11 +53,14 @@ bool MoveCommand::CanBeExecuted(Game& game, uint playerIndex)
     {
         if(auto unit = map.GetUnit(origin_))
         {
-            auto commandAuthor = game.GetPlayer(playerIndex);
-            if(unit->GetOwner().GetId() == commandAuthor.GetId())
+            if(unit->CanMove())
             {
-                auto unitMovement = unit->CalculateMovement(map, origin_);
-                canBeExecuted = unitMovement.CanMove(dest_);
+                auto commandAuthor = game.GetPlayer(playerIndex);
+                if(unit->GetOwner().GetId() == commandAuthor.GetId())
+                {
+                    auto unitMovement = unit->CalculateMovement(map, origin_);
+                    canBeExecuted = unitMovement.CanMove(dest_);
+                }
             }
         }
     }
@@ -103,20 +106,23 @@ bool AttackCommand::CanBeExecuted(Game& game, uint playerIndex)
     {
         if(auto sourceUnit = map.GetUnit(unitIndex_))
         {
-            auto commandAuthor = game.GetPlayer(playerIndex);
-            if(sourceUnit->GetOwner().GetId() == commandAuthor.GetId())
+            if(sourceUnit->CanAttack())
             {
-                auto unitAttack = sourceUnit->CalculateAttack(weaponIndex_, map, unitIndex_);
-                if(unitAttack.CanAttack(targetPos_))
+                auto commandAuthor = game.GetPlayer(playerIndex);
+                if(sourceUnit->GetOwner().GetId() == commandAuthor.GetId())
                 {
-                    if(auto targetUnit = map.GetUnit(targetPos_))
+                    auto unitAttack = sourceUnit->CalculateAttack(weaponIndex_, map, unitIndex_);
+                    if(unitAttack.CanAttack(targetPos_))
                     {
-                        // Team should be different
-                        auto owner = targetUnit->GetOwner();
-                        canBeExecuted = commandAuthor.GetTeamId() != owner.GetTeamId();
+                        if(auto targetUnit = map.GetUnit(targetPos_))
+                        {
+                            // Team should be different
+                            auto owner = targetUnit->GetOwner();
+                            canBeExecuted = commandAuthor.GetTeamId() != owner.GetTeamId();
+                        }
+                        else
+                            canBeExecuted = true;
                     }
-                    else
-                        canBeExecuted = true;
                 }
             }
         }
