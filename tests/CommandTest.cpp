@@ -115,11 +115,13 @@ TEST_CASE("AttackCommands")
     UnitType soldierType = UnitTest::CreateSoldierType();
     auto soldierOne = soldierType.CreateUnit(game.GetPlayer(0));
     auto friendlySoldier = soldierType.CreateUnit(game.GetPlayer(0));
+    auto friendlySoldier2 = soldierType.CreateUnit(game.GetPlayer(0));
     auto soldierTwo = soldierType.CreateUnit(game.GetPlayer(1));
     auto soldierThree = soldierType.CreateUnit(game.GetPlayer(1));
 
     map.AddUnit(0, 0, soldierOne);
     map.AddUnit(0, 1, friendlySoldier);
+    map.AddUnit(1, 1, friendlySoldier2);
     map.AddUnit(1, 0, soldierTwo);
     map.AddUnit(9, 9, soldierThree);
 
@@ -127,17 +129,19 @@ TEST_CASE("AttackCommands")
     game.AddMap(map);
 
     CommandPtr validAttackCommand{new AttackCommand(0, Vector2{0, 0}, Vector2{1, 0}, 0)};
+    CommandPtr friendlyValidAttack{new AttackCommand{0, Vector2{1, 1}, Vector2{1, 0}, 0}};
 
     SUBCASE("Some of them are valid or not")
     {
         CommandPtr outOfBounds{new AttackCommand(0, Vector2{-1, -1}, Vector2{1, 0}, 0)}; // Invalid map origin index
         CommandPtr outOfBounds2{new AttackCommand(0, Vector2{0, 0}, Vector2{11, 11}, 0)}; // Invalid map target index
-        CommandPtr noUnit{ new AttackCommand(0, Vector2{1, 1}, Vector2{1, 0}, 0)}; // No unit there
+        CommandPtr noUnit{ new AttackCommand(0, Vector2{2, 2}, Vector2{1, 0}, 0)}; // No unit there
         CommandPtr tooFar{new AttackCommand(0, Vector2{0, 0}, Vector2{9, 9}, 0)}; // Unit out of range
         CommandPtr notMyUnit{ new AttackCommand(0, Vector2{1, 0}, Vector2{9, 9}, 0)}; // Not my unit
         CommandPtr notAnEnemy{ new AttackCommand{0, {0, 0}, {0, 1}}};
 
         CHECK(validAttackCommand->CanBeExecuted(game, 0) == true);
+        CHECK(friendlyValidAttack->CanBeExecuted(game, 0) == true);
         CHECK(outOfBounds->CanBeExecuted(game, 0) == false);
         CHECK(outOfBounds2->CanBeExecuted(game, 0) == false);
         CHECK(tooFar->CanBeExecuted(game, 0) == false);
@@ -151,11 +155,19 @@ TEST_CASE("AttackCommands")
         auto& gameMap  = game.GetMap(0);
 
         // Unit at (1, 0) should be damaged
-        auto unit = gameMap.GetUnit(1, 0);
+        auto victim = gameMap.GetUnit(1, 0);
 
-        CHECK(unit->GetHealth() < 100);
+        CHECK(victim->GetHealth() < 100);
 
         // Cannot attack again this turn
         CHECK(validAttackCommand->CanBeExecuted(game, 0) == false);
+
+        // Other soldier can still attack
+        CHECK(friendlyValidAttack->CanBeExecuted(game, 0) == true);
+        friendlyValidAttack->Execute(game, 0);
+
+        // Enemy is now dead
+        CHECK(victim->IsDead() == true);
+        CHECK(gameMap.GetUnit(1, 0).get() == nullptr);
     }
 }

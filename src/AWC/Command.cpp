@@ -87,6 +87,10 @@ void AttackCommand::DoExecute(Game& game, uint playerIndex)
     {   
         auto dmg = sourceUnit->GetDmgToUnit(weaponIndex_, targetUnit);
         targetUnit->TakeDamage(dmg);
+        
+        // Remove unit on death
+        if(targetUnit->IsDead())
+            map.RemoveUnit(targetPos_);
     }
 
     // TODO: Tile->OnAttack(): Tile triggers effect when attacked
