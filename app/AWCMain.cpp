@@ -97,8 +97,10 @@ Please, type a command.
     std::shared_ptr<ConsoleCommand> moveComm{new UnitMoveCommand(game)};
     std::shared_ptr<ConsoleCommand> attackComm{new UnitAttackCommand(game)};
     std::shared_ptr<ConsoleCommand> reportComm{new UnitReportCommand(game)};
+    std::shared_ptr<ConsoleCommand> passComm{new PassTurnCommand{game}};
     console.AddCommand("print", printMapComm);
     console.AddCommand("print-map", printMapComm);
+    console.AddCommand("pass", passComm);
     console.AddCommand("exit", exitComm);
     console.AddCommand("move", moveComm);
     console.AddCommand("attack", attackComm);

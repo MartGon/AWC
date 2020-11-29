@@ -86,6 +86,19 @@ void PrintMapCommand::PrintPadding(uint length, char c)
         std::cout << c;
 }
 
+// Pass turn
+
+void PassTurnCommand::Execute(std::vector<std::string> args)
+{
+    auto turn = game_.GetCurrentTurn();
+    std::cout << "Player " << turn.playerIndex << " turn has passed\n";
+
+    game_.PassTurn();
+
+    auto nextTurn = game_.GetCurrentTurn();
+    std::cout << "Now it's Player " << nextTurn.playerIndex << " turn\n";
+}
+
 // Move Unit
 
 void UnitMoveCommand::Execute(std::vector<std::string> args)
@@ -134,8 +147,6 @@ void UnitAttackCommand::Execute(std::vector<std::string> args)
         CommandPtr attackComm{new AttackCommand{0, origin, dest}};
         if(game_.CanExecuteCommand(attackComm))
         {
-            game_.ExecuteCommand(attackComm);
-
             // Info
             auto& map = game_.GetMap(0);
             auto attacker = map.GetUnit(origin);
@@ -144,7 +155,11 @@ void UnitAttackCommand::Execute(std::vector<std::string> args)
             auto rawDmg = attacker->GetDmgToUnit(0, victim);
             auto realDmg = victim->GetDmgTaken(rawDmg);
 
+            game_.ExecuteCommand(attackComm);
+
             std::cout << attacker->GetName() << " attacks " << victim->GetName() << " dealing " << realDmg << " damage to it\n";
+            if(victim->IsDead())
+                std::cout << victim->GetName() << " was destroyed by " << attacker->GetName() << "'s attack\n";
         }
         else
             std::cout << "Sorry. AttackCommand could not be executed\n";

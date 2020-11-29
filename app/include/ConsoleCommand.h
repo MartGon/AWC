@@ -61,6 +61,14 @@ private:
     Padding padding_;
 };
 
+class PassTurnCommand : public GameCommand
+{
+public:
+    PassTurnCommand(Game& game) : GameCommand{game} {}
+
+    void Execute(std::vector<std::string> args) override;
+};
+
 class UnitMoveCommand : public GameCommand
 {
 public:
