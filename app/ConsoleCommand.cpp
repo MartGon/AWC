@@ -42,7 +42,7 @@ void PrintMapCommand::Execute(std::vector<std::string> args)
             if(unit)
             {
                 char c = unit->GetName()[0];
-                std::string color = i > 2 ? BLUE_FG : RED_FG;
+                std::string color = unit->GetOwner().GetId() == 1 ? BLUE_FG : RED_FG;
                 std::string str = color + std::string(1, c);
                 auto substr = charMatrix[i][j].substr(0, ESCAPE_SIZE);
                 charMatrix[i][j] = substr + str;
@@ -172,10 +172,14 @@ void UnitReportCommand::Execute(std::vector<std::string> args)
                 auto health = unit->GetHealth();
                 auto ammo = unit->GetWeaponAmmo(0);
                 auto gas = unit->GetCurrentGas();
+                auto canAttack = unit->CanAttack();
+                auto canMove = unit->CanMove();
 
                 std::cout << '\n';
                 std::cout << "Unit name: " << name << '\n';
                 std::cout << "Unit health: " << health << '\n';
+                std::cout << "Unit can attack: " << canAttack << '\n';
+                std::cout << "Unit can move: " << canMove << '\n';
                 std::cout << "Unit ammo: " << ammo << '\n';
                 std::cout << "Unit gas: " << gas << '\n';
                 std::cout << '\n';
@@ -184,7 +188,7 @@ void UnitReportCommand::Execute(std::vector<std::string> args)
                 std::cout << "Could not find Unit at " + origin << '\n';
         }
         else
-            std::cout << "Error: Invalid position\n";
+            std::cout << "Error: Invalid position: " + origin + "\n";
     }
     else
         std::cout << "Incorrect number of arguments for UnitReportCommand\n";

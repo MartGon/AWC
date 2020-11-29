@@ -174,7 +174,7 @@ void Unit::TakeRawDamage(float incomingDmg)
 
 void Unit::TakeDamage(float incomingRawDmg)
 {
-    // Uses defense mods to calculate final health reduction. C
+    // Uses defense mods to calculate final health reduction.
     float dmg = GetDmgTaken(incomingRawDmg);
     TakeRawDamage(dmg);
 }
