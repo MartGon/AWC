@@ -73,7 +73,7 @@ int main()
 
         // Blue units
     map.AddUnit({4, 0}, soldierType.CreateUnit(game.GetPlayer(1)));
-    map.AddUnit({4, 2}, soldierType.CreateUnit(game.GetPlayer(1)));
+    //map.AddUnit({4, 2}, soldierType.CreateUnit(game.GetPlayer(1)));
 
     // Set map
     game.AddMap(map);
@@ -104,7 +104,16 @@ int main()
     console.AddCommand("help", helpComm);
 
     while(console.IsOpen())
+    {
         console.Prompt();
+
+        if(game.IsOver())
+        {
+            std::cout << "Game is over!!!\n";
+            std::cout << "Team " << game.GetPlayer(0).GetTeamId() << " wins\n";
+            break;
+        }
+    }
 
     return 0;
 }

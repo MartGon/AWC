@@ -90,7 +90,13 @@ void AttackCommand::DoExecute(Game& game, uint playerIndex)
         
         // Remove unit on death
         if(targetUnit->IsDead())
+        {
             map.RemoveUnit(targetPos_);
+
+            auto owner = targetUnit->GetOwner();
+            if(game.HasPlayerLost(owner.GetId()))
+                game.OnPlayerLost(owner.GetId());
+        }
     }
 
     // TODO: Tile->OnAttack(): Tile triggers effect when attacked

@@ -29,6 +29,16 @@ public:
 
     // State
     void Start();
+    bool IsOver() const;
+
+    void OnPlayerLost(uint playerIndex);
+    bool HasPlayerLost(uint playerIndex) const;
+    bool HasPlayerBeenRouted(uint playerIndex) const;
+
+    // Queries
+    std::vector<UnitPtr> GetUnits(uint mapIndex = 0) const;
+    std::vector<UnitPtr> GetPlayerUnits(uint playerIndex, uint mapIndex = 0) const;
+    void EnumUnits(std::function<void(UnitPtr)> operation, uint mapIndex = 0) const;
 
     // Turn history
     const Turn& GetCurrentTurn() const;

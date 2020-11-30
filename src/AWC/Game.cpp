@@ -13,6 +13,11 @@ void Game::AddPlayer(Player player)
 void Game::RemovePlayer(uint playerIndex)
 {
     VectorUtils::RemoveByIndex(players_, playerIndex);
+
+    // TODO:  RemovePlayer Units;
+
+
+    // TODO: Reset Captured buildings
 }
 
 Player& Game::GetPlayer(uint playerIndex)
@@ -78,6 +83,86 @@ void Game::Start()
     currentTurn = Turn(0);
 }
 
+bool Game::IsOver() const
+{
+    // Game is over when only players of the same team are left
+    bool isNotOver = GetPlayerCount() > 1;
+    if(isNotOver)
+    {
+        uint firstTeam = players_[0].GetTeamId();
+
+        for(uint i = 1; i < GetPlayerCount() && isNotOver; i++)
+        {
+            isNotOver = players_.at(i).GetTeamId() != firstTeam;
+        }
+    }
+
+    return !isNotOver;
+}
+
+void Game::OnPlayerLost(uint playerIndex)
+{
+    RemovePlayer(playerIndex);
+}
+
+bool Game::HasPlayerLost(uint playerIndex) const
+{
+    return HasPlayerBeenRouted(playerIndex);
+}
+
+bool Game::HasPlayerBeenRouted(uint playerIndex) const
+{
+    uint units = 0;
+    for(uint i = 0; i < GetMapCount(); i++)
+        units += GetPlayerUnits(playerIndex, i).size();
+    
+    return units == 0;
+}
+
+// Queries
+
+std::vector<UnitPtr> Game::GetUnits(uint mapIndex) const
+{
+    std::vector<UnitPtr> units;
+    std::function<void(UnitPtr)> operation = [&units](UnitPtr unit)
+    {
+        units.push_back(unit);
+    };
+    EnumUnits(operation, mapIndex);
+
+    return units;
+}
+
+std::vector<UnitPtr> Game::GetPlayerUnits(uint playerIndex, uint mapIndex) const
+{
+    std::vector<UnitPtr> playerUnits;
+    std::function<void(UnitPtr)> operation = [&playerUnits, playerIndex](UnitPtr unit)
+    {
+        if(unit->GetOwner().GetId() == playerIndex)
+            playerUnits.push_back(unit);
+    };
+    EnumUnits(operation, mapIndex);
+
+    return playerUnits;
+}
+
+void Game::EnumUnits(std::function<void(UnitPtr)> operation, uint mapIndex) const
+{
+    if(operation)
+    {
+        auto map = maps_.at(mapIndex);
+        Vector2 mapSize = map.GetSize();
+        for(int x = 0; x < mapSize.x; x++)
+        {
+            for(int y = 0; y < mapSize.y; y++)
+            {
+                if(auto unit = map.GetUnit(x, y))
+                    operation(unit);
+            }
+        }
+    }
+}
+
 // Turn history
 
 const Turn& Game::GetCurrentTurn() const
@@ -102,18 +187,9 @@ void Game::PassTurn()
 
 void Game::NotifyPassTurn(Turn &turn)
 {
-    for(auto map : maps_)
-    {
-        Vector2 mapSize = map.GetSize();
-        for(int x = 0; x < mapSize.x; x++)
-        {
-            for(int y = 0; y < mapSize.y; y++)
-            {
-                if(auto unit = map.GetUnit(x, y))
-                    unit->OnPassTurn(turn);
-            }
-        }
-    }
+    auto units = GetUnits();
+    for(auto& unit : units)
+        unit->OnPassTurn(turn);
 }
 
     // Index checks

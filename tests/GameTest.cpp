@@ -113,9 +113,50 @@ TEST_CASE("Game State")
         // Cannot attack again until next player turn
         CHECK(game.CanExecuteCommand(attackCommand) == false);
         
+        // Back to player 0 turn
         game.PassTurn();
         game.PassTurn();
-        CHECK(game.CanExecuteCommand(attackCommand) == true);
+
+        // Kill the unit an win
+        CHECK(game.CanExecuteCommand(attackCommand, 0) == true);
+        attackCommand->Execute(game, 0);
+
+        CHECK(game.IsOver() == true);
+    }
+    SUBCASE("Game win state")
+    {
+        // Init game
+        auto soldierType = UnitTest::CreateSoldierType();
+        TileType grassType{0, "Grass"}; 
+
+        Player player{0, 0, 1000};
+        Player playerTwo{1, 1, 1000};
+        auto soldierOne = soldierType.CreateUnit(player);
+        auto soldierTwo = soldierType.CreateUnit(playerTwo);
+        
+        auto& map = game.GetMap(0);
+
+        map.AddUnit({0, 0}, soldierOne);
+        map.AddUnit({1, 1}, soldierTwo);
+
+        MapUtils::FillMap(map, grassType);
+
+        CHECK(game.HasPlayerLost(0) == false);
+        CHECK(game.HasPlayerBeenRouted(0) == false);
+        CHECK(game.HasPlayerLost(1) == false);
+        CHECK(game.HasPlayerBeenRouted(1) == false);
+        CHECK(game.IsOver() == false);
+
+        map.RemoveUnit({1, 1});
+
+        CHECK(game.HasPlayerLost(0) == false);
+        CHECK(game.HasPlayerBeenRouted(0) == false);
+        CHECK(game.HasPlayerLost(1) == true);
+        CHECK(game.HasPlayerBeenRouted(1) == true);
+
+        game.OnPlayerLost(1);
+
+        CHECK(game.IsOver() == true);
     }
 }
 
