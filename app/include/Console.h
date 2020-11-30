@@ -39,6 +39,10 @@ public:
     bool IsOpen();
     void Close();
 
+    void Help();
+
+    std::vector<std::string> GetAvailableCommands() const;
+
 private:
 
     CommandInfo ParseCommand(std::string line);

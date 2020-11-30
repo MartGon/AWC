@@ -4,11 +4,12 @@
 
 #include <AWC/Game.h>
 
-
 class ConsoleCommand
 {
 public:
     virtual ~ConsoleCommand() {};
+
+    virtual std::string GetHelpMessage() {};
 
     virtual void Execute(std::vector<std::string> args) = 0;
 };
@@ -22,6 +23,21 @@ public:
     }
 
     void Execute(std::vector<std::string> args) override;
+private:
+    Console& console_;
+};
+
+class HelpConsoleCommand : public ConsoleCommand
+{
+public:
+
+    HelpConsoleCommand(Console& console) : console_{console}
+    {
+
+    }
+
+    void Execute(std::vector<std::string> args) override;
+
 private:
     Console& console_;
 };

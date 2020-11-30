@@ -80,9 +80,22 @@ namespace StringUtils
 namespace UnorderedMapUtils
 {   
     template<typename Key, typename Value>
-    bool Contains(std::unordered_map<Key, Value> map, Key key)
+    bool Contains(const std::unordered_map<Key, Value>& map, Key key)
     {
         return map.find(key) != map.end();
+    }
+
+    template<typename Key, typename Value>
+    std::vector<Key> GetKeys(const std::unordered_map<Key, Value>& map)
+    {
+        std::vector<Key> keys;
+        auto size = map.size();
+        keys.reserve(size);
+
+        for(const auto& pair : map)
+            keys.push_back(pair.first);
+
+        return keys;
     }
 }
 

@@ -28,7 +28,7 @@ UnitType CreateSoldierType()
 
     // CostTables
     std::shared_ptr<CostTable> unitCostTable{new CostTable};
-    unitCostTable->SetCost(0, 0);
+    unitCostTable->SetCost(0, std::numeric_limits<uint>::max());
 
     CostTablePtr tileCostTable{new CostTable};
     uint grassId = 0;
@@ -46,8 +46,6 @@ UnitType CreateSoldierType()
 
     return soldierType;
 }
-
-
 
 int main()
 {
@@ -84,10 +82,7 @@ int main()
     Console console(game);
 
     // Prompt message
-    std::string promptMsg = R"(
-Welcome to AWC console.
-Please, type a command.
-)";
+    std::string promptMsg = "Please, type a command.\n";
     console.SetPromptMsg(promptMsg);
 
     // Commands
@@ -98,6 +93,7 @@ Please, type a command.
     std::shared_ptr<ConsoleCommand> attackComm{new UnitAttackCommand(game)};
     std::shared_ptr<ConsoleCommand> reportComm{new UnitReportCommand(game)};
     std::shared_ptr<ConsoleCommand> passComm{new PassTurnCommand{game}};
+    std::shared_ptr<ConsoleCommand> helpComm{new HelpConsoleCommand{console}};
     console.AddCommand("print", printMapComm);
     console.AddCommand("print-map", printMapComm);
     console.AddCommand("pass", passComm);
@@ -105,6 +101,7 @@ Please, type a command.
     console.AddCommand("move", moveComm);
     console.AddCommand("attack", attackComm);
     console.AddCommand("report", reportComm);
+    console.AddCommand("help", helpComm);
 
     while(console.IsOpen())
         console.Prompt();

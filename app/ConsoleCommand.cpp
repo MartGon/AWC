@@ -9,6 +9,13 @@ void ExitConsoleCommand::Execute(std::vector<std::string> args)
     console_.Close();
 }
 
+// Help
+
+void HelpConsoleCommand::Execute(std::vector<std::string> args)
+{
+    console_.Help();
+}
+
 // Print Map
 
 void PrintMapCommand::Execute(std::vector<std::string> args)

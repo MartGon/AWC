@@ -41,6 +41,23 @@ void Console::Close()
     open_ = false;
 }
 
+std::vector<std::string> Console::GetAvailableCommands() const
+{
+    return UnorderedMapUtils::GetKeys(commands_);
+}
+
+void Console::Help()
+{
+    auto commands = this->GetAvailableCommands();
+    std::cout << "Available commands are:\n";
+    std::cout << '\n';
+
+    for(const auto& command : commands)
+        std::cout << command << '\n';
+    
+    std::cout << '\n';
+}
+
 // Private
 
 CommandInfo Console::ParseCommand(std::string line)
@@ -61,5 +78,8 @@ void Console::ExecuteCommand(CommandInfo ci)
     if(UnorderedMapUtils::Contains(commands_, ci.commandRef))
         commands_[ci.commandRef]->Execute(ci.args);
     else
-        std::cout << "Sorry, command " << ci.commandRef << " does not exist";
+    {
+        std::cout << "Sorry, command " << ci.commandRef << " does not exist\n";
+        Help();
+    }
 }
