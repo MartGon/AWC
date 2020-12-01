@@ -1,5 +1,4 @@
 add_executable(AWCExecutable 
-
     AWCMain.cpp    
     Console.cpp
     ConsoleCommand.cpp

@@ -11,6 +11,7 @@ class MovementDesc;
 struct Range;
 class Player;
 class Tile;
+class TileType;
 class TileGraph;
 class TileNode;
 class TilePattern;

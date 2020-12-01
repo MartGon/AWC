@@ -1,4 +1,4 @@
-    #pragma once
+#pragma once
 #include <AWC/AWCfwd.h>
 #include <Utils/Vector2.h>
 

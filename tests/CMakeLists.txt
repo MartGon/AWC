@@ -1,5 +1,6 @@
 add_executable(AWCTest 
     AWCTest.cpp
+    AWCSerTest.cpp
     CommandTest.cpp
     CostTableTest.cpp
     GameTest.cpp
@@ -16,6 +17,8 @@ add_executable(AWCTest
 
 # target_compile_features(AWCTest PRIVATE cxx_std_20)
 target_include_directories(AWCTest PUBLIC ${DOCTEST_INCLUDE_DIR} ../include include)
-target_link_libraries(AWCTest AWCLibrary)
+target_link_libraries(AWCTest AWCLibrary AWCSer)
+
+add_compile_definitions(PROJECT_DIR="${CMAKE_SOURCE_DIR}")
 
 add_test(NAME BasicTest COMMAND AWCTest)
