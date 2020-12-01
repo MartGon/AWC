@@ -13,6 +13,7 @@ public:
     void AddPlayer(Player player);
     void RemovePlayer(uint playerIndex);
     Player& GetPlayer(uint playerIndex);
+    std::vector<std::reference_wrapper<Player>> GetPlayersByTeam(uint teamId);
     uint GetPlayerCount() const;
 
     // Maps
@@ -30,6 +31,8 @@ public:
     // State
     void Start();
     bool IsOver() const;
+
+    uint GetWinnerTeamId();
 
     void OnPlayerLost(uint playerIndex);
     bool HasPlayerLost(uint playerIndex) const;

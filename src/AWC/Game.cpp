@@ -26,6 +26,16 @@ Player& Game::GetPlayer(uint playerIndex)
     return players_.at(playerIndex);
 }
 
+std::vector<std::reference_wrapper<Player>> Game::GetPlayersByTeam(uint teamId)
+{
+    std::vector<std::reference_wrapper<Player>> teamPlayers;
+    for(auto& player : players_)
+        if(player.GetTeamId() == teamId)
+            teamPlayers.push_back(player);
+
+    return teamPlayers;
+}
+
 uint Game::GetPlayerCount() const
 {
     return players_.size();
@@ -100,6 +110,14 @@ bool Game::IsOver() const
     return !isNotOver;
 }
 
+uint Game::GetWinnerTeamId()
+{
+    if(IsOver() && GetPlayerCount() > 0)
+        return players_[0].GetTeamId();
+    else
+        throw AWCException("Either the game wasn't over or there are no players");
+}
+
 void Game::OnPlayerLost(uint playerIndex)
 {
     RemovePlayer(playerIndex);
@@ -112,6 +130,8 @@ bool Game::HasPlayerLost(uint playerIndex) const
 
 bool Game::HasPlayerBeenRouted(uint playerIndex) const
 {
+    CheckPlayerIndex(playerIndex);
+
     uint units = 0;
     for(uint i = 0; i < GetMapCount(); i++)
         units += GetPlayerUnits(playerIndex, i).size();

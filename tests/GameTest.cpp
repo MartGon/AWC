@@ -146,7 +146,9 @@ TEST_CASE("Game State")
         CHECK(game.HasPlayerLost(1) == false);
         CHECK(game.HasPlayerBeenRouted(1) == false);
         CHECK(game.IsOver() == false);
+        CHECK_THROWS_AS(game.GetWinnerTeamId(), const AWCException&);
 
+        // Remove last player two's unit
         map.RemoveUnit({1, 1});
 
         CHECK(game.HasPlayerLost(0) == false);
@@ -154,9 +156,17 @@ TEST_CASE("Game State")
         CHECK(game.HasPlayerLost(1) == true);
         CHECK(game.HasPlayerBeenRouted(1) == true);
 
+        // On Player lost event
         game.OnPlayerLost(1);
 
         CHECK(game.IsOver() == true);
+
+        uint winnerTeam = game.GetWinnerTeamId();
+        CHECK(winnerTeam == 0);
+        auto winnerPlayers = game.GetPlayersByTeam(winnerTeam);
+        CHECK(winnerPlayers.size() == 1);
+        CHECK(winnerPlayers[0].get().GetTeamId() == winnerTeam);
+        CHECK(winnerPlayers[0].get().GetId() == 0);
     }
 }
 
