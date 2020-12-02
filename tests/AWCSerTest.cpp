@@ -3,11 +3,12 @@
 #include <AWCSer/AWCSer.h>
 
 #include <AWC/TileType.h>
+#include <AWC/Tile.h>
 
 #include <fstream>
 #include <iostream>
 
-TEST_CASE("Serialization from string")
+TEST_CASE("Loading from string")
 {
     SUBCASE("TileType")
     {
@@ -17,11 +18,25 @@ TEST_CASE("Serialization from string")
         CHECK(tileType.GetId() == 0);
         CHECK(tileType.GetName() == "Grass");
     }
+    SUBCASE("Tile")
+    {
+        // Prepare repo
+        Repository<TileType> tileTypeRepo;
+        TileType tileType{0, "Grass"};
+        tileTypeRepo.Add(tileType.GetId(), tileType);
+
+        Json data{{"tileTypeId", 0}, {"guid", 0}};
+        TilePtr tile = AWCSer::LoadTile(data, tileTypeRepo);
+
+        CHECK(tile.get() != nullptr);
+        CHECK(tile->GetId() == 0);
+        CHECK(tile->GetName() == "Grass");
+    }
 }
 
 const std::string JSON_FILES_PATH = "/resources/AWCSer/";
 
-TEST_CASE("Serialization from file")
+TEST_CASE("Loading from file")
 {
     SUBCASE("TileType")
     {
