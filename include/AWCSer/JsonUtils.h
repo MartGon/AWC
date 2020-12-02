@@ -9,7 +9,9 @@ namespace JsonUtils
 	template <typename T>
 	static T GetValueUnsafe(const Json& jsonObj, const T& def)
 	{
-		static_assert(std::is_integral<T>::value || std::is_enum<T>::value || std::is_floating_point<T>::value || std::is_base_of<bool, T>::value || std::is_base_of<std::string, T>::value, "Template type was not valid");
+		static_assert(std::is_integral<T>::value || std::is_enum<T>::value || std::is_floating_point<T>::value || 
+					std::is_base_of<bool, T>::value || std::is_base_of<std::string, T>::value || 
+					std::is_same<Json::array_t, T>::value || std::is_same<Json, T>::value, "Template type was not valid");
 
 		if (jsonObj.is_number_integer())
 		{
@@ -58,6 +60,28 @@ namespace JsonUtils
 		if (jsonObj.is_boolean())
 		{
 			return jsonObj.get<bool>();
+		}
+
+		return def;
+	}
+
+	template<>
+	Json::array_t GetValueUnsafe<Json::array_t>(const Json& jsonObj, const Json::array_t& def)
+	{
+		if (jsonObj.is_array())
+		{
+			return jsonObj.get<Json::array_t>();
+		}
+
+		return def;
+	}
+
+	template<>
+	Json GetValueUnsafe<Json>(const Json& jsonObj, const Json& def)
+	{
+		if (jsonObj.is_object())
+		{
+			return jsonObj;
 		}
 
 		return def;
