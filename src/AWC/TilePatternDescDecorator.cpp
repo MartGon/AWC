@@ -11,19 +11,19 @@ TilePatternDescDecorator::TilePatternDescDecorator(TilePatternDescIPtr child) : 
 
 // TPD FixedRange
 
-TPDFixedRange::TPDFixedRange(TilePatternDescIPtr child, unsigned int maxRange, unsigned int minRange)
+TPDStaticRange::TPDStaticRange(TilePatternDescIPtr child, unsigned int maxRange, unsigned int minRange)
      : range_{maxRange, minRange}, TilePatternDescDecorator{child}
 {
 
 }
 
-TPDFixedRange::TPDFixedRange(TilePatternDescIPtr child, Range range)
+TPDStaticRange::TPDStaticRange(TilePatternDescIPtr child, Range range)
      : range_{range}, TilePatternDescDecorator{child}
 {
 
 }
 
-TilePatternIPtr TPDFixedRange::DoCalculateTilePattern(const Map& map, Vector2 origin, 
+TilePatternIPtr TPDStaticRange::DoCalculateTilePattern(const Map& map, Vector2 origin, 
     std::optional<Vector2> destination, const TilePatternConstraints& constraints)
 {
     TilePatternIPtr result;
@@ -40,13 +40,13 @@ TilePatternIPtr TPDFixedRange::DoCalculateTilePattern(const Map& map, Vector2 or
 
 // TPD FixedCost
 
-TPDFixedCost::TPDFixedCost(TilePatternDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable) 
+TPDStaticCost::TPDStaticCost(TilePatternDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable) 
     : tileCostTable_{tileCostTable}, unitCostTable_{unitCostTable_},  TilePatternDescDecorator{child}
 {
 
 }
 
-TilePatternIPtr TPDFixedCost::DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, 
+TilePatternIPtr TPDStaticCost::DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, 
     const TilePatternConstraints& constraints)
 {
     TilePatternIPtr result;

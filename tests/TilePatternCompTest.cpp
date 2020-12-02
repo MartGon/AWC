@@ -134,7 +134,7 @@ TEST_CASE("TilePattern Composition Diff test")
     Vector2 s = {0, -1};
     std::vector<Vector2> directions = {e, ne, se, w, nw, sw, n, s};
     auto mooreDesc = TilePatternDesc::Create(directions);
-    auto towRangeMooreDesc = std::make_shared<TPDFixedRange>(mooreDesc, 2);
+    auto towRangeMooreDesc = std::make_shared<TPDStaticRange>(mooreDesc, 2);
 
     // TilePatternDesc - One Range Diagonal
     std::vector<Vector2> dDirections = {ne, nw, se, sw};
@@ -145,7 +145,7 @@ TEST_CASE("TilePattern Composition Diff test")
         {sw, {sw}}
     };
     auto diagonalDesc = TilePatternDesc::CreateByLocked(dDirections, lockedDT);
-    auto oneDiagonalDesc = std::make_shared<TPDFixedRange>(diagonalDesc, 1, 1);
+    auto oneDiagonalDesc = std::make_shared<TPDStaticRange>(diagonalDesc, 1, 1);
 
     // TilePatternDescDiff
     auto tpdd = std::make_shared<TilePatternDescDiff>(towRangeMooreDesc, oneDiagonalDesc);
@@ -233,12 +233,12 @@ TEST_CASE("TilePattern Composition Intersect test")
     Vector2 s = {0, -1};
     std::vector<Vector2> directions = {e, ne, se, w, nw, sw, n, s};
     auto mooreDesc = TilePatternDesc::Create(directions);
-    auto oneRangeMoore = std::make_shared<TPDFixedRange>(mooreDesc, 1);
+    auto oneRangeMoore = std::make_shared<TPDStaticRange>(mooreDesc, 1);
 
     // TilePatternDesc - Manhattan
     std::vector<Vector2> dDirections = {e, w, s, n};
     auto manhattan = TilePatternDesc::Create(dDirections);
-    auto oneRangeManhattan = std::make_shared<TPDFixedRange>(manhattan, 1);
+    auto oneRangeManhattan = std::make_shared<TPDStaticRange>(manhattan, 1);
 
     // TilePatternDescDiff
     auto tpdd = std::make_shared<TilePatternDescIntersect>(oneRangeMoore, oneRangeManhattan);

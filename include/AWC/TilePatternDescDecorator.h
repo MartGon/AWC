@@ -16,11 +16,11 @@ protected:
     TilePatternDescIPtr child_;
 };
 
-class TPDFixedRange : public TilePatternDescDecorator
+class TPDStaticRange : public TilePatternDescDecorator
 {
 public:
-    TPDFixedRange(TilePatternDescIPtr child, unsigned int maxRange, unsigned int minRange = 0);
-    TPDFixedRange(TilePatternDescIPtr child, Range range);
+    TPDStaticRange(TilePatternDescIPtr child, unsigned int maxRange, unsigned int minRange = 0);
+    TPDStaticRange(TilePatternDescIPtr child, Range range);
 
 private:
     TilePatternIPtr DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, 
@@ -29,10 +29,10 @@ private:
     Range range_;
 };
 
-class TPDFixedCost : public TilePatternDescDecorator
+class TPDStaticCost : public TilePatternDescDecorator
 {
 public:
-    TPDFixedCost(TilePatternDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable);
+    TPDStaticCost(TilePatternDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable);
 
 private:
     TilePatternIPtr DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, 

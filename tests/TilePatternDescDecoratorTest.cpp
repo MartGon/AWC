@@ -49,7 +49,7 @@ TEST_CASE("TilePattern Fixed Range Decorator test")
 
     // Fixed Range TPD
     CostTableIPtr unitCostTable{new CostTable};
-    auto mooreDescFixedRange = std::make_shared<TPDFixedRange>(mooreDesc, 1, 0);
+    auto mooreDescFixedRange = std::make_shared<TPDStaticRange>(mooreDesc, 1, 0);
 
     // Normal TPC
     TilePatternConstraints constraints{tileCostTable, unitCostTable, 8, 0};
@@ -128,8 +128,8 @@ TEST_CASE("TilePattern Fixed Cost Decorator test")
 
     // Fixed Range TPD
     CostTableIPtr unitCostTable{new CostTable};
-    auto mooreDescFixedRange = std::make_shared<TPDFixedRange>(mooreDesc, 1, 0);
-    auto mooreDescFixedCost = std::make_shared<TPDFixedCost>(mooreDescFixedRange, fixedTileCostTable, unitTileCostTable);
+    auto mooreDescFixedRange = std::make_shared<TPDStaticRange>(mooreDesc, 1, 0);
+    auto mooreDescFixedCost = std::make_shared<TPDStaticCost>(mooreDescFixedRange, fixedTileCostTable, unitTileCostTable);
 
     // Normal TPC
     std::shared_ptr<CostTable> normalCostTable{new CostTable};
