@@ -41,22 +41,22 @@ TilePatternDescPtr AWCSer::LoadTilePatternDesc(Json data)
 {
     TilePatternDescPtr tpd;
 
-    auto originDirectionsObj = JsonUtils::GetValue<Json::array_t>(data, "originDirections", {});
+    auto originDirectionsObj = JsonUtils::GetValue<Json::array_t>(data, "originDirections");
     Directions originDirections = LoadDirections(originDirectionsObj);
 
-    auto directionsTableObj = JsonUtils::GetValue<Json>(data, "directionsTable", {});
+    auto directionsTableObj = JsonUtils::GetValue<Json>(data, "directionsTable", Json{});
     if(directionsTableObj.is_object())
     {
-        auto tableObj = JsonUtils::GetValue<Json::array_t>(directionsTableObj, "table", {});
+        auto tableObj = JsonUtils::GetValue<Json::array_t>(directionsTableObj, "table");
 
         std::cout << directionsTableObj << "\n";
 
         DirectionsTable directionsTable;
         for(auto entry : tableObj)
         {
-            auto indexObj = JsonUtils::GetValue<Json>(entry, "indexDir", {});
+            auto indexObj = JsonUtils::GetValue<Json>(entry, "indexDir");
             Vector2 indexDir = LoadDirection(indexObj);
-            auto directionsObj = JsonUtils::GetValue<Json::array_t>(entry, "directions", {});
+            auto directionsObj = JsonUtils::GetValue<Json::array_t>(entry, "directions");
             Directions dirs = LoadDirections(directionsObj);
             directionsTable.insert({indexDir, dirs});
         }

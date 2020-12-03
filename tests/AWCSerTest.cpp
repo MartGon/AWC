@@ -215,10 +215,9 @@ TEST_CASE("TilePatternDesc Rook")
                 }
             }
         }
-    };
+        };
         
         TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
-        
         Directions tpDirs = tpdp->GetOriginDirections();
 
         for(auto dir : dirs)
