@@ -49,8 +49,6 @@ TilePatternDescPtr AWCSer::LoadTilePatternDesc(Json data)
     {
         auto tableObj = JsonUtils::GetValue<Json::array_t>(directionsTableObj, "table");
 
-        std::cout << directionsTableObj << "\n";
-
         DirectionsTable directionsTable;
         for(auto entry : tableObj)
         {
@@ -75,8 +73,8 @@ TilePatternDescPtr AWCSer::LoadTilePatternDesc(Json data)
 
 Vector2 AWCSer::LoadDirection(Json data)
 {
-    int x = JsonUtils::GetValue(data, "x", 0);
-    int y = JsonUtils::GetValue(data, "y", 0);
+    int x = JsonUtils::GetValue<int>(data, "x");
+    int y = JsonUtils::GetValue<int>(data, "y");
 
     return Vector2{x, y};
 }

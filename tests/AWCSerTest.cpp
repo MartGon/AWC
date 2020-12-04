@@ -64,6 +64,8 @@ TEST_CASE("Tile")
 
 TEST_CASE("TilePatternDesc")
 {
+    Directions dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
     SUBCASE("From json")
     {
         Json data{{"type", 0}, {"originDirections", 
@@ -85,7 +87,6 @@ TEST_CASE("TilePatternDesc")
                 {"y", -1}
             }
         }}};
-        Directions dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
         TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
         
@@ -95,7 +96,6 @@ TEST_CASE("TilePatternDesc")
     }
     SUBCASE("From file")
     {
-        Directions dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
         Json data = AWCSerTest::GetJsonFromFile("TilePatternDesc.json");
         TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
 
@@ -105,7 +105,7 @@ TEST_CASE("TilePatternDesc")
     }
 }
 
-TEST_CASE("TilePatternDesc Rook")
+TEST_CASE("TilePatternDesc Rook by Locked")
 {
     Vector2 e = {1, 0};
     Vector2 w = {-1, 0};
@@ -229,6 +229,183 @@ TEST_CASE("TilePatternDesc Rook")
     }
     SUBCASE("From file")
     {
+        Json data = AWCSerTest::GetJsonFromFile("TilePatternDescBaseLocked.json");
+        TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
+        Directions tpDirs = tpdp->GetOriginDirections();
+
+        for(auto dir : dirs)
+            CHECK(VectorUtils::IsInside(tpDirs, dir));
+        
+        for(auto dir : tpDirs)
+            lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir);
+    }
+}
+
+TEST_CASE("TilePatternDesc Rook by Exclusive")
+{
+    Vector2 e = {1, 0};
+    Vector2 w = {-1, 0};
+    Vector2 n = {0, 1};
+    Vector2 s = {0, -1};
+    Directions dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    DirectionsTable lockedDirTableR = {
+        {e, {e}},
+        {w, {w}},
+        {n, {n}},
+        {s, {s}}
+    };
+
+    SUBCASE("From json")
+    {
+        Json data{{"type", 0}, 
+        {"originDirections", 
+            {
+                {
+                    {"x", 1},
+                    {"y", 0}
+                },
+                {
+                    {"x", 0},
+                    {"y", 1}
+                },
+                {
+                    {"x", -1},
+                    {"y", 0}
+                },
+                {
+                    {"x", 0},
+                    {"y", -1}
+                }
+            }   
+        },
+        { "directionsTable",
+            {
+                {"type", 0},
+                {"table", 
+                    {
+                        {
+                            {"indexDir",
+                                {
+                                    {"x", 1},
+                                    {"y", 0}
+                                }
+                            },
+                            {"directions",
+                                {
+                                    {
+                                        {"x", -1},
+                                        {"y", 0}
+                                    },
+                                    {
+                                        {"x", 0},
+                                        {"y", 1}
+                                    },
+                                    {
+                                        {"x", 0},
+                                        {"y", -1}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            {"indexDir",
+                                {
+                                    {"x", -1},
+                                    {"y", 0}
+                                }
+                            },
+                            {"directions",
+                                {
+                                    {
+                                        {"x", 1},
+                                        {"y", 0}
+                                    },
+                                    {
+                                        {"x", 0},
+                                        {"y", 1}
+                                    },
+                                    {
+                                        {"x", 0},
+                                        {"y", -1}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            {"indexDir",
+                                {
+                                    {"x", 0},
+                                    {"y", 1}
+                                }
+                            },
+                            {"directions",
+                                {
+                                    {
+                                        {"x", -1},
+                                        {"y", 0}
+                                    },
+                                    {
+                                        {"x", 1},
+                                        {"y", 0}
+                                    },
+                                    {
+                                        {"x", 0},
+                                        {"y", -1}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            {"indexDir",
+                                {
+                                    {"x", 0},
+                                    {"y", -1}
+                                }
+                            },
+                            {"directions",
+                                {
+                                    {
+                                        {"x", 1},
+                                        {"y", 0}
+                                    },
+                                    {
+                                        {"x", 0},
+                                        {"y", 1}
+                                    },
+                                    {
+                                        {"x", -1},
+                                        {"y", 0}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        };
+        
+        TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
+        Directions tpDirs = tpdp->GetOriginDirections();
+
+        for(auto dir : dirs)
+            CHECK(VectorUtils::IsInside(tpDirs, dir));
+        
+        for(auto dir : tpDirs)
+            lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir);
+
+    }
+    SUBCASE("From file")
+    {
+        Json data = AWCSerTest::GetJsonFromFile("TilePatternDescBaseExclusive.json");
+        TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
+        Directions tpDirs = tpdp->GetOriginDirections();
+
+        for(auto dir : dirs)
+            CHECK(VectorUtils::IsInside(tpDirs, dir));
+        
+        for(auto dir : tpDirs)
+            lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir);
     }
 }
 

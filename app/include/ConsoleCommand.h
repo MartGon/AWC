@@ -9,7 +9,7 @@ class ConsoleCommand
 public:
     virtual ~ConsoleCommand() {};
 
-    virtual std::string GetHelpMessage() {};
+    virtual std::string GetHelpMessage() { return std::string{};};
 
     virtual void Execute(std::vector<std::string> args) = 0;
 };
