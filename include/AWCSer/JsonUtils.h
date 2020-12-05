@@ -87,21 +87,6 @@ namespace JsonUtils
 			throw Json::type_error::create(0, "Object was not of type Json");
 	}
 
-	template <typename T>
-	T GetValueUnsafe(const Json& jsonOb, const T& value)
-	{
-		T ret;
-		try{
-			ret = GetValueUnsafe<T>(jsonOb);
-		}
-		catch(const Json::type_error& e)
-		{
-			ret = value;
-		}
-
-		return ret;
-	}
-
 	// Get value
 
 	template <typename T> 
@@ -111,7 +96,7 @@ namespace JsonUtils
 		if (JsonUtils::HasKey(json, key))
 		{
 			Json obj = json.at(key);
-			val = GetValueUnsafe<T>(obj, def);
+			val = GetValueUnsafe<T>(obj);
 		}
 
 		return val;
@@ -136,8 +121,10 @@ namespace JsonUtils
 		if (json.is_array() && json.size() > index)
 		{
 			Json obj = json.at(index);
-			val = GetValueUnsafe<T>(obj, def);
+			val = GetValueUnsafe<T>(obj);
 		}
+		else
+			val = def;
 
 		return val;
 	}
@@ -151,8 +138,6 @@ namespace JsonUtils
 			return GetValueUnsafe<T>(obj);
 		}
 		else
-			throw Json::other_error::create(0, "JsonUtils:GetValue: Index " + std::to_string(index) + " is out of range");
-		
-		
+			throw Json::out_of_range::create(0, "Index " + std::to_string(index) + " was out of range");
 	}
 }

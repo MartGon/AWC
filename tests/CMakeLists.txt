@@ -4,6 +4,7 @@ add_executable(AWCTest
     CommandTest.cpp
     CostTableTest.cpp
     GameTest.cpp
+    JsonUtilsTest.cpp
     MapTest.cpp
     TileTest.cpp
     UnitTest.cpp
