@@ -41,7 +41,7 @@ TilePatternIPtr TPDStaticRange::DoCalculateTilePattern(const Map& map, Vector2 o
 // TPD FixedCost
 
 TPDStaticCost::TPDStaticCost(TilePatternDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable) 
-    : tileCostTable_{tileCostTable}, unitCostTable_{unitCostTable_},  TilePatternDescDecorator{child}
+    : tileCostTable_{tileCostTable}, unitCostTable_{unitCostTable},  TilePatternDescDecorator{child}
 {
 
 }
