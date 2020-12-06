@@ -4,10 +4,14 @@
 
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
+#include <AWC/Map.h>
 
 #include <AWC/TilePatternDesc.h>
+#include <AWC/TilePatternConstraints.h>
+#include <AWC/CostTable.h>
 
 #include <AWCSerTest.h>
+#include <TilePatternCompTest.h>
 
 #include <fstream>
 #include <iostream>
@@ -96,7 +100,7 @@ TEST_CASE("TilePatternDesc")
     }
     SUBCASE("From file")
     {
-        Json data = AWCSerTest::GetJsonFromFile("TilePatternDesc.json");
+        Json data = AWCSerTest::GetJsonFromFile("TilePatternDescBase.json");
         TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
 
         Directions tpDirs = tpdp->GetOriginDirections();
@@ -406,6 +410,26 @@ TEST_CASE("TilePatternDesc Rook by Exclusive")
         
         for(auto dir : tpDirs)
             lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir);
+    }
+}
+
+TEST_CASE("TilePatternDescCompUnion")
+{
+    Repository<TilePatternDescIPtr> repo;
+    auto rookDesc = TilePatternCompTest::GetRookDesc();
+    auto bishopDesc = TilePatternCompTest::GetBishopDesc();
+    repo.Add(0, rookDesc);
+    repo.Add(1, bishopDesc);
+
+    SUBCASE("From json")
+    {
+        Json data{
+                {"type", 1}, {"name", "Queen"}, {"subType", 0}, 
+                {"tpdA", 0}, {"tpdB", 1}
+            };
+        auto queenDesc = AWCSer::LoadTilePatternDescI(data, repo);
+
+        TilePatternCompTest::CheckQueenDesc(queenDesc);
     }
 }
 

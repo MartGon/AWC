@@ -36,8 +36,9 @@ namespace AWCSer
         STATIC_COST
     };
 
-    TilePatternDescIPtr LoadTilePatternDescI(Json data);
+    TilePatternDescIPtr LoadTilePatternDescI(Json data, Repository<TilePatternDescIPtr> repo = Repository<TilePatternDescIPtr>{});
     TilePatternDescPtr LoadTilePatternDesc(Json data);
+    TilePatternDescIPtr LoadTilePatternDescComp(Json data, Repository<TilePatternDescIPtr> repo);
     Vector2 LoadDirection(Json data);
     std::vector<Vector2> LoadDirections(Json data);
 }

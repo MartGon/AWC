@@ -4,6 +4,8 @@
 
 #include <AWC/TileType.h>
 #include <AWC/TilePatternDesc.h>
+#include <AWC/TilePatternDescComp.h>
+#include <AWC/TilePatternComp.h>
 
 #include <iostream>
 
@@ -17,12 +19,12 @@ TileType AWCSer::LoadTileType(Json data)
 
 TilePtr AWCSer::LoadTile(Json data, Repository<TileType> tileTypeRepo)
 {
-    uint tileTypeId = JsonUtils::GetValue(data, "tileTypeId", -1);
+    uint tileTypeId = JsonUtils::GetValue<uint>(data, "tileTypeId");
     auto& tileType = tileTypeRepo.GetById(tileTypeId);
     return tileType.CreateTile();
 }
 
-TilePatternDescIPtr AWCSer::LoadTilePatternDescI(Json data)
+TilePatternDescIPtr AWCSer::LoadTilePatternDescI(Json data, Repository<TilePatternDescIPtr> repo)
 {
     TilePatternDescIPtr tpdip;
     auto type = JsonUtils::GetValue<TilePatternDescType>(data, "type", TilePatternDescType::BASE);
@@ -30,6 +32,8 @@ TilePatternDescIPtr AWCSer::LoadTilePatternDescI(Json data)
     {
     case TilePatternDescType::BASE:
         tpdip = LoadTilePatternDesc(data);
+    case TilePatternDescType::COMP:
+        tpdip = LoadTilePatternDescComp(data, repo);
     default:
         break;
     }
@@ -69,6 +73,34 @@ TilePatternDescPtr AWCSer::LoadTilePatternDesc(Json data)
         tpd = TilePatternDesc::Create(originDirections);
 
     return tpd;
+}
+
+TilePatternDescIPtr AWCSer::LoadTilePatternDescComp(Json data, Repository<TilePatternDescIPtr> repo)
+{
+    auto subType = JsonUtils::GetValue<TilePatternDescCompType>(data, "subType");
+    auto tpdAId = JsonUtils::GetValue<uint>(data, "tpdA");
+    auto tpdBId = JsonUtils::GetValue<uint>(data, "tpdB");
+
+    auto tpdA = repo.GetById(tpdAId);
+    auto tpdB = repo.GetById(tpdBId);
+
+    TilePatternDescIPtr tpdip;
+    switch (subType)
+    {
+    case TilePatternDescCompType::UNION:
+        tpdip = TilePatternDescIPtr{ new TilePatternDescComp<TilePatternUnion>{tpdA, tpdB}};
+        break;
+    case TilePatternDescCompType::DIFF:
+        tpdip = TilePatternDescIPtr{ new TilePatternDescComp<TilePatternDiff>{tpdA, tpdB}};
+        break;
+    case TilePatternDescCompType::INTERSECT:
+        tpdip = TilePatternDescIPtr{ new TilePatternDescComp<TilePatternIntersect>{tpdA, tpdB}};
+        break;
+    default:
+        break;
+    }
+
+    return tpdip;
 }
 
 Vector2 AWCSer::LoadDirection(Json data)

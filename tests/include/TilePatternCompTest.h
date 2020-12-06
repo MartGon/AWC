@@ -2,10 +2,9 @@
 
 #include <vector>
 
-namespace TilePatternTest
+namespace TilePatternCompTest
 {
-    std::vector<Vector2> GetUnreachableTiles(const Map& map, const Directions& reachableTiles);
-
     TilePatternDescIPtr GetRookDesc();
     TilePatternDescIPtr GetBishopDesc();
+    void CheckQueenDesc(TilePatternDescIPtr tpd);
 };
