@@ -431,6 +431,13 @@ TEST_CASE("TilePatternDescCompUnion")
 
         TilePatternCompTest::CheckQueenDesc(queenDesc);
     }
+    SUBCASE("From file")
+    {
+        Json data = AWCSerTest::GetJsonFromFile("TilePatternDescComp.json");
+        auto queenDesc = AWCSer::LoadTilePatternDescI(data, repo);
+
+        TilePatternCompTest::CheckQueenDesc(queenDesc);
+    }
 }
 
 Json AWCSerTest::GetJsonFromFile(std::string filename)
