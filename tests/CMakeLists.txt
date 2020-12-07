@@ -3,7 +3,6 @@ add_executable(AWCTest
     CommandTest.cpp
     CostTableTest.cpp
     GameTest.cpp
-    JsonUtilsTest.cpp
     MapTest.cpp
     TileTest.cpp
     UnitTest.cpp
@@ -12,10 +11,12 @@ add_executable(AWCTest
     TilePatternDescTest.cpp
     TilePatternDescDecoratorTest.cpp
     TileGraphTest.cpp
-    STLUtilsTest.cpp
 
     AWCSerTest/AWCSerTest.cpp
     AWCSerTest/TilePatternDescSerTest.cpp
+    AWCSerTest/JsonUtilsTest.cpp
+
+    Utils/STLUtilsTest.cpp
 )
 
 # target_compile_features(AWCTest PRIVATE cxx_std_20)
