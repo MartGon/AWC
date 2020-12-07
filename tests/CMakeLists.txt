@@ -1,6 +1,5 @@
 add_executable(AWCTest 
     AWCTest.cpp
-    AWCSerTest.cpp
     CommandTest.cpp
     CostTableTest.cpp
     GameTest.cpp
@@ -14,6 +13,9 @@ add_executable(AWCTest
     TilePatternDescDecoratorTest.cpp
     TileGraphTest.cpp
     STLUtilsTest.cpp
+
+    AWCSerTest/AWCSerTest.cpp
+    AWCSerTest/TilePatternDescSerTest.cpp
 )
 
 # target_compile_features(AWCTest PRIVATE cxx_std_20)
