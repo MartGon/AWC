@@ -1,3 +1,4 @@
+#pragma once
 #include <Utils/STLUtils.h>
 #include <AWC/AWCException.h>
 

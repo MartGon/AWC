@@ -1,6 +1,7 @@
 #include "doctest.h"
 
 #include <AWCSer/AWCSer.h>
+#include <AWCSer/TilePatternDescSer.h>
 
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
@@ -92,7 +93,7 @@ TEST_CASE("TilePatternDesc")
             }
         }}};
 
-        TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
+        TilePatternDescPtr tpdp = TilePatternDescSer::LoadTilePatternDesc(data);
         
         Directions tpDirs = tpdp->GetOriginDirections();
         for(auto dir : dirs)
@@ -101,7 +102,7 @@ TEST_CASE("TilePatternDesc")
     SUBCASE("From file")
     {
         Json data = AWCSerTest::GetJsonFromFile("TilePatternDescBase.json");
-        TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
+        TilePatternDescPtr tpdp = TilePatternDescSer::LoadTilePatternDesc(data);
 
         Directions tpDirs = tpdp->GetOriginDirections();
         for(auto dir : dirs)
@@ -221,7 +222,7 @@ TEST_CASE("TilePatternDesc Rook by Locked")
         }
         };
         
-        TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
+        TilePatternDescPtr tpdp = TilePatternDescSer::LoadTilePatternDesc(data);
         Directions tpDirs = tpdp->GetOriginDirections();
 
         for(auto dir : dirs)
@@ -234,7 +235,7 @@ TEST_CASE("TilePatternDesc Rook by Locked")
     SUBCASE("From file")
     {
         Json data = AWCSerTest::GetJsonFromFile("TilePatternDescBaseLocked.json");
-        TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
+        TilePatternDescPtr tpdp = TilePatternDescSer::LoadTilePatternDesc(data);
         Directions tpDirs = tpdp->GetOriginDirections();
 
         for(auto dir : dirs)
@@ -389,7 +390,7 @@ TEST_CASE("TilePatternDesc Rook by Exclusive")
         }
         };
         
-        TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
+        TilePatternDescPtr tpdp = TilePatternDescSer::LoadTilePatternDesc(data);
         Directions tpDirs = tpdp->GetOriginDirections();
 
         for(auto dir : dirs)
@@ -402,7 +403,7 @@ TEST_CASE("TilePatternDesc Rook by Exclusive")
     SUBCASE("From file")
     {
         Json data = AWCSerTest::GetJsonFromFile("TilePatternDescBaseExclusive.json");
-        TilePatternDescPtr tpdp = AWCSer::LoadTilePatternDesc(data);
+        TilePatternDescPtr tpdp = TilePatternDescSer::LoadTilePatternDesc(data);
         Directions tpDirs = tpdp->GetOriginDirections();
 
         for(auto dir : dirs)
@@ -427,14 +428,14 @@ TEST_CASE("TilePatternDescCompUnion")
                 {"type", 1}, {"name", "Queen"}, {"subType", 0}, 
                 {"tpdA", 0}, {"tpdB", 1}
             };
-        auto queenDesc = AWCSer::LoadTilePatternDescI(data, repo);
+        auto queenDesc = TilePatternDescSer::LoadTilePatternDescI(data, repo);
 
         TilePatternCompTest::CheckQueenDesc(queenDesc);
     }
     SUBCASE("From file")
     {
         Json data = AWCSerTest::GetJsonFromFile("TilePatternDescComp.json");
-        auto queenDesc = AWCSer::LoadTilePatternDescI(data, repo);
+        auto queenDesc = TilePatternDescSer::LoadTilePatternDescI(data, repo);
 
         TilePatternCompTest::CheckQueenDesc(queenDesc);
     }

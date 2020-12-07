@@ -2,6 +2,7 @@
 #include "json.hpp"
 
 #include <AWCSer/AWCSer.h>
+#include <AWCSer/TilePatternDescSer.h>
 #include <AWCSer/JsonUtils.h>
 
 using Json = nlohmann::json;
@@ -77,7 +78,7 @@ TEST_CASE("JsonUtils GetValueUnsafe")
     }
     SUBCASE("Get misc")
     {
-        CHECK_NOTHROW(JsonUtils::GetValueUnsafe<AWCSer::TilePatternDescType>(intObj));
+        CHECK_NOTHROW(JsonUtils::GetValueUnsafe<TilePatternDescSer::TilePatternDescType>(intObj));
     }
 }
 
