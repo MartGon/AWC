@@ -140,4 +140,7 @@ namespace JsonUtils
 		else
 			throw Json::out_of_range::create(0, "Index " + std::to_string(index) + " was out of range");
 	}
+
+	// Files
+	Json GetJsonFromFile(std::string filePath, std::string folder ="");
 }

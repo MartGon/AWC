@@ -2,22 +2,18 @@
 
 #include <AWCSer/AWCSer.h>
 #include <AWCSer/TilePatternDescSer.h>
+#include <AWCSer/JsonUtils.h>
 
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
 #include <AWC/Map.h>
 
-#include <AWC/TilePatternDesc.h>
-#include <AWC/TilePatternConstraints.h>
-#include <AWC/CostTable.h>
-
 #include <AWCSerTest/AWCSerTest.h>
+
 #include <TilePatternCompTest.h>
 
-#include <fstream>
-#include <iostream>
 
-const std::string JSON_FILES_PATH = "/resources/AWCSer/";
+#include <iostream>
 
 TEST_CASE("TileType")
 {
@@ -32,7 +28,7 @@ TEST_CASE("TileType")
     SUBCASE("Load from file")
     {
         const std::string filename = "TileType.json";
-        Json data = AWCSerTest::GetJsonFromFile(filename);
+        Json data = JsonUtils::GetJsonFromFile(filename, AWCSerTest::GetJsonFolderPath());
         TileType tileType = AWCSer::LoadTileType(data);
         
         CHECK(tileType.GetId() == 0);
@@ -58,7 +54,7 @@ TEST_CASE("Tile")
     }
     SUBCASE("Loading from file")
     {
-        Json data = AWCSerTest::GetJsonFromFile("Tile.json");
+        Json data = JsonUtils::GetJsonFromFile("Tile.json", AWCSerTest::GetJsonFolderPath());
         TilePtr tile = AWCSer::LoadTile(data, tileTypeRepo);
 
         CHECK(tile.get() != nullptr);
@@ -67,14 +63,7 @@ TEST_CASE("Tile")
     }
 }
 
-Json AWCSerTest::GetJsonFromFile(std::string filename)
+std::string AWCSerTest::GetJsonFolderPath()
 {
-    const std::string path = PROJECT_DIR + JSON_FILES_PATH + filename;
-
-    std::ifstream file{path};
-    CHECK(file.good() == true);
-
-    Json data = Json::parse(file);
-
-    return data;
+    return PROJECT_DIR + std::string("/resources/AWCSer/");
 }
