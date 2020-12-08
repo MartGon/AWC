@@ -16,3 +16,4 @@ User executes an AttackCommand which results in a Unit death that has an OnDeath
 2. The unit itself handles the event. It scans nearby units.
 3. Applies a damage effect to every unit around via a well-defined operation
 4. This is recorded within the AttackCommand.
+
