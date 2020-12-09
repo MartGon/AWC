@@ -28,7 +28,7 @@ TEST_CASE("TileType")
     SUBCASE("Load from file")
     {
         const std::string filename = "TileType.json";
-        Json data = JsonUtils::GetJsonFromFile(filename, AWCSerTest::GetJsonFolderPath());
+        Json data = JsonUtils::GetJsonFromFile(filename, RESOURCES_DIR);
         TileType tileType = AWCSer::LoadTileType(data);
         
         CHECK(tileType.GetId() == 0);
@@ -54,16 +54,11 @@ TEST_CASE("Tile")
     }
     SUBCASE("Loading from file")
     {
-        Json data = JsonUtils::GetJsonFromFile("Tile.json", AWCSerTest::GetJsonFolderPath());
+        Json data = JsonUtils::GetJsonFromFile("Tile.json", RESOURCES_DIR);
         TilePtr tile = AWCSer::LoadTile(data, tileTypeRepo);
 
         CHECK(tile.get() != nullptr);
         CHECK(tile->GetId() == 0);
         CHECK(tile->GetName() == "Grass");
     }
-}
-
-std::string AWCSerTest::GetJsonFolderPath()
-{
-    return PROJECT_DIR + std::string("/resources/AWCSer/");
 }

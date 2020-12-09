@@ -49,7 +49,7 @@ TEST_CASE("TilePatternDesc")
     }
     SUBCASE("From file")
     {
-        Json data = JsonUtils::GetJsonFromFile("TilePatternDescBase.json", AWCSerTest::GetJsonFolderPath());
+        Json data = JsonUtils::GetJsonFromFile("TilePatternDescBase.json", RESOURCES_DIR);
         TilePatternDescPtr tpdp = TilePatternDescSer::LoadTilePatternDesc(data);
 
         Directions tpDirs = tpdp->GetOriginDirections();
@@ -182,7 +182,7 @@ TEST_CASE("TilePatternDesc Rook by Locked")
     }
     SUBCASE("From file")
     {
-        Json data = JsonUtils::GetJsonFromFile("TilePatternDescBaseLocked.json", AWCSerTest::GetJsonFolderPath());
+        Json data = JsonUtils::GetJsonFromFile("TilePatternDescBaseLocked.json", RESOURCES_DIR);
         TilePatternDescPtr tpdp = TilePatternDescSer::LoadTilePatternDesc(data);
         Directions tpDirs = tpdp->GetOriginDirections();
 
@@ -350,7 +350,7 @@ TEST_CASE("TilePatternDesc Rook by Exclusive")
     }
     SUBCASE("From file")
     {
-        Json data = JsonUtils::GetJsonFromFile("TilePatternDescBaseExclusive.json", AWCSerTest::GetJsonFolderPath());
+        Json data = JsonUtils::GetJsonFromFile("TilePatternDescBaseExclusive.json", RESOURCES_DIR);
         TilePatternDescPtr tpdp = TilePatternDescSer::LoadTilePatternDesc(data);
         Directions tpDirs = tpdp->GetOriginDirections();
 
@@ -382,7 +382,7 @@ TEST_CASE("TilePatternDescCompUnion")
     }
     SUBCASE("From file")
     {
-        Json data = JsonUtils::GetJsonFromFile("TilePatternDescComp.json", AWCSerTest::GetJsonFolderPath());
+        Json data = JsonUtils::GetJsonFromFile("TilePatternDescComp.json", RESOURCES_DIR);
         auto queenDesc = TilePatternDescSer::LoadTilePatternDescI(data, repo);
 
         TilePatternCompTest::CheckQueenDesc(queenDesc);

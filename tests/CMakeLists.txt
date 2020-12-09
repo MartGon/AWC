@@ -24,5 +24,6 @@ target_include_directories(AWCTest PUBLIC ${DOCTEST_INCLUDE_DIR} ../include incl
 target_link_libraries(AWCTest AWCLibrary AWCSer)
 
 add_compile_definitions(PROJECT_DIR="${CMAKE_SOURCE_DIR}")
+add_compile_definitions(RESOURCES_DIR="${CMAKE_SOURCE_DIR}/resources/AWCSer/")
 
 add_test(NAME BasicTest COMMAND AWCTest)
