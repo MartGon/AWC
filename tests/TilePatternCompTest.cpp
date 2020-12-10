@@ -6,12 +6,12 @@
 #include <AWC/Map.h>
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
-#include <AWC/TilePatternDesc.h>
-#include <AWC/TilePatternDescComp.h>
-#include <AWC/TilePatternDescDecorator.h>
-#include <AWC/TilePattern.h>
-#include <AWC/TilePatternComp.h>
-#include <AWC/TilePatternConstraints.h>
+#include <AWC/TilePattern/TilePatternDesc.h>
+#include <AWC/TilePattern/TilePatternDescComp.h>
+#include <AWC/TilePattern/TilePatternDescDecorator.h>
+#include <AWC/TilePattern/TilePattern.h>
+#include <AWC/TilePattern/TilePatternComp.h>
+#include <AWC/TilePattern/TilePatternConstraints.h>
 
 #include <TilePatternTest.h>
 #include <TilePatternCompTest.h>

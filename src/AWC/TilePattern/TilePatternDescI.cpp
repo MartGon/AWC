@@ -1,4 +1,4 @@
-#include <AWC/TilePatternDescI.h>
+#include <AWC/TilePattern/TilePatternDescI.h>
 
 TilePatternIPtr TilePatternDescI::CalculateTilePattern(const Map& map, Vector2 origin, const TilePatternConstraints& constraints)
 {

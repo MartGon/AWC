@@ -1,8 +1,8 @@
 #pragma once
 
 #include <AWC/AWCusing.h>
-#include <AWC/TilePatternDescI.h>
-#include <AWC/TilePatternDesc.h>
+#include <AWC/TilePattern/TilePatternDescI.h>
+#include <AWC/TilePattern/TilePatternDesc.h>
 
 template<typename T>
 class TilePatternDescComp : public TilePatternDescI

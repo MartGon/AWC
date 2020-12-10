@@ -1,8 +1,8 @@
 #pragma once
 
 #include <AWC/AWCusing.h>
-#include <AWC/TilePatternI.h>
-#include <AWC/TilePattern.h>
+#include <AWC/TilePattern/TilePatternI.h>
+#include <AWC/TilePattern/TilePattern.h>
 
 #include <memory>
 

@@ -7,7 +7,7 @@
 
 // Units
 #include <AWC/UnitType.h>
-#include <AWC/TilePatternDesc.h>
+#include <AWC/TilePattern/TilePatternDesc.h>
 #include <AWC/MovementDescType.h>
 #include <AWC/CostTable.h>
 #include <AWC/WeaponType.h>

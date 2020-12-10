@@ -3,7 +3,7 @@
 #include <Utils/Vector2.h>
 
 #include <AWC/AWCfwd.h>
-#include <AWC/TileNode.h>
+#include <AWC/TilePattern/TileNode.h>
 #include <AWC/Directions.h>
 
 #include <exception>

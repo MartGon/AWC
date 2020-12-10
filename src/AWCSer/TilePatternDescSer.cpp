@@ -2,9 +2,9 @@
 #include <AWCSer/JsonUtils.h>
 #include <AWCSer/AWCSer.h>
 
-#include <AWC/TilePatternDesc.h>
-#include <AWC/TilePatternDescComp.h>
-#include <AWC/TilePatternComp.h>
+#include <AWC/TilePattern/TilePatternDesc.h>
+#include <AWC/TilePattern/TilePatternDescComp.h>
+#include <AWC/TilePattern/TilePatternComp.h>
 
 TilePatternDescIPtr TilePatternDescSer::LoadTilePatternDescI(Json data, Repository<TilePatternDescIPtr> repo)
 {

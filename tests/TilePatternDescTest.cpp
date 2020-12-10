@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include <AWC/TilePatternDesc.h>
-#include <AWC/TilePattern.h>
+#include <AWC/TilePattern/TilePatternDesc.h>
+#include <AWC/TilePattern/TilePattern.h>
 #include <AWC/Map.h>
 #include <AWC/AWCException.h>
 

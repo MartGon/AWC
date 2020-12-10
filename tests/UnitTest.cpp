@@ -4,7 +4,7 @@
 #include <AWC/CostTable.h>
 #include <AWC/MovementDescType.h>
 #include <AWC/Player.h>
-#include <AWC/TilePatternDesc.h>
+#include <AWC/TilePattern/TilePatternDesc.h>
 #include <AWC/UnitType.h>
 #include <AWC/Unit.h>
 #include <AWC/WeaponType.h>

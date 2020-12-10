@@ -1,5 +1,5 @@
 #include <AWC/UnitMovement.h>
-#include <AWC/TilePatternI.h>
+#include <AWC/TilePattern/TilePatternI.h>
 
 
 UnitMovement::UnitMovement(TilePatternIPtr tp) : tp_{tp}

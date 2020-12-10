@@ -4,8 +4,8 @@
 
 #include <AWC/AWCusing.h>
 #include <AWC/Directions.h>
-#include <AWC/TilePatternDescI.h>
-#include <AWC/TileNode.h>
+#include <AWC/TilePattern/TilePatternDescI.h>
+#include <AWC/TilePattern/TileNode.h>
 
 #include <unordered_map>
 #include <memory>

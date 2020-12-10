@@ -10,16 +10,16 @@ add_library(AWCSource
   Player.cpp
   Tile.cpp
   TileType.cpp
-  TilePattern.cpp
-  TilePatternI.cpp
-  TilePatternComp.cpp
-  TilePatternConstraints.cpp
-  TilePatternDesc.cpp
-  TilePatternDescI.cpp
-  TilePatternDescComp.cpp
-  TilePatternDescDecorator.cpp
-  TileGraph.cpp
-  TileNode.cpp
+  TilePattern/TilePattern.cpp
+  TilePattern/TilePatternI.cpp
+  TilePattern/TilePatternComp.cpp
+  TilePattern/TilePatternConstraints.cpp
+  TilePattern/TilePatternDesc.cpp
+  TilePattern/TilePatternDescI.cpp
+  TilePattern/TilePatternDescComp.cpp
+  TilePattern/TilePatternDescDecorator.cpp
+  TilePattern/TileGraph.cpp
+  TilePattern/TileNode.cpp
   Turn.cpp
   Unit.cpp
   UnitAttack.cpp

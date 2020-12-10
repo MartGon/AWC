@@ -1,8 +1,8 @@
 #pragma once
 
 #include <AWC/AWCusing.h>
-#include <AWC/TileGraph.h>
-#include <AWC/TilePatternI.h>
+#include <AWC/TilePattern/TileGraph.h>
+#include <AWC/TilePattern/TilePatternI.h>
 #include <AWC/Range.h>
 
 #include <vector>

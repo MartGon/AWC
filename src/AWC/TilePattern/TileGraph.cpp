@@ -1,4 +1,4 @@
-#include <AWC/TileGraph.h>
+#include <AWC/TilePattern/TileGraph.h>
 #include <AWC/AWCException.h>
 
 #include <iostream>

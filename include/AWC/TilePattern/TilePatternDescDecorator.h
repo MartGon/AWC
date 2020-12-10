@@ -1,7 +1,7 @@
 #pragma once
 
 #include <AWC/AWCusing.h>
-#include <AWC/TilePatternDescI.h>
+#include <AWC/TilePattern/TilePatternDescI.h>
 #include <AWC/Range.h>
 
 #include <memory>

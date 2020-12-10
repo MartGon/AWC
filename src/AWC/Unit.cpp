@@ -3,14 +3,14 @@
 #include <AWC/UnitMovement.h>
 #include <AWC/UnitAttack.h>
 
-#include <AWC/TilePatternConstraints.h>
+#include <AWC/TilePattern/TilePatternConstraints.h>
 
 #include <AWC/MovementDescType.h>
 #include <AWC/MovementDesc.h>
 #include <AWC/Weapon.h>
 #include <AWC/WeaponType.h>
-#include <AWC/TilePatternDesc.h>
-#include <AWC/TilePattern.h>
+#include <AWC/TilePattern/TilePatternDesc.h>
+#include <AWC/TilePattern/TilePattern.h>
 #include <AWC/CostTable.h>
 #include <AWC/Player.h>
 #include <AWC/Turn.h>

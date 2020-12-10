@@ -3,8 +3,8 @@
 #include <AWCSer/AWCSer.h>
 #include <AWCSer/TilePatternDescSer.h>
 
-#include <AWC/TilePatternDesc.h>
-#include <AWC/TilePatternConstraints.h>
+#include <AWC/TilePattern/TilePatternDesc.h>
+#include <AWC/TilePattern/TilePatternConstraints.h>
 #include <AWC/CostTable.h>
 
 #include <AWCSerTest/AWCSerTest.h>

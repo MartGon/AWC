@@ -1,5 +1,5 @@
-#include <AWC/TilePatternDescDecorator.h>
-#include <AWC/TilePatternConstraints.h>
+#include <AWC/TilePattern/TilePatternDescDecorator.h>
+#include <AWC/TilePattern/TilePatternConstraints.h>
 
 
 // TPD Decorator

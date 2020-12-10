@@ -1,4 +1,4 @@
-#include <AWC/TilePatternConstraints.h>
+#include <AWC/TilePattern/TilePatternConstraints.h>
 
 #include <AWC/Map.h>
 #include <AWC/CostTable.h>

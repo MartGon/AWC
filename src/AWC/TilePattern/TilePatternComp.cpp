@@ -1,4 +1,4 @@
-#include <AWC/TilePatternComp.h>
+#include <AWC/TilePattern/TilePatternComp.h>
 
 #include <Utils/STLUtils.h>
 

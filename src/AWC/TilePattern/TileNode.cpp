@@ -1,4 +1,4 @@
-#include <AWC/TileNode.h>
+#include <AWC/TilePattern/TileNode.h>
 #include <AWC/AWCException.h>
 
 TileNode::TileNode(const Vector2 pos, const unsigned int cost) : pos{pos}, cost{cost}

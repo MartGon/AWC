@@ -1,5 +1,5 @@
 #include <AWC/UnitAttack.h>
-#include <AWC/TilePatternI.h>
+#include <AWC/TilePattern/TilePatternI.h>
 
 UnitAttack::UnitAttack(TilePatternIPtr tp) : tp_{tp}
 {

@@ -1,9 +1,9 @@
-#include <AWC/TilePattern.h>
-#include <AWC/TilePatternDesc.h>
-#include <AWC/TilePatternConstraints.h>
+#include <AWC/TilePattern/TilePattern.h>
+#include <AWC/TilePattern/TilePatternDesc.h>
+#include <AWC/TilePattern/TilePatternConstraints.h>
 #include <AWC/CostTable.h>
 #include <AWC/Map.h>
-#include <AWC/TileGraph.h>
+#include <AWC/TilePattern/TileGraph.h>
 #include <AWC/AWCException.h>
 
 #include <Utils/STLUtils.h>

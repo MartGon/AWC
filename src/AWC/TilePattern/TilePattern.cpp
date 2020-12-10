@@ -1,4 +1,4 @@
-#include <AWC/TilePattern.h>
+#include <AWC/TilePattern/TilePattern.h>
 
 TilePattern::TilePattern(Vector2 origin, TileGraph tg, unsigned int maxRange, unsigned int minRange) : 
     origin_{origin}, tg_{tg}, range_{maxRange, minRange}
