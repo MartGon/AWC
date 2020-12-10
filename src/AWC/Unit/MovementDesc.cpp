@@ -1,5 +1,5 @@
-#include <AWC/MovementDesc.h>
-#include <AWC/MovementDescType.h>
+#include <AWC/Unit/MovementDesc.h>
+#include <AWC/Unit/MovementDescType.h>
 
 #include <AWC/CostTable.h>
 

@@ -2,12 +2,12 @@
 
 #include <AWC/AWCusing.h>
 #include <AWC/CostTable.h>
-#include <AWC/MovementDescType.h>
+#include <AWC/Unit/MovementDescType.h>
 #include <AWC/Player.h>
 #include <AWC/TilePattern/TilePatternDesc.h>
-#include <AWC/UnitType.h>
-#include <AWC/Unit.h>
-#include <AWC/WeaponType.h>
+#include <AWC/Unit/UnitType.h>
+#include <AWC/Unit/Unit.h>
+#include <AWC/Unit/WeaponType.h>
 
 #include <UnitTest.h>
 

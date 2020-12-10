@@ -6,11 +6,11 @@
 #include <AWC/Tile.h>
 
 // Units
-#include <AWC/UnitType.h>
+#include <AWC/Unit/UnitType.h>
 #include <AWC/TilePattern/TilePatternDesc.h>
-#include <AWC/MovementDescType.h>
+#include <AWC/Unit/MovementDescType.h>
 #include <AWC/CostTable.h>
-#include <AWC/WeaponType.h>
+#include <AWC/Unit/WeaponType.h>
 
 // App
 #include <Console.h>

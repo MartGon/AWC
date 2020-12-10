@@ -1,5 +1,5 @@
-#include <AWC/Weapon.h>
-#include <AWC/WeaponType.h>
+#include <AWC/Unit/Weapon.h>
+#include <AWC/Unit/WeaponType.h>
 
 Weapon::Weapon(const WeaponType& weaponType) : weaponType{weaponType}, currentAmmo{weaponType.maxAmmo}
 {

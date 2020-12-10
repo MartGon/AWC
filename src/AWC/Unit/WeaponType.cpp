@@ -1,5 +1,5 @@
-#include <AWC/WeaponType.h>
-#include <AWC/Weapon.h>
+#include <AWC/Unit/WeaponType.h>
+#include <AWC/Unit/Weapon.h>
 
 // AttackTable
 

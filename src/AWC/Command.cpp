@@ -1,8 +1,8 @@
 #include <AWC/Command.h>
 
 #include <AWC/Game.h>
-#include <AWC/UnitMovement.h>
-#include <AWC/UnitAttack.h>
+#include <AWC/Unit/UnitMovement.h>
+#include <AWC/Unit/UnitAttack.h>
 
 void Command::Execute(Game& game, uint playerIndex)
 {

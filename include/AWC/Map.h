@@ -6,7 +6,7 @@
 #include <string>
 
 #include <AWC/AWCusing.h>
-#include <AWC/Unit.h>
+#include <AWC/Unit/Unit.h>
 #include <AWC/Tile.h>
 
 #include <Utils/Vector2.h>

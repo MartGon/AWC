@@ -1,5 +1,5 @@
-#include <AWC/MovementDescType.h>
-#include <AWC/MovementDesc.h>
+#include <AWC/Unit/MovementDescType.h>
+#include <AWC/Unit/MovementDesc.h>
 
 MovementDescType::MovementDescType(TilePatternDescIPtr tpd, Range range, CostTableIPtr tileCost, 
     CostTableIPtr unitCost, uint maxGas) : tpd{tpd}, range{range}, tileCostTable{tileCost}, 

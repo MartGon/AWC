@@ -1,14 +1,14 @@
-#include <AWC/Unit.h>
-#include <AWC/UnitType.h>
-#include <AWC/UnitMovement.h>
-#include <AWC/UnitAttack.h>
+#include <AWC/Unit/Unit.h>
+#include <AWC/Unit/UnitType.h>
+#include <AWC/Unit/UnitMovement.h>
+#include <AWC/Unit/UnitAttack.h>
 
 #include <AWC/TilePattern/TilePatternConstraints.h>
 
-#include <AWC/MovementDescType.h>
-#include <AWC/MovementDesc.h>
-#include <AWC/Weapon.h>
-#include <AWC/WeaponType.h>
+#include <AWC/Unit/MovementDescType.h>
+#include <AWC/Unit/MovementDesc.h>
+#include <AWC/Unit/Weapon.h>
+#include <AWC/Unit/WeaponType.h>
 #include <AWC/TilePattern/TilePatternDesc.h>
 #include <AWC/TilePattern/TilePattern.h>
 #include <AWC/CostTable.h>

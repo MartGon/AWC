@@ -7,8 +7,8 @@
 #include <AWC/Map.h>
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
-#include <AWC/UnitType.h>
-#include <AWC/Unit.h>
+#include <AWC/Unit/UnitType.h>
+#include <AWC/Unit/Unit.h>
 #include <AWC/TilePattern/TilePatternDesc.h>
 #include <AWC/CostTable.h>
 

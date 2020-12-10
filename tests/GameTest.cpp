@@ -3,7 +3,7 @@
 #include <AWC/Game.h>
 
 #include <AWC/TileType.h>
-#include <AWC/UnitType.h>
+#include <AWC/Unit/UnitType.h>
 #include <AWC/Command.h>
 #include <AWC/Player.h>
 

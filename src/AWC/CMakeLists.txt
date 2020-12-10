@@ -4,12 +4,12 @@ add_library(AWCSource
   CostTable.cpp
   Game.cpp
   Map.cpp
-  MovementDescType.cpp
-  MovementDesc.cpp
   Range.cpp
   Player.cpp
   Tile.cpp
   TileType.cpp
+  Turn.cpp
+
   TilePattern/TilePattern.cpp
   TilePattern/TilePatternI.cpp
   TilePattern/TilePatternComp.cpp
@@ -20,13 +20,15 @@ add_library(AWCSource
   TilePattern/TilePatternDescDecorator.cpp
   TilePattern/TileGraph.cpp
   TilePattern/TileNode.cpp
-  Turn.cpp
-  Unit.cpp
-  UnitAttack.cpp
-  UnitType.cpp
-  UnitMovement.cpp
-  Weapon.cpp
-  WeaponType.cpp
+
+  Unit/MovementDescType.cpp
+  Unit/MovementDesc.cpp
+  Unit/Unit.cpp
+  Unit/UnitAttack.cpp
+  Unit/UnitType.cpp
+  Unit/UnitMovement.cpp
+  Unit/Weapon.cpp
+  Unit/WeaponType.cpp
 )
 
 target_include_directories(AWCSource PUBLIC ${CMAKE_SOURCE_DIR}/include)
