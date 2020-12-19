@@ -46,7 +46,7 @@ namespace Event
 
 using EventListener = std::function<void(Event)>;
 
-class GameEvents
+class Subject
 
 public:
 
@@ -128,3 +128,26 @@ public:
 
 private:
     map<EventType, vector<EventListener>> event_listeners;
+
+# Third design, no variant
+
+template<typename T>
+class Subject
+
+public:
+
+    void Register(std::function<void(T)> listener);
+    void Notify(T event);
+
+private:
+
+    vector<std::function<void(T)> listeners;
+
+class GameSubject
+
+    Subject<TurnPassed> turnPassedTopic;
+    Subject<PlayerRemoved> playerRemovedTopic;
+
+
+gameSubject.turnPassedTopic.Register(...)
+gameSubject.turnPassedTopic.Notify(turnPassed);
