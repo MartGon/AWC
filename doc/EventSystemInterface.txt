@@ -1,0 +1,130 @@
+# First design
+
+namespace Event
+{
+    enum Type
+    {
+        UNIT_DEATH,
+        UNIT_SPAWN,
+        UNIT_MOVE,
+        UNIT_ATTACK,
+        TURN_PASSED
+    }
+
+    struct Event
+    {
+        Event::Type type
+        Event::Union event;
+    }
+
+    union Union
+    {
+        UnitDeath unitDeath;
+        UnitSpawn unitSpawn;
+        UnitMove unitMove;
+        UnitAttack unitAttack;
+        TurnPassed turnPassed;
+    }
+
+    namespace Unit
+    {
+        struct Death
+        {
+            Unit* unit;
+            Unit* killer;
+        }
+
+        struct Move
+        {
+            Unit* unit;
+            Vector2 origin;
+            Vector2 dest;
+            Map& map;
+        }
+    }
+}
+
+using EventListener = std::function<void(Event)>;
+
+class GameEvents
+
+public:
+
+    void Register(EventType, EventListener);
+    void Notify(Event);
+
+private:
+    map<EventType, vector<EventListener>> event_listeners;
+
+# Second design
+
+namespace Event
+{
+
+    enum Type
+    {
+        GAME,
+        UNIT
+    }
+
+    enum UnitSubType
+    {
+        UNIT_DEATH,
+        UNIT_SPAWN,
+        UNIT_MOVE,
+        UNIT_ATTACK
+    }
+
+    enum GameSubType
+    {
+        TURN_PASSED,
+        PLAYER_REMOVED
+    }
+
+    union SubType
+    {
+        UnitSubType unitSubType;
+        GameSubType gameSubType;
+    }
+
+    union Union
+    {
+        UnitDeath unitDeath;
+        UnitSpawn unitSpawn;
+    }
+
+    struct Event
+    {
+        Event::Type type
+        Event::SubType subtype;
+        Event::Union event;
+    }
+
+    namespace Unit
+    {
+        struct Death
+        {
+            Unit* unit;
+            Unit* killer;
+        }
+
+        struct Move
+        {
+            Unit* unit;
+            Vector2 origin;
+            Vector2 dest;
+            Map& map;
+        }
+    }
+}
+
+using EventListener = std::function<void(Event)>;
+
+class GameEvents
+
+public:
+
+    void Register(EventType, EventListener);
+
+private:
+    map<EventType, vector<EventListener>> event_listeners;
