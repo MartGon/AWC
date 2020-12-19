@@ -4,6 +4,7 @@
 #include <AWC/Map.h>
 #include <AWC/Player.h>
 #include <AWC/Turn.h>
+#include <AWC/Event.h>
 
 class Game
 {
@@ -61,4 +62,5 @@ private:
     std::vector<Player> players_;
     std::vector<Map> maps_;
     Turn currentTurn;
+    Event::Subject events;
 };
