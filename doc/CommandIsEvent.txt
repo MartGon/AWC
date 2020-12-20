@@ -110,3 +110,91 @@ while(!q.Empty()):
     o->Execute();
     auto tOperations = Notify(o);
 
+
+# One Queue model with execute history
+##################################################################
+
+Q = []
+H = []
+
+# 1. User creates a MoveCommand
+
+Q = [MC]
+H = []
+
+# 2. MoveCommand is executed, move operations are created
+
+Q = [M, M, M, M, M]
+H = [MC]
+
+# 3. First move operation is executed. Mine is notified. Clears Queue and pushes Attack
+
+Q = [A]
+H = [MC, M]
+
+# 4. Attack is executed. Nothing else is triggered
+
+Q = []
+H = [MC, M, A]
+
+# Note: undoing a command is simple. Iterate the H backwards, until u find a command
+
+# Heirarchical model
+########################################################
+
+Q = []
+H = []
+
+# 1. User creates a MoveCommand
+
+Q = [MC]
+H = []
+
+# 2. MoveCommand is executed, move operations are created
+
+Q = []
+Q(MC) = [M, M, M, M, M]
+H = []
+
+# 3. First Move operation is executed. Mine is notified. Clears queue and pushes Attack
+
+Q = []
+Q(MC) = [M]
+Q(M) = [A]
+H = []
+
+# 4. Attack is executed. Nothing else is triggered
+
+Q = []
+H = [MC]
+H(MC) = [M]
+H(M) = [A]
+
+# Undoing is easy. Call Undo in root, which calls Undo in children, then undoes itself.
+
+# Design
+
+class Operation
+
+public:
+    void Execute():
+        DoStuff() // This could be a function param
+
+        while(opeartions.NotEmpty()):
+            operation.Execute();
+            history.push(operation)
+
+            Notify(operation);
+
+    void Undo():
+        ...        
+
+    void AddOperation(operation):
+        operations.push(operation)
+
+    void ClearQueue();
+        operations.clear();
+
+private:
+    std::queue<Operation> operations
+    std::queue<Operation> history;
