@@ -151,3 +151,21 @@ class GameSubject
 
 gameSubject.turnPassedTopic.Register(...)
 gameSubject.turnPassedTopic.Notify(turnPassed);
+
+
+# Fourth Design, everything is an event
+# In this design, theres a queue of events, where every change made to the state of the game is registered.
+# Commands create events that are pushed to the queue, then those events are resolved.
+# After an event is resolved, every entity is notified of that event.
+# In this model, commands and events are almost interchangeable.
+
+EventQueue q;
+
+while(!q.Empty())
+    Event e = q.Pop();
+    e.Resolve()
+    Notify(e);
+
+# Problem: Now that commands and events are the same thing. How does the mine realize that the tank has walked over it
+# if there's no Path information in the event?
+# Well, once they are executed, commands can give that information. MoveCommand has a method to return a path, returns an empty vector if it wasn't executed.
