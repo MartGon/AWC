@@ -23,6 +23,8 @@ add_library(AWCSource
   TilePattern/TileGraph.cpp
   TilePattern/TileNode.cpp
 
+  Operation/Operation.cpp
+
   Unit/MovementDescType.cpp
   Unit/MovementDesc.cpp
   Unit/Unit.cpp

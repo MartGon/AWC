@@ -32,6 +32,12 @@ class UnitType;
 class Weapon;
 class WeaponType;
 
+namespace UnitNS
+{
+    enum Flag : unsigned int;
+    enum StatType : unsigned int;
+}
+
 namespace Operation
 {
     class OperationI;

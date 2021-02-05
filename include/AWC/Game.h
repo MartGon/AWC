@@ -62,5 +62,6 @@ private:
     std::vector<Player> players_;
     std::vector<Map> maps_;
     Turn currentTurn;
+    
     Event::Subject events;
 };

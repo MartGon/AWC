@@ -16,7 +16,7 @@ namespace UnitNS
         ATTACKED    = 0x2
     };
 
-    enum StatType
+    enum StatType : uint
     {
         HEALTH,
         GAS

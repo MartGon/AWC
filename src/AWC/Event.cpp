@@ -1,7 +1,7 @@
 #include <AWC/Event.h>
 
 #include <Utils/STLUtils.h>
-#include <AWC/Operation.h>
+#include <AWC/Operation/Operation.h>
 
 using namespace Event;
 using namespace Operation;
