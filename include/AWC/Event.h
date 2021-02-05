@@ -1,39 +1,21 @@
 #pragma once
 
-#include <AWC/GameEvent.h>
-
+#include <AWC/AWCusing.h>
 #include <functional>
 #include <unordered_map>
 
 namespace Event
 {
-    enum class Type
-    {
-        TURN_PASSED
-    };
-
-    union Union
-    {
-        TurnPassed turnPassed;
-    };
-
-    struct Event
-    {
-        Type type;
-        Union event;
-    };
-
-
     // Subject
-    using EventListener = std::function<void(Event)>;
+    using Listener = std::function<void(OperationIPtr)>;
     class Subject
     {
     public:
-        void Register(Type type, EventListener eventListener);
-        void Notify(Event ev);
-        void Notify(Event ev, Type type);
+        void Register(Operation::Type type, Listener eventListener);
+        void Notify(OperationIPtr op);
+        void Notify(OperationIPtr op, Operation::Type type);
 
     private:
-        std::unordered_map<Type, std::vector<EventListener>> eventListeners_;
+        std::unordered_map<Operation::Type, std::vector<Listener>> eventListeners_;
     };
 }

@@ -18,7 +18,7 @@
 #include <AWC/AWCException.h>
 
 Unit::Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& owner) 
-    : unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}, owner_{owner}, flags{UnitFlags::NONE}
+    : unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}, owner_{owner}, flags{UnitNS::Flag::NONE}
 {
 
 }
@@ -53,7 +53,7 @@ void Unit::Move(unsigned int moveCost)
     //TODO: Could check if that moveCost is possible. Check current gas and maxRange;
     moveDesc_->Move(moveCost);
 
-    SetFlag(UnitFlags::MOVED);
+    SetFlag(UnitNS::Flag::MOVED);
 }
 
 uint Unit::GetCurrentGas() const
@@ -63,7 +63,7 @@ uint Unit::GetCurrentGas() const
 
 bool Unit::CanMove() const
 {
-    return !HasFlag(UnitFlags::MOVED);
+    return !HasFlag(UnitNS::Flag::MOVED);
 }
 
 // Attack
@@ -87,7 +87,7 @@ UnitAttack Unit::CalculateAttack(unsigned int weaponId, const Map& map, Vector2 
 
 bool Unit::CanAttack() const
 {
-    return !HasFlag(UnitFlags::ATTACKED);
+    return !HasFlag(UnitNS::Flag::ATTACKED);
 }
 
 bool Unit::CanAttack(UnitPtr unit) const
@@ -141,7 +141,7 @@ void Unit::UseWeapon(unsigned int weaponId)
         auto weapon = weapons_[weaponId];
         weapon->Use();
 
-        SetFlag(UnitFlags::ATTACKED);
+        SetFlag(UnitNS::Flag::ATTACKED);
     }
     else
         ThrowInvalidWeaponIdException(weaponId);
@@ -195,8 +195,8 @@ void Unit::OnPassTurn(Turn& turn)
 {
     if(turn.playerIndex == owner_.GetId())
     {
-        RemoveFlag(UnitFlags::MOVED);
-        RemoveFlag(UnitFlags::ATTACKED);
+        RemoveFlag(UnitNS::Flag::MOVED);
+        RemoveFlag(UnitNS::Flag::ATTACKED);
     }
 }
 
@@ -239,17 +239,17 @@ bool Unit::IsWeaponIdValid(uint weaponId) const
 
     // State
 
-void Unit::SetFlag(UnitFlags flag)
+void Unit::SetFlag(UnitNS::Flag flag)
 {
     flags |= flag;
 }
 
-void Unit::RemoveFlag(UnitFlags flag)
+void Unit::RemoveFlag(UnitNS::Flag flag)
 {
     flags = flags & ~flag;
 }
 
-bool Unit::HasFlag(UnitFlags flag) const
+bool Unit::HasFlag(UnitNS::Flag flag) const
 {
     return flags & flag;
 }

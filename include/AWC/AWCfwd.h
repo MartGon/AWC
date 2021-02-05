@@ -31,3 +31,9 @@ class UnitMovement;
 class UnitType;
 class Weapon;
 class WeaponType;
+
+namespace Operation
+{
+    class OperationI;
+    enum class Type;
+};

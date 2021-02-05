@@ -7,12 +7,21 @@
 
 class UnitType;
 
-enum UnitFlags : uint
+namespace UnitNS
 {
-    NONE        = 0x0,
-    MOVED       = 0x1,
-    ATTACKED    = 0x2
-};
+    enum Flag : uint
+    {
+        NONE        = 0x0,
+        MOVED       = 0x1,
+        ATTACKED    = 0x2
+    };
+
+    enum StatType
+    {
+        HEALTH,
+        GAS
+    };
+}
 
 class Unit
 {
@@ -107,13 +116,13 @@ private:
     // State
 
     // Sets a UnitFlag
-    void SetFlag(UnitFlags flag);
+    void SetFlag(UnitNS::Flag flag);
 
     // Clears a UnitFlag
-    void RemoveFlag(UnitFlags flag);
+    void RemoveFlag(UnitNS::Flag flag);
 
     // Checks a UnitFlag
-    bool HasFlag(UnitFlags flag) const;
+    bool HasFlag(UnitNS::Flag flag) const;
 
     // Utils
     void ThrowInvalidWeaponIdException(uint weaponId) const;
