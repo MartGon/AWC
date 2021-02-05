@@ -11,7 +11,7 @@
 
 using namespace Pathfinding;
 
-TilePatternIPtr Pathfinding::Dijkstra(Vector2 origin, Params params)
+TileGraph Pathfinding::Dijkstra(Vector2 origin, Params params)
 {
     TileGraph tg;
     auto originNode = tg.CreateNode(origin, 0);
@@ -53,10 +53,8 @@ TilePatternIPtr Pathfinding::Dijkstra(Vector2 origin, Params params)
             }
         }
     }
-
-    // Create TilePattern
-    auto tp = TilePatternIPtr(new TilePattern{origin, tg, params.constraints.range});
-    return tp;
+    
+    return tg;
 }
 
 Directions Pathfinding::GetDiscoverDirections(TileNodePtr tileNode, Params params)

@@ -153,5 +153,10 @@ TilePatternIPtr TilePatternDesc::DoCalculateTilePattern(const Map& map, Vector2 
     std::optional<Vector2> destination, const TilePatternConstraints& constraints)
 {
     Pathfinding::Params params{map, *this, constraints, destination};
-    return Pathfinding::Dijkstra(origin, params);
+    auto tg = Pathfinding::Dijkstra(origin, params);
+
+    // Create TilePattern
+    auto tp = TilePatternIPtr(new TilePattern{origin, tg, params.constraints.range});
+
+    return tp;
 }

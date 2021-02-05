@@ -14,7 +14,7 @@ namespace Pathfinding
         std::optional<Vector2> dest;
     };
 
-    TilePatternIPtr Dijkstra(Vector2 origin, Params params);
+    TileGraph Dijkstra(Vector2 origin, Params params);
 
     Directions GetDiscoverDirections(TileNodePtr tileNode, Params params);
     Vector2 GetMovementToOrigin(TileNodePtr tileNode);
