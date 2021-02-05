@@ -9,9 +9,11 @@
 
 class TilePattern : public TilePatternI
 {
-friend class TilePatternDesc;
-
 public:
+
+    TilePattern(Vector2 origin, TileGraph mg, unsigned int maxRange, unsigned int minRange);
+    TilePattern(Vector2 origin, TileGraph mg, Range range);
+
     unsigned int GetTileCost(Vector2 dest) const override;
     bool IsTileInPattern(Vector2 dest) const override;
 
@@ -22,8 +24,6 @@ public:
     Vector2 GetOrigin() const override;
 
 private:
-    TilePattern(Vector2 origin, TileGraph mg, unsigned int maxRange, unsigned int minRange);
-    TilePattern(Vector2 origin, TileGraph mg, Range range);
 
     bool IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange = 0) const;
     bool IsTileInRange(Vector2 dest) const;

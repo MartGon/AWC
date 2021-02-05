@@ -5,6 +5,7 @@
 #include <AWC/Map.h>
 #include <AWC/TilePattern/TileGraph.h>
 #include <AWC/AWCException.h>
+#include <AWC/Pathfinding.h>
 
 #include <Utils/STLUtils.h>
 
@@ -151,102 +152,6 @@ Directions TilePatternDesc::GenerateLockedDirections(const Directions& direction
 TilePatternIPtr TilePatternDesc::DoCalculateTilePattern(const Map& map, Vector2 origin, 
     std::optional<Vector2> destination, const TilePatternConstraints& constraints)
 {
-        // Create mapGraph
-    TileGraph tg;
-    auto originNode = tg.CreateNode(origin, 0);
-
-    // Create prioQueue
-    // PrioQueue pop values in reverse order
-    auto greater = [](TileNodePtr a, TileNodePtr b) { return a.lock()->cost > b.lock()->cost;};
-    std::priority_queue<TileNodePtr, std::vector<TileNodePtr>, decltype(greater)> prioQueue{greater};
-    prioQueue.push(originNode);
-
-    while(!prioQueue.empty())
-    {
-        // Pop first member
-        auto node = prioQueue.top().lock();
-        prioQueue.pop();
-
-        if(destination.has_value() && destination.value() == node->pos)
-            break;
-
-        // Get its neighbours
-        auto discoverDirections = GetDiscoverDirections(node, map);
-        auto neighbours = tg.DiscoverNeighbours(node->pos, discoverDirections);
-        for(const auto& nei : neighbours)
-        {
-            auto sharedNei = nei.lock();
-
-            // Check if accumulated cost to this neighbour is lower than previous
-            uint neiCost = GetTileCost(map, constraints, sharedNei->pos);
-            uint calculatedCost = PrimitiveUtils::NoOverflowSum(node->cost, neiCost);
-            if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.range.maxRange)
-            {
-                // Push it to queue if that's the case
-                sharedNei->cost = calculatedCost;
-                prioQueue.push(nei);
-            }
-        }
-    }
-
-    // Create TilePattern
-    auto tp = TilePatternIPtr(new TilePattern{origin, tg, constraints.range});
-
-    return tp;
-}
-
-Directions TilePatternDesc::GetDiscoverDirections(TileNodePtr tileNode, const Map& map)
-{
-    auto directions = GetOriginDirections();
-
-    auto movement = GetMovementToOrigin(tileNode);
-    directions = GetLockedDirections(movement);
-    directions = GetValidDirections(tileNode, directions, map);
-
-    return directions;
-}
-
-Vector2 TilePatternDesc::GetMovementToOrigin(TileNodePtr tileNode)
-{
-    Vector2 movement{0, 0};
-
-    auto sTileNode = tileNode.lock();
-    auto lowestCost = [](TileNodePtr a, TileNodePtr b) {
-            return a.lock()->cost < b.lock()->cost;
-        };
-
-    auto neighbour = sTileNode->GetNeighbourBySortCriteria(lowestCost);
-    if(auto sNeigbour = neighbour.lock())
-        movement = sTileNode->pos - sNeigbour->pos;
-    
-    return movement;
-}
-
-Directions TilePatternDesc::GetValidDirections(TileNodePtr tileNode, Directions directions, const Map& map)
-{
-    auto nodePos = tileNode.lock()->pos;
-
-    std::vector<Vector2> validDirections;
-    for(auto dir : directions)
-    {
-        auto neigbourPos = nodePos + dir;
-        if(map.IsPositionValid(neigbourPos))
-            validDirections.push_back(dir);
-    }
-
-    return validDirections;
-}
-
-unsigned int TilePatternDesc::GetTileCost(const Map& map, const TilePatternConstraints& tpc, Vector2 pos)
-{
-    auto tile = map.GetTile(pos);
-    auto cost = tpc.GetTileCost(tile->GetId());
-  
-    if(auto unit = map.GetUnit(pos))
-    {   
-        auto extraCost = tpc.GetUnitCost(unit->GetId());
-        cost = PrimitiveUtils::NoOverflowSum(cost, extraCost);
-    }
-
-    return cost;
+    Pathfinding::Params params{map, *this, constraints, destination};
+    return Pathfinding::Dijkstra(origin, params);
 }

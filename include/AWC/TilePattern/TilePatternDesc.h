@@ -44,11 +44,6 @@ private:
 
     TilePatternIPtr DoCalculateTilePattern(const Map& map, Vector2 origin, std::optional<Vector2> destination, const TilePatternConstraints& constraints) override;
 
-    Directions GetDiscoverDirections(TileNodePtr tileNode, const Map& map);
-    Vector2 GetMovementToOrigin(TileNodePtr tileNode);
-    Directions GetValidDirections(TileNodePtr tileNode, Directions directions, const Map& map);
-    unsigned int GetTileCost(const Map& map, const TilePatternConstraints& tpc, Vector2 pos);
-
     Directions originDirections_;
     DirectionsTable lockedDirectionsTable_;
 };

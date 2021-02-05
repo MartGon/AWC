@@ -5,6 +5,7 @@ add_library(AWCSource
   Game.cpp
   Map.cpp
   Range.cpp
+  Pathfinding.cpp
   Player.cpp
   Tile.cpp
   TileType.cpp
