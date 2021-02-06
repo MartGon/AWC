@@ -2,6 +2,7 @@
 #include <Utils/STLUtils.h>
 #include <AWC/AWCException.h>
 #include <AWC/Command.h>
+#include <AWC/Operation/Operation.h>
 
 // Players
 
@@ -66,24 +67,25 @@ uint Game::GetMapCount() const
 
 // Commands
 
+bool Game::CanExecuteCommand(CommandPtr command)
+{
+    return this->CanExecuteCommand(command, currentTurn.playerIndex);
+}
+
 bool Game::CanExecuteCommand(CommandPtr command, uint playerIndex)
 {
     return IsPlayerIndexValid(playerIndex) && command->CanBeExecuted(*this, playerIndex);
 }
 
-bool Game::CanExecuteCommand(CommandPtr command)
+void Game::ExecuteCommand(CommandPtr command)
 {
-    return command->CanBeExecuted(*this, currentTurn.playerIndex);
+    this->ExecuteCommand(command, currentTurn.playerIndex);
 }
 
 void Game::ExecuteCommand(CommandPtr command, uint playerIndex)
 {
     command->Execute(*this, playerIndex);
-}
-
-void Game::ExecuteCommand(CommandPtr command)
-{
-    command->Execute(*this, currentTurn.playerIndex);
+    Run();
 }
 
 // State
@@ -234,4 +236,22 @@ void Game::CheckMapIndex(uint mapIndex) const
 {
     if(!IsMapIndexValid(mapIndex))
         throw std::out_of_range("Map index out of range:" + std::to_string(mapIndex));
+}
+
+    // Operations
+
+void Game::Run()
+{
+    using namespace Operation;
+
+    OperationIPtr op = nullptr;
+    while(!opQueue_.empty())
+    {
+        op = opQueue_.front();
+        opQueue_.pop();
+
+        Result res = op->Execute(*this);
+        if(res)
+            events.Notify(op);
+    }
 }

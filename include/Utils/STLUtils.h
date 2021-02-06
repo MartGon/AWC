@@ -24,7 +24,8 @@ namespace VectorUtils
     template<typename T>
     void RemoveByIndex(std::vector<T>& vector, uint index)
     {
-        assert(("Index is greater than vector size", index < vector.size()));
+        //"Index is greater than vector size"
+        assert((index < vector.size()));
         vector.erase(vector.begin() + index);
     }
 

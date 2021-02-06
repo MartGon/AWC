@@ -5,6 +5,9 @@
 #include <AWC/Player.h>
 #include <AWC/Turn.h>
 #include <AWC/Event.h>
+#include <AWC/Operation/OperationI.h>
+
+#include <queue>
 
 class Game
 {
@@ -24,10 +27,10 @@ public:
     uint GetMapCount() const;
 
     // Commands
-    bool CanExecuteCommand(CommandPtr command, uint playerIndex);
     bool CanExecuteCommand(CommandPtr command);
-    void ExecuteCommand(CommandPtr command, uint playerIndex);
+    bool CanExecuteCommand(CommandPtr command, uint playerIndex);
     void ExecuteCommand(CommandPtr command);
+    void ExecuteCommand(CommandPtr command, uint playerIndex);
 
     // State
     void Start();
@@ -59,8 +62,12 @@ private:
     void CheckPlayerIndex(uint playerIndex) const;
     void CheckMapIndex(uint mapIndex) const;
 
+    // Operations
+    void Run();
+
     std::vector<Player> players_;
     std::vector<Map> maps_;
+    std::queue<OperationIPtr> opQueue_;
     Turn currentTurn;
     
     Event::Subject events;
