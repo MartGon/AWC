@@ -6,11 +6,13 @@
 
 class Command
 {
+friend class Game;
+
 public:
     virtual ~Command(){};
-    void Execute(Game& game, uint playerIndex);
     virtual bool CanBeExecuted(Game& game, uint playerIndex) = 0;
 private:
+    void Execute(Game& game, uint playerIndex);
     virtual void DoExecute(Game& game, uint playerIndex) = 0;
 };
 

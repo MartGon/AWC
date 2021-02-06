@@ -32,6 +32,10 @@ public:
     void ExecuteCommand(CommandPtr command);
     void ExecuteCommand(CommandPtr command, uint playerIndex);
 
+    // Operation
+
+    void Push(OperationIPtr op);
+
     // State
     void Start();
     bool IsOver() const;

@@ -119,7 +119,8 @@ TEST_CASE("Game State")
 
         // Kill the unit an win
         CHECK(game.CanExecuteCommand(attackCommand, 0) == true);
-        attackCommand->Execute(game, 0);
+        //attackCommand->Execute(game, 0);
+        game.ExecuteCommand(attackCommand, 0);
 
         CHECK(game.IsOver() == true);
     }

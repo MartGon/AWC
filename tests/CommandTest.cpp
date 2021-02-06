@@ -45,7 +45,7 @@ TEST_CASE("MoveCommands")
     // Add map to game
     game.AddMap(map);
 
-    CommandPtr validMoveCommand = std::make_unique<MoveCommand>(0, 0, 0, 1, 0);
+    CommandPtr validMoveCommand = std::make_unique<MoveCommand>(0, 0, 0, 3, 0);
 
     SUBCASE("Some of them are valid or not")
     {
@@ -72,7 +72,8 @@ TEST_CASE("MoveCommands")
     SUBCASE("Valid commands can be executed and yield correct results")
     {
         auto startingGas = soldier->GetCurrentGas();
-        validMoveCommand->Execute(game, 0);
+        game.ExecuteCommand(validMoveCommand, 0);
+        //validMoveCommand->Execute(game, 0);
 
         auto& gameMap  = game.GetMap(0);
 
@@ -80,7 +81,8 @@ TEST_CASE("MoveCommands")
         auto noUnit = gameMap.GetUnit(0, 0);
 
         // Unit should now be at (1, 0)
-        auto unit = gameMap.GetUnit(1, 0);
+        auto unit = gameMap.GetUnit(3, 0);
+        CHECK(unit.get() != nullptr);
         auto currentGas = unit->GetCurrentGas();
 
         CHECK(unit.get() == soldier.get());
@@ -150,7 +152,8 @@ TEST_CASE("AttackCommands")
     }
     SUBCASE("Valid commands can be executed and yield correct results")
     {
-        validAttackCommand->Execute(game, 0);
+        //validAttackCommand->Execute(game, 0);
+        game.ExecuteCommand(validAttackCommand, 0);
 
         auto& gameMap  = game.GetMap(0);
 
@@ -164,7 +167,8 @@ TEST_CASE("AttackCommands")
 
         // Other soldier can still attack
         CHECK(friendlyValidAttack->CanBeExecuted(game, 0) == true);
-        friendlyValidAttack->Execute(game, 0);
+        //friendlyValidAttack->Execute(game, 0);
+        game.ExecuteCommand(friendlyValidAttack, 0);
 
         // Enemy is now dead
         CHECK(victim->IsDead() == true);

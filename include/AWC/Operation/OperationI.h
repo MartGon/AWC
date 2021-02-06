@@ -28,7 +28,8 @@ namespace Operation
         CUSTOM,
         COMPOSED,
         STAT_MOD,
-        UPDATE_FLAG
+        UPDATE_FLAG,
+        MOVE
     };
 
     class OperationI

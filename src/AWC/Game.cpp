@@ -88,6 +88,13 @@ void Game::ExecuteCommand(CommandPtr command, uint playerIndex)
     Run();
 }
 
+// Operation
+
+void Game::Push(OperationIPtr op)
+{
+    opQueue_.push(op);
+}
+
 // State
 
 void Game::Start()

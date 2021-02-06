@@ -1,8 +1,12 @@
 #include <AWC/Command.h>
 
 #include <AWC/Game.h>
+#include <AWC/Unit/Unit.h>
 #include <AWC/Unit/UnitMovement.h>
 #include <AWC/Unit/UnitAttack.h>
+#include <AWC/Operation/Operation.h>
+
+#include <Utils/STLUtils.h>
 
 void Command::Execute(Game& game, uint playerIndex)
 {
@@ -35,12 +39,24 @@ MoveCommand::MoveCommand(uint mapIndex, Vector2 origin, Vector2 dest) :
 void MoveCommand::DoExecute(Game& game, uint playerIndex)
 {
     auto& map = game.GetMap(mapIndex_);
-    auto unit = map.GetUnit(origin_);
-    map.RemoveUnit(origin_);
-    map.AddUnit(dest_, unit);
+    auto unit = map.GetUnit(origin_);    
 
     auto unitMovement = unit->CalculateMovement(map, origin_);
-    unit->Move(unitMovement.GetMoveCostTo(dest_));
+    auto path = unitMovement.GetPathTo(dest_);
+
+    Vector2 origin = origin_;
+    VectorUtils::RemoveByValue(path, origin_);
+    for(auto tile : path)
+    {
+        Vector2 dest = tile;
+        OperationIPtr move{new Operation::Move(mapIndex_, origin, dest)};
+        OperationIPtr gasMod{new Operation::StatMod(unit, UnitNS::StatType::GAS, 1)};
+
+        game.Push(move);
+        game.Push(gasMod);
+
+        origin = dest;
+    }
 }
 
 bool MoveCommand::CanBeExecuted(Game& game, uint playerIndex)
