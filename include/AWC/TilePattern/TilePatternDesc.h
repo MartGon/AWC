@@ -21,12 +21,12 @@ public:
     static TilePatternDescPtr CreateByLocked(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
     static TilePatternDescPtr CreateByExclusive(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
 
-    Directions GetOriginDirections();
+    Directions GetOriginDirections() const;
     bool IsOriginDirection(Vector2 dir);
     void AddOriginDirection(Vector2 dir);
     void RemoveOriginDirection(Vector2 dir);
 
-    Directions GetLockedDirections(Vector2 dir);
+    Directions GetLockedDirections(Vector2 dir) const;
     void SetExclusiveDirections(Vector2 dir, const Directions& exclusiveDirections);
     void SetLockedDirections(Vector2 dir, const Directions& lockedDirections);
 

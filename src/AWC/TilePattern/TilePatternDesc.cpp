@@ -49,7 +49,7 @@ TilePatternDesc::TilePatternDesc(const Directions& directions,
 
 // Methods
 
-Directions TilePatternDesc::GetOriginDirections()
+Directions TilePatternDesc::GetOriginDirections() const
 {
     return originDirections_;
 }
@@ -79,7 +79,7 @@ void TilePatternDesc::RemoveOriginDirection(Vector2 dir)
 
 }
 
-Directions TilePatternDesc::GetLockedDirections(Vector2 dir)
+Directions TilePatternDesc::GetLockedDirections(Vector2 dir) const
 {
     return lockedDirectionsTable_.at(dir);
 }

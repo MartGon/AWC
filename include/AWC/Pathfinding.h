@@ -5,11 +5,11 @@ namespace Pathfinding
 {
     struct Params
     {
-        Params(const Map& map, TilePatternDesc& tpd, const TilePatternConstraints& constraints, std::optional<Vector2> dest) :
+        Params(const Map& map, const TilePatternDesc& tpd, const TilePatternConstraints& constraints, std::optional<Vector2> dest) :
             map{map}, tpd{tpd}, constraints{constraints}, dest{dest} {}
 
         const Map& map;
-        TilePatternDesc& tpd;
+        const TilePatternDesc& tpd;
         const TilePatternConstraints& constraints;
         std::optional<Vector2> dest;
     };
