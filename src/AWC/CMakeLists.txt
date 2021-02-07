@@ -8,6 +8,7 @@ add_library(AWCSource
   Range.cpp
   Pathfinding.cpp
   Player.cpp
+  Process.cpp
   Tile.cpp
   TileType.cpp
   Turn.cpp

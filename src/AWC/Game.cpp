@@ -90,9 +90,9 @@ void Game::ExecuteCommand(CommandPtr command, uint playerIndex)
 
 // Operation
 
-void Game::Push(OperationIPtr op)
+void Game::Push(OperationIPtr op, uint8_t prio)
 {
-    opQueue_.push(op);
+    opQueue_.push(Process{op, prio});
 }
 
 // State
@@ -251,14 +251,24 @@ void Game::Run()
 {
     using namespace Operation;
 
-    OperationIPtr op = nullptr;
     while(!opQueue_.empty())
     {
-        op = opQueue_.front();
-        opQueue_.pop();
+        auto process = opQueue_.top();
 
-        Result res = op->Execute(*this);
-        if(res)
-            events.Notify(op);
+        if(!process.announced)
+        {
+            events.Notify(process.op, Event::NotificationType::PRE);
+            process.announced = true;
+        }
+
+        process = opQueue_.top();
+        if(process.announced)
+        {
+            opQueue_.pop();
+
+            Result res = process.op->Execute(*this);
+            if(res)
+                events.Notify(process.op, Event::NotificationType::POST);
+        }
     }
 }

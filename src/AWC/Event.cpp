@@ -2,6 +2,7 @@
 
 #include <Utils/STLUtils.h>
 #include <AWC/Operation/Operation.h>
+#include <AWC/Process.h>
 
 using namespace Event;
 using namespace Operation;
@@ -17,20 +18,20 @@ void Subject::Register(Operation::Type type, Listener eventListener)
     typeListeners.push_back(eventListener);
 }
 
-void Subject::Notify(OperationIPtr op, Operation::Type type)
+void Subject::Notify(Process p, Operation::Type type, NotificationType notType)
 {
     if(UnorderedMapUtils::Contains(eventListeners_, type))
     {
         std::vector<Listener> typeListeners = eventListeners_.at(type);
         for(auto listener : typeListeners)
         {
-            listener(op);
+            listener(p, notType);
         }
     }
 }
 
-void Subject::Notify(OperationIPtr op)
+void Subject::Notify(Process p, NotificationType notType)
 {
-    Type type = op->GetType();
-    Notify(op, type);
+    Type type = p.op->GetType();
+    Notify(p, type, notType);
 }

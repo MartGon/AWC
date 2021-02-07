@@ -2,6 +2,7 @@ add_executable(AWCTest
     AWCTest.cpp
     CommandTest.cpp
     CostTableTest.cpp
+    EventsTest.cpp
     GameTest.cpp
     MapTest.cpp
     TileTest.cpp

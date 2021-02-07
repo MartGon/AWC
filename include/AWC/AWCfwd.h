@@ -10,6 +10,7 @@ class MovementDescType;
 class MovementDesc;
 struct Range;
 class Player;
+struct Process;
 class Tile;
 class TileType;
 class TileGraph;

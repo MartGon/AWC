@@ -6,6 +6,7 @@
 #include <AWC/Turn.h>
 #include <AWC/Event.h>
 #include <AWC/Operation/OperationI.h>
+#include <AWC/Process.h>
 
 #include <queue>
 
@@ -34,7 +35,7 @@ public:
 
     // Operation
 
-    void Push(OperationIPtr op);
+    void Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
 
     // State
     void Start();
@@ -71,8 +72,10 @@ private:
 
     std::vector<Player> players_;
     std::vector<Map> maps_;
-    std::queue<OperationIPtr> opQueue_;
-    Turn currentTurn;
+
+    std::function<bool(Process a, Process b)> greater = [](Process a, Process b){return a.priority < b.priority;};
+    std::priority_queue<Process, std::vector<Process>, decltype(greater)> opQueue_{greater};
     
+    Turn currentTurn;    
     Event::Subject events;
 };
