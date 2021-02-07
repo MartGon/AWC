@@ -56,6 +56,9 @@ public:
     const Turn& GetCurrentTurn() const;
     void PassTurn();
 
+    // Events
+    Event::Subject& GetSubject();
+
 private:
     
     // Events

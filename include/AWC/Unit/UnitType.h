@@ -4,6 +4,9 @@
 #include <memory>
 #include <string>
 
+#include <AWC/Event.h>
+
+
 class Unit;
 
 class UnitType
@@ -16,6 +19,9 @@ public:
     const std::string GetName() const;
     const uint GetId() const;
 
+    std::vector<Event::Listener> GetListeners() const;
+    void AddListener(Event::Listener listener);
+
 private:
 
     std::vector<WeaponPtr> GetWeapons() const;
@@ -25,4 +31,5 @@ private:
 
     MovementDecTypePtr moveType_;
     std::vector<WeaponTypePtr> weaponTypes_;
+    std::vector<Event::Listener> listeners_;
 };

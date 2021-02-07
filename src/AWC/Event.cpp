@@ -7,11 +7,16 @@
 using namespace Event;
 using namespace Operation;
 
-void Subject::Register(Operation::Type type, Listener eventListener)
+void Subject::Register(Listener listener)
+{
+    Subject::Register(listener.type, listener.handler);
+}
+
+void Subject::Register(Operation::Type type, Handler eventListener)
 {
     if(!UnorderedMapUtils::Contains(eventListeners_, type))
     {
-        eventListeners_[type] = std::vector<Listener>{};
+        eventListeners_[type] = std::vector<Handler>{};
     }
 
     auto& typeListeners = eventListeners_.at(type);
@@ -22,7 +27,7 @@ void Subject::Notify(Process p, Operation::Type type, NotificationType notType)
 {
     if(UnorderedMapUtils::Contains(eventListeners_, type))
     {
-        std::vector<Listener> typeListeners = eventListeners_.at(type);
+        std::vector<Handler> typeListeners = eventListeners_.at(type);
         for(auto listener : typeListeners)
         {
             listener(p, notType);

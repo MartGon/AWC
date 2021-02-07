@@ -4,6 +4,7 @@
 
 #include <Utils/Vector2.h>
 #include <AWC/AWCusing.h>
+#include <AWC/Event.h>
 
 class UnitType;
 
@@ -101,6 +102,9 @@ public:
 
     // Callback to be called on pass turn
     void OnPassTurn(Turn& turn);
+
+    // Events
+    void RegisterListeners(Event::Subject& subject);
 
 private:
 

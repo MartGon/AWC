@@ -200,6 +200,15 @@ void Unit::OnPassTurn(Turn& turn)
     }
 }
 
+// Events
+
+void Unit::RegisterListeners(Event::Subject& subject)
+{
+    auto listeners = unitType_.GetListeners();
+    for(auto listener : listeners)
+        subject.Register(listener.type, listener.handler);
+}
+
 // private
 
     // Movement

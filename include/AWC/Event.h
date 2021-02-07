@@ -14,15 +14,23 @@ namespace Event
     };
 
     // Subject
-    using Listener = std::function<void(Process, NotificationType)>;
+    using Handler = std::function<void(Process, NotificationType)>;
+
+    struct Listener
+    {
+        Operation::Type type;
+        Handler handler;
+    };
+
     class Subject
     {
     public:
-        void Register(Operation::Type type, Listener eventListener);
+        void Register(Listener listener);
+        void Register(Operation::Type type, Handler eventListener);
         void Notify(Process p, NotificationType notType);
         void Notify(Process p, Operation::Type type, NotificationType notType);
 
     private:
-        std::unordered_map<Operation::Type, std::vector<Listener>> eventListeners_;
+        std::unordered_map<Operation::Type, std::vector<Handler>> eventListeners_;
     };
 }

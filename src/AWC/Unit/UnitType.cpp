@@ -25,6 +25,16 @@ const uint UnitType::GetId() const
     return id_;
 }
 
+std::vector<Event::Listener> UnitType::GetListeners() const
+{
+    return listeners_;
+}
+
+void UnitType::AddListener(Event::Listener listener)
+{
+    listeners_.push_back(listener);
+}
+
 // Private
 
 std::vector<WeaponPtr> UnitType::GetWeapons() const

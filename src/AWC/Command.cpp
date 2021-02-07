@@ -46,14 +46,16 @@ void MoveCommand::DoExecute(Game& game, uint playerIndex)
 
     Vector2 origin = origin_;
     VectorUtils::RemoveByValue(path, origin_);
+
+    uint8_t prio = PRIORITY_DEFAULT;
     for(auto tile : path)
     {
         Vector2 dest = tile;
         OperationIPtr move{new Operation::Move(mapIndex_, origin, dest)};
         OperationIPtr gasMod{new Operation::StatMod(unit, UnitNS::StatType::GAS, 1)};
 
-        game.Push(move);
-        game.Push(gasMod);
+        game.Push(move, prio--);
+        game.Push(gasMod, prio--);
 
         origin = dest;
     }

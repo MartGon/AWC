@@ -210,6 +210,13 @@ void Game::PassTurn()
     NotifyPassTurn(currentTurn);
 }
 
+// Events
+
+Event::Subject& Game::GetSubject()
+{
+    return events;
+}
+
 // Private
 
     // Events
@@ -253,13 +260,17 @@ void Game::Run()
 
     while(!opQueue_.empty())
     {
-        auto process = opQueue_.top();
+        Process process = opQueue_.top();
+        opQueue_.pop();
 
         if(!process.announced)
         {
-            events.Notify(process.op, Event::NotificationType::PRE);
             process.announced = true;
+            opQueue_.push(process);
+            events.Notify(process.op, Event::NotificationType::PRE);
         }
+        else
+            opQueue_.push(process);
 
         process = opQueue_.top();
         if(process.announced)
