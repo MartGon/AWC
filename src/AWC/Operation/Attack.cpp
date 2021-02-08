@@ -25,9 +25,7 @@ Result Attack::Execute(Game& game)
         game.Push(op);
     }
 
-    // TODO: Weapon ammo is reduced
-    StatMod::Extra extra;
-    extra.ammo = {weaponIndex_};
+    StatMod::Extra extra{StatMod::Ammo{weaponIndex_}};
     OperationIPtr ammoOp{new StatMod{unit_, UnitNS::AMMO, -1, extra}};
     game.Push(ammoOp);
 

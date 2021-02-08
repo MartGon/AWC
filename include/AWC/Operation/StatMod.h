@@ -16,11 +16,16 @@ namespace Operation
 
         struct Ammo
         {
+            Ammo(uint weaponIndex) : weaponIndex{weaponIndex} {};
+
             uint weaponIndex;
         };
 
         union Extra
         {
+            Extra() {};
+            Extra(Ammo ammo) : ammo{ammo} {};
+
             Null null;
             Ammo ammo;
         };
