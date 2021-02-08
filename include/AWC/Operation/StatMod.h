@@ -33,7 +33,7 @@ namespace Operation
         ~StatMod() override {};
         
         StatMod(UnitPtr unit, UnitNS::StatType type, int amount, Extra extra = Extra{}) : 
-            unit_{unit}, type_{type}, amount_{amount}, OperationI{Type::STAT_MOD} {};
+            unit_{unit}, type_{type}, amount_{amount}, extra_{extra}, OperationI{Type::STAT_MOD} {};
 
         Result Execute(Game& state) override;
     
