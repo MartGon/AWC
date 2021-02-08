@@ -8,6 +8,8 @@ Result Move::Execute(Game& game)
 {
     Result result{SUCCESS};
 
+    // TODO: Check if the unit can move there
+
     auto& map = game.GetMap(mapIndex_);
     unit_ = map.GetUnit(origin_);
     map.RemoveUnit(origin_);

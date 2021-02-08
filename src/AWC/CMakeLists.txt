@@ -27,6 +27,9 @@ add_library(AWCSource
   Operation/Operation.cpp
   Operation/Move.cpp
   Operation/StatMod.cpp
+  Operation/Attack.cpp
+  Operation/TakeDmg.cpp
+  Operation/UpdateFlag.cpp
 
   Unit/MovementDescType.cpp
   Unit/MovementDesc.cpp

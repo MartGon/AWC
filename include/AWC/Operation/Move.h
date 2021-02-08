@@ -1,3 +1,5 @@
+#pragma once
+
 #include "AWC/Operation/OperationI.h"
 
 #include "AWC/AWCusing.h"

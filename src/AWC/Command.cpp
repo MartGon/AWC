@@ -4,6 +4,7 @@
 #include <AWC/Unit/Unit.h>
 #include <AWC/Unit/UnitMovement.h>
 #include <AWC/Unit/UnitAttack.h>
+
 #include <AWC/Operation/Operation.h>
 
 #include <Utils/STLUtils.h>
@@ -97,30 +98,12 @@ AttackCommand::AttackCommand(uint mapIndex, Vector2 unitIndex, Vector2 targetPos
 void AttackCommand::DoExecute(Game& game, uint playerIndex)
 {
     auto& map = game.GetMap(mapIndex_);
-    
     auto sourceUnit = map.GetUnit(unitIndex_);
 
-    // Unit takes damage
-    if(auto targetUnit = map.GetUnit(targetPos_))
-    {   
-        auto dmg = sourceUnit->GetDmgToUnit(weaponIndex_, targetUnit);
-        targetUnit->TakeDamage(dmg);
-        
-        // Remove unit on death
-        if(targetUnit->IsDead())
-        {
-            map.RemoveUnit(targetPos_);
-
-            auto owner = targetUnit->GetOwner();
-            if(game.HasPlayerLost(owner.GetId()))
-                game.OnPlayerLost(owner.GetId());
-        }
-    }
-
-    // TODO: Tile->OnAttack(): Tile triggers effect when attacked
-
-    // Weapon ammo is reduced
-    sourceUnit->UseWeapon(weaponIndex_);
+    Position origin{unitIndex_, mapIndex_};
+    Position dest{targetPos_, mapIndex_};
+    OperationIPtr attack{new Operation::Attack{origin, dest, weaponIndex_}};
+    game.Push(attack);
 }
 
 bool AttackCommand::CanBeExecuted(Game& game, uint playerIndex)

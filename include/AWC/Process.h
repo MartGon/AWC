@@ -1,3 +1,4 @@
+#pragma once
 #include <AWC/AWCusing.h>
 
 enum Priority

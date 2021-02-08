@@ -14,13 +14,28 @@ namespace UnitNS
     {
         NONE        = 0x0,
         MOVED       = 0x1,
-        ATTACKED    = 0x2
+        ATTACKED    = 0x2,
+        DEAD        = 0x4
     };
 
     enum StatType : uint
     {
         HEALTH,
-        GAS
+        GAS,
+        AMMO
+    };
+
+    struct GUID
+    {
+        GUID(uint id, uint typeId) : id{id}, typeId{typeId} {};
+
+        bool operator==(const GUID& b) const
+        {
+            return id == b.id && typeId == b.typeId;
+        }
+
+        uint id;
+        uint typeId;
     };
 }
 
@@ -29,10 +44,9 @@ class Unit
 friend class UnitType;
 
 public:
-    Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& ownerId);
-
     const std::string GetName() const;
-    const uint GetId() const;
+    const uint GetTypeId() const;
+    const UnitNS::GUID GetGUID() const;
     const Player& GetOwner() const;
 
     // Misc
@@ -103,10 +117,20 @@ public:
     // Callback to be called on pass turn
     void OnPassTurn(Turn& turn);
 
+    // Sets a UnitFlag
+    void SetFlag(UnitNS::Flag flag);
+
+    // Clears a UnitFlag
+    void RemoveFlag(UnitNS::Flag flag);
+
+    // Checks a UnitFlag
+    bool HasFlag(UnitNS::Flag flag) const;
+
     // Events
     void RegisterListeners(Event::Subject& subject);
 
 private:
+    Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& ownerId);
 
     // Movement
     // TODO: This should become public once CalculateMovement does
@@ -119,19 +143,11 @@ private:
 
     // State
 
-    // Sets a UnitFlag
-    void SetFlag(UnitNS::Flag flag);
-
-    // Clears a UnitFlag
-    void RemoveFlag(UnitNS::Flag flag);
-
-    // Checks a UnitFlag
-    bool HasFlag(UnitNS::Flag flag) const;
-
     // Utils
     void ThrowInvalidWeaponIdException(uint weaponId) const;
 
-    // TODO: Add GUID.
+    // Member variables
+    uint id;
 
     // State
     float health = 100;

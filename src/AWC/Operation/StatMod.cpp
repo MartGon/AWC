@@ -13,6 +13,11 @@ Result StatMod::Execute(Game& game)
         case GAS:
             unit_->Move(amount_);
             break;
+        case AMMO:
+        {
+            auto weaponIndex = extra_.ammo.weaponIndex;
+            unit_->UseWeapon(weaponIndex);
+        }
         default:
             break;
     }

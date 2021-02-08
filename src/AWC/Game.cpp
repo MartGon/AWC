@@ -192,6 +192,41 @@ void Game::EnumUnits(std::function<void(UnitPtr)> operation, uint mapIndex) cons
     }
 }
 
+void Game::EnumUnits(std::function<void(UnitPtr, Position)> operation, uint mapIndex) const
+{
+    if(operation)
+    {
+        uint maps = GetMapCount();
+        for(uint i = 0; i < maps; i++)
+        {
+            auto map = maps_.at(i);
+            Vector2 mapSize = map.GetSize();
+            for(int x = 0; x < mapSize.x; x++)
+            {
+                for(int y = 0; y < mapSize.y; y++)
+                {
+                    if(auto unit = map.GetUnit(x, y))
+                        operation(unit, Position{{x, y}, i});
+                }
+            }
+        }
+    }
+}
+
+std::optional<Position> Game::GetUnitPos(UnitNS::GUID guid)
+{
+    std::optional<Position> pos;
+
+    auto myUnit = [&pos, guid](UnitPtr unit, Position position)
+    {
+        if(unit->GetGUID() == guid)
+            pos = position;
+    };
+    EnumUnits(myUnit);
+
+    return pos;
+}
+
 // Turn history
 
 const Turn& Game::GetCurrentTurn() const

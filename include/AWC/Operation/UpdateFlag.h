@@ -1,3 +1,5 @@
+#pragma once
+
 #include "AWC/Operation/OperationI.h"
 
 namespace Operation
@@ -6,11 +8,13 @@ namespace Operation
     {
     public:
         ~UpdateFlag() override {};
-        UpdateFlag(UnitPtr unit, UnitNS::Flag flag, bool set) : unit_{unit}, flag_{flag}, set_{set}, OperationI{Type::UPDATE_FLAG} {};
+        UpdateFlag(UnitPtr unit, UnitNS::Flag flag, bool set) : unit_{unit}, 
+            flag_{flag}, set_{set}, OperationI{Type::UPDATE_FLAG} {};
 
         Result Execute(Game& game) override;
     
         UnitPtr unit_;
+        Vector2 unitPos_;
         UnitNS::Flag flag_;
         bool set_;
     };

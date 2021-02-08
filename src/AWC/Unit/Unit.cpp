@@ -28,9 +28,14 @@ const std::string Unit::GetName() const
     return unitType_.GetName();
 }
 
-const uint Unit::GetId() const
+const uint Unit::GetTypeId() const
 {
     return unitType_.GetId();
+}
+
+const UnitNS::GUID Unit::GetGUID() const
+{
+    return UnitNS::GUID{id, GetTypeId()};
 }
 
 const Player& Unit::GetOwner() const
@@ -105,7 +110,7 @@ bool Unit::CanAttackUnitWith(UnitPtr unit, uint weaponId) const
     if(IsWeaponIdValid(weaponId))
     {
         auto weapon = weapons_[weaponId];
-        canAttack = weapon->HasEnoughAmmo() && weapon->CanAttackUnit(unit->GetId());
+        canAttack = weapon->HasEnoughAmmo() && weapon->CanAttackUnit(unit->GetTypeId());
     }
     else    
         ThrowInvalidWeaponIdException(weaponId);
@@ -125,7 +130,7 @@ float Unit::GetDmgToUnit(unsigned int weaponId, UnitPtr unit) const
     if(IsWeaponIdValid(weaponId))
     {
         auto weapon = weapons_[weaponId];
-        dmg = weapon->GetBaseDamageTo(unit->GetId());
+        dmg = weapon->GetBaseDamageTo(unit->GetTypeId());
     }
     else
         ThrowInvalidWeaponIdException(weaponId);
@@ -186,7 +191,7 @@ float Unit::GetHealth()
 
 bool Unit::IsDead()
 {
-    return health <= 0;
+    return HasFlag(UnitNS::Flag::DEAD);
 }
 
 // State
@@ -198,6 +203,21 @@ void Unit::OnPassTurn(Turn& turn)
         RemoveFlag(UnitNS::Flag::MOVED);
         RemoveFlag(UnitNS::Flag::ATTACKED);
     }
+}
+
+void Unit::SetFlag(UnitNS::Flag flag)
+{
+    flags |= flag;
+}
+
+void Unit::RemoveFlag(UnitNS::Flag flag)
+{
+    flags = flags & ~flag;
+}
+
+bool Unit::HasFlag(UnitNS::Flag flag) const
+{
+    return flags & flag;
 }
 
 // Events
@@ -245,24 +265,6 @@ bool Unit::IsWeaponIdValid(uint weaponId) const
 {
     return weaponId < weapons_.size();
 }
-
-    // State
-
-void Unit::SetFlag(UnitNS::Flag flag)
-{
-    flags |= flag;
-}
-
-void Unit::RemoveFlag(UnitNS::Flag flag)
-{
-    flags = flags & ~flag;
-}
-
-bool Unit::HasFlag(UnitNS::Flag flag) const
-{
-    return flags & flag;
-}
-
 
 void Unit::ThrowInvalidWeaponIdException(uint weaponId) const
 {

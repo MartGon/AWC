@@ -1,5 +1,6 @@
-#include "AWC/Operation/OperationI.h"
+#pragma once
 
+#include "AWC/Operation/OperationI.h"
 
 namespace Operation
 {

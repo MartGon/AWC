@@ -9,6 +9,15 @@
 #include <AWC/Process.h>
 
 #include <queue>
+#include <optional>
+
+struct Position
+{
+    Position(Vector2 pos, uint mapIndex) : pos{pos}, mapIndex{mapIndex} {}
+
+    Vector2 pos;
+    uint mapIndex;
+};
 
 class Game
 {
@@ -51,6 +60,8 @@ public:
     std::vector<UnitPtr> GetUnits(uint mapIndex = 0) const;
     std::vector<UnitPtr> GetPlayerUnits(uint playerIndex, uint mapIndex = 0) const;
     void EnumUnits(std::function<void(UnitPtr)> operation, uint mapIndex = 0) const;
+    void EnumUnits(std::function<void(UnitPtr, Position)> operation, uint mapIndex = 0) const;
+    std::optional<Position> GetUnitPos(UnitNS::GUID unitGUID);
 
     // Turn history
     const Turn& GetCurrentTurn() const;

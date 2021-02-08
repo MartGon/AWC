@@ -10,6 +10,7 @@ class MovementDescType;
 class MovementDesc;
 struct Range;
 class Player;
+struct Position;
 struct Process;
 class Tile;
 class TileType;
@@ -37,10 +38,18 @@ namespace UnitNS
 {
     enum Flag : unsigned int;
     enum StatType : unsigned int;
+    struct GUID;
 }
 
 namespace Operation
 {
     class OperationI;
+    class Custom;
+    class Composed;
+    class Move;
+    class StatMod;
+    class TakeDmg;
+    class UpdateFlag;
+    class Attack;
     enum class Type;
 };

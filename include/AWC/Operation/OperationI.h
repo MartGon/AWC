@@ -29,7 +29,9 @@ namespace Operation
         COMPOSED,
         STAT_MOD,
         UPDATE_FLAG,
-        MOVE
+        MOVE,
+        ATTACK,
+        TAKE_DMG
     };
 
     class OperationI
