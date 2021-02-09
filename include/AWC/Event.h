@@ -1,24 +1,52 @@
 #pragma once
 
 #include <AWC/AWCusing.h>
+#include <AWC/Process.h>
+#include <AWC/Entity.h>
+
 #include <functional>
 #include <unordered_map>
+#include <variant>
 
 
 namespace Event
-{
-    enum class NotificationType
+{   
+    namespace Notification
     {
-        PRE,
-        POST
-    };
+        enum class Type
+        {
+            PRE,
+            POST
+        };
 
-    // Subject
-    using Handler = std::function<void(Process, NotificationType)>;
+        struct Notification
+        {  
+            Notification(Type type, Process process) : 
+                type{type}, process{process} {};
+
+            Type type;
+            Process process;
+        };
+    }
+
+    using HandlerCallback = std::function<void(Notification::Notification, Entity::Entity, Game&)>;
+
+    struct Handler
+    {
+        Handler(Operation::Type type, HandlerCallback callback) : type{type}, callback{callback} {};
+
+        Operation::Type type;
+        HandlerCallback callback;
+    };
 
     struct Listener
     {
-        Operation::Type type;
+         Listener(Entity::Entity entity, Handler handler) :
+            entity{entity}, handler{handler} {};
+        Listener(Operation::Type type, Entity::Entity entity, HandlerCallback handler) :
+            entity{entity}, handler{type, handler} {};
+
+        Entity::Entity entity;
         Handler handler;
     };
 
@@ -26,11 +54,12 @@ namespace Event
     {
     public:
         void Register(Listener listener);
-        void Register(Operation::Type type, Handler eventListener);
-        void Notify(Process p, NotificationType notType);
-        void Notify(Process p, Operation::Type type, NotificationType notType);
+        void Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener);
+        void Notify(Process p, Notification::Type notType, Game& game);
+        void Notify(Process p, Operation::Type type, Notification::Type notType, Game& game);
+        void Notify(Notification::Notification notification, Game& game);
 
     private:
-        std::unordered_map<Operation::Type, std::vector<Handler>> eventListeners_;
+        std::unordered_map<Operation::Type, std::vector<Listener>> eventListeners_;
     };
 }

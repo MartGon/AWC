@@ -292,6 +292,7 @@ void Game::CheckMapIndex(uint mapIndex) const
 void Game::Run()
 {
     using namespace Operation;
+    using namespace Event;
 
     while(!opQueue_.empty())
     {
@@ -302,7 +303,9 @@ void Game::Run()
         {
             process.announced = true;
             opQueue_.push(process);
-            events.Notify(process.op, Event::NotificationType::PRE);
+
+            Notification::Notification notification{Notification::Type::PRE, process};
+            events.Notify(notification, *this);
         }
         else
             opQueue_.push(process);
@@ -314,7 +317,10 @@ void Game::Run()
 
             Result res = process.op->Execute(*this);
             if(res)
-                events.Notify(process.op, Event::NotificationType::POST);
+            {
+                Notification::Notification notification{Notification::Type::POST, process};
+                events.Notify(notification, *this);
+            }
         }
     }
 }

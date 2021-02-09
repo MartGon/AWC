@@ -9,34 +9,44 @@ using namespace Operation;
 
 void Subject::Register(Listener listener)
 {
-    Subject::Register(listener.type, listener.handler);
-}
-
-void Subject::Register(Operation::Type type, Handler eventListener)
-{
+    auto type = listener.handler.type;
     if(!UnorderedMapUtils::Contains(eventListeners_, type))
     {
-        eventListeners_[type] = std::vector<Handler>{};
+        eventListeners_[type] = std::vector<Listener>{};
     }
-
+    
     auto& typeListeners = eventListeners_.at(type);
-    typeListeners.push_back(eventListener);
+    typeListeners.push_back(listener);
 }
 
-void Subject::Notify(Process p, Operation::Type type, NotificationType notType)
+void Subject::Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener)
 {
+    Listener listener{type, entity, eventListener};
+    Subject::Register(listener);
+}
+
+void Subject::Notify(Notification::Notification notification, Game& game)
+{
+    auto type = notification.process.op->GetType();
     if(UnorderedMapUtils::Contains(eventListeners_, type))
     {
-        std::vector<Handler> typeListeners = eventListeners_.at(type);
+        auto typeListeners = eventListeners_.at(type);
         for(auto listener : typeListeners)
         {
-            listener(p, notType);
+            auto callback = listener.handler.callback;
+            callback(notification, listener.entity, game);
         }
     }
 }
 
-void Subject::Notify(Process p, NotificationType notType)
+void Subject::Notify(Process p, Operation::Type type, Notification::Type notType, Game& game)
 {
-    Type type = p.op->GetType();
-    Notify(p, type, notType);
+    Notification::Notification noti{notType, p};
+    Notify(noti, game);
+}
+
+void Subject::Notify(Process p, Notification::Type notType, Game& game)
+{
+    Notification::Notification noti{notType, p};
+    Notify(noti, game);
 }

@@ -19,8 +19,8 @@ public:
     const std::string GetName() const;
     const uint GetId() const;
 
-    std::vector<Event::Listener> GetListeners() const;
-    void AddListener(Event::Listener listener);
+    std::vector<Event::Handler> GetHandlers() const;
+    void AddHandler(Event::Handler listener);
 
 private:
 
@@ -31,5 +31,5 @@ private:
 
     MovementDecTypePtr moveType_;
     std::vector<WeaponTypePtr> weaponTypes_;
-    std::vector<Event::Listener> listeners_;
+    std::vector<Event::Handler> listeners_;
 };

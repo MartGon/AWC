@@ -33,14 +33,14 @@ const uint Unit::GetTypeId() const
     return unitType_.GetId();
 }
 
-const UnitNS::GUID Unit::GetGUID() const
-{
-    return UnitNS::GUID{id, GetTypeId()};
-}
-
 const Player& Unit::GetOwner() const
 {
     return owner_;
+}
+
+UnitNS::GUID Unit::GetGUID() const
+{
+    return UnitNS::GUID{id, GetTypeId()};
 }
 
 // Movement
@@ -222,11 +222,15 @@ bool Unit::HasFlag(UnitNS::Flag flag) const
 
 // Events
 
-void Unit::RegisterListeners(Event::Subject& subject)
-{
-    auto listeners = unitType_.GetListeners();
-    for(auto listener : listeners)
-        subject.Register(listener.type, listener.handler);
+void Unit::RegisterHandlers(Event::Subject& subject)
+{   
+    Entity::Entity entity{Entity::Type::UNIT, GetGUID()};
+    auto handlers = unitType_.GetHandlers();
+    for(auto handler : handlers)
+    {
+        Event::Listener listener{entity, handler};
+        subject.Register(listener);
+    }
 }
 
 // private

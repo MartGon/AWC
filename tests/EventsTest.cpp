@@ -7,6 +7,7 @@
 #include <AWC/Unit/UnitType.h>
 #include <AWC/Map.h>
 #include <AWC/Command.h>
+#include <AWC/Event.h>
 
 #include <iostream>
 
@@ -31,23 +32,23 @@ TEST_CASE("Event test")
 
     // Create soldier
     UnitType soldierType = UnitTest::CreateSoldierType();
-
     
-    Event::Listener listener;
-    listener.type = Operation::Type::MOVE;
     bool check = false;
-    listener.handler = [&check](Process p, Event::NotificationType type)
+    auto callback = [&check](Event::Notification::Notification noti, Entity::Entity entity, Game& game)
     {
-        if(type == Event::NotificationType::POST){
+        if(noti.type == Event::Notification::Type::POST){
             check = true;
             std::cout << "I see you movin' !!!\n";
         }
     };
 
-    soldierType.AddListener(listener);
+    Event::Handler handler{Operation::Type::MOVE, callback};
+    handler.type = Operation::Type::MOVE;
+
+    soldierType.AddHandler(handler);
     auto soldierOne = soldierType.CreateUnit(playerOne);
     auto& events = game.GetSubject();
-    soldierOne->RegisterListeners(events);
+    soldierOne->RegisterHandlers(events);
 
     // Add to map
     map.AddUnit({0, 0}, soldierOne);
@@ -63,5 +64,4 @@ TEST_CASE("Event test")
 
         CHECK(check == true);
     }
-    
 }

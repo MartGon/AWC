@@ -5,6 +5,7 @@
 #include <Utils/Vector2.h>
 #include <AWC/AWCusing.h>
 #include <AWC/Event.h>
+#include <AWC/Unit/GUID.h>
 
 class UnitType;
 
@@ -25,18 +26,7 @@ namespace UnitNS
         AMMO
     };
 
-    struct GUID
-    {
-        GUID(uint id, uint typeId) : id{id}, typeId{typeId} {};
-
-        bool operator==(const GUID& b) const
-        {
-            return id == b.id && typeId == b.typeId;
-        }
-
-        uint id;
-        uint typeId;
-    };
+    
 }
 
 class Unit
@@ -46,8 +36,9 @@ friend class UnitType;
 public:
     const std::string GetName() const;
     const uint GetTypeId() const;
-    const UnitNS::GUID GetGUID() const;
     const Player& GetOwner() const;
+
+    UnitNS::GUID GetGUID() const;
 
     // Misc
     // TODO: Future release. Needs WeaponType and MovementType interface implementation.
@@ -127,7 +118,7 @@ public:
     bool HasFlag(UnitNS::Flag flag) const;
 
     // Events
-    void RegisterListeners(Event::Subject& subject);
+    void RegisterHandlers(Event::Subject& subject);
 
 private:
     Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& ownerId);

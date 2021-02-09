@@ -2,6 +2,7 @@ add_library(AWCSource
   AWCException.cpp
   Command.cpp
   CostTable.cpp
+  Entity.cpp
   Event.cpp
   Game.cpp
   Map.cpp

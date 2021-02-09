@@ -25,12 +25,12 @@ const uint UnitType::GetId() const
     return id_;
 }
 
-std::vector<Event::Listener> UnitType::GetListeners() const
+std::vector<Event::Handler> UnitType::GetHandlers() const
 {
     return listeners_;
 }
 
-void UnitType::AddListener(Event::Listener listener)
+void UnitType::AddHandler(Event::Handler listener)
 {
     listeners_.push_back(listener);
 }
