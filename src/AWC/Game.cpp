@@ -213,6 +213,21 @@ void Game::EnumUnits(std::function<void(UnitPtr, Position)> operation, uint mapI
     }
 }
 
+UnitPtr Game::GetUnit(UnitNS::GUID guid)
+{
+    UnitPtr unitPtr;
+
+    auto myUnit = [&unitPtr, guid](UnitPtr unit, Position position)
+    {
+        if(unit->GetGUID() == guid)
+            unitPtr = unit;
+    };
+
+    EnumUnits(myUnit);
+
+    return unitPtr;
+}
+
 std::optional<Position> Game::GetUnitPos(UnitNS::GUID guid)
 {
     std::optional<Position> pos;

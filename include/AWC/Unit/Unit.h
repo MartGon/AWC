@@ -121,7 +121,7 @@ public:
     void RegisterHandlers(Event::Subject& subject);
 
 private:
-    Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& ownerId);
+    Unit(uint id, const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& ownerId);
 
     // Movement
     // TODO: This should become public once CalculateMovement does
@@ -138,7 +138,7 @@ private:
     void ThrowInvalidWeaponIdException(uint weaponId) const;
 
     // Member variables
-    uint id;
+    uint id_;
 
     // State
     float health = 100;

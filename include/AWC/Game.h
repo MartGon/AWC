@@ -61,7 +61,8 @@ public:
     std::vector<UnitPtr> GetPlayerUnits(uint playerIndex, uint mapIndex = 0) const;
     void EnumUnits(std::function<void(UnitPtr)> operation, uint mapIndex = 0) const;
     void EnumUnits(std::function<void(UnitPtr, Position)> operation, uint mapIndex = 0) const;
-    std::optional<Position> GetUnitPos(UnitNS::GUID unitGUID);
+    UnitPtr GetUnit(UnitNS::GUID guid);
+    std::optional<Position> GetUnitPos(UnitNS::GUID guid);
 
     // Turn history
     const Turn& GetCurrentTurn() const;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace UnitNS
 {
     struct GUID
@@ -9,6 +11,11 @@ namespace UnitNS
         bool operator==(const GUID& b) const
         {
             return id == b.id && typeId == b.typeId;
+        }
+
+        std::string ToString()
+        {
+            return std::to_string(id) + "-" + std::to_string(typeId);
         }
 
         unsigned int id;

@@ -41,7 +41,7 @@ namespace Event
 
     struct Listener
     {
-         Listener(Entity::Entity entity, Handler handler) :
+        Listener(Entity::Entity entity, Handler handler) :
             entity{entity}, handler{handler} {};
         Listener(Operation::Type type, Entity::Entity entity, HandlerCallback handler) :
             entity{entity}, handler{type, handler} {};

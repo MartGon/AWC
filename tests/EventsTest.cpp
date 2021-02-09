@@ -39,6 +39,13 @@ TEST_CASE("Event test")
         if(noti.type == Event::Notification::Type::POST){
             check = true;
             std::cout << "I see you movin' !!!\n";
+
+            auto unitGUID = entity.guid.unitGUID;
+            auto pos = game.GetUnitPos(unitGUID);
+            auto unit = game.GetUnit(unitGUID);
+            std::cout << "My id is " << unitGUID.ToString() << '\n';
+            std::cout << "I'm at pos " << pos->pos.ToString() << '\n';
+            std::cout << "My name is " << unit->GetName() << '\n';
         }
     };
 
@@ -46,6 +53,7 @@ TEST_CASE("Event test")
     handler.type = Operation::Type::MOVE;
 
     soldierType.AddHandler(handler);
+    auto soldierTwo = soldierType.CreateUnit(playerOne);
     auto soldierOne = soldierType.CreateUnit(playerOne);
     auto& events = game.GetSubject();
     soldierOne->RegisterHandlers(events);
