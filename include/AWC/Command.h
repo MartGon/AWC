@@ -48,6 +48,17 @@ private:
     const uint weaponIndex_;
 };
 
+class NullCommand : public Command
+{
+public:
+
+    bool CanBeExecuted(Game& game, uint playerIndex) override { return true; }
+
+private:
+
+    void DoExecute(Game& game, uint playerIndex) override {};
+};
+
 class InvalidCommandException : public AWCException
 {
 public:

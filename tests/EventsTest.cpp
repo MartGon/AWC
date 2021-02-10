@@ -8,6 +8,7 @@
 #include <AWC/Map.h>
 #include <AWC/Command.h>
 #include <AWC/Event.h>
+#include <AWC/Operation/Custom.h>
 
 #include <iostream>
 
@@ -71,5 +72,40 @@ TEST_CASE("Event test")
         game.ExecuteCommand(moveCommand);
 
         CHECK(check == true);
+    }
+}
+
+TEST_CASE("Event::Subjec test")
+{
+    Game game;
+    int counter = 0;
+    int counterObjective = 5;
+    Event::HandlerCallback recursiveCB = [&recursiveCB, &counter, counterObjective](Event::Notification::Notification noti, Entity::Entity ent, Game& game)
+    {
+        if(noti.type == Event::Notification::Type::PRE)
+        {
+            std::cout << "Handling custom operation with counter " << counter << "\n";
+            if(counter < counterObjective)
+            {
+                auto& subject = game.GetSubject();
+                subject.Register(Operation::Type::CUSTOM, recursiveCB);
+                counter++;
+            }
+        }
+    };
+    auto& subject = game.GetSubject();
+    subject.Register(Operation::Type::CUSTOM, recursiveCB);
+
+    OperationIPtr custom{ new Operation::Custom([](Game& game){
+        std::cout << "Custom operation this is \n";
+    })};
+    game.Push(custom);
+
+    SUBCASE("Modifying the list while iterating through it")
+    {
+        CommandPtr null{ new NullCommand{}};
+        game.ExecuteCommand(null, 0);
+
+        CHECK(counter == counterObjective);
     }
 }

@@ -12,11 +12,11 @@ void Subject::Register(Listener listener)
     auto type = listener.handler.type;
     if(!UnorderedMapUtils::Contains(eventListeners_, type))
     {
-        eventListeners_[type] = std::vector<Listener>{};
+        eventListeners_[type] = std::queue<Listener>{};
     }
     
     auto& typeListeners = eventListeners_.at(type);
-    typeListeners.push_back(listener);
+    typeListeners.push(listener);
 }
 
 void Subject::Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener)
@@ -25,17 +25,34 @@ void Subject::Register(Entity::Entity entity, Operation::Type type, HandlerCallb
     Subject::Register(listener);
 }
 
+void Subject::Register(Operation::Type type, HandlerCallback cb)
+{
+    Event::Handler handler{type, cb};
+    Event::Listener listener{Entity::NIL, handler};
+    Register(listener);
+}
+
 void Subject::Notify(Notification::Notification notification, Game& game)
 {
     auto type = notification.process.op->GetType();
     if(UnorderedMapUtils::Contains(eventListeners_, type))
     {
-        auto typeListeners = eventListeners_.at(type);
-        for(auto listener : typeListeners)
+        auto& typeListeners = eventListeners_.at(type);
+        std::queue<Listener> listenersLeft;
+
+        // TODO: Maybe sort listeners by GUID.
+
+        while(!typeListeners.empty())
         {
+            auto listener = typeListeners.front();
+            typeListeners.pop();
+            listenersLeft.push(listener);
+
             auto callback = listener.handler.callback;
             callback(notification, listener.entity, game);
         }
+
+        eventListeners_[type] = listenersLeft;
     }
 }
 
