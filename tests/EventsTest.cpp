@@ -75,37 +75,84 @@ TEST_CASE("Event test")
     }
 }
 
-TEST_CASE("Event::Subjec test")
+Event::Listener GetNilListener(Event::HandlerCallback cb)
+{
+    auto entType = Entity::Type::UNIT;
+    Entity::Entity ent{ entType, UnitNS::GUID(0, 0)};
+
+    auto opType = Operation::Type::CUSTOM;
+    Event::Handler handler{opType, cb};
+
+    Event::Listener listener{ent, handler};
+
+    return listener;
+}
+
+TEST_CASE("Event::Subject::Add/Remove/Iteration test")
 {
     Game game;
-    int counter = 0;
-    int counterObjective = 5;
-    Event::HandlerCallback recursiveCB = [&recursiveCB, &counter, counterObjective](Event::Notification::Notification noti, Entity::Entity ent, Game& game)
-    {
-        if(noti.type == Event::Notification::Type::PRE)
-        {
-            std::cout << "Handling custom operation with counter " << counter << "\n";
-            if(counter < counterObjective)
-            {
-                auto& subject = game.GetSubject();
-                subject.Register(Operation::Type::CUSTOM, recursiveCB);
-                counter++;
-            }
-        }
-    };
-    auto& subject = game.GetSubject();
-    subject.Register(Operation::Type::CUSTOM, recursiveCB);
-
-    OperationIPtr custom{ new Operation::Custom([](Game& game){
-        std::cout << "Custom operation this is \n";
-    })};
-    game.Push(custom);
 
     SUBCASE("Modifying the list while iterating through it")
     {
+        int counter = 0;
+        int counterObjective = 5;;
+
+        Event::HandlerCallback recursiveCB = [&recursiveCB, &counter, counterObjective]
+        (Event::Notification::Notification noti, Entity::Entity ent, Game& game)
+        {
+            if(noti.type == Event::Notification::Type::PRE)
+            {
+                std::cout << "Handling custom operation with counter " << counter << "\n";
+                if(counter < counterObjective)
+                {
+                    auto& subject = game.GetSubject();
+                    subject.Register(Operation::Type::CUSTOM, recursiveCB);
+                    counter++;
+                }
+            }
+        };
+        auto& subject = game.GetSubject();
+        subject.Register(Operation::Type::CUSTOM, recursiveCB);
+
+        OperationIPtr custom{ new Operation::Custom([](Game& game){
+            std::cout << "Custom operation this is \n";
+        })};
+        game.Push(custom);
+
         CommandPtr null{ new NullCommand{}};
         game.ExecuteCommand(null, 0);
 
-        CHECK(counter == counterObjective);
+        CHECK(counter == 1);
+
+    }
+    SUBCASE("Listener removal")
+    {   
+        int count = 0;
+        Event::HandlerCallback cb = [&count](Event::Notification::Notification noti, Entity::Entity ent, Game& game)
+        {
+            if(noti.type == Event::Notification::Type::PRE)
+                count++;
+        };
+        auto listener = GetNilListener(cb);
+        auto& subject = game.GetSubject();
+        subject.Register(listener);
+
+        OperationIPtr custom{ new Operation::Custom([&count](Game& game){
+            
+        })};
+        game.Push(custom);
+
+        CommandPtr null{new NullCommand};
+        game.ExecuteCommand(null, 0);
+
+        // Is called here
+        CHECK(count == 1);
+
+        subject.Unregister(listener.entity, listener.handler.type);
+        game.Push(custom);
+        game.ExecuteCommand(null, 0);
+
+        // Is not called after being unregistered
+        CHECK(count == 1);
     }
 }

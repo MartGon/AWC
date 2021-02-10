@@ -7,8 +7,6 @@
 #include <functional>
 #include <unordered_map>
 #include <variant>
-#include <queue>
-
 
 namespace Event
 {   
@@ -57,11 +55,14 @@ namespace Event
         void Register(Listener listener);
         void Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener);
         void Register(Operation::Type type, HandlerCallback callback);
+
+        void Unregister(Entity::Entity entity, Operation::Type type);
+
         void Notify(Process p, Notification::Type notType, Game& game);
         void Notify(Process p, Operation::Type type, Notification::Type notType, Game& game);
         void Notify(Notification::Notification notification, Game& game);
 
     private:
-        std::unordered_map<Operation::Type, std::queue<Listener>> eventListeners_;
+        std::unordered_map<Operation::Type, std::vector<Listener>> eventListeners_;
     };
 }

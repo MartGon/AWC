@@ -12,11 +12,11 @@ void Subject::Register(Listener listener)
     auto type = listener.handler.type;
     if(!UnorderedMapUtils::Contains(eventListeners_, type))
     {
-        eventListeners_[type] = std::queue<Listener>{};
+        eventListeners_[type] = std::vector<Listener>{};
     }
     
     auto& typeListeners = eventListeners_.at(type);
-    typeListeners.push(listener);
+    typeListeners.push_back(listener);
 }
 
 void Subject::Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener)
@@ -32,27 +32,39 @@ void Subject::Register(Operation::Type type, HandlerCallback cb)
     Register(listener);
 }
 
+void Subject::Unregister(Entity::Entity entity, Operation::Type type)
+{
+    if(UnorderedMapUtils::Contains(eventListeners_, type))
+    {
+        auto& typeListeners = eventListeners_.at(type);
+        std::vector<unsigned int> indexToRemove;
+
+        for(unsigned int i = 0; i < typeListeners.size(); i++)
+        {
+            auto listener = typeListeners.at(i);
+            if(listener.entity == entity)
+                indexToRemove.push_back(i);
+        }
+
+        for(auto index : indexToRemove)
+            VectorUtils::RemoveByIndex(typeListeners, index);
+    }
+}
+
 void Subject::Notify(Notification::Notification notification, Game& game)
 {
     auto type = notification.process.op->GetType();
     if(UnorderedMapUtils::Contains(eventListeners_, type))
     {
-        auto& typeListeners = eventListeners_.at(type);
-        std::queue<Listener> listenersLeft;
+        auto typeListeners = eventListeners_.at(type);
 
         // TODO: Maybe sort listeners by GUID.
 
-        while(!typeListeners.empty())
+        for(auto listener : typeListeners)
         {
-            auto listener = typeListeners.front();
-            typeListeners.pop();
-            listenersLeft.push(listener);
-
             auto callback = listener.handler.callback;
             callback(notification, listener.entity, game);
         }
-
-        eventListeners_[type] = listenersLeft;
     }
 }
 
