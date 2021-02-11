@@ -31,7 +31,7 @@ public:
     uint GetPlayerCount() const;
 
     // Maps
-    void AddMap(Map map);
+    unsigned int AddMap(Map map);
     void RemoveMap(uint mapIndex);
     Map& GetMap(uint mapIndex);
     uint GetMapCount() const;
@@ -42,8 +42,11 @@ public:
     void ExecuteCommand(CommandPtr command);
     void ExecuteCommand(CommandPtr command, uint playerIndex);
 
-    // Operation
+    // Units
+    void AddUnit(UnitPtr unit, Vector2 pos, uint mapIndex = 0);
+    void RemoveUnit(Vector2 pos, uint mapIndex = 0);
 
+    // Operation
     void Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
 
     // State
@@ -57,10 +60,11 @@ public:
     bool HasPlayerBeenRouted(uint playerIndex) const;
 
     // Queries
-    std::vector<UnitPtr> GetUnits(uint mapIndex = 0) const;
-    std::vector<UnitPtr> GetPlayerUnits(uint playerIndex, uint mapIndex = 0) const;
     void EnumUnits(std::function<void(UnitPtr)> operation, uint mapIndex = 0) const;
     void EnumUnits(std::function<void(UnitPtr, Position)> operation, uint mapIndex = 0) const;
+
+    std::vector<UnitPtr> GetUnits(uint mapIndex = 0) const;
+    std::vector<UnitPtr> GetPlayerUnits(uint playerIndex, uint mapIndex = 0) const;
     UnitPtr GetUnit(UnitNS::GUID guid);
     std::optional<Position> GetUnitPos(UnitNS::GUID guid);
 

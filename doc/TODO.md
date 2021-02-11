@@ -24,3 +24,6 @@
 - Re organize stuff in proper namespaces. They're polluting global scope
 - Re organize headers. Much stuff is being imported while not being needed.
 - Use std::enable_shared_prt_to_this;
+- Do something about exceptions
+- Players/Maps can only be created from Game:
+    They hold a reference to event, so the map/player interface can be used directly. No need to make proxy methods in game

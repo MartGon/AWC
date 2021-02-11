@@ -37,23 +37,43 @@ void Subject::Register(Operation::Type type, HandlerCallback cb, Notification::T
     Register(listener);
 }
 
+void Subject::Unregister(Entity::Entity ent)
+{
+    for(auto& pair : eventListeners_)
+    {
+        auto& typeListeners = pair.second;
+        RemoveListeners(typeListeners, ent);
+    }
+
+    return;
+}
+
 void Subject::Unregister(Entity::Entity entity, Operation::Type type)
 {
     if(UnorderedMapUtils::Contains(eventListeners_, type))
     {
         auto& typeListeners = eventListeners_.at(type);
-        std::vector<unsigned int> indexToRemove;
-
-        for(unsigned int i = 0; i < typeListeners.size(); i++)
-        {
-            auto listener = typeListeners.at(i);
-            if(listener.entity == entity)
-                indexToRemove.push_back(i);
-        }
-
-        for(auto index : indexToRemove)
-            VectorUtils::RemoveByIndex(typeListeners, index);
+        RemoveListeners(typeListeners, entity);
     }
+
+    return;
+}
+
+void Subject::RemoveListeners(std::vector<Listener>& typeListeners, Entity::Entity ent)
+{
+    std::vector<unsigned int> indexToRemove;
+
+    for(unsigned int i = 0; i < typeListeners.size(); i++)
+    {
+        auto listener = typeListeners.at(i);
+        if(listener.entity == ent)
+            indexToRemove.push_back(i);
+    }
+
+    for(auto index : indexToRemove)
+        VectorUtils::RemoveByIndex(typeListeners, index);
+
+    return;
 }
 
 void Subject::Notify(Notification::Notification notification, Game& game)

@@ -24,6 +24,7 @@ TEST_CASE("Event test")
 
     TileType grassType{0, "Grass"};
     MapUtils::FillMap(map, grassType);
+    game.AddMap(map);
 
     // Player
     Player playerOne{0, 0, 100};
@@ -34,11 +35,11 @@ TEST_CASE("Event test")
     // Create soldier
     UnitType soldierType = UnitTest::CreateSoldierType();
     
-    bool check = false;
+    auto check = 0;
     auto callback = [&check](Event::Notification::Notification noti, Entity::Entity entity, Game& game)
     {
         if(noti.type == Event::Notification::Type::POST){
-            check = true;
+            check++;
             std::cout << "I see you movin' !!!\n";
 
             auto unitGUID = entity.guid.unitGUID;
@@ -54,24 +55,30 @@ TEST_CASE("Event test")
     handler.type = Operation::Type::MOVE;
 
     soldierType.AddHandler(handler);
-    auto soldierTwo = soldierType.CreateUnit(playerOne);
     auto soldierOne = soldierType.CreateUnit(playerOne);
-    auto& events = game.GetSubject();
-    soldierOne->RegisterHandlers(events);
+    auto soldierTwo = soldierType.CreateUnit(playerOne);
 
     // Add to map
-    map.AddUnit({0, 0}, soldierOne);
-    game.AddMap(map);
+    game.AddUnit(soldierOne, {0, 0});
+    game.AddUnit(soldierTwo, {0, 1});
 
     CommandPtr moveCommand{new MoveCommand(0, {0, 0}, {1, 0})};
+    CommandPtr moveCommand2{new MoveCommand(0, {0, 1}, {1, 1})};
 
     SUBCASE("Check listener has been executed")
     {
-        CHECK(check == false);
+        CHECK(check == 0);
 
         game.ExecuteCommand(moveCommand);
 
-        CHECK(check == true);
+        // The two soldiers are listening
+        CHECK(check == 2);
+
+        game.RemoveUnit({1, 0});
+        game.ExecuteCommand(moveCommand2);
+
+        // Now only one is listening
+        CHECK(check == 3);
     }
 }
 

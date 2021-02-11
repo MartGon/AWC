@@ -44,9 +44,10 @@ uint Game::GetPlayerCount() const
 
 // Maps
 
-void Game::AddMap(Map map)
+unsigned int Game::AddMap(Map map)
 {
     maps_.push_back(map);
+    return maps_.size() - 1;
 }
 
 void Game::RemoveMap(uint mapIndex)
@@ -86,6 +87,31 @@ void Game::ExecuteCommand(CommandPtr command, uint playerIndex)
 {
     command->Execute(*this, playerIndex);
     Run();
+}
+
+// Units
+
+void Game::AddUnit(UnitPtr unit, Vector2 pos, uint mapIndex)
+{
+    auto& map = GetMap(mapIndex);
+    map.AddUnit(pos, unit);
+
+    unit->RegisterHandlers(events);
+}
+
+void Game::RemoveUnit(Vector2 pos, uint mapIndex)
+{
+    auto& map = GetMap(mapIndex);
+    auto unit = map.GetUnit(pos);
+    if(unit)
+    {
+        auto guid = unit->GetGUID();
+
+        Entity::Entity ent{Entity::Type::UNIT, guid};
+        events.Unregister(ent);
+
+        map.RemoveUnit(pos);
+    }
 }
 
 // Operation

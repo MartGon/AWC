@@ -62,12 +62,16 @@ namespace Event
         void Register(Operation::Type opType, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
 
         void Unregister(Entity::Entity entity, Operation::Type type);
+        void Unregister(Entity::Entity entity);
 
         void Notify(Process p, Notification::Type notType, Game& game);
         void Notify(Process p, Operation::Type type, Notification::Type notType, Game& game);
         void Notify(Notification::Notification notification, Game& game);
 
     private:
+
+        void RemoveListeners(std::vector<Listener>& listeners, Entity::Entity ent);
+
         std::unordered_map<Operation::Type, std::vector<Listener>> eventListeners_;
     };
 }
