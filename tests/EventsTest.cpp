@@ -95,7 +95,7 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
     SUBCASE("Modifying the list while iterating through it")
     {
         int counter = 0;
-        int counterObjective = 5;;
+        int counterObjective = 5;
 
         Event::HandlerCallback recursiveCB = [&recursiveCB, &counter, counterObjective]
         (Event::Notification::Notification noti, Entity::Entity ent, Game& game)
@@ -124,6 +124,12 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
 
         CHECK(counter == 1);
 
+        game.Push(custom);
+        game.ExecuteCommand(null, 0);
+
+        // On Pre only one is listening, so counter == 1
+        // On Post, two of them are listening so counter = counter + 2; counter == 3
+        CHECK(counter == 3);
     }
     SUBCASE("Listener removal")
     {   
@@ -155,4 +161,55 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         // Is not called after being unregistered
         CHECK(count == 1);
     }
+}
+
+TEST_CASE("Event::Subject listen by notification")
+{
+    using namespace Event;
+
+    Game game;
+    Event::Subject& sub = game.GetSubject();
+
+    Notification::Type first = Notification::Type::NONE;
+
+    auto countPre = 0;
+    auto cbPre = [&countPre, &first](Notification::Notification noti, Entity::Entity e, Game& game)
+    {
+        countPre++;
+        if(first == Notification::Type::NONE)
+            first = Notification::Type::PRE;
+    };
+
+    auto countPost = 0;
+    auto cbPost = [&countPost, &first](Notification::Notification noti, Entity::Entity e, Game& game)
+    {
+        countPost++;
+        if(first == Notification::Type::NONE)
+            first = Notification::Type::POST;
+    };
+
+    auto counterAny = 0;
+    auto cbAny = [&counterAny, &first](Notification::Notification noti, Entity::Entity e, Game& game)
+    {
+        counterAny++;
+        if(first == Notification::Type::NONE)
+            first = Notification::Type::ANY;
+    };
+
+    sub.Register(Operation::Type::CUSTOM, cbPre, Notification::Type::PRE);
+    sub.Register(Operation::Type::CUSTOM, cbPost, Notification::Type::POST);
+    sub.Register(Operation::Type::CUSTOM, cbAny, Notification::Type::ANY);
+
+    OperationIPtr custom{ new Operation::Custom([](Game& game){
+            
+        })};
+    game.Push(custom);
+
+    CommandPtr null{new NullCommand};
+    game.ExecuteCommand(null, 0);
+
+    CHECK(countPre == 1);
+    CHECK(countPost == 1);
+    CHECK(counterAny == 2);
+    CHECK(first == Notification::Type::PRE);
 }

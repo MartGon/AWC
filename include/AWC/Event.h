@@ -14,8 +14,10 @@ namespace Event
     {
         enum class Type
         {
+            NONE,
             PRE,
-            POST
+            POST,
+            ANY
         };
 
         struct Notification
@@ -40,21 +42,24 @@ namespace Event
 
     struct Listener
     {
-        Listener(Entity::Entity entity, Handler handler) :
-            entity{entity}, handler{handler} {};
-        Listener(Operation::Type type, Entity::Entity entity, HandlerCallback handler) :
-            entity{entity}, handler{type, handler} {};
+        Listener(Entity::Entity entity, Handler handler, Notification::Type type = Notification::Type::ANY) :
+            entity{entity}, handler{handler}, notificationType{type} {};
+        Listener(Entity::Entity entity, Operation::Type opType, HandlerCallback handler, Notification::Type type = Notification::Type::ANY) :
+            entity{entity}, handler{opType, handler}, notificationType{type} {};
+
+        bool ListensTo(Notification::Type type);
 
         Entity::Entity entity;
         Handler handler;
+        Notification::Type notificationType;
     };
 
     class Subject
     {
     public:
         void Register(Listener listener);
-        void Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener);
-        void Register(Operation::Type type, HandlerCallback callback);
+        void Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener, Notification::Type notType = Notification::Type::ANY);
+        void Register(Operation::Type opType, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
 
         void Unregister(Entity::Entity entity, Operation::Type type);
 

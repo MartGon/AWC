@@ -7,6 +7,11 @@
 using namespace Event;
 using namespace Operation;
 
+bool Listener::ListensTo(Notification::Type type)
+{
+    return notificationType == Notification::Type::ANY || notificationType == type;
+}
+
 void Subject::Register(Listener listener)
 {
     auto type = listener.handler.type;
@@ -19,16 +24,16 @@ void Subject::Register(Listener listener)
     typeListeners.push_back(listener);
 }
 
-void Subject::Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener)
+void Subject::Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener, Notification::Type notType)
 {
-    Listener listener{type, entity, eventListener};
+    Listener listener{entity, type, eventListener, notType};
     Subject::Register(listener);
 }
 
-void Subject::Register(Operation::Type type, HandlerCallback cb)
+void Subject::Register(Operation::Type type, HandlerCallback cb, Notification::Type notType)
 {
     Event::Handler handler{type, cb};
-    Event::Listener listener{Entity::NIL, handler};
+    Event::Listener listener{Entity::NIL, handler, notType};
     Register(listener);
 }
 
@@ -53,17 +58,18 @@ void Subject::Unregister(Entity::Entity entity, Operation::Type type)
 
 void Subject::Notify(Notification::Notification notification, Game& game)
 {
-    auto type = notification.process.op->GetType();
-    if(UnorderedMapUtils::Contains(eventListeners_, type))
+    auto opType = notification.process.op->GetType();
+    if(UnorderedMapUtils::Contains(eventListeners_, opType))
     {
-        auto typeListeners = eventListeners_.at(type);
+        auto typeListeners = eventListeners_.at(opType);
 
         // TODO: Maybe sort listeners by GUID.
 
         for(auto listener : typeListeners)
         {
             auto callback = listener.handler.callback;
-            callback(notification, listener.entity, game);
+            if(listener.ListensTo(notification.type))
+                callback(notification, listener.entity, game);
         }
     }
 }

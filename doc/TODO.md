@@ -10,9 +10,9 @@
 - Register Observers - 1/2 Done
 - Game::AddUnit methods which registers handlers
 - Game::RemoveUnit methods which removes its handlers
-- Subject::Register by notification type
-- Subject::Remove
-- Subject use a while loop instead of for - Done
+- Subject::Register by notification type - DONE
+- Subject::Remove - Done
+- Subject use a while loop instead of for - Undone -> Can cause infinite loops and undesired behaviour in general. It's also simpler the other way.
 - UnitTests for each of the methods
 - Functional test - Hugo and Large tank
 - Tile and Unit inherit from Entity. Then create GUID{EntityType, SubType, id}. Use GUID for Subject
