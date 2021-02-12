@@ -38,9 +38,9 @@ const Player& Unit::GetOwner() const
     return owner_;
 }
 
-UnitNS::GUID Unit::GetGUID() const
+Entity::GUID Unit::GetGUID() const
 {
-    return UnitNS::GUID{id_, GetTypeId()};
+    return Entity::GUID{Entity::Type::UNIT, GetTypeId(), id_};
 }
 
 // Movement
@@ -224,7 +224,7 @@ bool Unit::HasFlag(UnitNS::Flag flag) const
 
 void Unit::RegisterHandlers(Event::Subject& subject)
 {   
-    Entity::Entity entity{Entity::Type::UNIT, GetGUID()};
+    Entity::GUID entity = GetGUID();
     auto handlers = unitType_.GetHandlers();
     for(auto handler : handlers)
     {

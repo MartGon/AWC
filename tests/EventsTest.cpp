@@ -36,13 +36,12 @@ TEST_CASE("Event test")
     UnitType soldierType = UnitTest::CreateSoldierType();
     
     auto check = 0;
-    auto callback = [&check](Event::Notification::Notification noti, Entity::Entity entity, Game& game)
+    auto callback = [&check](Event::Notification::Notification noti, Entity::GUID unitGUID, Game& game)
     {
         if(noti.type == Event::Notification::Type::POST){
             check++;
             std::cout << "I see you movin' !!!\n";
 
-            auto unitGUID = entity.guid.unitGUID;
             auto pos = game.GetUnitPos(unitGUID);
             auto unit = game.GetUnit(unitGUID);
             std::cout << "My id is " << unitGUID.ToString() << '\n';
@@ -85,12 +84,11 @@ TEST_CASE("Event test")
 Event::Listener GetNilListener(Event::HandlerCallback cb)
 {
     auto entType = Entity::Type::UNIT;
-    Entity::Entity ent{ entType, UnitNS::GUID(0, 0)};
 
     auto opType = Operation::Type::CUSTOM;
     Event::Handler handler{opType, cb};
 
-    Event::Listener listener{ent, handler};
+    Event::Listener listener{Entity::NIL, handler};
 
     return listener;
 }
@@ -105,7 +103,7 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         int counterObjective = 5;
 
         Event::HandlerCallback recursiveCB = [&recursiveCB, &counter, counterObjective]
-        (Event::Notification::Notification noti, Entity::Entity ent, Game& game)
+        (Event::Notification::Notification noti, Entity::GUID ent, Game& game)
         {
             if(noti.type == Event::Notification::Type::PRE)
             {
@@ -141,7 +139,7 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
     SUBCASE("Listener removal")
     {   
         int count = 0;
-        Event::HandlerCallback cb = [&count](Event::Notification::Notification noti, Entity::Entity ent, Game& game)
+        Event::HandlerCallback cb = [&count](Event::Notification::Notification noti, Entity::GUID ent, Game& game)
         {
             if(noti.type == Event::Notification::Type::PRE)
                 count++;
@@ -180,7 +178,7 @@ TEST_CASE("Event::Subject listen by notification")
     Notification::Type first = Notification::Type::NONE;
 
     auto countPre = 0;
-    auto cbPre = [&countPre, &first](Notification::Notification noti, Entity::Entity e, Game& game)
+    auto cbPre = [&countPre, &first](Notification::Notification noti, Entity::GUID e, Game& game)
     {
         countPre++;
         if(first == Notification::Type::NONE)
@@ -188,7 +186,7 @@ TEST_CASE("Event::Subject listen by notification")
     };
 
     auto countPost = 0;
-    auto cbPost = [&countPost, &first](Notification::Notification noti, Entity::Entity e, Game& game)
+    auto cbPost = [&countPost, &first](Notification::Notification noti, Entity::GUID e, Game& game)
     {
         countPost++;
         if(first == Notification::Type::NONE)
@@ -196,7 +194,7 @@ TEST_CASE("Event::Subject listen by notification")
     };
 
     auto counterAny = 0;
-    auto cbAny = [&counterAny, &first](Notification::Notification noti, Entity::Entity e, Game& game)
+    auto cbAny = [&counterAny, &first](Notification::Notification noti, Entity::GUID e, Game& game)
     {
         counterAny++;
         if(first == Notification::Type::NONE)

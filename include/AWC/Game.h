@@ -65,8 +65,8 @@ public:
 
     std::vector<UnitPtr> GetUnits(uint mapIndex = 0) const;
     std::vector<UnitPtr> GetPlayerUnits(uint playerIndex, uint mapIndex = 0) const;
-    UnitPtr GetUnit(UnitNS::GUID guid);
-    std::optional<Position> GetUnitPos(UnitNS::GUID guid);
+    UnitPtr GetUnit(Entity::GUID guid);
+    std::optional<Position> GetUnitPos(Entity::GUID guid);
 
     // Turn history
     const Turn& GetCurrentTurn() const;

@@ -30,7 +30,7 @@ namespace Event
         };
     }
 
-    using HandlerCallback = std::function<void(Notification::Notification, Entity::Entity, Game&)>;
+    using HandlerCallback = std::function<void(Notification::Notification, Entity::GUID, Game&)>;
 
     struct Handler
     {
@@ -42,14 +42,14 @@ namespace Event
 
     struct Listener
     {
-        Listener(Entity::Entity entity, Handler handler, Notification::Type type = Notification::Type::ANY) :
+        Listener(Entity::GUID entity, Handler handler, Notification::Type type = Notification::Type::ANY) :
             entity{entity}, handler{handler}, notificationType{type} {};
-        Listener(Entity::Entity entity, Operation::Type opType, HandlerCallback handler, Notification::Type type = Notification::Type::ANY) :
+        Listener(Entity::GUID entity, Operation::Type opType, HandlerCallback handler, Notification::Type type = Notification::Type::ANY) :
             entity{entity}, handler{opType, handler}, notificationType{type} {};
 
         bool ListensTo(Notification::Type type);
 
-        Entity::Entity entity;
+        Entity::GUID entity;
         Handler handler;
         Notification::Type notificationType;
     };
@@ -58,11 +58,11 @@ namespace Event
     {
     public:
         void Register(Listener listener);
-        void Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener, Notification::Type notType = Notification::Type::ANY);
+        void Register(Entity::GUID entity, Operation::Type type, HandlerCallback eventListener, Notification::Type notType = Notification::Type::ANY);
         void Register(Operation::Type opType, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
 
-        void Unregister(Entity::Entity entity, Operation::Type type);
-        void Unregister(Entity::Entity entity);
+        void Unregister(Entity::GUID entity, Operation::Type type);
+        void Unregister(Entity::GUID entity);
 
         void Notify(Process p, Notification::Type notType, Game& game);
         void Notify(Process p, Operation::Type type, Notification::Type notType, Game& game);
@@ -70,7 +70,7 @@ namespace Event
 
     private:
 
-        void RemoveListeners(std::vector<Listener>& listeners, Entity::Entity ent);
+        void RemoveListeners(std::vector<Listener>& listeners, Entity::GUID ent);
 
         std::unordered_map<Operation::Type, std::vector<Listener>> eventListeners_;
     };

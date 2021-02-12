@@ -24,7 +24,7 @@ void Subject::Register(Listener listener)
     typeListeners.push_back(listener);
 }
 
-void Subject::Register(Entity::Entity entity, Operation::Type type, HandlerCallback eventListener, Notification::Type notType)
+void Subject::Register(Entity::GUID entity, Operation::Type type, HandlerCallback eventListener, Notification::Type notType)
 {
     Listener listener{entity, type, eventListener, notType};
     Subject::Register(listener);
@@ -37,7 +37,7 @@ void Subject::Register(Operation::Type type, HandlerCallback cb, Notification::T
     Register(listener);
 }
 
-void Subject::Unregister(Entity::Entity ent)
+void Subject::Unregister(Entity::GUID ent)
 {
     for(auto& pair : eventListeners_)
     {
@@ -48,7 +48,7 @@ void Subject::Unregister(Entity::Entity ent)
     return;
 }
 
-void Subject::Unregister(Entity::Entity entity, Operation::Type type)
+void Subject::Unregister(Entity::GUID entity, Operation::Type type)
 {
     if(UnorderedMapUtils::Contains(eventListeners_, type))
     {
@@ -59,7 +59,7 @@ void Subject::Unregister(Entity::Entity entity, Operation::Type type)
     return;
 }
 
-void Subject::RemoveListeners(std::vector<Listener>& typeListeners, Entity::Entity ent)
+void Subject::RemoveListeners(std::vector<Listener>& typeListeners, Entity::GUID ent)
 {
     std::vector<unsigned int> indexToRemove;
 

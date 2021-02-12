@@ -5,7 +5,7 @@
 #include <Utils/Vector2.h>
 #include <AWC/AWCusing.h>
 #include <AWC/Event.h>
-#include <AWC/Unit/GUID.h>
+#include <AWC/Entity.h>
 
 class UnitType;
 
@@ -38,7 +38,7 @@ public:
     const uint GetTypeId() const;
     const Player& GetOwner() const;
 
-    UnitNS::GUID GetGUID() const;
+    Entity::GUID GetGUID() const;
 
     // Misc
     // TODO: Future release. Needs WeaponType and MovementType interface implementation.

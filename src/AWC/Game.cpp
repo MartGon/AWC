@@ -106,9 +106,7 @@ void Game::RemoveUnit(Vector2 pos, uint mapIndex)
     if(unit)
     {
         auto guid = unit->GetGUID();
-
-        Entity::Entity ent{Entity::Type::UNIT, guid};
-        events.Unregister(ent);
+        events.Unregister(guid);
 
         map.RemoveUnit(pos);
     }
@@ -239,7 +237,7 @@ void Game::EnumUnits(std::function<void(UnitPtr, Position)> operation, uint mapI
     }
 }
 
-UnitPtr Game::GetUnit(UnitNS::GUID guid)
+UnitPtr Game::GetUnit(Entity::GUID guid)
 {
     UnitPtr unitPtr;
 
@@ -254,7 +252,7 @@ UnitPtr Game::GetUnit(UnitNS::GUID guid)
     return unitPtr;
 }
 
-std::optional<Position> Game::GetUnitPos(UnitNS::GUID guid)
+std::optional<Position> Game::GetUnitPos(Entity::GUID guid)
 {
     std::optional<Position> pos;
 
