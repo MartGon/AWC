@@ -47,6 +47,7 @@ namespace Operation
     class Custom;
     class Composed;
     class Move;
+    class AntiOperation;
     class StatMod;
     class TakeDmg;
     class UpdateFlag;

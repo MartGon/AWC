@@ -4,6 +4,8 @@
 #include <AWC/Command.h>
 #include <AWC/Operation/Operation.h>
 
+#include <algorithm>
+
 // Players
 
 void Game::AddPlayer(Player player)
@@ -119,9 +121,27 @@ Operation::Factory& Game::GetOperationFactory()
     return factory;
 }
 
+void Game::RemoveOperation(unsigned int id)
+{
+    for(int index = 0; index < opQueue_.size(); index++)
+    {   
+        auto op = opQueue_.at(index);
+        if(op.op->GetId() == id)
+        {
+            VectorUtils::RemoveByIndex(opQueue_, index);
+            return;
+        }
+    }
+
+    return;
+}
+
 void Game::Push(OperationIPtr op, uint8_t prio)
 {
-    opQueue_.push(Process{op, prio});
+    std::function<bool(Process a, Process b)> greater = [](Process a, Process b){return a.priority > b.priority;};
+
+    opQueue_.push_back(Process{op, prio});
+    std::sort(opQueue_.begin(), opQueue_.end(), greater);
 }
 
 // State
@@ -340,26 +360,22 @@ void Game::Run()
 
     while(!opQueue_.empty())
     {
-        Process process = opQueue_.top();
-        opQueue_.pop();
+        Process& ref = opQueue_.front();
 
-        if(!process.announced)
+        if(!ref.announced)
         {
-            process.announced = true;
-            opQueue_.push(process);
-
-            Notification::Notification notification{Notification::Type::PRE, process};
+            ref.announced = true;
+            Notification::Notification notification{Notification::Type::PRE, ref};
             events.Notify(notification, *this);
         }
-        else
-            opQueue_.push(process);
 
-        process = opQueue_.top();
+        // Take a copy. Taking a ref 
+        Process process = opQueue_.front();
         if(process.announced)
         {
-            opQueue_.pop();
-
             Result res = process.op->Execute(*this);
+
+            opQueue_.erase(opQueue_.begin());
             if(res)
             {
                 Notification::Notification notification{Notification::Type::POST, process};

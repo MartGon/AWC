@@ -49,6 +49,7 @@ public:
 
     // Operation
     Operation::Factory& GetOperationFactory();
+    void RemoveOperation(unsigned int id);
     void Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
 
     // State
@@ -95,8 +96,8 @@ private:
     std::vector<Map> maps_;
 
     Operation::Factory factory;
-    std::function<bool(Process a, Process b)> greater = [](Process a, Process b){return a.priority < b.priority;};
-    std::priority_queue<Process, std::vector<Process>, decltype(greater)> opQueue_{greater};
+    //std::priority_queue<Process, std::vector<Process>, decltype(greater)> opQueuePrio_{greater};
+    std::vector<Process> opQueue_;
     
     Turn currentTurn;    
     Event::Subject events;

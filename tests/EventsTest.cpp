@@ -9,6 +9,7 @@
 #include <AWC/Command.h>
 #include <AWC/Event.h>
 #include <AWC/Operation/Custom.h>
+#include <AWC/Operation/AntiOperation.h>
 
 #include <iostream>
 
@@ -78,6 +79,26 @@ TEST_CASE("Event test")
 
         // Now only one is listening
         CHECK(check == 3);
+    }
+    SUBCASE("Anti Operations cancel current operations")
+    {
+        auto& subject = game.GetSubject();
+
+        auto cb = [](Event::Notification::Notification noti, Entity::GUID unitGUID, Game& game)
+        {
+            auto& opFactory = game.GetOperationFactory();
+            auto process = noti.process;
+            OperationIPtr antiOp = opFactory.CreateAntiOperation(process.op->GetId());
+            game.Push(antiOp, process.priority + 1);
+        };
+        subject.Register(Operation::Type::MOVE, cb, Event::Notification::Type::PRE);
+
+        CHECK(check == 0);
+
+        game.ExecuteCommand(moveCommand);
+
+        // Nothing moves
+        CHECK(check == 0);
     }
 }
 

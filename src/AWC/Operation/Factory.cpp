@@ -19,6 +19,11 @@ std::shared_ptr<Custom> Factory::CreateCustom(std::function<void(Game&)> func)
     return std::shared_ptr<Custom>{new Custom(GetNextId(), func)};
 }
 
+std::shared_ptr<AntiOperation> Factory::CreateAntiOperation(unsigned int targetId)
+{
+    return std::shared_ptr<AntiOperation>{new AntiOperation(GetNextId(), targetId)};
+}
+
 std::shared_ptr<Move> Factory::CreateMove(uint mapIndex, Vector2 origin, Vector2 dest)
 {
     return std::shared_ptr<Move>{new Move(GetNextId(), mapIndex, origin, dest)};

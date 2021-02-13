@@ -26,6 +26,8 @@ namespace Operation
         NONE,
         CUSTOM,
         COMPOSED,
+        ANTI_OPERATION,
+        
         STAT_MOD,
         UPDATE_FLAG,
         MOVE,
@@ -39,7 +41,8 @@ namespace Operation
         OperationI(unsigned int id, Type type = Type::NONE) : id_{id}, type_{type} {};
         virtual ~OperationI() {};
         virtual Result Execute(Game& state) { return Result{SUCCESS}; };
-
+        
+        unsigned int GetId() {return id_;}
         Type GetType() { return type_; }
 
         template <typename T>

@@ -27,6 +27,7 @@ add_library(AWCSource
 
   Operation/Factory.cpp
   Operation/Operation.cpp
+  Operation/AntiOperation.cpp
   Operation/Composed.cpp
   Operation/Custom.cpp
   Operation/Move.cpp
