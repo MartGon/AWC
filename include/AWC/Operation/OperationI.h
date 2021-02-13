@@ -19,7 +19,6 @@ namespace Operation
     private:
 
         ResultCode code_;
-
     };
 
     enum class Type
@@ -37,7 +36,7 @@ namespace Operation
     class OperationI
     {
     public:
-        OperationI(Type type = Type::NONE) : type_{type} {};
+        OperationI(unsigned int id, Type type = Type::NONE) : id_{id}, type_{type} {};
         virtual ~OperationI() {};
         virtual Result Execute(Game& state) { return Result{SUCCESS}; };
 
@@ -52,5 +51,6 @@ namespace Operation
 
     private:
         Type type_;
+        unsigned int id_;
     };
 }

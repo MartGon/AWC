@@ -15,6 +15,8 @@
 - Subject use a while loop instead of for - UNDONE -> Can cause infinite loops and undesired behaviour in general. It's also simpler the other way.
 - UnitTests for each of the methods - DONE
 - Functional test - Hugo and Large tank
+- OperationFactory which holds the next operation id
+- CounterOperation: Operation which removes another operation from the queue
 - Tile and Unit inherit from Entity. Then create GUID{EntityType, SubType, id}. Use GUID for Subject. Callbacks have dummy entities. Entity has a GetGUID method.
   It could also have a To<> method which asserts if it's a entity's son
 

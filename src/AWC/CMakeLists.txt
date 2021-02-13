@@ -25,7 +25,9 @@ add_library(AWCSource
   TilePattern/TileGraph.cpp
   TilePattern/TileNode.cpp
 
+  Operation/Factory.cpp
   Operation/Operation.cpp
+  Operation/Composed.cpp
   Operation/Custom.cpp
   Operation/Move.cpp
   Operation/StatMod.cpp

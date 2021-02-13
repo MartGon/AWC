@@ -8,15 +8,18 @@ namespace Operation
 {
     class TakeDmg : public OperationI
     {
+    friend class Factory;
+
     public:
         ~TakeDmg() override {};
-        TakeDmg(UnitPtr victim, float attackDmg, OperationI* source) :  victim_{victim}, attackDmg_{attackDmg}, 
-            source_{source}, OperationI{Type::TAKE_DMG} {};
 
         Result Execute(Game& state) override;
     
         UnitPtr victim_;
         float attackDmg_;
         OperationI* source_;
+    private:
+        TakeDmg(unsigned int id, UnitPtr victim, float attackDmg, OperationI* source) :  victim_{victim}, attackDmg_{attackDmg}, 
+            source_{source}, OperationI{id, Type::TAKE_DMG} {};
     };
 }

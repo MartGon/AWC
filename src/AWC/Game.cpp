@@ -114,6 +114,11 @@ void Game::RemoveUnit(Vector2 pos, uint mapIndex)
 
 // Operation
 
+Operation::Factory& Game::GetOperationFactory()
+{
+    return factory;
+}
+
 void Game::Push(OperationIPtr op, uint8_t prio)
 {
     opQueue_.push(Process{op, prio});

@@ -96,6 +96,7 @@ Event::Listener GetNilListener(Event::HandlerCallback cb)
 TEST_CASE("Event::Subject::Add/Remove/Iteration test")
 {
     Game game;
+    auto& opFactory = game.GetOperationFactory();
 
     SUBCASE("Modifying the list while iterating through it")
     {
@@ -119,9 +120,9 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         auto& subject = game.GetSubject();
         subject.Register(Operation::Type::CUSTOM, recursiveCB);
 
-        OperationIPtr custom{ new Operation::Custom([](Game& game){
+        OperationIPtr custom= opFactory.CreateCustom([](Game& game){
             std::cout << "Custom operation this is \n";
-        })};
+        });
         game.Push(custom);
 
         CommandPtr null{ new NullCommand{}};
@@ -148,9 +149,9 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         auto& subject = game.GetSubject();
         subject.Register(listener);
 
-        OperationIPtr custom{ new Operation::Custom([&count](Game& game){
+        OperationIPtr custom = opFactory.CreateCustom([&count](Game& game){
             
-        })};
+        });
         game.Push(custom);
 
         CommandPtr null{new NullCommand};
@@ -173,6 +174,7 @@ TEST_CASE("Event::Subject listen by notification")
     using namespace Event;
 
     Game game;
+    auto& opFactory = game.GetOperationFactory();
     Event::Subject& sub = game.GetSubject();
 
     Notification::Type first = Notification::Type::NONE;
@@ -205,9 +207,9 @@ TEST_CASE("Event::Subject listen by notification")
     sub.Register(Operation::Type::CUSTOM, cbPost, Notification::Type::POST);
     sub.Register(Operation::Type::CUSTOM, cbAny, Notification::Type::ANY);
 
-    OperationIPtr custom{ new Operation::Custom([](Game& game){
+    OperationIPtr custom = opFactory.CreateCustom([](Game& game){
             
-        })};
+        });
     game.Push(custom);
 
     CommandPtr null{new NullCommand};

@@ -11,18 +11,21 @@ namespace Operation
 
     class Composed : public OperationI
     {
+    friend class Factory;
+    
     public:
         ~Composed() override {
             for(auto child : children)
                 delete child;
         };
-        Composed() : OperationI{Type::COMPOSED} {};
 
         void AddChild(OperationI* child) { children.push_back(child); };
 
         Result Execute(Game& state) override;
 
     private:
+        Composed(unsigned int id) : OperationI{id, Type::COMPOSED} {};
+
         std::vector<OperationI*> children;
     };
 }

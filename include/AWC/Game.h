@@ -6,6 +6,7 @@
 #include <AWC/Turn.h>
 #include <AWC/Event.h>
 #include <AWC/Operation/OperationI.h>
+#include <AWC/Operation/Factory.h>
 #include <AWC/Process.h>
 
 #include <queue>
@@ -47,6 +48,7 @@ public:
     void RemoveUnit(Vector2 pos, uint mapIndex = 0);
 
     // Operation
+    Operation::Factory& GetOperationFactory();
     void Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
 
     // State
@@ -92,6 +94,7 @@ private:
     std::vector<Player> players_;
     std::vector<Map> maps_;
 
+    Operation::Factory factory;
     std::function<bool(Process a, Process b)> greater = [](Process a, Process b){return a.priority < b.priority;};
     std::priority_queue<Process, std::vector<Process>, decltype(greater)> opQueue_{greater};
     
