@@ -241,3 +241,37 @@ TEST_CASE("Event::Subject listen by notification")
     CHECK(counterAny == 2);
     CHECK(first == Notification::Type::PRE);
 }
+
+TEST_CASE("Sort operations")
+{
+    Game game;
+    auto& sub = game.GetSubject();
+    auto& factory = game.GetOperationFactory();
+
+    std::vector<int> order{1, 2, 3};
+    std::vector<int> check;
+
+    OperationIPtr first = factory.CreateCustom([&check](Game& game) {
+        check.push_back(1);
+    });
+
+    OperationIPtr second = factory.CreateCustom([&check](Game& game) {
+        check.push_back(2);
+    });
+
+    OperationIPtr third = factory.CreateCustom([&check](Game& game) {
+        check.push_back(3);
+    });
+
+    game.Push(third);
+    game.Push(first, 255);
+    game.Push(second);
+
+    CommandPtr null{new NullCommand};
+    
+    CHECK(check.empty() == true);
+
+    game.ExecuteCommand(null);
+
+    CHECK(order == check);
+}

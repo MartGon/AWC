@@ -91,12 +91,12 @@ private:
 
     // Operations
     void Run();
+    void SortQueue();
 
     std::vector<Player> players_;
     std::vector<Map> maps_;
 
     Operation::Factory factory;
-    //std::priority_queue<Process, std::vector<Process>, decltype(greater)> opQueuePrio_{greater};
     std::vector<Process> opQueue_;
     
     Turn currentTurn;    

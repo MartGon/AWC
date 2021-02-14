@@ -138,10 +138,8 @@ void Game::RemoveOperation(unsigned int id)
 
 void Game::Push(OperationIPtr op, uint8_t prio)
 {
-    std::function<bool(Process a, Process b)> greater = [](Process a, Process b){return a.priority > b.priority;};
-
     opQueue_.push_back(Process{op, prio});
-    std::sort(opQueue_.begin(), opQueue_.end(), greater);
+    SortQueue();
 }
 
 // State
@@ -383,4 +381,13 @@ void Game::Run()
             }
         }
     }
+}
+
+void Game::SortQueue()
+{
+    std::function<bool(Process a, Process b)> greater = [](Process a, Process b)
+    {
+        return a.priority > b.priority || (a.priority == b.priority && a.op->GetId() < b.op->GetId());
+    };
+    std::sort(opQueue_.begin(), opQueue_.end(), greater);
 }
