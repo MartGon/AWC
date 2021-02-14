@@ -21,6 +21,11 @@ namespace Entity
             return type == b.type && subType == b.subType && id == b.id;
         }
 
+        bool operator!=(const GUID& b) const
+        {
+            return !operator==(b);
+        }
+
         std::string ToString()
         {
             unsigned int type = static_cast<unsigned int>(type);

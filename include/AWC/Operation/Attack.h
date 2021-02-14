@@ -18,7 +18,7 @@ namespace Operation
 
         Result Execute(Game& state) override;
     
-        UnitPtr unit_;
+        UnitPtr attacker_;
         Position origin_;
         Position dest_;
         uint weaponIndex_;

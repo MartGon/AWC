@@ -15,8 +15,8 @@
 - Subject use a while loop instead of for - UNDONE -> Can cause infinite loops and undesired behaviour in general. It's also simpler the other way.
 - UnitTests for each of the methods - DONE
 - Functional test - Hugo and Large tank
-- OperationFactory which holds the next operation id
-- CounterOperation: Operation which removes another operation from the queue
+- OperationFactory which holds the next operation id - DONE
+- CounterOperation: Operation which removes another operation from the queue - DONE
 - Tile and Unit inherit from Entity. Then create GUID{EntityType, SubType, id}. Use GUID for Subject. Callbacks have dummy entities. Entity has a GetGUID method.
   It could also have a To<> method which asserts if it's a entity's son
 
@@ -27,7 +27,7 @@
 - Re organize stuff in proper namespaces. They're polluting global scope
 - Re organize headers. Much stuff is being imported while not being needed.
 - Use std::enable_shared_prt_to_this;
-- Do something about exceptions
+- Do something about AWC exceptions
 - Players/Maps can only be created from Game:
     They hold a reference to event/Subject, so the map/player interface can be used directly. No need to make proxy methods in game (Add/RemoveUnit)
 

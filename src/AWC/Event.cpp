@@ -7,7 +7,7 @@
 using namespace Event;
 using namespace Operation;
 
-bool Listener::ListensTo(Notification::Type type)
+bool Handler::ListensTo(Notification::Type type)
 {
     return notificationType == Notification::Type::ANY || notificationType == type;
 }
@@ -32,8 +32,8 @@ void Subject::Register(Entity::GUID entity, Operation::Type type, HandlerCallbac
 
 void Subject::Register(Operation::Type type, HandlerCallback cb, Notification::Type notType)
 {
-    Event::Handler handler{type, cb};
-    Event::Listener listener{Entity::NIL, handler, notType};
+    Event::Handler handler{type, cb, notType};
+    Event::Listener listener{Entity::NIL, handler};
     Register(listener);
 }
 
@@ -88,7 +88,7 @@ void Subject::Notify(Notification::Notification notification, Game& game)
         for(auto listener : typeListeners)
         {
             auto callback = listener.handler.callback;
-            if(listener.ListensTo(notification.type))
+            if(listener.handler.ListensTo(notification.type))
                 callback(notification, listener.entity, game);
         }
     }

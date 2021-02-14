@@ -34,24 +34,25 @@ namespace Event
 
     struct Handler
     {
-        Handler(Operation::Type type, HandlerCallback callback) : type{type}, callback{callback} {};
+        Handler(Operation::Type type, HandlerCallback callback, Notification::Type notificationType = Notification::Type::ANY) : 
+            type{type}, callback{callback}, notificationType{notificationType} {};
+
+        bool ListensTo(Notification::Type type);
 
         Operation::Type type;
         HandlerCallback callback;
+        Notification::Type notificationType;
     };
 
     struct Listener
     {
-        Listener(Entity::GUID entity, Handler handler, Notification::Type type = Notification::Type::ANY) :
-            entity{entity}, handler{handler}, notificationType{type} {};
+        Listener(Entity::GUID entity, Handler handler) :
+            entity{entity}, handler{handler} {};
         Listener(Entity::GUID entity, Operation::Type opType, HandlerCallback handler, Notification::Type type = Notification::Type::ANY) :
-            entity{entity}, handler{opType, handler}, notificationType{type} {};
-
-        bool ListensTo(Notification::Type type);
+            entity{entity}, handler{opType, handler, type} {};
 
         Entity::GUID entity;
         Handler handler;
-        Notification::Type notificationType;
     };
 
     class Subject
