@@ -13,7 +13,7 @@ namespace Operation
     public:
         ~TakeDmg() override {};
 
-        Result Execute(Game& state) override;
+        Result Execute(Game& state, uint8_t prio) override;
     
         UnitPtr victim_;
         float attackDmg_;

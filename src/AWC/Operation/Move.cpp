@@ -4,7 +4,7 @@
 
 using namespace Operation;
 
-Result Move::Execute(Game& game)
+Result Move::Execute(Game& game, uint8_t prio)
 {
     Result result{SUCCESS};
 

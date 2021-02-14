@@ -21,7 +21,7 @@ namespace Operation
 
         void AddChild(OperationI* child) { children.push_back(child); };
 
-        Result Execute(Game& state) override;
+        Result Execute(Game& state, uint8_t prio) override;
 
     private:
         Composed(unsigned int id) : OperationI{id, Type::COMPOSED} {};

@@ -13,7 +13,7 @@ namespace Operation
     public:
         ~Move() override {};
 
-        Result Execute(Game& state) override;
+        Result Execute(Game& state, uint8_t prio) override;
     
         UnitPtr unit_;
         uint mapIndex_;

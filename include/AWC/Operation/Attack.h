@@ -16,7 +16,7 @@ namespace Operation
     public:
         ~Attack() override {};
 
-        Result Execute(Game& state) override;
+        Result Execute(Game& state, uint8_t prio) override;
     
         UnitPtr attacker_;
         Position origin_;

@@ -4,7 +4,7 @@
 using namespace Operation;
 using namespace UnitNS;
 
-Result StatMod::Execute(Game& game)
+Result StatMod::Execute(Game& game, uint8_t prio)
 {
     Result res{SUCCESS};
 

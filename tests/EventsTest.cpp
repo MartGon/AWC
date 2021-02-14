@@ -10,6 +10,7 @@
 #include <AWC/Event.h>
 #include <AWC/Operation/Custom.h>
 #include <AWC/Operation/AntiOperation.h>
+#include <AWC/Operation/Operation.h>
 
 #include <iostream>
 
@@ -274,4 +275,170 @@ TEST_CASE("Sort operations")
     game.ExecuteCommand(null);
 
     CHECK(order == check);
+}
+
+TEST_CASE("Hugo and large tank")
+{
+    using namespace Event;
+    
+    // Game
+    Game game;
+    std::vector<int> solution{1, 2, 3, 4};
+    std::vector<int> orderCheck;
+
+    // Adds map
+    Map map{5, 5};
+    TileType grassType{0, "Grass"};
+    MapUtils::FillMap(map, grassType);
+    auto mapId = game.AddMap(map);
+
+    // Adds players
+    Player playerOne{0, 0, 1000};
+    Player playerTwo{1, 1, 1000};
+    game.AddPlayer(playerOne);
+    game.AddPlayer(playerTwo);
+
+    auto& sub = game.GetSubject();
+
+    // TODO: Need to create each separate unit type
+
+    auto soldierType = UnitTest::CreateSoldierType();
+
+        // Puts units
+    auto large = soldierType.CreateUnit(playerOne);
+    auto hugo = soldierType.CreateUnit(playerTwo);
+    auto cop = soldierType.CreateUnit(playerTwo);
+    auto normal = soldierType.CreateUnit(playerOne);
+
+    // Cop stuff
+
+    auto copCB = [&orderCheck](Notification::Notification noti, Entity::GUID e, Game& game)
+    {
+        auto process = noti.process;
+        if(process.op->GetType() == Operation::Type::ATTACK)
+        {
+            auto attack = process.op->To<Operation::Attack>();
+            auto attacker = game.GetMap(attack->origin_.mapIndex).GetUnit(attack->origin_.pos);
+            
+            auto me = game.GetUnit(e);
+            auto myPos = game.GetUnitPos(e);
+
+            auto myGUID = me->GetGUID();
+            auto attackerGUID = attacker->GetGUID();
+            if(me && myGUID != attackerGUID && myPos.has_value())
+            {
+                auto& factory = game.GetOperationFactory();
+                OperationIPtr counterAttack = factory.CreateAttack(myPos.value(), attack->origin_, 0);
+                game.Push(counterAttack, process.priority + 1);
+
+                orderCheck.push_back(1);
+            }
+        }
+    };
+    Handler copHandler{Operation::Type::ATTACK, copCB, Notification::Type::PRE};
+    Listener copListener{cop->GetGUID(), copHandler};
+    sub.Register(copListener);
+
+    // Hugo stuff
+    auto hugoCB = [&orderCheck, &large](Notification::Notification noti, Entity::GUID e, Game& game)
+    {
+        auto process = noti.process;
+        if(process.op->GetType() == Operation::Type::TAKE_DMG)
+        {
+            auto takeDmg = process.op->To<Operation::TakeDmg>();
+            auto victim = takeDmg->victim_;
+
+            if(victim->GetGUID() == large->GetGUID()) // Is Large
+            {
+                // When large takes damage, we register a callback that negates dmg taken by Hugo
+                auto denyDmgCB = [&orderCheck](Notification::Notification noti, Entity::GUID hugo, Game& game)
+                {
+                    auto process = noti.process;
+                    if(process.op->GetType() == Operation::Type::TAKE_DMG)
+                    {
+                        auto takeDmg = process.op->To<Operation::TakeDmg>();
+                        auto victim = takeDmg->victim_;
+
+                        if(victim->GetGUID() == hugo)
+                        {
+                            auto& factory = game.GetOperationFactory();
+                            OperationIPtr deny = factory.CreateAntiOperation(noti.process.op->GetId());
+                            game.Push(deny, process.priority + 1);
+
+                            orderCheck.push_back(3);
+                        }
+                    }
+                };
+
+                Handler denyDmg{Operation::Type::TAKE_DMG, denyDmgCB, Notification::Type::PRE};
+                Listener denyListener{e, denyDmg};
+                auto& sub = game.GetSubject();
+                sub.Register(denyListener);
+
+                orderCheck.push_back(2);
+            }
+        }
+    };
+    Handler hugoHandler{Operation::Type::TAKE_DMG, hugoCB, Notification::Type::POST};
+    Listener hugoListener{hugo->GetGUID(), hugoHandler};
+    sub.Register(hugoListener);
+
+    // Large stuff
+    auto largeCB = [&orderCheck](Notification::Notification noti, Entity::GUID me, Game& game)
+    {
+        auto process = noti.process;
+        if(process.op->GetType() == Operation::Type::ANTI_OPERATION)
+        {
+            auto antiOp = process.op->To<Operation::AntiOperation>();
+            auto deniedOpId = antiOp->targetId_;
+
+            auto deniedProcess = game.GetProcess(deniedOpId);
+            if(deniedProcess.has_value() && deniedProcess.value().op->GetType() == Operation::Type::TAKE_DMG)
+            {
+                auto takeDmg = deniedProcess->op->To<Operation::TakeDmg>();
+                auto sourceOp = takeDmg->source_;
+                if(sourceOp->GetType() == Operation::Type::ATTACK)
+                {
+                    auto attack = sourceOp->To<Operation::Attack>();
+                    if(attack->attacker_->GetGUID() == me)
+                    {
+                        auto& factory = game.GetOperationFactory();
+                        OperationIPtr deny = factory.CreateAntiOperation(process.op->GetId());
+                        game.Push(deny, process.priority + 1);
+
+                        orderCheck.push_back(4);
+                    }
+                }
+            }
+        }
+    };
+    Handler largeHandler{Operation::Type::ANTI_OPERATION, largeCB, Notification::Type::PRE};
+    Listener largeListener{large->GetGUID(), largeHandler};
+    sub.Register(largeListener);
+
+    game.AddUnit(large, {0, 0}, mapId);
+    game.AddUnit(cop, {0, 1}, mapId);
+    game.AddUnit(hugo, {1, 0}, mapId);
+    game.AddUnit(normal, {2, 0}, mapId);
+
+    SUBCASE("Cop counter attacks")
+    {
+        CommandPtr largeAttack{new AttackCommand{mapId, {0, 0}, {1, 0}, 0}};
+        
+        auto largeHP = large->GetHealth();
+        auto hugoHP = hugo->GetHealth();
+
+        game.ExecuteCommand(largeAttack, 0);
+
+        auto hugoLeftHp = hugo->GetHealth();
+
+        CHECK(largeHP > large->GetHealth());
+        CHECK(hugoHP > hugoLeftHp);
+        CHECK(orderCheck == solution);
+
+        CommandPtr normalAttack{new AttackCommand{mapId, {2, 0}, {1, 0}, 0}};
+        game.ExecuteCommand(normalAttack, 0);
+
+        CHECK(hugoLeftHp == hugo->GetHealth());
+    }
 }

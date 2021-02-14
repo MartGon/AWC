@@ -50,6 +50,7 @@ public:
     // Operation
     Operation::Factory& GetOperationFactory();
     void RemoveOperation(unsigned int id);
+    std::optional<Process> GetProcess(unsigned int id);
     void Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
 
     // State

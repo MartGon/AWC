@@ -10,7 +10,7 @@ namespace Operation
     
     public:
         ~Custom() override {};
-        Result Execute(Game& state) override { func_(state); return Result{SUCCESS}; }
+        Result Execute(Game& state, uint8_t prio) override { func_(state); return Result{SUCCESS}; }
 
     private:
         Custom(unsigned int id, std::function<void(Game&)> func) : func_{func}, OperationI{id, Type::CUSTOM} {};

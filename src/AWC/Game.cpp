@@ -136,6 +136,19 @@ void Game::RemoveOperation(unsigned int id)
     return;
 }
 
+std::optional<Process> Game::GetProcess(unsigned int id)
+{
+    std::optional<Process> process;
+
+    for(auto p : opQueue_)
+    {
+        if(p.op->GetId() == id)
+            return p;
+    }
+
+    return process;
+}
+
 void Game::Push(OperationIPtr op, uint8_t prio)
 {
     opQueue_.push_back(Process{op, prio});
@@ -371,7 +384,7 @@ void Game::Run()
         Process process = opQueue_.front();
         if(process.announced)
         {
-            Result res = process.op->Execute(*this);
+            Result res = process.op->Execute(*this, process.priority);
 
             opQueue_.erase(opQueue_.begin());
             if(res)

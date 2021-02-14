@@ -5,7 +5,7 @@
 
 using namespace Operation;
 
-Result TakeDmg::Execute(Game& game)
+Result TakeDmg::Execute(Game& game, uint8_t prio)
 {
     Result result{SUCCESS};
 
@@ -16,7 +16,7 @@ Result TakeDmg::Execute(Game& game)
     {
         auto& opFactory = game.GetOperationFactory();
         OperationIPtr op = opFactory.CreateUpdateFlag(victim_, UnitNS::DEAD, true);
-        game.Push(op);
+        game.Push(op, prio);
     }
 
     return result;

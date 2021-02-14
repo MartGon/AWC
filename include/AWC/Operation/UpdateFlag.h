@@ -13,7 +13,7 @@ namespace Operation
         UpdateFlag(unsigned int id, UnitPtr unit, UnitNS::Flag flag, bool set) : unit_{unit}, 
             flag_{flag}, set_{set}, OperationI{id, Type::UPDATE_FLAG} {};
 
-        Result Execute(Game& game) override;
+        Result Execute(Game& game, uint8_t prio) override;
     
         UnitPtr unit_;
         Vector2 unitPos_;

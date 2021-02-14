@@ -4,7 +4,7 @@
 
 using namespace Operation;
 
-Result UpdateFlag::Execute(Game& game)
+Result UpdateFlag::Execute(Game& game, uint8_t prio)
 {
     Result result{SUCCESS};
 

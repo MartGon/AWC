@@ -34,7 +34,7 @@ namespace Operation
 
         ~StatMod() override {};
 
-        Result Execute(Game& state) override;
+        Result Execute(Game& state, uint8_t prio) override;
     
         UnitPtr unit_;
         UnitNS::StatType type_;

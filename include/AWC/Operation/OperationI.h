@@ -40,7 +40,7 @@ namespace Operation
     public:
         OperationI(unsigned int id, Type type = Type::NONE) : id_{id}, type_{type} {};
         virtual ~OperationI() {};
-        virtual Result Execute(Game& state) { return Result{SUCCESS}; };
+        virtual Result Execute(Game& state, uint8_t prio) { return Result{SUCCESS}; };
         
         unsigned int GetId() {return id_;}
         Type GetType() { return type_; }
