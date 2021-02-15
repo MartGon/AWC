@@ -46,5 +46,5 @@ add_library(AWCSource
   Unit/WeaponType.cpp
 )
 
-target_link_libraries(AWCSource /home/defu/Libs/lua-5.4.2/src/liblua.a)
-target_include_directories(AWCSource PUBLIC ${CMAKE_SOURCE_DIR}/include /home/defu/Libs/lua-5.4.2/src)
+target_link_libraries(AWCSource ${LUA_LIB_PATH})
+target_include_directories(AWCSource PUBLIC ${CMAKE_SOURCE_DIR}/include ${LUA_INCLUDE_DIR})
