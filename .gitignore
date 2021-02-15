@@ -1,4 +1,5 @@
 build/
 .vscode/
 *.sh
+valgrind-out.txt
 

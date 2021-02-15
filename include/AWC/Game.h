@@ -99,6 +99,7 @@ private:
 
     Operation::Factory factory;
     std::vector<Process> opQueue_;
+    std::vector<Process> opHistory_;
     
     Turn currentTurn;    
     Event::Subject events;

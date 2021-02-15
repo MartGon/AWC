@@ -385,6 +385,7 @@ void Game::Run()
         if(process.announced)
         {
             Result res = process.op->Execute(*this, process.priority);
+            opHistory_.push_back(process);
 
             opQueue_.erase(opQueue_.begin());
             if(res)
