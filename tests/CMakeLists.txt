@@ -28,5 +28,6 @@ target_link_libraries(AWCTest AWCLibrary AWCSer ${LUA_LIB_PATH})
 
 add_compile_definitions(PROJECT_DIR="${CMAKE_SOURCE_DIR}")
 add_compile_definitions(RESOURCES_DIR="${CMAKE_SOURCE_DIR}/resources/AWCSer/")
+add_compile_definitions(SCRIPTS_DIR="${CMAKE_SOURCE_DIR}/resources/Scripts/")
 
 add_test(NAME BasicTest COMMAND AWCTest)
