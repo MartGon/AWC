@@ -2,6 +2,9 @@
 #include <Utils/STLUtils.h>
 #include <AWC/AWCException.h>
 #include <AWC/Command.h>
+#include <AWC/Operation/Operation.h>
+
+#include <algorithm>
 
 // Players
 
@@ -43,9 +46,10 @@ uint Game::GetPlayerCount() const
 
 // Maps
 
-void Game::AddMap(Map map)
+unsigned int Game::AddMap(Map map)
 {
     maps_.push_back(map);
+    return maps_.size() - 1;
 }
 
 void Game::RemoveMap(uint mapIndex)
@@ -66,24 +70,89 @@ uint Game::GetMapCount() const
 
 // Commands
 
+bool Game::CanExecuteCommand(CommandPtr command)
+{
+    return this->CanExecuteCommand(command, currentTurn.playerIndex);
+}
+
 bool Game::CanExecuteCommand(CommandPtr command, uint playerIndex)
 {
     return IsPlayerIndexValid(playerIndex) && command->CanBeExecuted(*this, playerIndex);
 }
 
-bool Game::CanExecuteCommand(CommandPtr command)
+void Game::ExecuteCommand(CommandPtr command)
 {
-    return command->CanBeExecuted(*this, currentTurn.playerIndex);
+    this->ExecuteCommand(command, currentTurn.playerIndex);
 }
 
 void Game::ExecuteCommand(CommandPtr command, uint playerIndex)
 {
     command->Execute(*this, playerIndex);
+    Run();
 }
 
-void Game::ExecuteCommand(CommandPtr command)
+// Units
+
+void Game::AddUnit(UnitPtr unit, Vector2 pos, uint mapIndex)
 {
-    command->Execute(*this, currentTurn.playerIndex);
+    auto& map = GetMap(mapIndex);
+    map.AddUnit(pos, unit);
+
+    unit->RegisterHandlers(events);
+}
+
+void Game::RemoveUnit(Vector2 pos, uint mapIndex)
+{
+    auto& map = GetMap(mapIndex);
+    auto unit = map.GetUnit(pos);
+    if(unit)
+    {
+        auto guid = unit->GetGUID();
+        events.Unregister(guid);
+
+        map.RemoveUnit(pos);
+    }
+}
+
+// Operation
+
+Operation::Factory& Game::GetOperationFactory()
+{
+    return factory;
+}
+
+void Game::RemoveOperation(unsigned int id)
+{
+    for(int index = 0; index < opQueue_.size(); index++)
+    {   
+        auto op = opQueue_.at(index);
+        if(op.op->GetId() == id)
+        {
+            VectorUtils::RemoveByIndex(opQueue_, index);
+            return;
+        }
+    }
+
+    return;
+}
+
+std::optional<Process> Game::GetProcess(unsigned int id)
+{
+    std::optional<Process> process;
+
+    for(auto p : opQueue_)
+    {
+        if(p.op->GetId() == id)
+            return p;
+    }
+
+    return process;
+}
+
+void Game::Push(OperationIPtr op, uint8_t prio)
+{
+    opQueue_.push_back(Process{op, prio});
+    SortQueue();
 }
 
 // State
@@ -183,6 +252,56 @@ void Game::EnumUnits(std::function<void(UnitPtr)> operation, uint mapIndex) cons
     }
 }
 
+void Game::EnumUnits(std::function<void(UnitPtr, Position)> operation, uint mapIndex) const
+{
+    if(operation)
+    {
+        uint maps = GetMapCount();
+        for(uint i = 0; i < maps; i++)
+        {
+            auto map = maps_.at(i);
+            Vector2 mapSize = map.GetSize();
+            for(int x = 0; x < mapSize.x; x++)
+            {
+                for(int y = 0; y < mapSize.y; y++)
+                {
+                    if(auto unit = map.GetUnit(x, y))
+                        operation(unit, Position{{x, y}, i});
+                }
+            }
+        }
+    }
+}
+
+UnitPtr Game::GetUnit(Entity::GUID guid)
+{
+    UnitPtr unitPtr;
+
+    auto myUnit = [&unitPtr, guid](UnitPtr unit, Position position)
+    {
+        if(unit->GetGUID() == guid)
+            unitPtr = unit;
+    };
+
+    EnumUnits(myUnit);
+
+    return unitPtr;
+}
+
+std::optional<Position> Game::GetUnitPos(Entity::GUID guid)
+{
+    std::optional<Position> pos;
+
+    auto myUnit = [&pos, guid](UnitPtr unit, Position position)
+    {
+        if(unit->GetGUID() == guid)
+            pos = position;
+    };
+    EnumUnits(myUnit);
+
+    return pos;
+}
+
 // Turn history
 
 const Turn& Game::GetCurrentTurn() const
@@ -199,6 +318,13 @@ void Game::PassTurn()
 
     // TODO: This is an example of possible event on an event system
     NotifyPassTurn(currentTurn);
+}
+
+// Events
+
+Event::Subject& Game::GetSubject()
+{
+    return events;
 }
 
 // Private
@@ -234,4 +360,47 @@ void Game::CheckMapIndex(uint mapIndex) const
 {
     if(!IsMapIndexValid(mapIndex))
         throw std::out_of_range("Map index out of range:" + std::to_string(mapIndex));
+}
+
+    // Operations
+
+void Game::Run()
+{
+    using namespace Operation;
+    using namespace Event;
+
+    while(!opQueue_.empty())
+    {
+        Process& ref = opQueue_.front();
+
+        if(!ref.announced)
+        {
+            ref.announced = true;
+            Notification::Notification notification{Notification::Type::PRE, ref};
+            events.Notify(notification, *this);
+        }
+
+        // Take a copy. Taking a ref 
+        Process process = opQueue_.front();
+        if(process.announced)
+        {
+            Result res = process.op->Execute(*this, process.priority);
+
+            opQueue_.erase(opQueue_.begin());
+            if(res)
+            {
+                Notification::Notification notification{Notification::Type::POST, process};
+                events.Notify(notification, *this);
+            }
+        }
+    }
+}
+
+void Game::SortQueue()
+{
+    std::function<bool(Process a, Process b)> greater = [](Process a, Process b)
+    {
+        return a.priority > b.priority || (a.priority == b.priority && a.op->GetId() < b.op->GetId());
+    };
+    std::sort(opQueue_.begin(), opQueue_.end(), greater);
 }

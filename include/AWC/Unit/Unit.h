@@ -4,26 +4,41 @@
 
 #include <Utils/Vector2.h>
 #include <AWC/AWCusing.h>
+#include <AWC/Event.h>
+#include <AWC/Entity.h>
 
 class UnitType;
 
-enum UnitFlags : uint
+namespace UnitNS
 {
-    NONE        = 0x0,
-    MOVED       = 0x1,
-    ATTACKED    = 0x2
-};
+    enum Flag : uint
+    {
+        NONE        = 0x0,
+        MOVED       = 0x1,
+        ATTACKED    = 0x2,
+        DEAD        = 0x4
+    };
+
+    enum StatType : uint
+    {
+        HEALTH,
+        GAS,
+        AMMO
+    };
+
+    
+}
 
 class Unit
 {
 friend class UnitType;
 
 public:
-    Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& ownerId);
-
     const std::string GetName() const;
-    const uint GetId() const;
+    const uint GetTypeId() const;
     const Player& GetOwner() const;
+
+    Entity::GUID GetGUID() const;
 
     // Misc
     // TODO: Future release. Needs WeaponType and MovementType interface implementation.
@@ -93,7 +108,20 @@ public:
     // Callback to be called on pass turn
     void OnPassTurn(Turn& turn);
 
+    // Sets a UnitFlag
+    void SetFlag(UnitNS::Flag flag);
+
+    // Clears a UnitFlag
+    void RemoveFlag(UnitNS::Flag flag);
+
+    // Checks a UnitFlag
+    bool HasFlag(UnitNS::Flag flag) const;
+
+    // Events
+    void RegisterHandlers(Event::Subject& subject);
+
 private:
+    Unit(uint id, const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& ownerId);
 
     // Movement
     // TODO: This should become public once CalculateMovement does
@@ -106,19 +134,11 @@ private:
 
     // State
 
-    // Sets a UnitFlag
-    void SetFlag(UnitFlags flag);
-
-    // Clears a UnitFlag
-    void RemoveFlag(UnitFlags flag);
-
-    // Checks a UnitFlag
-    bool HasFlag(UnitFlags flag) const;
-
     // Utils
     void ThrowInvalidWeaponIdException(uint weaponId) const;
 
-    // TODO: Add GUID.
+    // Member variables
+    uint id_;
 
     // State
     float health = 100;

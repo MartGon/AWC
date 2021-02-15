@@ -2,11 +2,14 @@ add_library(AWCSource
   AWCException.cpp
   Command.cpp
   CostTable.cpp
+  Entity.cpp
+  Event.cpp
   Game.cpp
   Map.cpp
   Range.cpp
   Pathfinding.cpp
   Player.cpp
+  Process.cpp
   Tile.cpp
   TileType.cpp
   Turn.cpp
@@ -21,6 +24,17 @@ add_library(AWCSource
   TilePattern/TilePatternDescDecorator.cpp
   TilePattern/TileGraph.cpp
   TilePattern/TileNode.cpp
+
+  Operation/Factory.cpp
+  Operation/Operation.cpp
+  Operation/AntiOperation.cpp
+  Operation/Composed.cpp
+  Operation/Custom.cpp
+  Operation/Move.cpp
+  Operation/StatMod.cpp
+  Operation/Attack.cpp
+  Operation/TakeDmg.cpp
+  Operation/UpdateFlag.cpp
 
   Unit/MovementDescType.cpp
   Unit/MovementDesc.cpp

@@ -10,6 +10,8 @@ class MovementDescType;
 class MovementDesc;
 struct Range;
 class Player;
+struct Position;
+struct Process;
 class Tile;
 class TileType;
 class TileGraph;
@@ -31,3 +33,24 @@ class UnitMovement;
 class UnitType;
 class Weapon;
 class WeaponType;
+
+namespace UnitNS
+{
+    enum Flag : unsigned int;
+    enum StatType : unsigned int;
+    struct GUID;
+}
+
+namespace Operation
+{
+    class OperationI;
+    class Custom;
+    class Composed;
+    class Move;
+    class AntiOperation;
+    class StatMod;
+    class TakeDmg;
+    class UpdateFlag;
+    class Attack;
+    enum class Type;
+};

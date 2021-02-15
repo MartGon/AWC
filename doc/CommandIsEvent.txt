@@ -1,0 +1,200 @@
+# Scenario: User creates a MoveCommand with a tank. Tank origin pos is (0, 0), tank destination is (5, 0). 
+# The tank takes the following path [(0, 0), (1, 0), ..., (5, 0)]. In positions (1, 0) and (3, 0) there are two mines.
+
+# Case 1: Mine 1 stops tank in its path
+
+MoveCommand((0, 0), (5, 0))
+    SetUnitPos((5, 0), (1, 0))
+    AttackCommand (Mine 1)
+
+# The move command triggers two other commands, SetUnitPos and AttackCommand
+
+# MoveCommand should trigger MoveEvents along it's path. So an InterruptCommand can be pushed
+
+MoveCommand((0, 0), (5, 0))
+    Move({0, 0}, {1, 0})
+        # Mine
+        Rewind()
+        Attack({1, 0}, {1, 0})
+    Move({1, 0}, {2, 0})
+    Move({2, 0}, {3, 0})
+        # Mine
+        Rewind()
+    Move({3, 0}, {4, 0})
+    Move({4, 0}, {5, 0})
+
+# Every move call consumes gas.
+# Interrupt destroys every event in the queue
+
+# What happens here?
+
+# 1. User creates a MoveCommand which is pushed to the queue.
+# 2. MoveCommand is executed, which results in pushing 5 Move calls in the queue
+# 3. Move({0, 0}, {1, 0}) is executed succesfully. Tank pos is now {1, 0} and its gas has been reduced
+# 4. The Mine is notified of the move operation. It realizes that the tank has moved to its position and triggers two operations
+# 5. First, the mine calls Interrupt() which removes all other operations of the level above it. It basically interrupts a command.
+
+# Note: The interrupt call which removes operations BEFORE they are executed, requires a stack model instead of a queue. In a stack, the Interrupt operation
+# would be called before the rest of Move operations, however this results in unintended behaviour when oprations are triggered and chained. An explosion
+# that hits other units that explode would be resolved like this: Explosion hits 3 -> Victim1 explodes-> Victim4 explodes
+# A queue model allows to resolve the operations of each level before going down in the tree. This solution should be more semantic.
+
+# How an Interrupt operation is implemented in a queue model? Well, instead of interrupting we can rewind! Rewind is called with a given index, which returns
+# the index of the queue, by undoing every operation on the path
+
+# So this is basically Depth First Search (Stack) vs Breadth First Search (Queue)
+
+# Note 2: Well, this can be solved too by using an unregistered operation, which clears the queue. Then the mine would push its operations. This is the
+# most performance friendly solution.
+
+# Steps with queue state
+
+# 1. User creates MoveCommand Which is pushed to the queue
+
+Q1[MC]
+  ^
+# 2. MC is popped and executed, which results in 5 move operations pushed
+
+Q(MC)[M, M, M, M, M]
+               ^
+# 3. Move operation one is executed, and a notification is sent. 
+# The mine calls the ClearQueue (which is not registered) and then pushes an AttackEvent
+
+Q(MC)[M, A]
+         ^
+# 4. The Attack event is resolved
+
+Queue state with index
+
+Q1[MC, ]
+      ^
+Q(MC)[M, A]
+
+# Tree Model. In the tree model, user commands are at the root level of the tree. Then every command has its own set of operations which are triggered
+# when they are executed.
+# The user MoveCommand pushes 5 Move operations. The First move operation triggers the ClearQueue operation and the Attack operation.
+
+MC
+    M
+        A
+    M
+    M
+    M
+    M
+
+# Design
+
+class Operation
+
+public:
+    void Execute():
+        DoStuff()
+
+    void Undo():
+        ...        
+
+    void AddOperation();
+    void ClearQueue();
+
+private:
+    std::queue<Operation> operations
+
+
+# Example
+
+MoveCommand mc;
+std::queue<Operation> q{mc};
+
+while(!q.Empty()):
+    Operation o = q.Pop()
+    o->Execute();
+    auto tOperations = Notify(o);
+
+
+# One Queue model with execute history
+##################################################################
+
+Q = []
+H = []
+
+# 1. User creates a MoveCommand
+
+Q = [MC]
+H = []
+
+# 2. MoveCommand is executed, move operations are created
+
+Q = [M, M, M, M, M]
+H = [MC]
+
+# 3. First move operation is executed. Mine is notified. Clears Queue and pushes Attack
+
+Q = [A]
+H = [MC, M]
+
+# 4. Attack is executed. Nothing else is triggered
+
+Q = []
+H = [MC, M, A]
+
+# Note: undoing a command is simple. Iterate the H backwards, until u find a command
+
+# Heirarchical model
+########################################################
+
+Q = []
+H = []
+
+# 1. User creates a MoveCommand
+
+Q = [MC]
+H = []
+
+# 2. MoveCommand is executed, move operations are created
+
+Q = []
+Q(MC) = [M, M, M, M, M]
+H = []
+
+# 3. First Move operation is executed. Mine is notified. Clears queue and pushes Attack
+
+Q = []
+Q(MC) = [M]
+Q(M) = [A]
+H = []
+
+# 4. Attack is executed. Nothing else is triggered
+
+Q = []
+H = [MC]
+H(MC) = [M]
+H(M) = [A]
+
+# Undoing is easy. Call Undo in root, which calls Undo in children, then undoes itself.
+
+# Design
+
+class Operation
+
+public:
+    void Execute():
+        DoStuff() // This could be a function param
+
+        while(opeartions.NotEmpty()):
+            operation.Execute();
+            history.push(operation)
+
+            Notify(operation);
+
+    void Undo():
+        ...        
+
+    void AddOperation(operation):
+        operations.push(operation)
+
+    void ClearQueue();
+        operations.clear();
+
+private:
+    std::queue<Operation> operations
+    std::queue<Operation> history;

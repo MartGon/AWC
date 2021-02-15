@@ -106,7 +106,7 @@ unsigned int Pathfinding::GetTileCost(const Map& map, const TilePatternConstrain
   
     if(auto unit = map.GetUnit(pos))
     {   
-        auto extraCost = tpc.GetUnitCost(unit->GetId());
+        auto extraCost = tpc.GetUnitCost(unit->GetTypeId());
         cost = PrimitiveUtils::NoOverflowSum(cost, extraCost);
     }
 

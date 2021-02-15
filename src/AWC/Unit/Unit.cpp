@@ -17,8 +17,8 @@
 
 #include <AWC/AWCException.h>
 
-Unit::Unit(const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& owner) 
-    : unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}, owner_{owner}, flags{UnitFlags::NONE}
+Unit::Unit(uint id, const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& owner) 
+    : id_{id}, unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}, owner_{owner}, flags{UnitNS::Flag::NONE}
 {
 
 }
@@ -28,7 +28,7 @@ const std::string Unit::GetName() const
     return unitType_.GetName();
 }
 
-const uint Unit::GetId() const
+const uint Unit::GetTypeId() const
 {
     return unitType_.GetId();
 }
@@ -36,6 +36,11 @@ const uint Unit::GetId() const
 const Player& Unit::GetOwner() const
 {
     return owner_;
+}
+
+Entity::GUID Unit::GetGUID() const
+{
+    return Entity::GUID{Entity::Type::UNIT, GetTypeId(), id_};
 }
 
 // Movement
@@ -53,7 +58,7 @@ void Unit::Move(unsigned int moveCost)
     //TODO: Could check if that moveCost is possible. Check current gas and maxRange;
     moveDesc_->Move(moveCost);
 
-    SetFlag(UnitFlags::MOVED);
+    SetFlag(UnitNS::Flag::MOVED);
 }
 
 uint Unit::GetCurrentGas() const
@@ -63,7 +68,7 @@ uint Unit::GetCurrentGas() const
 
 bool Unit::CanMove() const
 {
-    return !HasFlag(UnitFlags::MOVED);
+    return !HasFlag(UnitNS::Flag::MOVED);
 }
 
 // Attack
@@ -87,7 +92,7 @@ UnitAttack Unit::CalculateAttack(unsigned int weaponId, const Map& map, Vector2 
 
 bool Unit::CanAttack() const
 {
-    return !HasFlag(UnitFlags::ATTACKED);
+    return !HasFlag(UnitNS::Flag::ATTACKED);
 }
 
 bool Unit::CanAttack(UnitPtr unit) const
@@ -105,7 +110,7 @@ bool Unit::CanAttackUnitWith(UnitPtr unit, uint weaponId) const
     if(IsWeaponIdValid(weaponId))
     {
         auto weapon = weapons_[weaponId];
-        canAttack = weapon->HasEnoughAmmo() && weapon->CanAttackUnit(unit->GetId());
+        canAttack = weapon->HasEnoughAmmo() && weapon->CanAttackUnit(unit->GetTypeId());
     }
     else    
         ThrowInvalidWeaponIdException(weaponId);
@@ -125,7 +130,7 @@ float Unit::GetDmgToUnit(unsigned int weaponId, UnitPtr unit) const
     if(IsWeaponIdValid(weaponId))
     {
         auto weapon = weapons_[weaponId];
-        dmg = weapon->GetBaseDamageTo(unit->GetId());
+        dmg = weapon->GetBaseDamageTo(unit->GetTypeId());
     }
     else
         ThrowInvalidWeaponIdException(weaponId);
@@ -141,7 +146,7 @@ void Unit::UseWeapon(unsigned int weaponId)
         auto weapon = weapons_[weaponId];
         weapon->Use();
 
-        SetFlag(UnitFlags::ATTACKED);
+        SetFlag(UnitNS::Flag::ATTACKED);
     }
     else
         ThrowInvalidWeaponIdException(weaponId);
@@ -186,7 +191,7 @@ float Unit::GetHealth()
 
 bool Unit::IsDead()
 {
-    return health <= 0;
+    return HasFlag(UnitNS::Flag::DEAD);
 }
 
 // State
@@ -195,8 +200,36 @@ void Unit::OnPassTurn(Turn& turn)
 {
     if(turn.playerIndex == owner_.GetId())
     {
-        RemoveFlag(UnitFlags::MOVED);
-        RemoveFlag(UnitFlags::ATTACKED);
+        RemoveFlag(UnitNS::Flag::MOVED);
+        RemoveFlag(UnitNS::Flag::ATTACKED);
+    }
+}
+
+void Unit::SetFlag(UnitNS::Flag flag)
+{
+    flags |= flag;
+}
+
+void Unit::RemoveFlag(UnitNS::Flag flag)
+{
+    flags = flags & ~flag;
+}
+
+bool Unit::HasFlag(UnitNS::Flag flag) const
+{
+    return flags & flag;
+}
+
+// Events
+
+void Unit::RegisterHandlers(Event::Subject& subject)
+{   
+    Entity::GUID entity = GetGUID();
+    auto handlers = unitType_.GetHandlers();
+    for(auto handler : handlers)
+    {
+        Event::Listener listener{entity, handler};
+        subject.Register(listener);
     }
 }
 
@@ -236,24 +269,6 @@ bool Unit::IsWeaponIdValid(uint weaponId) const
 {
     return weaponId < weapons_.size();
 }
-
-    // State
-
-void Unit::SetFlag(UnitFlags flag)
-{
-    flags |= flag;
-}
-
-void Unit::RemoveFlag(UnitFlags flag)
-{
-    flags = flags & ~flag;
-}
-
-bool Unit::HasFlag(UnitFlags flag) const
-{
-    return flags & flag;
-}
-
 
 void Unit::ThrowInvalidWeaponIdException(uint weaponId) const
 {

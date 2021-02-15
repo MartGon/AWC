@@ -20,3 +20,5 @@ using TilePtr = std::shared_ptr<Tile>;
 using UnitPtr = std::shared_ptr<Unit>;
 using WeaponPtr = std::shared_ptr<Weapon>;
 using WeaponTypePtr = std::shared_ptr<WeaponType>;
+using OperationIPtr = std::shared_ptr<Operation::OperationI>;
+using OpeartionIWPtr = std::weak_ptr<Operation::OperationI>;

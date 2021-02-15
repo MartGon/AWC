@@ -6,11 +6,13 @@
 
 class Command
 {
+friend class Game;
+
 public:
     virtual ~Command(){};
-    void Execute(Game& game, uint playerIndex);
     virtual bool CanBeExecuted(Game& game, uint playerIndex) = 0;
 private:
+    void Execute(Game& game, uint playerIndex);
     virtual void DoExecute(Game& game, uint playerIndex) = 0;
 };
 
@@ -44,6 +46,17 @@ private:
     const Vector2 unitIndex_;
     const Vector2 targetPos_;
     const uint weaponIndex_;
+};
+
+class NullCommand : public Command
+{
+public:
+
+    bool CanBeExecuted(Game& game, uint playerIndex) override { return true; }
+
+private:
+
+    void DoExecute(Game& game, uint playerIndex) override {};
 };
 
 class InvalidCommandException : public AWCException

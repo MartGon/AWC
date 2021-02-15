@@ -1,8 +1,13 @@
 #include <AWC/Command.h>
 
 #include <AWC/Game.h>
+#include <AWC/Unit/Unit.h>
 #include <AWC/Unit/UnitMovement.h>
 #include <AWC/Unit/UnitAttack.h>
+
+#include <AWC/Operation/Operation.h>
+
+#include <Utils/STLUtils.h>
 
 void Command::Execute(Game& game, uint playerIndex)
 {
@@ -35,12 +40,27 @@ MoveCommand::MoveCommand(uint mapIndex, Vector2 origin, Vector2 dest) :
 void MoveCommand::DoExecute(Game& game, uint playerIndex)
 {
     auto& map = game.GetMap(mapIndex_);
-    auto unit = map.GetUnit(origin_);
-    map.RemoveUnit(origin_);
-    map.AddUnit(dest_, unit);
+    auto unit = map.GetUnit(origin_);    
 
     auto unitMovement = unit->CalculateMovement(map, origin_);
-    unit->Move(unitMovement.GetMoveCostTo(dest_));
+    auto path = unitMovement.GetPathTo(dest_);
+
+    Vector2 origin = origin_;
+    VectorUtils::RemoveByValue(path, origin_);
+
+    uint8_t prio = PRIORITY_DEFAULT;
+    auto& opFactory = game.GetOperationFactory();
+    for(auto tile : path)
+    {
+        Vector2 dest = tile;
+        OperationIPtr move = opFactory.CreateMove(mapIndex_, origin, dest);
+        OperationIPtr gasMod = opFactory.CreateStatMod(unit, UnitNS::StatType::GAS, 1);
+
+        game.Push(move, prio--);
+        game.Push(gasMod, prio--);
+
+        origin = dest;
+    }
 }
 
 bool MoveCommand::CanBeExecuted(Game& game, uint playerIndex)
@@ -79,30 +99,13 @@ AttackCommand::AttackCommand(uint mapIndex, Vector2 unitIndex, Vector2 targetPos
 void AttackCommand::DoExecute(Game& game, uint playerIndex)
 {
     auto& map = game.GetMap(mapIndex_);
-    
     auto sourceUnit = map.GetUnit(unitIndex_);
 
-    // Unit takes damage
-    if(auto targetUnit = map.GetUnit(targetPos_))
-    {   
-        auto dmg = sourceUnit->GetDmgToUnit(weaponIndex_, targetUnit);
-        targetUnit->TakeDamage(dmg);
-        
-        // Remove unit on death
-        if(targetUnit->IsDead())
-        {
-            map.RemoveUnit(targetPos_);
-
-            auto owner = targetUnit->GetOwner();
-            if(game.HasPlayerLost(owner.GetId()))
-                game.OnPlayerLost(owner.GetId());
-        }
-    }
-
-    // TODO: Tile->OnAttack(): Tile triggers effect when attacked
-
-    // Weapon ammo is reduced
-    sourceUnit->UseWeapon(weaponIndex_);
+    Position origin{unitIndex_, mapIndex_};
+    Position dest{targetPos_, mapIndex_};
+    auto& opFactory = game.GetOperationFactory();
+    OperationIPtr attack = opFactory.CreateAttack(origin, dest, weaponIndex_);
+    game.Push(attack);
 }
 
 bool AttackCommand::CanBeExecuted(Game& game, uint playerIndex)
