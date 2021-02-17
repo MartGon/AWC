@@ -92,10 +92,10 @@ int GetMap(lua_State* L)
 
 int SetMapValue(lua_State* L)
 {
-    auto map = static_cast<TestMap*>(lua_touserdata(L, -1));
-    auto x = lua_tointeger(L, -2);
-    auto y = lua_tointeger(L, -3);
-    auto value = lua_tointeger(L, -4);
+    auto map = static_cast<TestMap*>(lua_touserdata(L, 1));
+    auto x = lua_tointeger(L, 2);
+    auto y = lua_tointeger(L, 3);
+    auto value = lua_tointeger(L, 4);
 
     map->SetValue(x, y, value);
 
@@ -157,4 +157,58 @@ TEST_CASE("User data Test")
 
     CHECK(lMap == (void*)&map);
     CHECK(value == map.GetValue(0, 1));
+}
+
+struct TestOperation
+{
+    TestOperation(uint id, std::string name, int executeRef) : id{id}, name{name}, executeRef{executeRef}
+    {
+
+    }
+
+    void Execute(lua_State* luaState)
+    {
+        auto type = lua_rawgeti(luaState, LUA_REGISTRYINDEX, executeRef);
+        if(type == LUA_TFUNCTION)
+        {
+            auto res = lua_pcall(luaState, 0, 0, 0);
+        }
+    }
+
+    uint id;
+    std::string name;
+
+    int executeRef;
+    int dataRef;
+};
+
+TEST_CASE("Custom operation test")
+{
+    auto luaState = luaL_newstate();
+
+    lua_pushinteger(luaState, 15);
+    lua_setglobal(luaState, "value");
+
+    std::string file = std::string(SCRIPTS_DIR) + "optest.lua";
+
+    int regIndex = 0;
+    if(LUA_OK == luaL_loadfile(luaState, file.c_str()))
+    {  
+        regIndex = luaL_ref(luaState, LUA_REGISTRYINDEX);
+    }
+    TestOperation top{0, "testOp", regIndex};
+
+    top.Execute(luaState);
+    lua_getglobal(luaState, "value");
+    int value = lua_tointeger(luaState, -1);
+
+    CHECK(value == 20);
+
+    top.Execute(luaState);
+    lua_getglobal(luaState, "value");
+    value = lua_tointeger(luaState, -1);
+
+    CHECK(value == 25);
+
+    lua_close(luaState);
 }
