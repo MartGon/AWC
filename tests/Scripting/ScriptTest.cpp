@@ -212,3 +212,73 @@ TEST_CASE("Custom operation test")
 
     lua_close(luaState);
 }
+
+TEST_CASE("Custom environment test")
+{
+    auto luaState = luaL_newstate();
+
+    bool fileLoadedFine = false;
+    bool valueIsNil = false;
+    bool valueIsStillNil = false;
+    bool envValueIsFine = false;
+    bool envNewValueIsFine = false;
+
+    std::string file = std::string(SCRIPTS_DIR) + "environment.lua";
+    if(LUA_OK == luaL_loadfile(luaState, file.c_str()))
+    {
+        // Creates table and gets a ref
+        lua_newtable(luaState);
+        auto envRef = luaL_ref(luaState, LUA_REGISTRYINDEX);
+
+        // Sets that table as ENV
+        lua_rawgeti(luaState, LUA_REGISTRYINDEX, envRef);
+        auto ret = lua_setupvalue(luaState, 1, 1);
+        if(LUA_OK == lua_pcall(luaState, 0, 0, 0))
+        {
+            // Get table again
+            lua_rawgeti(luaState, LUA_REGISTRYINDEX, envRef);
+
+            // Get Execute func
+            lua_pushstring(luaState, "Execute");
+            lua_rawget(luaState, -2);
+
+            // Check if type at top is a function
+            auto type = lua_type(luaState, -1);
+            fileLoadedFine = type == LUA_TFUNCTION;
+
+            // This global should be nil
+            lua_getglobal(luaState, "value");
+            valueIsNil = lua_isnil(luaState, -1);
+            lua_pop(luaState, 1);
+
+            // This env var should be 5
+            lua_getfield(luaState, -2, "value");
+            auto value = lua_tointeger(luaState, -1);
+            envValueIsFine = value == 5;
+            lua_pop(luaState, 1);
+
+            // Call the function, it should be at top
+            if(LUA_OK == lua_pcall(luaState, 0, 0, 0))
+            {
+                // Now the ENV table is at top
+                lua_getfield(luaState, -1, "value");
+                value = lua_tointeger(luaState, -1);
+                envNewValueIsFine = value == 3;
+                lua_pop(luaState, 1);
+
+                // This global should still be nil
+                lua_getglobal(luaState, "value");
+                valueIsStillNil = lua_isnil(luaState, -1);
+                lua_pop(luaState, 1);
+            }
+        }
+    }
+
+    CHECK(fileLoadedFine == true);
+    CHECK(valueIsNil == true);
+    CHECK(valueIsStillNil == true);
+    CHECK(envValueIsFine == true);
+    CHECK(envNewValueIsFine == true);
+
+    lua_close(luaState);
+}
