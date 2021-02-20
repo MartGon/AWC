@@ -5,6 +5,7 @@
 - Game operations
 - Event handlers
 - TilePatternDescriptors
+- Win Conditions
 
 ## How can they be scripted ?
 
@@ -79,3 +80,8 @@ RegisterHandler(opType, handlerCallback, notificationType);
 ]
 ```
 
+## Script loading structure
+
+Create lua files which are aimed to create instances of scriptable entities:
+
+1. Operations.lua file. This file contains the custom Script operations
