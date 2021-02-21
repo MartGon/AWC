@@ -12,8 +12,6 @@ if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
     add_compile_definitions(_DEBUG=1)
 endif()
 
-add_subdirectory(extern)
-
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)
 
@@ -28,4 +26,3 @@ message("Lua lib path is: ${LUA_LIB_PATH}")
 message("Lua inlcude dir is: ${LUA_INCLUDE_DIR}")
 
 add_subdirectory(src)
-add_subdirectory(app)

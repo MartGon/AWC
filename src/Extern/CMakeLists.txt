@@ -1,0 +1,2 @@
+set(DOCTEST_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/Doctest CACHE INTERNAL "Path to include folder for doctest")
+set(NLOHMANN_JSON_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/Nlohmann CACHE INTERNAL "Path to include nlohmann json lib")

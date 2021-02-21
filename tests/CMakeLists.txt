@@ -1,33 +1,15 @@
-add_executable(AWCTest 
-    AWCTest.cpp
-    CommandTest.cpp
-    CostTableTest.cpp
-    EventsTest.cpp
-    GameTest.cpp
-    MapTest.cpp
-    TileTest.cpp
-    UnitTest.cpp
-    TilePatternTest.cpp
-    TilePatternCompTest.cpp
-    TilePatternDescTest.cpp
-    TilePatternDescDecoratorTest.cpp
-    TileGraphTest.cpp
-
-    AWCSerTest/AWCSerTest.cpp
-    AWCSerTest/TilePatternDescSerTest.cpp
-    AWCSerTest/JsonUtilsTest.cpp
-
-    Scripting/ScriptTest.cpp
-
-    Utils/STLUtilsTest.cpp
-)
-
-# target_compile_features(AWCTest PRIVATE cxx_std_20)
-target_include_directories(AWCTest PUBLIC ${DOCTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/include include ${LUA_INCLUDE_DIR})
-target_link_libraries(AWCTest AWCLibrary AWCSer ${LUA_LIB_PATH})
-
 add_compile_definitions(PROJECT_DIR="${CMAKE_SOURCE_DIR}")
-add_compile_definitions(RESOURCES_DIR="${CMAKE_SOURCE_DIR}/resources/AWCSer/")
-add_compile_definitions(SCRIPTS_DIR="${CMAKE_SOURCE_DIR}/resources/Scripts/")
+add_compile_definitions(RESOURCES_DIR="${CMAKE_SOURCE_DIR}/resources/test/AWCSer/")
+add_compile_definitions(SCRIPTS_DIR="${CMAKE_SOURCE_DIR}/resources/tests/Scripts/")
 
-add_test(NAME BasicTest COMMAND AWCTest)
+add_subdirectory(AWC)
+add_subdirectory(DB)
+add_subdirectory(Extern)
+add_subdirectory(Utils)
+
+add_executable(FullTest FullTest.cpp)
+
+target_include_directories(FullTest PUBLIC ${DOCTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/include include ${LUA_INCLUDE_DIR})
+target_link_libraries(FullTest AWC DB Utils ${LUA_LIB_PATH})
+
+add_test(NAME BasicTest COMMAND FullTest)
