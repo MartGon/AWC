@@ -12,6 +12,12 @@ if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
     add_compile_definitions(_DEBUG=1)
 endif()
 
+message("Build type is: ${CMAKE_BUILD_TYPE}")
+message("Lua lib path is: ${LUA_LIB_PATH}")
+message("Lua inlcude dir is: ${LUA_INCLUDE_DIR}")
+
+add_subdirectory(src)
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)
 
@@ -20,9 +26,3 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     endif()
 
 endif()
-
-message("Build type is: ${CMAKE_BUILD_TYPE}")
-message("Lua lib path is: ${LUA_LIB_PATH}")
-message("Lua inlcude dir is: ${LUA_INCLUDE_DIR}")
-
-add_subdirectory(src)

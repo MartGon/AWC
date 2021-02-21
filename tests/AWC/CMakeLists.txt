@@ -1,4 +1,7 @@
 SET(SOURCES
+
+    src/AWCTest.cpp
+
     src/CommandTest.cpp
     src/CostTableTest.cpp
     src/EventsTest.cpp
@@ -13,11 +16,21 @@ SET(SOURCES
     src/TileGraphTest.cpp
 )
 
-add_library(AWCTest ${SOURCES})
+add_library(AWCTestLib ${SOURCES})
+target_include_directories(AWCTestLib PUBLIC include
+    ${CMAKE_SOURCE_DIR}/src/AWC/include
+    ${CMAKE_SOURCE_DIR}/src/Utils/include  
+    ${LUA_INCLUDE_DIR}
+    ${DOCTEST_INCLUDE_DIR})
+target_link_libraries(AWCTestLib AWC Utils ${LUA_LIB_PATH})
 
+
+add_executable(AWCTest ${SOURCES})
 target_include_directories(AWCTest PUBLIC include
     ${CMAKE_SOURCE_DIR}/src/AWC/include
     ${CMAKE_SOURCE_DIR}/src/Utils/include  
     ${LUA_INCLUDE_DIR}
     ${DOCTEST_INCLUDE_DIR})
 target_link_libraries(AWCTest AWC Utils ${LUA_LIB_PATH})
+
+add_test(NAME RunAWCTest COMMAND AWCTest)
