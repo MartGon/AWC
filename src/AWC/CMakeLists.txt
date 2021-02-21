@@ -46,4 +46,5 @@ add_library(AWCSource
   Unit/WeaponType.cpp
 )
 
-target_include_directories(AWCSource PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(AWCSource ${LUA_LIB_PATH})
+target_include_directories(AWCSource PUBLIC ${CMAKE_SOURCE_DIR}/include ${LUA_INCLUDE_DIR})

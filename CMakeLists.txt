@@ -23,5 +23,9 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
 endif()
 
+message("Build type is: ${CMAKE_BUILD_TYPE}")
+message("Lua lib path is: ${LUA_LIB_PATH}")
+message("Lua inlcude dir is: ${LUA_INCLUDE_DIR}")
+
 add_subdirectory(src)
 add_subdirectory(app)

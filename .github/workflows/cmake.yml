@@ -22,6 +22,22 @@ jobs:
       # We'll use this as our working directory for all subsequent commands
       run: cmake -E make_directory ${{runner.workspace}}/build
 
+    - name: Download Lua
+      shell: bash
+      run: curl -R -O http://www.lua.org/ftp/lua-5.4.2.tar.gz
+
+    - name: Uncompress Lua
+      shell: bash
+      run: tar zxf lua-5.4.2.tar.gz
+
+    - name: Compile Lua
+      shell: bash
+      run: cd lua-5.4.2; make; cd ..
+
+    - name: Set Lua lib and include dir env vars
+      shell: bash
+      run: echo "LUA_INCLUDE_DIR=$(pwd)/lua-5.4.2/src/" >> $GITHUB_ENV; echo "LUA_LIB_PATH=$(pwd)/lua-5.4.2/src/liblua.a" >> $GITHUB_ENV
+
     - name: Configure CMake
       # Use a bash shell so we can use the same syntax for environment variable
       # access regardless of the host operating system
@@ -30,7 +46,7 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DLUA_INCLUDE_DIR=${{ env.LUA_INCLUDE_DIR }} -DLUA_LIB_PATH=${{ env.LUA_LIB_PATH }}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
