@@ -1,8 +1,54 @@
-#include <AWC/AWCusing.h>
-#include <AWC/AWCException.h>
-#include <AWC/AWCfwd.h>
+#pragma once
 
-#include <AWC/TilePattern/TilePatternDesc.h>
-#include <AWC/TilePattern/TilePatternDescI.h>
-#include <AWC/TilePattern/TilePatternDescComp.h>
-#include <AWC/TilePattern/TilePatternComp.h>
+#include "AWC/AWCusing.h"
+#include "AWC/AWCException.h"
+#include "AWC/AWCfwd.h"
+
+#include "AWC/Operation/AntiOperation.h"
+#include "AWC/Operation/Attack.h"
+#include "AWC/Operation/Composed.h"
+#include "AWC/Operation/Custom.h"
+#include "AWC/Operation/Factory.h"
+#include "AWC/Operation/Move.h"
+#include "AWC/Operation/Operation.h"
+#include "AWC/Operation/OperationI.h"
+#include "AWC/Operation/StatMod.h"
+#include "AWC/Operation/TakeDmg.h"
+#include "AWC/Operation/UpdateFlag.h"
+
+#include "AWC/TilePattern/TileGraph.h"
+#include "AWC/TilePattern/TileNode.h"
+
+#include "AWC/TilePattern/TilePattern.h"
+#include "AWC/TilePattern/TilePatternI.h"
+
+#include "AWC/TilePattern/TilePatternComp.h"
+#include "AWC/TilePattern/TilePatternConstraints.h"
+#include "AWC/TilePattern/TilePatternDesc.h"
+#include "AWC/TilePattern/TilePatternDescComp.h"
+#include "AWC/TilePattern/TilePatternDescDecorator.h"
+#include "AWC/TilePattern/TilePatternDescI.h"
+
+#include "AWC/Unit/MovementDesc.h"
+#include "AWC/Unit/MovementDescType.h"
+#include "AWC/Unit/Unit.h"
+#include "AWC/Unit/UnitAttack.h"
+#include "AWC/Unit/UnitMovement.h"
+#include "AWC/Unit/UnitType.h"
+#include "AWC/Unit/Weapon.h"
+#include "AWC/Unit/WeaponType.h"
+
+#include "AWC/Command.h"
+#include "AWC/CostTable.h"
+#include "AWC/Directions.h"
+#include "AWC/Entity.h"
+#include "AWC/Event.h"
+#include "AWC/Game.h"
+#include "AWC/Map.h"
+#include "AWC/Pathfinding.h"
+#include "AWC/Player.h"
+#include "AWC/Process.h"
+#include "AWC/Range.h"
+#include "AWC/Tile.h"
+#include "AWC/TileType.h"
+#include "AWC/Turn.h"
