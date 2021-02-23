@@ -222,6 +222,7 @@ TEST_CASE("Custom environment test")
     bool valueIsStillNil = false;
     bool envValueIsFine = false;
     bool envNewValueIsFine = false;
+    bool changedEnvValueOk = false;
 
     std::string file = std::string(SCRIPTS_DIR) + "environment.lua";
     if(LUA_OK == luaL_loadfile(luaState, file.c_str()))
@@ -270,6 +271,46 @@ TEST_CASE("Custom environment test")
                 lua_getglobal(luaState, "value");
                 valueIsStillNil = lua_isnil(luaState, -1);
                 lua_pop(luaState, 1);
+
+                // ----- Changing ENV -------
+
+                // Get table where Execute func is defined
+                lua_rawgeti(luaState, LUA_REGISTRYINDEX, envRef);
+
+                // Get Execute func
+                lua_pushstring(luaState, "Execute");
+                lua_rawget(luaState, -2);
+
+                // Create new ENV table
+                lua_newtable(luaState);
+                
+                // Set value to 10
+                lua_pushinteger(luaState, 10);
+                lua_setfield(luaState, -2, "value");
+                
+                // Change ENV table of the Execute function.
+                // As of Lua 5.4, functions always have ENV as their first upvalue
+                lua_setupvalue(luaState, -2, 1);
+                
+                // Call the execute function, it should be at top
+                if(LUA_OK == lua_pcall(luaState, 0, 0, 0))
+                {
+                    // Get table where Execute func is defined
+                    lua_rawgeti(luaState, LUA_REGISTRYINDEX, envRef);
+
+                    // Get Execute func
+                    lua_pushstring(luaState, "Execute");
+                    lua_rawget(luaState, -2);
+
+                    // Get ENV table
+                    lua_getupvalue(luaState, -1, 1);
+
+                    // Check value variable, ENV table should be now at top
+                    lua_getfield(luaState, -1, "value");
+                    value = lua_tointeger(luaState, -1);
+                    changedEnvValueOk = value == 8;
+                    lua_pop(luaState, 1);
+                }
             }
         }
     }
@@ -279,6 +320,7 @@ TEST_CASE("Custom environment test")
     CHECK(valueIsStillNil == true);
     CHECK(envValueIsFine == true);
     CHECK(envNewValueIsFine == true);
+    CHECK(changedEnvValueOk == true);
 
     lua_close(luaState);
 }

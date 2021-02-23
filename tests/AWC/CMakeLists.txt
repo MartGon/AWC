@@ -14,6 +14,8 @@ SET(SOURCES
     src/TilePatternDescTest.cpp
     src/TilePatternDescDecoratorTest.cpp
     src/TileGraphTest.cpp
+
+    src/ScriptTest.cpp
 )
 
 add_library(AWCTestLib ${SOURCES})

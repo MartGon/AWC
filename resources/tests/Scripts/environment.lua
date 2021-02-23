@@ -3,5 +3,5 @@
 value = 5;
 
 function Execute()
-    value = 3;
+    value = value - 2;
 end
