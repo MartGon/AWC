@@ -5,6 +5,7 @@ SET(SOURCES
   src/Entity.cpp
   src/Event.cpp
   src/Game.cpp
+  src/ScriptGame.cpp
   src/Map.cpp
   src/Range.cpp
   src/Pathfinding.cpp
@@ -35,6 +36,7 @@ SET(SOURCES
   src/Operation/Attack.cpp
   src/Operation/TakeDmg.cpp
   src/Operation/UpdateFlag.cpp
+  src/Operation/Script.cpp
   src/Operation/ScriptType.cpp
 
   src/Unit/MovementDescType.cpp

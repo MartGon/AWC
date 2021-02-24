@@ -9,6 +9,7 @@
 // TODO: This should be part of its own lib. If included in AWC.h, then 
 // DB module cannot be built
 #include <AWC/Operation/ScriptType.h>
+#include <AWC/ScriptGame.h>
 
 int ExecuteLuaFile(lua_State* luaState, std::string file)
 {
@@ -331,19 +332,76 @@ TEST_CASE("Custom environment test")
     lua_close(luaState);
 }
 
-TEST_CASE("ScriptType Operations")
+TEST_CASE("Lua Table test")
 {
-    auto luaState = luaL_newstate();    
+    auto luaState = luaL_newstate();
 
-    std::string scriptPath = std::string(SCRIPTS_DIR) + "scripttype.lua";
-    Operation::ScriptType scryptType(luaState, scriptPath);
+    // Scope so lt is destroyed before luaState
+    {
+        LuaTable lt{luaState};
 
-    CHECK(lua_gettop(luaState) == 0);
+        SUBCASE("Integers")
+        {
+            lt.SetInt("Int", 1);
 
-    std::string wrongPath = std::string(SCRIPTS_DIR) + "wrongPath.lua";
-    CHECK_THROWS_AS(Operation::ScriptType err(luaState, wrongPath), const AWCException&);
+            CHECK(lua_gettop(luaState) == 0);
 
-    CHECK(lua_gettop(luaState) == 0);
+            auto var = lt.GetInt("Int");
+            CHECK(var == 1);
+        }
+        SUBCASE("Strings")
+        {
+            lt.SetString("String", "str");
+
+            CHECK(lua_gettop(luaState) == 0);
+
+            auto var = lt.GetString("String");
+            CHECK(var == "str");
+        }
+
+        CHECK(lua_gettop(luaState) == 0);
+    }
 
     lua_close(luaState);
+}
+
+TEST_CASE("ScriptType Operations")
+{
+    ScriptGame sg;
+    lua_State* luaState = sg.GetLuaState();
+
+    std::string scriptPath = std::string(SCRIPTS_DIR) + "scripttype.lua";
+    Operation::ScriptType scriptType(luaState, scriptPath);
+
+    CHECK(lua_gettop(luaState) == 0);
+
+    SUBCASE("Execution")
+    {
+        auto script = scriptType.CreateScript();
+        auto& table = script->GetArgsTable();
+        table.SetInt("value", 3);
+
+        script->Execute(sg, 128);
+
+        CHECK(table.GetInt("value") == 6);
+
+        script->Execute(sg, 128);
+
+        CHECK(table.GetInt("value") == 9);
+
+        /*
+        sg.Push(script, 128);
+        CommandPtr null{new NullCommand()};
+        sg.ExecuteCommand(null);
+
+        CHECK(table.GetInt("value") == 12);
+        */
+    }
+    SUBCASE("Creation with wrong path")
+    {
+        std::string wrongPath = std::string(SCRIPTS_DIR) + "wrongPath.lua";
+        CHECK_THROWS_AS(Operation::ScriptType err(luaState, wrongPath), const AWCException&);
+
+        CHECK(lua_gettop(luaState) == 0);
+    }
 }

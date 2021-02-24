@@ -1,10 +1,11 @@
 #include <AWC/Operation/ScriptType.h>
+#include <AWC/ScriptGame.h>
 
 #include <AWC/AWCException.h>
 
 using namespace Operation;
 
-ScriptType::ScriptType(lua_State* luaState, std::string scriptPath) : scriptPath_{scriptPath}, executeRef_{-1}, undoRef_{-1}
+ScriptType::ScriptType(lua_State* luaState, std::string scriptPath) : scriptPath_{scriptPath}, luaState_{luaState}, executeRef_{-1}, undoRef_{-1}
 {
     auto res = luaL_loadfile(luaState, scriptPath.c_str());
     if(res == LUA_OK)
@@ -56,4 +57,42 @@ ScriptType::ScriptType(lua_State* luaState, std::string scriptPath) : scriptPath
 
         throw AWCException{msg};
     }
+}
+
+std::shared_ptr<Script> ScriptType::CreateScript()
+{
+    std::shared_ptr<Script> s{new Script{luaState_, *this}};
+
+    return s;
+}
+
+Result ScriptType::Execute(Game& game, uint8_t prio, int tableRef)
+{
+    Result res{ERROR};
+
+    ScriptGame& sGame = static_cast<ScriptGame&>(game);
+    auto luaState = sGame.GetLuaState();
+
+    // Get Execute function
+    auto type = lua_rawgeti(luaState, LUA_REGISTRYINDEX, executeRef_);
+    if(type == LUA_TFUNCTION)
+    {
+        // Get table
+        type = lua_rawgeti(luaState, LUA_REGISTRYINDEX, tableRef);
+        if(type == LUA_TTABLE)
+        {
+            // Sets table to function ENV
+            lua_setupvalue(luaState, 1, 1);
+
+            // Call function
+            // TODO: Push game and prio params beforehand
+            auto ret = lua_pcall(luaState, 0, 0, 0);
+            if(ret == LUA_OK)
+            {
+                res = Result{SUCCESS};
+            }
+        }
+    }
+
+    return res;
 }
