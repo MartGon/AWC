@@ -4,6 +4,12 @@
 
 #include <string>
 
+#include <AWC.h>
+
+// TODO: This should be part of its own lib. If included in AWC.h, then 
+// DB module cannot be built
+#include <AWC/Operation/ScriptType.h>
+
 int ExecuteLuaFile(lua_State* luaState, std::string file)
 {
     auto res = luaL_loadfile(luaState, file.c_str());
@@ -321,6 +327,23 @@ TEST_CASE("Custom environment test")
     CHECK(envValueIsFine == true);
     CHECK(envNewValueIsFine == true);
     CHECK(changedEnvValueOk == true);
+
+    lua_close(luaState);
+}
+
+TEST_CASE("ScriptType Operations")
+{
+    auto luaState = luaL_newstate();    
+
+    std::string scriptPath = std::string(SCRIPTS_DIR) + "scripttype.lua";
+    Operation::ScriptType scryptType(luaState, scriptPath);
+
+    CHECK(lua_gettop(luaState) == 0);
+
+    std::string wrongPath = std::string(SCRIPTS_DIR) + "wrongPath.lua";
+    CHECK_THROWS_AS(Operation::ScriptType err(luaState, wrongPath), const AWCException&);
+
+    CHECK(lua_gettop(luaState) == 0);
 
     lua_close(luaState);
 }

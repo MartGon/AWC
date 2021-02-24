@@ -35,6 +35,7 @@ SET(SOURCES
   src/Operation/Attack.cpp
   src/Operation/TakeDmg.cpp
   src/Operation/UpdateFlag.cpp
+  src/Operation/ScriptType.cpp
 
   src/Unit/MovementDescType.cpp
   src/Unit/MovementDesc.cpp
