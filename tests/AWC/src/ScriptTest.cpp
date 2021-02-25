@@ -407,6 +407,8 @@ TEST_CASE("ScriptType Operations")
         std::string wrongPath = std::string(SCRIPTS_DIR) + "wrongPath.lua";
         CHECK_THROWS_AS(sg.CreateScriptType(wrongPath), const AWCException&);
 
+#ifdef _DEBUG
         CHECK(lua_gettop(luaState) == 0);
+#endif
     }
 }
