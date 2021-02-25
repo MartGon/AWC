@@ -368,39 +368,44 @@ TEST_CASE("Lua Table test")
 TEST_CASE("ScriptType Operations")
 {
     ScriptGame sg;
-    lua_State* luaState = sg.GetLuaState();
 
     std::string scriptPath = std::string(SCRIPTS_DIR) + "scripttype.lua";
-    Operation::ScriptType scriptType(luaState, scriptPath);
+    auto st = sg.CreateScriptType(scriptPath);
 
+
+#ifdef _DEBUG
+    auto luaState = sg.GetLuaState();
     CHECK(lua_gettop(luaState) == 0);
+
+#endif
 
     SUBCASE("Execution")
     {
-        auto script = scriptType.CreateScript();
-        auto& table = script->GetArgsTable();
+        auto script = sg.CreateScript(st);
+        auto& table = sg.GetScriptTable(script);
         table.SetInt("value", 3);
 
-        script->Execute(sg, 128);
+        sg.PushScript(script);
+        sg.GetGame().Run();
 
         CHECK(table.GetInt("value") == 6);
 
-        script->Execute(sg, 128);
+        
+        sg.PushScript(script);
+        sg.GetGame().Run();
 
         CHECK(table.GetInt("value") == 9);
 
-        /*
-        sg.Push(script, 128);
+        sg.PushScript(script);
         CommandPtr null{new NullCommand()};
-        sg.ExecuteCommand(null);
+        sg.GetGame().ExecuteCommand(null);
 
         CHECK(table.GetInt("value") == 12);
-        */
     }
     SUBCASE("Creation with wrong path")
     {
         std::string wrongPath = std::string(SCRIPTS_DIR) + "wrongPath.lua";
-        CHECK_THROWS_AS(Operation::ScriptType err(luaState, wrongPath), const AWCException&);
+        CHECK_THROWS_AS(sg.CreateScriptType(wrongPath), const AWCException&);
 
         CHECK(lua_gettop(luaState) == 0);
     }

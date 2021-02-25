@@ -52,6 +52,7 @@ public:
     void RemoveOperation(unsigned int id);
     std::optional<Process> GetProcess(unsigned int id);
     void Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
+    void Run();
 
     // State
     void Start();
@@ -91,7 +92,6 @@ private:
     void CheckMapIndex(uint mapIndex) const;
 
     // Operations
-    void Run();
     void SortQueue();
 
     std::vector<Player> players_;

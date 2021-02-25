@@ -69,9 +69,8 @@ std::shared_ptr<Script> ScriptType::CreateScript()
 Result ScriptType::Execute(Game& game, uint8_t prio, int tableRef)
 {
     Result res{ERROR};
-
-    ScriptGame& sGame = static_cast<ScriptGame&>(game);
-    auto luaState = sGame.GetLuaState();
+    
+    auto luaState = luaState_;
 
     // Get Execute function
     auto type = lua_rawgeti(luaState, LUA_REGISTRYINDEX, executeRef_);
