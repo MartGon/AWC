@@ -6,7 +6,6 @@
 #include <AWC/Turn.h>
 #include <AWC/Event.h>
 #include <AWC/Operation/OperationI.h>
-#include <AWC/Operation/Factory.h>
 #include <AWC/Process.h>
 
 #include <queue>
@@ -48,7 +47,6 @@ public:
     void RemoveUnit(Vector2 pos, uint mapIndex = 0);
 
     // Operation
-    Operation::Factory& GetOperationFactory();
     void RemoveOperation(unsigned int id);
     std::optional<Process> GetProcess(unsigned int id);
     void Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
@@ -97,9 +95,9 @@ private:
     std::vector<Player> players_;
     std::vector<Map> maps_;
 
-    Operation::Factory factory;
     std::vector<Process> opQueue_;
     std::vector<Process> opHistory_;
+    unsigned int nextProcessId = 0;
     
     Turn currentTurn;    
     Event::Subject events;

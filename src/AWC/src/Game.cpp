@@ -117,20 +117,15 @@ void Game::RemoveUnit(Vector2 pos, uint mapIndex)
 
 // Operation
 
-Operation::Factory& Game::GetOperationFactory()
-{
-    return factory;
-}
-
 void Game::RemoveOperation(unsigned int id)
 {
     for(int index = 0; index < opQueue_.size(); index++)
     {   
-        auto op = opQueue_.at(index);
-        if(op.op->GetId() == id)
+        auto proc = opQueue_.at(index);
+        if(proc.id == id)
         {
             VectorUtils::RemoveByIndex(opQueue_, index);
-            return;
+            break;
         }
     }
 
@@ -143,7 +138,7 @@ std::optional<Process> Game::GetProcess(unsigned int id)
 
     for(auto p : opQueue_)
     {
-        if(p.op->GetId() == id)
+        if(p.id == id)
             return p;
     }
 
@@ -152,7 +147,7 @@ std::optional<Process> Game::GetProcess(unsigned int id)
 
 void Game::Push(OperationIPtr op, uint8_t prio)
 {
-    opQueue_.push_back(Process{op, prio});
+    opQueue_.push_back(Process{nextProcessId++, op, prio});
     SortQueue();
 }
 
@@ -402,7 +397,7 @@ void Game::SortQueue()
 {
     std::function<bool(Process a, Process b)> greater = [](Process a, Process b)
     {
-        return a.priority > b.priority || (a.priority == b.priority && a.op->GetId() < b.op->GetId());
+        return a.priority > b.priority || (a.priority == b.priority && a.id < b.id);
     };
     std::sort(opQueue_.begin(), opQueue_.end(), greater);
 }

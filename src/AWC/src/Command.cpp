@@ -48,12 +48,11 @@ void MoveCommand::DoExecute(Game& game, uint playerIndex)
     VectorUtils::RemoveByValue(path, origin_);
 
     uint8_t prio = PRIORITY_DEFAULT;
-    auto& opFactory = game.GetOperationFactory();
     for(auto tile : path)
     {
         Vector2 dest = tile;
-        OperationIPtr move = opFactory.CreateMove(mapIndex_, origin, dest);
-        OperationIPtr gasMod = opFactory.CreateStatMod(unit, UnitNS::StatType::GAS, 1);
+        OperationIPtr move {new Operation::Move(mapIndex_, origin, dest)};
+        OperationIPtr gasMod{new Operation::StatMod(unit, UnitNS::StatType::GAS, 1)};
 
         game.Push(move, prio--);
         game.Push(gasMod, prio--);
@@ -102,8 +101,7 @@ void AttackCommand::DoExecute(Game& game, uint playerIndex)
 
     Position origin{unitIndex_, mapIndex_};
     Position dest{targetPos_, mapIndex_};
-    auto& opFactory = game.GetOperationFactory();
-    OperationIPtr attack = opFactory.CreateAttack(origin, dest, weaponIndex_);
+    OperationIPtr attack{ new Operation::Attack(origin, dest, weaponIndex_)};
     game.Push(attack);
 }
 

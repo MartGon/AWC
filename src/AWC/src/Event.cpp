@@ -24,13 +24,13 @@ void Subject::Register(Listener listener)
     typeListeners.push_back(listener);
 }
 
-void Subject::Register(Entity::GUID entity, Operation::Type type, HandlerCallback eventListener, Notification::Type notType)
+void Subject::Register(Entity::GUID entity, unsigned int type, HandlerCallback eventListener, Notification::Type notType)
 {
     Listener listener{entity, type, eventListener, notType};
     Subject::Register(listener);
 }
 
-void Subject::Register(Operation::Type type, HandlerCallback cb, Notification::Type notType)
+void Subject::Register(unsigned int type, HandlerCallback cb, Notification::Type notType)
 {
     Event::Handler handler{type, cb, notType};
     Event::Listener listener{Entity::NIL, handler};
@@ -48,7 +48,7 @@ void Subject::Unregister(Entity::GUID ent)
     return;
 }
 
-void Subject::Unregister(Entity::GUID entity, Operation::Type type)
+void Subject::Unregister(Entity::GUID entity, unsigned int type)
 {
     if(UnorderedMapUtils::Contains(eventListeners_, type))
     {

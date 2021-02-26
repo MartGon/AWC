@@ -87,9 +87,8 @@ TEST_CASE("Event test")
 
         auto cb = [](Event::Notification::Notification noti, Entity::GUID unitGUID, Game& game)
         {
-            auto& opFactory = game.GetOperationFactory();
             auto process = noti.process;
-            OperationIPtr antiOp = opFactory.CreateAntiOperation(process.op->GetId());
+            OperationIPtr antiOp{ new Operation::AntiOperation(process.id)};
             game.Push(antiOp, process.priority + 1);
         };
         subject.Register(Operation::Type::MOVE, cb, Event::Notification::Type::PRE);
@@ -118,7 +117,6 @@ Event::Listener GetNilListener(Event::HandlerCallback cb)
 TEST_CASE("Event::Subject::Add/Remove/Iteration test")
 {
     Game game;
-    auto& opFactory = game.GetOperationFactory();
 
     SUBCASE("Modifying the list while iterating through it")
     {
@@ -142,9 +140,9 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         auto& subject = game.GetSubject();
         subject.Register(Operation::Type::CUSTOM, recursiveCB);
 
-        OperationIPtr custom= opFactory.CreateCustom([](Game& game){
+        OperationIPtr custom{new Operation::Custom([](Game& game){
             std::cout << "Custom operation this is \n";
-        });
+        })};
         game.Push(custom);
 
         CommandPtr null{ new NullCommand{}};
@@ -171,9 +169,9 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         auto& subject = game.GetSubject();
         subject.Register(listener);
 
-        OperationIPtr custom = opFactory.CreateCustom([&count](Game& game){
+        OperationIPtr custom{new Operation::Custom([&count](Game& game){
             
-        });
+        })};
         game.Push(custom);
 
         CommandPtr null{new NullCommand};
@@ -196,7 +194,6 @@ TEST_CASE("Event::Subject listen by notification")
     using namespace Event;
 
     Game game;
-    auto& opFactory = game.GetOperationFactory();
     Event::Subject& sub = game.GetSubject();
 
     Notification::Type first = Notification::Type::NONE;
@@ -229,9 +226,9 @@ TEST_CASE("Event::Subject listen by notification")
     sub.Register(Operation::Type::CUSTOM, cbPost, Notification::Type::POST);
     sub.Register(Operation::Type::CUSTOM, cbAny, Notification::Type::ANY);
 
-    OperationIPtr custom = opFactory.CreateCustom([](Game& game){
+    OperationIPtr custom{new Operation::Custom([](Game& game){
             
-        });
+        })};
     game.Push(custom);
 
     CommandPtr null{new NullCommand};
@@ -247,22 +244,21 @@ TEST_CASE("Sort operations")
 {
     Game game;
     auto& sub = game.GetSubject();
-    auto& factory = game.GetOperationFactory();
 
-    std::vector<int> order{1, 2, 3};
+    std::vector<int> order{1, 3, 2};
     std::vector<int> check;
 
-    OperationIPtr first = factory.CreateCustom([&check](Game& game) {
+    OperationIPtr first{new Operation::Custom([&check](Game& game) {
         check.push_back(1);
-    });
+    })};
 
-    OperationIPtr second = factory.CreateCustom([&check](Game& game) {
+    OperationIPtr second{new Operation::Custom([&check](Game& game) {
         check.push_back(2);
-    });
+    })};
 
-    OperationIPtr third = factory.CreateCustom([&check](Game& game) {
+    OperationIPtr third{new Operation::Custom([&check](Game& game) {
         check.push_back(3);
-    });
+    })};
 
     game.Push(third);
     game.Push(first, 255);
@@ -327,8 +323,7 @@ TEST_CASE("Hugo and large tank")
             auto attackerGUID = attacker->GetGUID();
             if(me && myGUID != attackerGUID && myPos.has_value())
             {
-                auto& factory = game.GetOperationFactory();
-                OperationIPtr counterAttack = factory.CreateAttack(myPos.value(), attack->origin_, 0);
+                OperationIPtr counterAttack{new Operation::Attack(myPos.value(), attack->origin_, 0)};
                 game.Push(counterAttack, process.priority + 1);
 
                 orderCheck.push_back(1);
@@ -361,8 +356,7 @@ TEST_CASE("Hugo and large tank")
 
                         if(victim->GetGUID() == hugo)
                         {
-                            auto& factory = game.GetOperationFactory();
-                            OperationIPtr deny = factory.CreateAntiOperation(noti.process.op->GetId());
+                            OperationIPtr deny{ new Operation::AntiOperation(noti.process.id)};
                             game.Push(deny, process.priority + 1);
 
                             orderCheck.push_back(3);
@@ -402,8 +396,7 @@ TEST_CASE("Hugo and large tank")
                     auto attack = sourceOp->To<Operation::Attack>();
                     if(attack->attacker_->GetGUID() == me)
                     {
-                        auto& factory = game.GetOperationFactory();
-                        OperationIPtr deny = factory.CreateAntiOperation(process.op->GetId());
+                        OperationIPtr deny{new Operation::AntiOperation(process.id)};
                         game.Push(deny, process.priority + 1);
 
                         orderCheck.push_back(4);

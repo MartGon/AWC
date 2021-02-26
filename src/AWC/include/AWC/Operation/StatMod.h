@@ -7,9 +7,7 @@
 namespace Operation
 {
     class StatMod : public OperationI
-    {
-    friend class Factory;
-    
+    {    
     public:
 
         struct Null
@@ -32,6 +30,8 @@ namespace Operation
             Ammo ammo;
         };
 
+        StatMod(UnitPtr unit, UnitNS::StatType type, int amount, Extra extra = Extra{}) : 
+            unit_{unit}, type_{type}, amount_{amount}, extra_{extra}, OperationI{Type::STAT_MOD} {};
         ~StatMod() override {};
 
         Result Execute(Game& state, uint8_t prio) override;
@@ -40,9 +40,5 @@ namespace Operation
         UnitNS::StatType type_;
         int amount_;
         Extra extra_;
-
-    private:
-        StatMod(unsigned int id, UnitPtr unit, UnitNS::StatType type, int amount, Extra extra = Extra{}) : 
-            unit_{unit}, type_{type}, amount_{amount}, extra_{extra}, OperationI{id, Type::STAT_MOD} {};
     };
 }

@@ -1,6 +1,7 @@
 # TODO
 
 - Operations don't need to have ids, process should be the ones with id. This way, the factory is no longer needed
+- Operation Type should be an unsigned int instead of an enum class. This way it's extendable, while some constants are still defined
 
 - With LuaTable class, beware of destructor call order. Atm ScriptGame is called before Game destructor, so Scripts on history are cleared right after the luaState has been close! - DONE. A LuaState wrapper has been created to avoid this issue
 

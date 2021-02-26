@@ -5,15 +5,13 @@
 namespace Operation
 {
     class Custom : public OperationI
-    {
-    friend class Factory;
-    
+    {    
     public:
+        Custom(std::function<void(Game&)> func) : func_{func}, OperationI{Type::CUSTOM} {};
         ~Custom() override {};
         Result Execute(Game& state, uint8_t prio) override { func_(state); return Result{SUCCESS}; }
 
     private:
-        Custom(unsigned int id, std::function<void(Game&)> func) : func_{func}, OperationI{id, Type::CUSTOM} {};
         std::function<void(Game&)> func_;
     };
 }

@@ -52,5 +52,4 @@ namespace Operation
     class TakeDmg;
     class UpdateFlag;
     class Attack;
-    enum class Type;
 };

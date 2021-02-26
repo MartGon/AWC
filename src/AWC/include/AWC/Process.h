@@ -8,8 +8,9 @@ enum Priority
 
 struct Process
 {
-    Process(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT, bool announced = false) : priority{prio}, op{op}, announced{false} {};
+    Process(unsigned int id, OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT, bool announced = false) : id{id}, priority{prio}, op{op}, announced{false} {};
 
+    unsigned int id;
     uint8_t priority;
     OperationIPtr op;
     bool announced;

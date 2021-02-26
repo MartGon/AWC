@@ -21,7 +21,7 @@ namespace Operation
         ResultCode code_;
     };
 
-    enum class Type
+    enum Type : unsigned int
     {
         NONE,
         CUSTOM,
@@ -38,12 +38,11 @@ namespace Operation
     class OperationI
     {
     public:
-        OperationI(unsigned int id, Type type = Type::NONE) : id_{id}, type_{type} {};
+        OperationI(unsigned int type = Type::NONE) : type_{type} {};
         virtual ~OperationI() {};
         virtual Result Execute(Game& state, uint8_t prio) { return Result{SUCCESS}; };
-        
-        unsigned int GetId() {return id_;}
-        Type GetType() { return type_; }
+    
+        unsigned int GetType() { return type_; }
 
         template <typename T>
         T* To()
@@ -53,7 +52,6 @@ namespace Operation
         }
 
     private:
-        Type type_;
-        unsigned int id_;
+        unsigned int type_;
     };
 }

@@ -10,10 +10,9 @@ namespace Operation
     };
 
     class Composed : public OperationI
-    {
-    friend class Factory;
-    
+    { 
     public:
+        Composed() : OperationI{Type::COMPOSED} {};
         ~Composed() override {
             for(auto child : children)
                 delete child;
@@ -24,8 +23,6 @@ namespace Operation
         Result Execute(Game& state, uint8_t prio) override;
 
     private:
-        Composed(unsigned int id) : OperationI{id, Type::COMPOSED} {};
-
         std::vector<OperationI*> children;
     };
 }

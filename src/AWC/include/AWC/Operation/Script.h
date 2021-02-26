@@ -73,6 +73,8 @@ namespace Operation
 {
     class ScriptType;
 
+    const unsigned int SCRIPT = 9;
+
     class Script : public OperationI
     {
     friend class ScriptType;
@@ -91,7 +93,7 @@ namespace Operation
         Result Execute(Game& state, uint8_t prio) override;
 
     private:
-        Script(lua_State* luaState, ScriptType& type) : scriptType_{type}, luaState_{luaState}, argsTable_{luaState}, OperationI{0}
+        Script(lua_State* luaState, ScriptType& type) : scriptType_{type}, luaState_{luaState}, argsTable_{luaState}, OperationI{SCRIPT}
         {
             
         }

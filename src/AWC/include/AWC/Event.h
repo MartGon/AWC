@@ -3,6 +3,7 @@
 #include <AWC/AWCusing.h>
 #include <AWC/Process.h>
 #include <AWC/Entity.h>
+#include <AWC/Operation/OperationI.h>
 
 #include <functional>
 #include <unordered_map>
@@ -30,16 +31,16 @@ namespace Event
         };
     }
 
-    using HandlerCallback = std::function<void(Notification::Notification, Entity::GUID, Game&)>;
+    using HandlerCallback = std::function<void(const Notification::Notification, Entity::GUID, Game&)>;
 
     struct Handler
     {
-        Handler(Operation::Type type, HandlerCallback callback, Notification::Type notificationType = Notification::Type::ANY) : 
+        Handler(unsigned int type, HandlerCallback callback, Notification::Type notificationType = Notification::Type::ANY) : 
             type{type}, callback{callback}, notificationType{notificationType} {};
 
         bool ListensTo(Notification::Type type);
 
-        Operation::Type type;
+        unsigned int type;
         HandlerCallback callback;
         Notification::Type notificationType;
     };
@@ -48,7 +49,7 @@ namespace Event
     {
         Listener(Entity::GUID entity, Handler handler) :
             entity{entity}, handler{handler} {};
-        Listener(Entity::GUID entity, Operation::Type opType, HandlerCallback handler, Notification::Type type = Notification::Type::ANY) :
+        Listener(Entity::GUID entity, unsigned int opType, HandlerCallback handler, Notification::Type type = Notification::Type::ANY) :
             entity{entity}, handler{opType, handler, type} {};
 
         Entity::GUID entity;
@@ -59,10 +60,10 @@ namespace Event
     {
     public:
         void Register(Listener listener);
-        void Register(Entity::GUID entity, Operation::Type type, HandlerCallback eventListener, Notification::Type notType = Notification::Type::ANY);
-        void Register(Operation::Type opType, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
+        void Register(Entity::GUID entity, unsigned int type, HandlerCallback eventListener, Notification::Type notType = Notification::Type::ANY);
+        void Register(unsigned int opType, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
 
-        void Unregister(Entity::GUID entity, Operation::Type type);
+        void Unregister(Entity::GUID entity, unsigned int type);
         void Unregister(Entity::GUID entity);
 
         void Notify(Process p, Notification::Type notType, Game& game);
@@ -73,6 +74,6 @@ namespace Event
 
         void RemoveListeners(std::vector<Listener>& listeners, Entity::GUID ent);
 
-        std::unordered_map<Operation::Type, std::vector<Listener>> eventListeners_;
+        std::unordered_map<unsigned int, std::vector<Listener>> eventListeners_;
     };
 }

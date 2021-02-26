@@ -26,7 +26,6 @@ SET(SOURCES
   src/TilePattern/TileGraph.cpp
   src/TilePattern/TileNode.cpp
 
-  src/Operation/Factory.cpp
   src/Operation/Operation.cpp
   src/Operation/AntiOperation.cpp
   src/Operation/Composed.cpp

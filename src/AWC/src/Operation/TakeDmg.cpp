@@ -14,8 +14,7 @@ Result TakeDmg::Execute(Game& game, uint8_t prio)
 
     if(health <= 0)
     {
-        auto& opFactory = game.GetOperationFactory();
-        OperationIPtr op = opFactory.CreateUpdateFlag(victim_, UnitNS::DEAD, true);
+        OperationIPtr op {new UpdateFlag(victim_, UnitNS::DEAD, true)};
         game.Push(op, prio);
     }
 

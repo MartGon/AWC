@@ -17,17 +17,15 @@ Result Attack::Execute(Game& game, uint8_t prio)
 
     // TODO: Get units inside attack (it can be an AoE)
     // TODO: Check if the weapon has enough ammo
-
-    auto& opFactory = game.GetOperationFactory();
     if(auto targetUnit = map.GetUnit(dest_.pos))
     {
         auto dmg = attacker_->GetDmgToUnit(weaponIndex_, targetUnit);
-        OperationIPtr op = opFactory.CreateTakeDmg(targetUnit, dmg, this);
+        OperationIPtr op{new TakeDmg(targetUnit, dmg, this)};
         game.Push(op, prio);
     }
 
     StatMod::Extra extra{StatMod::Ammo{weaponIndex_}};
-    OperationIPtr ammoOp = opFactory.CreateStatMod(attacker_, UnitNS::AMMO, -1, extra);
+    OperationIPtr ammoOp{new StatMod(attacker_, UnitNS::AMMO, -1, extra)};
     game.Push(ammoOp, prio);
 
     return result;
