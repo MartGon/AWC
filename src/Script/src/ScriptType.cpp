@@ -1,5 +1,6 @@
 #include <Script/ScriptType.h>
 #include <Script/ScriptGame.h>
+#include <Script/UserData/Game.h>
 
 #include <AWC/AWCException.h>
 
@@ -37,7 +38,8 @@ Script::Type::Type(lua_State* luaState, std::string scriptPath) : scriptPath_{sc
         else
         {
             // TODO: Print the Lua stack
-            throw AWCException{"Lua Runtime error"};
+            std::string err = lua_tostring(luaState, -1);
+            throw AWCException{"Lua Runtime error: " + err};
         }
 
         // Pops the ENV table from the stack
@@ -82,13 +84,19 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef
         {
             // Sets table to function ENV
             lua_setupvalue(luaState, 1, 1);
+            UserData::Game::Push(luaState, &game);
 
             // Call function
             // TODO: Push game and prio params beforehand
-            auto ret = lua_pcall(luaState, 0, 0, 0);
+            auto ret = lua_pcall(luaState, 1, 0, 0);
             if(ret == LUA_OK)
             {
                 res = Operation::Result{Operation::SUCCESS};
+            }
+            else
+            {
+                std::string error = lua_tostring(luaState, -1);
+                throw AWCException(error);
             }
         }
     }

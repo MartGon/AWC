@@ -3,7 +3,9 @@
 #include <lua.hpp>
 
 #include <AWC/Game.h>
+
 #include <Script/ScriptType.h>
+#include <Script/UserData/Game.h>
 
 namespace Script
 {
@@ -35,6 +37,7 @@ namespace Script
     public:
         Game()
         {
+            UserData::Game::Init(ls.GetLuaState());
         }
 
         ~Game()
@@ -45,15 +48,11 @@ namespace Script
         {
             return game_;
         }
-
-    #ifdef _DEBUG
-
+        
         lua_State* GetLuaState()
         {
             return ls.GetLuaState();
         }
-
-    #endif
 
         unsigned int CreateScriptType(std::string scriptPath);
         unsigned int CreateScript(unsigned int typeId);
@@ -71,7 +70,6 @@ namespace Script
         unsigned int sIndex_ = 0;
 
         ::Game game_;
-        lua_State* luaState_;
     };
 
 }

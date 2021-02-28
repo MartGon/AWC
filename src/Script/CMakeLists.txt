@@ -3,6 +3,8 @@ set(SOURCES
     src/ScriptOperation.cpp
     src/ScriptGame.cpp
 
+    src/UserData/Game.cpp
+
 )
 
 add_library(Script ${SOURCES})
