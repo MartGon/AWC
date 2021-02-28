@@ -5,7 +5,6 @@ SET(SOURCES
   src/Entity.cpp
   src/Event.cpp
   src/Game.cpp
-  src/ScriptGame.cpp
   src/Map.cpp
   src/Range.cpp
   src/Pathfinding.cpp
@@ -35,8 +34,6 @@ SET(SOURCES
   src/Operation/Attack.cpp
   src/Operation/TakeDmg.cpp
   src/Operation/UpdateFlag.cpp
-  src/Operation/Script.cpp
-  src/Operation/ScriptType.cpp
 
   src/Unit/MovementDescType.cpp
   src/Unit/MovementDesc.cpp
@@ -52,5 +49,5 @@ add_library(AWC
   ${SOURCES}
 )
 
-target_link_libraries(AWC ${LUA_LIB_PATH})
-target_include_directories(AWC PUBLIC include ../Utils/include ${LUA_INCLUDE_DIR})
+target_link_libraries(AWC Utils)
+target_include_directories(AWC PUBLIC include ../Utils/include)

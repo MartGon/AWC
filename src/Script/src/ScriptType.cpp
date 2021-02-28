@@ -1,11 +1,11 @@
-#include <AWC/Operation/ScriptType.h>
-#include <AWC/ScriptGame.h>
+#include <Script/ScriptType.h>
+#include <Script/ScriptGame.h>
 
 #include <AWC/AWCException.h>
 
-using namespace Operation;
+using namespace Script;
 
-ScriptType::ScriptType(lua_State* luaState, std::string scriptPath) : scriptPath_{scriptPath}, luaState_{luaState}, executeRef_{-1}, undoRef_{-1}
+Script::Type::Type(lua_State* luaState, std::string scriptPath) : scriptPath_{scriptPath}, luaState_{luaState}, executeRef_{-1}, undoRef_{-1}
 {
     auto res = luaL_loadfile(luaState, scriptPath.c_str());
     if(res == LUA_OK)
@@ -59,16 +59,16 @@ ScriptType::ScriptType(lua_State* luaState, std::string scriptPath) : scriptPath
     }
 }
 
-std::shared_ptr<Script> ScriptType::CreateScript()
+std::shared_ptr<ScriptOperation> Script::Type::CreateScript()
 {
-    std::shared_ptr<Script> s{new Script{luaState_, *this}};
+    std::shared_ptr<ScriptOperation> s{new ScriptOperation{luaState_, *this}};
 
     return s;
 }
 
-Result ScriptType::Execute(Game& game, uint8_t prio, int tableRef)
+Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef)
 {
-    Result res{ERROR};
+    Operation::Result res{Operation::ERROR};
     
     auto luaState = luaState_;
 
@@ -88,7 +88,7 @@ Result ScriptType::Execute(Game& game, uint8_t prio, int tableRef)
             auto ret = lua_pcall(luaState, 0, 0, 0);
             if(ret == LUA_OK)
             {
-                res = Result{SUCCESS};
+                res = Operation::Result{Operation::SUCCESS};
             }
         }
     }

@@ -8,8 +8,8 @@
 
 // TODO: This should be part of its own lib. If included in AWC.h, then 
 // DB module cannot be built
-#include <AWC/Operation/ScriptType.h>
-#include <AWC/ScriptGame.h>
+#include <Script/ScriptType.h>
+#include <Script/ScriptGame.h>
 
 int ExecuteLuaFile(lua_State* luaState, std::string file)
 {
@@ -367,7 +367,7 @@ TEST_CASE("Lua Table test")
 
 TEST_CASE("ScriptType Operations")
 {
-    ScriptGame sg;
+    Script::Game sg;
 
     std::string scriptPath = std::string(SCRIPTS_DIR) + "scripttype.lua";
     auto st = sg.CreateScriptType(scriptPath);

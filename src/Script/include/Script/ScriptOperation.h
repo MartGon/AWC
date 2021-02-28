@@ -4,14 +4,14 @@
 
 #include <lua.hpp>
 
-namespace Operation
+namespace Script
 {
-    class Script;
+    class ScriptOperation;
 }
 
 class LuaTable
 {
-friend class Operation::Script;
+friend class Script::ScriptOperation;
 public:
     LuaTable(lua_State* luaState) : luaState_{luaState}
     {
@@ -69,18 +69,18 @@ private:
     int tableRef_;
 };
 
-namespace Operation
+namespace Script
 {
-    class ScriptType;
+    class Type;
 
     const unsigned int SCRIPT = 9;
 
-    class Script : public OperationI
+    class ScriptOperation : public Operation::OperationI
     {
-    friend class ScriptType;
+    friend class Type;
 
     public:
-        ~Script() override
+        ~ScriptOperation() override
         {
 
         }
@@ -90,16 +90,16 @@ namespace Operation
             return argsTable_;
         }
 
-        Result Execute(Game& state, uint8_t prio) override;
+        Operation::Result Execute(::Game& state, uint8_t prio) override;
 
     private:
-        Script(lua_State* luaState, ScriptType& type) : scriptType_{type}, luaState_{luaState}, argsTable_{luaState}, OperationI{SCRIPT}
+        ScriptOperation(lua_State* luaState, Type& type) : scriptType_{type}, luaState_{luaState}, argsTable_{luaState}, OperationI{SCRIPT}
         {
             
         }
 
         lua_State* luaState_;
         LuaTable argsTable_;
-        ScriptType& scriptType_;
+        Type& scriptType_;
     };
 }

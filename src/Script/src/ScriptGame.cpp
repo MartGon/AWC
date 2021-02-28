@@ -1,17 +1,19 @@
-#include <AWC/ScriptGame.h>
+#include <Script/ScriptGame.h>
 
 #include <AWC/AWCException.h>
 
-unsigned int ScriptGame::CreateScriptType(std::string scriptPath)
+
+
+unsigned int Script::Game::CreateScriptType(std::string scriptPath)
 {
-    Operation::ScriptType st{ls.GetLuaState(), scriptPath};
+    Script::Type st{ls.GetLuaState(), scriptPath};
     auto id = stIndex_++;
     scriptTypes_.insert({id, st});
 
     return id;
 }
 
-unsigned int ScriptGame::CreateScript(unsigned int typeId)
+unsigned int Script::Game::CreateScript(unsigned int typeId)
 {
     unsigned int id = -1;
     if(UnorderedMapUtils::Contains(scriptTypes_, typeId))
@@ -26,7 +28,7 @@ unsigned int ScriptGame::CreateScript(unsigned int typeId)
     return id;
 }
 
-LuaTable& ScriptGame::GetScriptTable(unsigned int id)
+LuaTable& Script::Game::GetScriptTable(unsigned int id)
 {
     if(UnorderedMapUtils::Contains(scripts_, id))
     {
@@ -37,7 +39,7 @@ LuaTable& ScriptGame::GetScriptTable(unsigned int id)
         throw AWCException("GetScriptTable Error: Script with id " + std::to_string(id) + " did not exist");
 }
 
-void ScriptGame::PushScript(unsigned int id, unsigned int prio)
+void Script::Game::PushScript(unsigned int id, unsigned int prio)
 {
     if(UnorderedMapUtils::Contains(scripts_, id))
     {
