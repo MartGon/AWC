@@ -3,7 +3,7 @@
 
 using namespace Script;
 
-const char* MT_NAME = "AWC_Game";
+static const char* MT_NAME = "AWC_Game";
 
 void UserData::Game::Init(lua_State* luaState)
 {
@@ -26,6 +26,8 @@ void UserData::Game::Push(lua_State* luaState, ::Game* game)
 int UserData::Game::GetMap(lua_State* L)
 {
     int n = 0;
+
+
 
     return n;
 }

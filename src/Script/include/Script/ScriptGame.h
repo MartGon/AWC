@@ -5,7 +5,7 @@
 #include <AWC/Game.h>
 
 #include <Script/ScriptType.h>
-#include <Script/UserData/Game.h>
+#include <Script/UserData.h>
 
 namespace Script
 {
@@ -37,7 +37,11 @@ namespace Script
     public:
         Game()
         {
+            auto L = ls.GetLuaState();
             UserData::Game::Init(ls.GetLuaState());
+            UserData::Map::Init(L);
+            UserData::Unit::Init(L);
+            UserData::Vector2::Init(L);
         }
 
         ~Game()

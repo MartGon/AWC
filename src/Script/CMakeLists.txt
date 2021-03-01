@@ -5,7 +5,9 @@ set(SOURCES
 
     src/UserData/Game.cpp
     src/UserData/Map.cpp
+    src/UserData/Unit.cpp
     src/UserData/UserData.cpp
+    src/UserData/Vector2.cpp
 
 )
 

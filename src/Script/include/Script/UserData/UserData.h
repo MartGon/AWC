@@ -7,6 +7,7 @@
 namespace Script::UserData::UserData
 {
     void RegisterMetatable(lua_State* luaState, const char* mtName, const luaL_Reg* methods);
+    void RegisterLib(lua_State* luaState, const char* libName, const luaL_Reg* funcs);
     void Push(lua_State* luaState, const  char* mtName, void* userdata);
 
     template <typename T>
@@ -23,5 +24,11 @@ namespace Script::UserData::UserData
     T* ToUserData(lua_State* luaState, std::string mtName)
     {
         return ToUserData<T>(luaState, -1, mtName);
+    }
+
+    template <typename T>
+    T* ToFullUserData(lua_State* luaState)
+    {
+        return static_cast<T*>(lua_newuserdata(luaState, sizeof(T)));
     }
 }
