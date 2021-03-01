@@ -2,6 +2,9 @@
 SET(SOURCES
 
     src/ScriptTest.cpp
+
+    src/UserData/Game.cpp
+    src/UserData/Map.cpp
 )
 
 add_executable(ScriptTest ${SOURCES})

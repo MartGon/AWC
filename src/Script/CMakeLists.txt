@@ -4,6 +4,8 @@ set(SOURCES
     src/ScriptGame.cpp
 
     src/UserData/Game.cpp
+    src/UserData/Map.cpp
+    src/UserData/UserData.cpp
 
 )
 

@@ -1,4 +1,5 @@
 #include <Script/UserData/Game.h>
+#include <Script/UserData/UserData.h>
 
 using namespace Script;
 
@@ -7,28 +8,19 @@ const char* MT_NAME = "AWC_Game";
 void UserData::Game::Init(lua_State* luaState)
 {
     const luaL_Reg methods[] = {
-        {"GetMap", UserData::Game::GetMap},
-        {"GetMapCount", UserData::Game::GetMapCount},
+        {"GetMap", Game::GetMap},
+        {"GetMapCount", Game::GetMapCount},
         {NULL, NULL}
     };
 
-    luaL_newmetatable(luaState, MT_NAME);
-
-    lua_pushstring(luaState, "__index");
-    lua_pushvalue(luaState, -2);
-    lua_settable(luaState, -3); // Metatable.__index = Metatable
-
-    luaL_setfuncs(luaState, methods, 0);
-    lua_pop(luaState, 1);
+    UserData::RegisterMetatable(luaState, MT_NAME, methods);
 
     return;
 }
 
 void UserData::Game::Push(lua_State* luaState, ::Game* game)
 {
-    lua_pushlightuserdata(luaState, game);
-    luaL_getmetatable(luaState, MT_NAME);
-    lua_setmetatable(luaState, -2);
+    UserData::Push(luaState, MT_NAME, game);
 }
 
 int UserData::Game::GetMap(lua_State* L)
@@ -40,8 +32,7 @@ int UserData::Game::GetMap(lua_State* L)
 
 int UserData::Game::GetMapCount(lua_State* luaState)
 {
-    ::Game* game = static_cast<::Game*>(luaL_checkudata(luaState, -1, MT_NAME));
-    luaL_argcheck(luaState, game != nullptr, 1, "'Game' expected");
+    auto game = UserData::ToUserData<::Game>(luaState, MT_NAME);
 
     int mapCount = game->GetMapCount();
     lua_pushinteger(luaState, mapCount);
