@@ -7,7 +7,6 @@ const char* UserData::Vector2::MT_NAME = "Utils_Vector2";
 const char* UserData::Vector2::LIB_NAME = "Vector2";
 
 const luaL_Reg UserData::Vector2::methods[] = {
-    {"__gc", UserData::Delete<::Vector2*>},
     {NULL, NULL}
 };
 
@@ -23,6 +22,10 @@ void UserData::Vector2::Init(lua_State* luaState)
     lua_pushstring(luaState, "__index");
     lua_pushcfunction(luaState, Vector2::Get);
     lua_settable(luaState, -3); // Metatable.__index = Get
+
+    lua_pushstring(luaState, "__gc");
+    lua_pushcfunction(luaState, UserData::Delete<::Vector2*>);
+    lua_settable(luaState, -3);
 
     lua_pop(luaState, 1);
 
