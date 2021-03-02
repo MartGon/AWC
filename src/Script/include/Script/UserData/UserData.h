@@ -7,17 +7,8 @@
 namespace Script::UserData::UserData
 {
     void RegisterMetatable(lua_State* luaState, const char* mtName, const luaL_Reg* methods);
-    void RegisterLib(lua_State* luaState, const char* libName, const luaL_Reg* funcs);
-    void PushLight(lua_State* luaState, const  char* mtName, void* userdata);
-
     void RegisterMetaMethod(lua_State* luaState, const char* mtName, const char* key, const lua_CFunction method);
-
-    template<typename T>
-    int GCHandler(lua_State* luaState)
-    {
-        T userdata = static_cast<T>(*static_cast<T*>(lua_touserdata(luaState, -1)));
-        
-    }
+    void RegisterLib(lua_State* luaState, const char* libName, const luaL_Reg* funcs);
 
     template <typename T>
     T* ToLightUserData(lua_State* luaState, std::string mtName, int index = 1)
@@ -38,6 +29,8 @@ namespace Script::UserData::UserData
 
         return userdata;
     }
+
+    void PushLight(lua_State* luaState, const  char* mtName, void* userdata);
 
     template <typename T>
     T* PushFullUserData(lua_State* luaState, const char* mtName, T value)

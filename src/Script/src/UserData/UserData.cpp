@@ -14,6 +14,14 @@ void UserData::RegisterMetatable(lua_State* luaState, const char* mtName, const 
     lua_pop(luaState, 1);
 }
 
+void UserData::RegisterMetaMethod(lua_State* luaState, const char* mtName, const char* key, const lua_CFunction method)
+{
+    luaL_getmetatable(luaState, mtName);
+    lua_pushcfunction(luaState, method);
+    lua_setfield(luaState, -2, key);
+    lua_pop(luaState, 1);
+}
+
 void UserData::RegisterLib(lua_State* luaState, const char* libName, const luaL_Reg* funcs)
 {
     lua_newtable(luaState);
@@ -25,11 +33,4 @@ void UserData::PushLight(lua_State* luaState, const char* mtName, void* userdata
 {
     lua_pushlightuserdata(luaState, userdata);
     luaL_setmetatable(luaState, mtName);
-}
-
-void UserData::RegisterMetaMethod(lua_State* luaState, const char* mtName, const char* key, const lua_CFunction method)
-{
-    luaL_getmetatable(luaState, mtName);
-    lua_pushcfunction(luaState, method);
-    lua_setfield(luaState, -2, key);
 }
