@@ -2,8 +2,14 @@
 
 function Execute(game)
 
-    value = game:GetMapCount();
-    value = 1;
+    map = game:GetMap(0);
+    value = origin.x;
+
+    unit = map:GetUnit(origin);
+    
+    if unit then
+        found = true;
+    end
 
 end
 

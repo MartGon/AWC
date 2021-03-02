@@ -1,6 +1,7 @@
 #include <Script/UserData/Map.h>
 #include <Script/UserData/UserData.h>
 #include <Script/UserData/Unit.h>
+#include <Script/UserData/Vector2.h>
 
 using namespace Script;
 
@@ -22,21 +23,26 @@ void UserData::Map::PushLight(lua_State* luaState, ::Map* map)
 
 Map* UserData::Map::ToMap(lua_State* luaState, int index)
 {
-    return UserData::ToUserData<::Map>(luaState, MT_NAME, index);
+    return UserData::ToLightUserData<::Map>(luaState, MT_NAME, index);
 }
 
 int UserData::Map::GetUnit(lua_State* luaState)
 {
-    auto map = ToMap(luaState);
-    int x = luaL_checkinteger(luaState, 2);
-    int y = luaL_checkinteger(luaState, 3);
+    auto map = UserData::ToLightUserData<::Map>(luaState, MT_NAME, 1);
+    auto pos = UserData::ToFullUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
 
-    bool validPos = map->IsPositionValid(x, y);
-    luaL_error(luaState, "Map position (%d, %d) is not valid", x, y);
+    bool validPos = map->IsPositionValid(pos->x, pos->y);
+    if(validPos)
+    {
+        auto unit = map->GetUnit(pos->x, pos->y);
 
-    auto unit = map->GetUnit(x, y);
-
-    UserData::PushLight(luaState, Unit::MT_NAME, unit.get());
+        if(unit)
+            UserData::PushLight(luaState, Unit::MT_NAME, unit.get());
+        else
+            lua_pushnil(luaState);
+    }
+    else
+        luaL_error(luaState, "Map position (%d, %d) is not valid", pos->x, pos->y);
 
     return 1;
 }

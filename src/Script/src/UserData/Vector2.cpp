@@ -7,7 +7,7 @@ const char* UserData::Vector2::MT_NAME = "Utils_Vector2";
 const char* UserData::Vector2::LIB_NAME = "Vector2";
 
 const luaL_Reg UserData::Vector2::methods[] = {
-
+    {"__gc", UserData::Delete<::Vector2*>},
     {NULL, NULL}
 };
 
@@ -18,29 +18,43 @@ const luaL_Reg UserData::Vector2::functions[] = {
 
 void UserData::Vector2::Init(lua_State* luaState)
 {
-    UserData::RegisterMetatable(luaState, MT_NAME, methods);
-    UserData::RegisterLib(luaState, LIB_NAME, functions);
-}
+    luaL_newmetatable(luaState, MT_NAME);
 
-void UserData::Vector2::PushLight(lua_State* luaState, ::Vector2* vec)
-{
-    UserData::PushLight(luaState, MT_NAME, vec);
+    lua_pushstring(luaState, "__index");
+    lua_pushcfunction(luaState, Vector2::Get);
+    lua_settable(luaState, -3); // Metatable.__index = Get
+
+    lua_pop(luaState, 1);
+
+    UserData::RegisterLib(luaState, LIB_NAME, functions);
 }
 
 int UserData::Vector2::New(lua_State* luaState)
 {
     int x = luaL_checkinteger(luaState, 1);
     int y = luaL_checkinteger(luaState, 2);
-    ::Vector2* vec = UserData::PushFullUserData<::Vector2>(luaState);
-    vec->x = x;
-    vec->y = y;
+    ::Vector2* vec = UserData::PushFullUserData<::Vector2>(luaState, MT_NAME, ::Vector2{x, y});
 
     luaL_setmetatable(luaState, MT_NAME);
 
     return 1;
 }
 
-::Vector2* UserData::Vector2::ToVector2(lua_State* luaState, int index)
+int UserData::Vector2::Get(lua_State* luaState)
 {
-    return UserData::ToUserData<::Vector2>(luaState, MT_NAME, index);
+    ::Vector2* vec = UserData::ToFullUserData<::Vector2>(luaState, MT_NAME);
+    std::string index = std::string(luaL_checkstring(luaState, 2));
+
+    bool isIndexValid = index == "x" || index == "y";
+    if(isIndexValid)
+    {
+        if(index == "x")
+            lua_pushinteger(luaState, vec->x);
+        else
+            lua_pushinteger(luaState, vec->y);
+    }
+    else
+        luaL_error(luaState, "Invalid index %s", index.c_str());
+
+    return 1;
 }

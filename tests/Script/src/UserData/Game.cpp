@@ -3,6 +3,8 @@
 #include <AWC.h>
 #include <Script.h>
 
+#include <Test/Script/UserData/UserData.h>
+
 TEST_CASE("Game userdata")
 {
     Script::Game sGame;
@@ -17,23 +19,20 @@ TEST_CASE("Game userdata")
     SUBCASE("GetMapCount")
     {
         std::string path = std::string(SCRIPTS_DIR) + "UserData/Game/GetMapCount.lua";
-        auto sType = sGame.CreateScriptType(path);
-        auto s = sGame.CreateScript(sType);
-        auto& sTable = sGame.GetScriptTable(s);
-        sGame.PushScript(s);
+        Test::Script::UserData::TestScript t(path, sGame);
+        sGame.PushScript(t.ref);
         game.Run();
 
-        auto value = sTable.GetInt("value");
+        auto value = t.lt().GetInt("value");
         CHECK(value == game.GetMapCount());
     }
     SUBCASE("GetMap")
     {
         std::string path = std::string(SCRIPTS_DIR) + "UserData/Game/GetMap.lua";
-        auto sType = sGame.CreateScriptType(path);
-        auto s = sGame.CreateScript(sType);
-        auto& sTable = sGame.GetScriptTable(s);
+        Test::Script::UserData::TestScript t(path, sGame);
+        auto& sTable = t.lt();
         sTable.SetInt("mapIndex", 0);
-        sGame.PushScript(s);
+        sGame.PushScript(t.ref);
         game.Run();
 
         auto value = sTable.GetInt("value");

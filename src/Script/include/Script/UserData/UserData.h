@@ -20,7 +20,7 @@ namespace Script::UserData::UserData
     }
 
     template <typename T>
-    T* ToUserData(lua_State* luaState, std::string mtName, int index = 1)
+    T* ToLightUserData(lua_State* luaState, std::string mtName, int index = 1)
     {
         T* userdata = static_cast<T*>(luaL_checkudata(luaState, index, mtName.c_str()));
         std::string error{mtName + " expected"};
@@ -30,9 +30,13 @@ namespace Script::UserData::UserData
     }
 
     template <typename T>
-    T* PushFullUserData(lua_State* luaState)
+    T* ToFullUserData(lua_State* luaState, std::string mtName, int index = 1)
     {
-        return static_cast<T*>(lua_newuserdata(luaState, sizeof(T)));
+        T* userdata = static_cast<T*>(*static_cast<T**>(luaL_checkudata(luaState, index, mtName.c_str())));
+        std::string error{mtName + " expected"};
+        luaL_argcheck(luaState, userdata != nullptr, index, error.c_str());
+
+        return userdata;
     }
 
     template <typename T>

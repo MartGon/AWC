@@ -2,6 +2,8 @@
 
 #include <AWC/Operation/OperationI.h>
 
+#include <Script/UserData.h>
+
 #include <lua.hpp>
 
 namespace Script
@@ -56,6 +58,17 @@ public:
         std::string str = std::string(lua_tostring(luaState_, -1));
         lua_pop(luaState_, 2);
         return str;
+    }
+
+    template<typename T>
+    T* SetFullUserData(std::string key, const char* mtName, T userdata)
+    {
+        lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
+        auto ptr = Script::UserData::UserData::PushFullUserData(luaState_, mtName, userdata);
+        lua_setfield(luaState_, -2, key.c_str());
+        lua_pop(luaState_, 1);
+
+        return ptr;
     }
 
 private:

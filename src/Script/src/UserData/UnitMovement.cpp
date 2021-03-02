@@ -19,8 +19,8 @@ void UserData::UnitMovement::Init(lua_State* luaState)
 
 int UserData::UnitMovement::CanMove(lua_State* luaState)
 {
-    auto unitMove = UserData::ToUserData<::UnitMovement>(luaState, MT_NAME);
-    auto dest = UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
+    auto unitMove = UserData::ToFullUserData<::UnitMovement>(luaState, MT_NAME);
+    auto dest = UserData::ToFullUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
 
     bool result = unitMove->CanMove(*dest);
     lua_pushboolean(luaState, result);
