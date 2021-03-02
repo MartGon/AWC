@@ -22,26 +22,25 @@ void UserData::Vector2::Init(lua_State* luaState)
     UserData::RegisterLib(luaState, LIB_NAME, functions);
 }
 
-void UserData::Vector2::Push(lua_State* luaState, ::Vector2* vec)
+void UserData::Vector2::PushLight(lua_State* luaState, ::Vector2* vec)
 {
-    UserData::Push(luaState, MT_NAME, vec);
+    UserData::PushLight(luaState, MT_NAME, vec);
 }
 
 int UserData::Vector2::New(lua_State* luaState)
 {
-    int x = luaL_checkinteger(luaState, -1);
-    int y = luaL_checkinteger(luaState, -2);
-    ::Vector2* vec = UserData::ToFullUserData<::Vector2>(luaState);
+    int x = luaL_checkinteger(luaState, 1);
+    int y = luaL_checkinteger(luaState, 2);
+    ::Vector2* vec = UserData::PushFullUserData<::Vector2>(luaState);
     vec->x = x;
     vec->y = y;
 
-    luaL_getmetatable(luaState, MT_NAME);
-    lua_setmetatable(luaState, -2);
+    luaL_setmetatable(luaState, MT_NAME);
 
     return 1;
 }
 
 ::Vector2* UserData::Vector2::ToVector2(lua_State* luaState, int index)
 {
-    return UserData::ToUserData<::Vector2>(luaState, index, MT_NAME);
+    return UserData::ToUserData<::Vector2>(luaState, MT_NAME, index);
 }

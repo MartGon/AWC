@@ -1,5 +1,6 @@
 #include <Script/UserData/Game.h>
 #include <Script/UserData/UserData.h>
+#include <Script/UserData/Map.h>
 
 using namespace Script;
 
@@ -17,18 +18,27 @@ void UserData::Game::Init(lua_State* luaState)
     return;
 }
 
-void UserData::Game::Push(lua_State* luaState, ::Game* game)
+void UserData::Game::PushLight(lua_State* luaState, ::Game* game)
 {
-    UserData::Push(luaState, MT_NAME, game);
+    UserData::PushLight(luaState, MT_NAME, game);
 }
 
 int UserData::Game::GetMap(lua_State* L)
-{
-    int n = 0;
+{   
+    auto game = UserData::ToUserData<::Game>(L, MT_NAME);
+    auto index = luaL_checkinteger(L, 2);
 
+    bool indexValid = index < game->GetMapCount() && index >= 0;
+    
+    if(indexValid)
+    {
+        auto map = game->GetMap(index);
+        UserData::PushLight(L, Map::MT_NAME, &map);
+    }
+    else
+        luaL_error(L, "Map index %d is not valid", index);
 
-
-    return n;
+    return 1;
 }
 
 int UserData::Game::GetMapCount(lua_State* luaState)

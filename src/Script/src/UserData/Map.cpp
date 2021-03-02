@@ -1,11 +1,12 @@
 #include <Script/UserData/Map.h>
 #include <Script/UserData/UserData.h>
+#include <Script/UserData/Unit.h>
 
 using namespace Script;
 
 const char* UserData::Map::MT_NAME = "AWC_Map";
 const luaL_Reg UserData::Map::methods[] = {
-                
+        {"GetUnit", Map::GetUnit},
         {NULL, NULL}
     };
 
@@ -14,14 +15,14 @@ void UserData::Map::Init(lua_State* luaState)
     UserData::RegisterMetatable(luaState, MT_NAME, methods);
 }
 
-void UserData::Map::Push(lua_State* luaState, ::Map* map)
+void UserData::Map::PushLight(lua_State* luaState, ::Map* map)
 {
-    UserData::Push(luaState, MT_NAME, map);
+    UserData::PushLight(luaState, MT_NAME, map);
 }
 
 Map* UserData::Map::ToMap(lua_State* luaState, int index)
 {
-    return UserData::ToUserData<::Map>(luaState, index, MT_NAME);
+    return UserData::ToUserData<::Map>(luaState, MT_NAME, index);
 }
 
 int UserData::Map::GetUnit(lua_State* luaState)
@@ -35,5 +36,7 @@ int UserData::Map::GetUnit(lua_State* luaState)
 
     auto unit = map->GetUnit(x, y);
 
-    // TODO
+    UserData::PushLight(luaState, Unit::MT_NAME, unit.get());
+
+    return 1;
 }

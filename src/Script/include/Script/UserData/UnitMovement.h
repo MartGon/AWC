@@ -11,6 +11,7 @@ namespace Script::UserData::UnitMovement
     extern const luaL_Reg methods[];
 
     void Init(lua_State* luaState);
-    void Push(lua_State* luaState, ::UnitMovement* uMove);
-    ::UnitMovement* ToUnitMovement(lua_State* luaState, int index = -1);
+    int Delete(lua_State* luaState);
+
+    int CanMove(lua_State* luaState);
 }

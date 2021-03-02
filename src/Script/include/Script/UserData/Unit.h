@@ -10,7 +10,7 @@ namespace Script::UserData::Unit
     extern const luaL_Reg methods[];
     
     void Init(lua_State* luaState);
-    void Push(lua_State* luaState, ::Unit* unit);
+    void PushLight(lua_State* luaState, ::Unit* unit);
 
     int CalculateMovement(lua_State* luaState);
 }

@@ -26,4 +26,17 @@ TEST_CASE("Game userdata")
         auto value = sTable.GetInt("value");
         CHECK(value == game.GetMapCount());
     }
+    SUBCASE("GetMap")
+    {
+        std::string path = std::string(SCRIPTS_DIR) + "UserData/Game/GetMap.lua";
+        auto sType = sGame.CreateScriptType(path);
+        auto s = sGame.CreateScript(sType);
+        auto& sTable = sGame.GetScriptTable(s);
+        sTable.SetInt("mapIndex", 0);
+        sGame.PushScript(s);
+        game.Run();
+
+        auto value = sTable.GetInt("value");
+        CHECK(value == 10);
+    }
 }

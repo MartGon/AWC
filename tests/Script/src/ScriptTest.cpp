@@ -413,4 +413,40 @@ TEST_CASE("ScriptType Operations")
     }
 }
 
+#include <iostream>
+#include <stdlib.h>
+
+TEST_CASE("GC")
+{
+    struct Test
+    {
+        Test(std::shared_ptr<int> a) : a{a}
+        {
+            std::cout << "Calling constructor of Test\n" ;
+        }
+
+        ~Test()
+        {
+            std::cout << "Calling destructor of Test\n";
+            std::cout << "Count is " << a.use_count() << "\n";
+        }
+
+        std::shared_ptr<int> a;
+    };
+
+    auto aPtr = std::make_shared<int>(2); // Count = 1;
+
+    Test* t = (Test*)malloc(sizeof(Test)); // Count = 2
+    *t = Test{aPtr};
+
+    CHECK(aPtr.use_count() == 2);
+
+    t->~Test(); // This is needed to make Count = 1;
+
+    CHECK(aPtr.use_count() == 1);
+
+    free(t); // Free memory
+
+    // Implicit Count = 0;
+}
 
