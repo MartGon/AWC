@@ -3,23 +3,23 @@
 
 using namespace Script;
 
-static const char* MT_NAME = "Utils_Vector2";
-static const char* LIB_NAME = "Vector2";
+const char* UserData::Vector2::MT_NAME = "Utils_Vector2";
+const char* UserData::Vector2::LIB_NAME = "Vector2";
 
-const luaL_Reg methods[] = {
+const luaL_Reg UserData::Vector2::methods[] = {
 
     {NULL, NULL}
 };
 
-const luaL_Reg funcs[] = {
-    {"new", UserData::Vector2::New},
+const luaL_Reg UserData::Vector2::functions[] = {
+    {"new", Vector2::New},
     {NULL, NULL}
 };
 
 void UserData::Vector2::Init(lua_State* luaState)
 {
     UserData::RegisterMetatable(luaState, MT_NAME, methods);
-    UserData::RegisterLib(luaState, LIB_NAME, funcs);
+    UserData::RegisterLib(luaState, LIB_NAME, functions);
 }
 
 void UserData::Vector2::Push(lua_State* luaState, ::Vector2* vec)

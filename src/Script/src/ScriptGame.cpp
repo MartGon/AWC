@@ -3,7 +3,6 @@
 #include <AWC/AWCException.h>
 
 
-
 unsigned int Script::Game::CreateScriptType(std::string scriptPath)
 {
     Script::Type st{ls.GetLuaState(), scriptPath};

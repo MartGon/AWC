@@ -5,9 +5,9 @@
 
 using namespace Script;
 
-static const char* MT_NAME = "AWC_Unit";
+const char* UserData::Unit::MT_NAME = "AWC_Unit";
 
-const luaL_Reg methods[] = {
+const luaL_Reg UserData::Unit::methods[] = {
     {NULL, NULL}
 };
 

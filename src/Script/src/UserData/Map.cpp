@@ -3,9 +3,8 @@
 
 using namespace Script;
 
-static const char* MT_NAME = "AWC_Map";
-
-const luaL_Reg methods[] = {
+const char* UserData::Map::MT_NAME = "AWC_Map";
+const luaL_Reg UserData::Map::methods[] = {
                 
         {NULL, NULL}
     };

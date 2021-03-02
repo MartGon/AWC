@@ -38,10 +38,7 @@ namespace Script
         Game()
         {
             auto L = ls.GetLuaState();
-            UserData::Game::Init(ls.GetLuaState());
-            UserData::Map::Init(L);
-            UserData::Unit::Init(L);
-            UserData::Vector2::Init(L);
+            UserData::Init(L);
         }
 
         ~Game()

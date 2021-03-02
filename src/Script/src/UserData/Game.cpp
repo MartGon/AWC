@@ -3,16 +3,15 @@
 
 using namespace Script;
 
-static const char* MT_NAME = "AWC_Game";
-
-void UserData::Game::Init(lua_State* luaState)
-{
-    const luaL_Reg methods[] = {
+const char* UserData::Game::MT_NAME = "AWC_Game";
+const luaL_Reg UserData::Game::methods[] = {
         {"GetMap", Game::GetMap},
         {"GetMapCount", Game::GetMapCount},
         {NULL, NULL}
     };
 
+void UserData::Game::Init(lua_State* luaState)
+{
     UserData::RegisterMetatable(luaState, MT_NAME, methods);
 
     return;

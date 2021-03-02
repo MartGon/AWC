@@ -2,11 +2,13 @@ set(SOURCES
     src/ScriptType.cpp
     src/ScriptOperation.cpp
     src/ScriptGame.cpp
+    src/UserData.cpp
 
     src/UserData/Game.cpp
     src/UserData/Map.cpp
     src/UserData/Unit.cpp
     src/UserData/UserData.cpp
+    src/UserData/UnitMovement.cpp
     src/UserData/Vector2.cpp
 
 )
