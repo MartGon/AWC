@@ -20,6 +20,6 @@ target_include_directories(DBTest PUBLIC include
     ${DOCTEST_INCLUDE_DIR}
     ${NLOHMANN_JSON_INCLUDE_DIR})
 
-target_link_libraries(DBTest AWC DB Utils AWCTestLib ${LUA_LIB_PATH})
+target_link_libraries(DBTest AWC DB Utils AWCTestLib)
 
 add_test(NAME RunDBTest COMMAND DBTest)

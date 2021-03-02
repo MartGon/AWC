@@ -22,7 +22,7 @@ target_include_directories(AWCTestLib PUBLIC include
     ${CMAKE_SOURCE_DIR}/src/Utils/include  
     ${LUA_INCLUDE_DIR}
     ${DOCTEST_INCLUDE_DIR})
-target_link_libraries(AWCTestLib AWC Utils ${LUA_LIB_PATH})
+target_link_libraries(AWCTestLib AWC Utils)
 
 
 add_executable(AWCTest ${SOURCES})
@@ -31,6 +31,6 @@ target_include_directories(AWCTest PUBLIC include
     ${CMAKE_SOURCE_DIR}/src/Utils/include  
     ${LUA_INCLUDE_DIR}
     ${DOCTEST_INCLUDE_DIR})
-target_link_libraries(AWCTest AWC Utils ${LUA_LIB_PATH})
+target_link_libraries(AWCTest AWC Utils)
 
 add_test(NAME RunAWCTest COMMAND AWCTest)

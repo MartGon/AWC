@@ -16,7 +16,8 @@ void UserData::RegisterMetatable(lua_State* luaState, const char* mtName, const 
 
 void UserData::RegisterLib(lua_State* luaState, const char* libName, const luaL_Reg* funcs)
 {
-    luaL_newlib(luaState, funcs);
+    lua_newtable(luaState);
+    luaL_setfuncs(luaState, funcs, 0);
     lua_setglobal(luaState, libName);
 }
 

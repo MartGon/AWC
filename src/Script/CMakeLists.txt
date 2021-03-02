@@ -13,5 +13,6 @@ set(SOURCES
 
 add_library(Script ${SOURCES})
 
-target_link_libraries(Script ${LUA_LIB_PATH})
+target_link_libraries(Script Lua)
+message("Path to lua is ${LUA_INCLUDE_DIR}")
 target_include_directories(Script PUBLIC  include ../Utils/include ../AWC/include ${LUA_INCLUDE_DIR})
