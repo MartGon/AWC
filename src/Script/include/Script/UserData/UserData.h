@@ -45,7 +45,7 @@ namespace Script::UserData::UserData
     template <typename T>
     int Delete(lua_State* luaState)
     {
-        delete *static_cast<T*>(lua_touserdata(luaState, -1));
+        delete *static_cast<T**>(lua_touserdata(luaState, -1));
 
         return 0;
     }

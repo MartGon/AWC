@@ -24,7 +24,7 @@ void UserData::Vector2::Init(lua_State* luaState)
     lua_settable(luaState, -3); // Metatable.__index = Get
 
     lua_pushstring(luaState, "__gc");
-    lua_pushcfunction(luaState, UserData::Delete<::Vector2*>);
+    lua_pushcfunction(luaState, UserData::Delete<::Vector2>);
     lua_settable(luaState, -3);
 
     lua_pop(luaState, 1);
