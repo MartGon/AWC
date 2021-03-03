@@ -27,19 +27,11 @@ namespace Script
         {
             luaL_unref(luaState_, LUA_REGISTRYINDEX, tableRef_);
         }
-
+    
         void SetInt(std::string key, int n)
         {
             lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
             lua_pushinteger(luaState_, n);
-            lua_setfield(luaState_, -2, key.c_str());
-            lua_pop(luaState_, 1);
-        }
-
-        void SetString(std::string key, std::string str)
-        {
-            lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
-            lua_pushstring(luaState_, str.c_str());
             lua_setfield(luaState_, -2, key.c_str());
             lua_pop(luaState_, 1);
         }
@@ -53,6 +45,14 @@ namespace Script
             return val;
         }
 
+        void SetString(std::string key, std::string str)
+        {
+            lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
+            lua_pushstring(luaState_, str.c_str());
+            lua_setfield(luaState_, -2, key.c_str());
+            lua_pop(luaState_, 1);
+        }
+
         std::string GetString(std::string key)
         {
             lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
@@ -61,6 +61,24 @@ namespace Script
             lua_pop(luaState_, 2);
 
             return str;
+        }
+
+        void SetBool(std::string key, bool b)
+        {
+            lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
+            lua_pushboolean(luaState_, b);
+            lua_setfield(luaState_, -2, key.c_str());
+            lua_pop(luaState_, 1);
+        }
+
+        bool GetBool(std::string key)
+        {
+            lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
+            lua_getfield(luaState_, -1, key.c_str());
+            bool b = lua_toboolean(luaState_, -1);
+            lua_pop(luaState_, 2);
+
+            return b;
         }
 
         template<typename T>
@@ -85,11 +103,39 @@ namespace Script
             return ptr;
         }
 
+        template<typename T>
+        void SetLightUserData(std::string key, const char* mtName, T userdata)
+        {
+            lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
+            Script::UserData::UserData::PushLight(luaState_, mtName, userdata);
+            lua_setfield(luaState_, -2, key.c_str());
+            lua_pop(luaState_, 1);
+        }
+
+        template <typename T>
+        T* GetLightUserData(std::string key, const char* mtName)
+        {
+            lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
+            lua_getfield(luaState_, -1, key.c_str());
+            T* ptr = Script::UserData::UserData::ToLightUserData<T>(luaState_, mtName, -1);
+            lua_pop(luaState_, 2);
+
+            return ptr;
+        }
+
         void SetMetaTable(std::string mtName)
         {
             int type = lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
             luaL_setmetatable(luaState_, mtName.c_str());
             lua_pop(luaState_, 1);
+        }
+
+        bool ContainsValue(std::string key)
+        {
+            lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
+            int type = lua_getfield(luaState_, -1, key.c_str());
+            
+            return type != LUA_TNIL;
         }
 
     private:

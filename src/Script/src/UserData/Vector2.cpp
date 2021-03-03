@@ -9,6 +9,8 @@ const char* UserData::Vector2::LIB_NAME = "Vector2";
 const luaL_Reg UserData::Vector2::methods[] = {
     {"__gc", UserData::Delete<::Vector2>},
     {"__add", Vector2::Add},
+    {"__sub", Vector2::Sub},
+    {"__eq", Vector2::Eq},
     {NULL, NULL}
 };
 
@@ -71,6 +73,28 @@ int UserData::Vector2::Add(lua_State* luaState)
 
     ::Vector2 sum = *a + *b;
     UserData::PushFullUserData(luaState, MT_NAME, sum);
+
+    return 1;
+}
+
+int UserData::Vector2::Sub(lua_State* luaState)
+{
+    ::Vector2* a = UserData::ToFullUserData<::Vector2>(luaState, MT_NAME);
+    ::Vector2* b = UserData::ToFullUserData<::Vector2>(luaState, MT_NAME, 2);
+
+    ::Vector2 sub = *a - *b;
+    UserData::PushFullUserData(luaState, MT_NAME, sub);
+
+    return 1;
+}
+
+int UserData::Vector2::Eq(lua_State* luaState)
+{
+    ::Vector2* a = UserData::ToFullUserData<::Vector2>(luaState, MT_NAME);
+    ::Vector2* b = UserData::ToFullUserData<::Vector2>(luaState, MT_NAME, 2);
+
+    bool eq = *a == *b;
+    lua_pushboolean(luaState, eq);
 
     return 1;
 }
