@@ -475,7 +475,7 @@ TEST_CASE("ENV with __index _G")
 
     CHECK(global1 == 15);
     CHECK(var1 == 12);
-    CHECK(var2 == 0);
+    CHECK(var2 == 0); // Nil, not defined
 
     // Ts2 Table
     auto& ts2Table = sGame.GetScriptTable(ts2.ref);
@@ -484,6 +484,6 @@ TEST_CASE("ENV with __index _G")
     var2 = ts2Table.GetInt("var2");
 
     CHECK(global2 == 4);
-    CHECK(var1 == 0);
+    CHECK(var1 == 0); // Nil, not defined
     CHECK(var2 == 3);
 }

@@ -58,7 +58,7 @@ void Script::Game::InitState()
     UserData::Init(L);
 
     // Create _MAIN, _ENV metatable, to access _G when not found
-    luaL_newmetatable(L, "_MAIN");
+    luaL_newmetatable(L, MT_NAME);
 
     int type = lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS);
     lua_setfield(L, -2, "__index"); // _MAIN.__index = _G

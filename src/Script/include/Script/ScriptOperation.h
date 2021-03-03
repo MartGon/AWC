@@ -11,7 +11,8 @@ namespace Script
 {
     class Type;
 
-    const unsigned int SCRIPT = 9;
+    extern const unsigned int SCRIPT;
+    extern const char* MT_NAME;
 
     class ScriptOperation : public Operation::OperationI
     {
@@ -32,7 +33,7 @@ namespace Script
 
     private:
         ScriptOperation(lua_State* luaState, Type& type) : 
-            scriptType_{type}, luaState_{luaState}, argsTable_{luaState, "_MAIN"}, OperationI{SCRIPT}
+            scriptType_{type}, luaState_{luaState}, argsTable_{luaState, MT_NAME}, OperationI{SCRIPT}
         {
 
         }
