@@ -11,18 +11,6 @@ const luaL_Reg UserData::Game::methods[] = {
         {NULL, NULL}
     };
 
-void UserData::Game::Init(lua_State* luaState)
-{
-    UserData::RegisterMetatable(luaState, MT_NAME, methods);
-
-    return;
-}
-
-void UserData::Game::PushLight(lua_State* luaState, ::Game* game)
-{
-    UserData::PushLight(luaState, MT_NAME, game);
-}
-
 int UserData::Game::GetMap(lua_State* L)
 {   
     auto game = UserData::ToLightUserData<::Game>(L, MT_NAME);

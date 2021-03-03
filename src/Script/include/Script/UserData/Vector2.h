@@ -16,4 +16,5 @@ namespace Script::UserData::Vector2
     int New(lua_State* luaState);
 
     int Get(lua_State* luaState);
+    int Add(lua_State* luaState);
 }

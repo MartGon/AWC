@@ -11,21 +11,6 @@ const luaL_Reg UserData::Map::methods[] = {
         {NULL, NULL}
     };
 
-void UserData::Map::Init(lua_State* luaState)
-{
-    UserData::RegisterMetatable(luaState, MT_NAME, methods);
-}
-
-void UserData::Map::PushLight(lua_State* luaState, ::Map* map)
-{
-    UserData::PushLight(luaState, MT_NAME, map);
-}
-
-Map* UserData::Map::ToMap(lua_State* luaState, int index)
-{
-    return UserData::ToLightUserData<::Map>(luaState, MT_NAME, index);
-}
-
 int UserData::Map::GetUnit(lua_State* luaState)
 {
     auto map = UserData::ToLightUserData<::Map>(luaState, MT_NAME, 1);

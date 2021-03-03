@@ -9,7 +9,6 @@
 
 namespace Script
 {
-
     class LuaState
     {
     public:
@@ -37,8 +36,7 @@ namespace Script
     public:
         Game()
         {
-            auto L = ls.GetLuaState();
-            UserData::Init(L);
+            InitState();
         }
 
         ~Game()
@@ -61,6 +59,8 @@ namespace Script
         void PushScript(unsigned int id, unsigned int prio = PRIORITY_DEFAULT);
 
     private:
+
+        void InitState();
 
         LuaState ls;
 

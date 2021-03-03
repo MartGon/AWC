@@ -338,7 +338,7 @@ TEST_CASE("Lua Table test")
 
     // Scope so lt is destroyed before luaState
     {
-        LuaTable lt{luaState};
+        Script::LuaTable lt{luaState};
 
         SUBCASE("Integers")
         {

@@ -12,11 +12,6 @@ const luaL_Reg UserData::UnitMovement::methods[] = {
     {NULL, NULL}
 };
 
-void UserData::UnitMovement::Init(lua_State* luaState)
-{
-    UserData::RegisterMetatable(luaState, MT_NAME, methods);
-}
-
 int UserData::UnitMovement::CanMove(lua_State* luaState)
 {
     auto unitMove = UserData::ToFullUserData<::UnitMovement>(luaState, MT_NAME);

@@ -7,6 +7,8 @@ const char* UserData::Vector2::MT_NAME = "Utils_Vector2";
 const char* UserData::Vector2::LIB_NAME = "Vector2";
 
 const luaL_Reg UserData::Vector2::methods[] = {
+    {"__gc", UserData::Delete<::Vector2>},
+    {"__add", Vector2::Add},
     {NULL, NULL}
 };
 
@@ -19,13 +21,13 @@ void UserData::Vector2::Init(lua_State* luaState)
 {
     luaL_newmetatable(luaState, MT_NAME);
 
+    // Overload Access
     lua_pushstring(luaState, "__index");
     lua_pushcfunction(luaState, Vector2::Get);
     lua_settable(luaState, -3); // Metatable.__index = Get
 
-    lua_pushstring(luaState, "__gc");
-    lua_pushcfunction(luaState, UserData::Delete<::Vector2>);
-    lua_settable(luaState, -3);
+    // Register Meta Methods
+    luaL_setfuncs(luaState, methods, 0);
 
     lua_pop(luaState, 1);
 
@@ -58,6 +60,17 @@ int UserData::Vector2::Get(lua_State* luaState)
     }
     else
         luaL_error(luaState, "Invalid index %s", index.c_str());
+
+    return 1;
+}
+
+int UserData::Vector2::Add(lua_State* luaState)
+{
+    ::Vector2* a = UserData::ToFullUserData<::Vector2>(luaState, MT_NAME);
+    ::Vector2* b = UserData::ToFullUserData<::Vector2>(luaState, MT_NAME, 2);
+
+    ::Vector2 sum = *a + *b;
+    UserData::PushFullUserData(luaState, MT_NAME, sum);
 
     return 1;
 }

@@ -27,7 +27,7 @@ unsigned int Script::Game::CreateScript(unsigned int typeId)
     return id;
 }
 
-LuaTable& Script::Game::GetScriptTable(unsigned int id)
+Script::LuaTable& Script::Game::GetScriptTable(unsigned int id)
 {
     if(UnorderedMapUtils::Contains(scripts_, id))
     {
@@ -47,4 +47,20 @@ void Script::Game::PushScript(unsigned int id, unsigned int prio)
 
         //scripts_.erase(id);
     }
+}
+
+// Private
+
+void Script::Game::InitState()
+{
+    // Init userdata
+    auto L = ls.GetLuaState();
+    UserData::Init(L);
+
+    // Create _MAIN, _ENV metatable, to access _G when not found
+    luaL_newmetatable(L, "_MAIN");
+
+    int type = lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS);
+    lua_setfield(L, -2, "__index"); // _MAIN.__index = _G
+    lua_pop(L, 1);
 }

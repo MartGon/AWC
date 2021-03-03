@@ -10,7 +10,7 @@ namespace Test::Script::UserData
             ref = sGame.CreateScript(sType);
         }
 
-        inline LuaTable& lt()
+        inline ::Script::LuaTable& lt()
         {
             return sGame.GetScriptTable(ref);
         }
