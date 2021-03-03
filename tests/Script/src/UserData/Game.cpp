@@ -3,7 +3,7 @@
 #include <AWC.h>
 #include <Script.h>
 
-#include <Test/Script/UserData/UserData.h>
+#include <Test/Script/Script.h>
 
 TEST_CASE("Game userdata")
 {
@@ -19,7 +19,7 @@ TEST_CASE("Game userdata")
     SUBCASE("GetMapCount")
     {
         std::string path = std::string(SCRIPTS_DIR) + "UserData/Game/GetMapCount.lua";
-        Test::Script::UserData::TestScript t(path, sGame);
+        Test::Script::TestScript t(path, sGame);
         sGame.PushScript(t.ref);
         game.Run();
 
@@ -29,7 +29,7 @@ TEST_CASE("Game userdata")
     SUBCASE("GetMap")
     {
         std::string path = std::string(SCRIPTS_DIR) + "UserData/Game/GetMap.lua";
-        Test::Script::UserData::TestScript t(path, sGame);
+        Test::Script::TestScript t(path, sGame);
         auto& sTable = t.lt();
         sTable.SetInt("mapIndex", 0);
         sGame.PushScript(t.ref);

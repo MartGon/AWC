@@ -450,3 +450,40 @@ TEST_CASE("GC")
     // Implicit Count = 0;
 }
 
+#include <Test/Script/Script.h>
+
+TEST_CASE("ENV with __index _G")
+{
+    Script::Game sGame;
+    auto& game = sGame.GetGame();
+
+    std::string path1 = std::string(SCRIPTS_DIR) + "Global1.lua";
+    Test::Script::TestScript ts1(path1, sGame);
+
+    std::string path2 = std::string(SCRIPTS_DIR) + "Global2.lua";
+    Test::Script::TestScript ts2(path2, sGame);
+    
+    sGame.PushScript(ts1.ref);
+    sGame.PushScript(ts2.ref);
+    game.Run();
+
+    // Ts1 Table
+    auto& ts1Table = sGame.GetScriptTable(ts1.ref);
+    auto global1 = ts1Table.GetInt("global");
+    auto var1 = ts1Table.GetInt("var1");
+    auto var2 = ts1Table.GetInt("var2");
+
+    CHECK(global1 == 15);
+    CHECK(var1 == 12);
+    CHECK(var2 == 0);
+
+    // Ts2 Table
+    auto& ts2Table = sGame.GetScriptTable(ts2.ref);
+    auto global2 = ts2Table.GetInt("global");
+    var1 = ts2Table.GetInt("var1");
+    var2 = ts2Table.GetInt("var2");
+
+    CHECK(global2 == 4);
+    CHECK(var1 == 0);
+    CHECK(var2 == 3);
+}

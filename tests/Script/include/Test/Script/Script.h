@@ -1,6 +1,6 @@
 #include <Script.h>
 
-namespace Test::Script::UserData
+namespace Test::Script
 {
     struct TestScript
     {

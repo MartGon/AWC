@@ -3,7 +3,7 @@
 #include <AWC.h>
 #include <Script.h>
 
-#include <Test/Script/UserData/UserData.h>
+#include <Test/Script/Script.h>
 #include <Tests/AWC/UnitTest.h>
 
 TEST_CASE("Vector2 userdata")
@@ -13,8 +13,8 @@ TEST_CASE("Vector2 userdata")
 
     SUBCASE("New")
     {
-        std::string path = Test::Script::UserData::GetUserDataPath() + "/Vector2/New.lua";
-        Test::Script::UserData::TestScript t(path, sGame);
+        std::string path = Test::Script::GetUserDataPath() + "/Vector2/New.lua";
+        Test::Script::TestScript t(path, sGame);
 
         auto& sTable = t.lt();
 

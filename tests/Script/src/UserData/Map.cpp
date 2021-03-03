@@ -3,7 +3,7 @@
 #include <AWC.h>
 #include <Script.h>
 
-#include <Test/Script/UserData/UserData.h>
+#include <Test/Script/Script.h>
 #include <Tests/AWC/UnitTest.h>
 
 TEST_CASE("Map userdata")
@@ -27,8 +27,8 @@ TEST_CASE("Map userdata")
 
     SUBCASE("GetUnit")
     {
-        std::string path = Test::Script::UserData::GetUserDataPath() + "/Map/GetUnit.lua";
-        Test::Script::UserData::TestScript t(path, sGame);
+        std::string path = Test::Script::GetUserDataPath() + "/Map/GetUnit.lua";
+        Test::Script::TestScript t(path, sGame);
 
         auto& sTable = t.lt();
         sTable.SetFullUserData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});

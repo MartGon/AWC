@@ -2,10 +2,10 @@
 SET(SOURCES
 
     src/ScriptTest.cpp
+    src/Script.cpp
 
     src/UserData/Game.cpp
     src/UserData/Map.cpp
-    src/UserData/UserData.cpp
     src/UserData/Vector2.cpp
 )
 
