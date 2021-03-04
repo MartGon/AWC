@@ -28,6 +28,11 @@ void UserData::Vector2::Init(lua_State* luaState)
     lua_pushcfunction(luaState, Vector2::Get);
     lua_settable(luaState, -3); // Metatable.__index = Get
 
+    // Overload Assignment
+    lua_pushstring(luaState, "__newindex");
+    lua_pushcfunction(luaState, Vector2::Set);
+    lua_settable(luaState, -3); // Metatable.__index = Get
+
     // Register Meta Methods
     luaL_setfuncs(luaState, methods, 0);
 
@@ -52,14 +57,26 @@ int UserData::Vector2::Get(lua_State* luaState)
     ::Vector2* vec = UserData::ToFullUserData<::Vector2>(luaState, MT_NAME);
     std::string index = std::string(luaL_checkstring(luaState, 2));
 
-    bool isIndexValid = index == "x" || index == "y";
-    if(isIndexValid)
-    {
-        if(index == "x")
-            lua_pushinteger(luaState, vec->x);
-        else
-            lua_pushinteger(luaState, vec->y);
-    }
+    if(index == "x")
+        lua_pushinteger(luaState, vec->x);
+    else if( index == "y")
+        lua_pushinteger(luaState, vec->y);
+    else
+        luaL_error(luaState, "Invalid index %s", index.c_str());
+
+    return 1;
+}
+
+int UserData::Vector2::Set(lua_State* luaState)
+{
+    ::Vector2* vec = UserData::ToFullUserData<::Vector2>(luaState, MT_NAME);
+    std::string index = std::string(luaL_checkstring(luaState, 2));
+    auto n = luaL_checkinteger(luaState, 3);
+
+    if(index == "x")
+        vec->x = n;
+    else if( index == "y")
+        vec->y = n;
     else
         luaL_error(luaState, "Invalid index %s", index.c_str());
 

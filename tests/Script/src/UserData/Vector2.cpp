@@ -63,4 +63,35 @@ TEST_CASE("Vector2 userdata")
         bool eq = sTable.GetBool("eq");
         CHECK(eq == true);
     }
+    SUBCASE("Get")
+    {
+        std::string path = Test::Script::GetUserDataPath() + "/Vector2/Get.lua";
+        Test::Script::TestScript t(path, sGame);
+
+        auto& sTable = t.lt();
+
+        sGame.PushScript(t.ref);
+        game.Run();
+
+        int x = sTable.GetInt("x");
+        int y = sTable.GetInt("y");
+
+        CHECK(x == 5);
+        CHECK(y == 1);
+    }
+    SUBCASE("Assingment")
+    {
+        std::string path = Test::Script::GetUserDataPath() + "/Vector2/Assignment.lua";
+        Test::Script::TestScript t(path, sGame);
+
+        auto& sTable = t.lt();
+
+        sGame.PushScript(t.ref);
+        game.Run();
+
+        Vector2 v = *sTable.GetFullUserData<Vector2>("origin", Script::UserData::Vector2::MT_NAME);
+
+        CHECK(v.x == 2);
+        CHECK(v.y == 8);
+    }
 }
