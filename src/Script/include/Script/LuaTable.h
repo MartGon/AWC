@@ -97,7 +97,7 @@ namespace Script
         {
             lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
             lua_getfield(luaState_, -1, key.c_str());
-            T* ptr = Script::UserData::UserData::ToFullUserData<T>(luaState_, mtName, -1);
+            T* ptr = Script::UserData::UserData::ToUserData<T>(luaState_, mtName, -1);
             lua_pop(luaState_, 2);
 
             return ptr;
@@ -117,7 +117,7 @@ namespace Script
         {
             lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
             lua_getfield(luaState_, -1, key.c_str());
-            T* ptr = Script::UserData::UserData::ToLightUserData<T>(luaState_, mtName, -1);
+            T* ptr = Script::UserData::UserData::ToUserData<T>(luaState_, mtName, -1);
             lua_pop(luaState_, 2);
 
             return ptr;

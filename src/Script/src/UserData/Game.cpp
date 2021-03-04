@@ -13,7 +13,7 @@ const luaL_Reg UserData::Game::methods[] = {
 
 int UserData::Game::GetMap(lua_State* L)
 {   
-    auto game = UserData::ToLightUserData<::Game>(L, MT_NAME);
+    auto game = UserData::ToUserData<::Game>(L, MT_NAME);
     auto index = luaL_checkinteger(L, 2);
 
     bool indexValid = index < game->GetMapCount() && index >= 0;
@@ -31,7 +31,7 @@ int UserData::Game::GetMap(lua_State* L)
 
 int UserData::Game::GetMapCount(lua_State* luaState)
 {
-    auto game = UserData::ToLightUserData<::Game>(luaState, MT_NAME);
+    auto game = UserData::ToUserData<::Game>(luaState, MT_NAME);
 
     int mapCount = game->GetMapCount();
     lua_pushinteger(luaState, mapCount);

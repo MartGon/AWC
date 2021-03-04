@@ -28,9 +28,3 @@ void UserData::RegisterLib(lua_State* luaState, const char* libName, const luaL_
     luaL_setfuncs(luaState, funcs, 0);
     lua_setglobal(luaState, libName);
 }
-
-void UserData::PushLight(lua_State* luaState, const char* mtName, void* userdata)
-{
-    lua_pushlightuserdata(luaState, userdata);
-    luaL_setmetatable(luaState, mtName);
-}

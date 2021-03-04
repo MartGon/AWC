@@ -13,8 +13,8 @@ const luaL_Reg UserData::Map::methods[] = {
 
 int UserData::Map::GetUnit(lua_State* luaState)
 {
-    auto map = UserData::ToLightUserData<::Map>(luaState, MT_NAME, 1);
-    auto pos = UserData::ToFullUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
+    auto map = UserData::ToUserData<::Map>(luaState, MT_NAME, 1);
+    auto pos = UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
 
     bool validPos = map->IsPositionValid(pos->x, pos->y);
     if(validPos)

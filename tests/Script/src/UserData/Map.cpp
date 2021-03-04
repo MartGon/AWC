@@ -23,21 +23,23 @@ TEST_CASE("Map userdata")
 
     game.AddMap(map);
 
-    game.AddUnit(soldier, {0, 0}, 0);
+    game.AddUnit(soldier, {2, 0}, 0);
 
     SUBCASE("GetUnit")
     {
         std::string path = Test::Script::GetUserDataPath() + "/Map/GetUnit.lua";
         Test::Script::TestScript t(path, sGame);
+        
+        auto L = sGame.GetLuaState();
 
         auto& sTable = t.lt();
+        sTable.SetLightUserData("map", Script::UserData::Map::MT_NAME, &game.GetMap(0));
         sTable.SetFullUserData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
+
+        auto m = sTable.GetLightUserData<::Map>("map", Script::UserData::Map::MT_NAME);
 
         sGame.PushScript(t.ref);
         game.Run();
-
-        auto value = sTable.GetInt("value");
-        CHECK(value == 2);
 
         auto found = sTable.GetInt("found");
         CHECK(found == 0);

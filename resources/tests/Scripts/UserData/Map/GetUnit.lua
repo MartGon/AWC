@@ -2,12 +2,9 @@
 
 function Execute(game)
 
-    map = game:GetMap(0);
-    value = origin.x;
-
     unit = map:GetUnit(origin);
     
-    if unit then
+    if unit ~= nil then
         found = true;
     end
 

@@ -57,6 +57,9 @@ void Script::Game::InitState()
     auto L = ls.GetLuaState();
     UserData::Init(L);
 
+    // Open standard libs
+    luaL_openlibs(L);
+
     // Create _MAIN, _ENV metatable, to access _G when not found
     luaL_newmetatable(L, MT_NAME);
 
