@@ -85,7 +85,7 @@ namespace Script
         T* SetFullUserData(std::string key, const char* mtName, T userdata)
         {
             lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
-            auto ptr = Script::UserData::UserData::PushFullUserData(luaState_, mtName, userdata);
+            auto ptr = Script::UserData::UserData::PushGCData(luaState_, mtName, userdata);
             lua_setfield(luaState_, -2, key.c_str());
             lua_pop(luaState_, 1);
 
@@ -107,7 +107,7 @@ namespace Script
         void SetLightUserData(std::string key, const char* mtName, T userdata)
         {
             lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
-            Script::UserData::UserData::PushLight(luaState_, mtName, userdata);
+            Script::UserData::UserData::PushRawData(luaState_, mtName, userdata);
             lua_setfield(luaState_, -2, key.c_str());
             lua_pop(luaState_, 1);
         }

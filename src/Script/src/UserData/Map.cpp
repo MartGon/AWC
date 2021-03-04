@@ -22,7 +22,7 @@ int UserData::Map::GetUnit(lua_State* luaState)
         auto unit = map->GetUnit(pos->x, pos->y);
 
         if(unit)
-            UserData::PushLight(luaState, Unit::MT_NAME, unit.get());
+            UserData::PushRawData(luaState, Unit::MT_NAME, unit.get());
         else
             lua_pushnil(luaState);
     }

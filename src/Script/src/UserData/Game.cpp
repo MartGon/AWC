@@ -21,7 +21,7 @@ int UserData::Game::GetMap(lua_State* L)
     if(indexValid)
     {
         auto& map = game->GetMap(index);
-        UserData::PushLight(L, Map::MT_NAME, &map);
+        UserData::PushRawData(L, Map::MT_NAME, &map);
     }
     else
         luaL_error(L, "Map index %d is not valid", index);

@@ -21,7 +21,7 @@ namespace Script::UserData::UserData
     }
 
     template <typename T>
-    void PushLight(lua_State* luaState, const  char* mtName, T* userdata)
+    void PushRawData(lua_State* luaState, const  char* mtName, T* userdata)
     {
         T** ptr = static_cast<T**>(lua_newuserdata(luaState, sizeof(void*)));
         *ptr = userdata;
@@ -30,7 +30,7 @@ namespace Script::UserData::UserData
     }
 
     template <typename T>
-    T* PushFullUserData(lua_State* luaState, const char* mtName, T value)
+    T* PushGCData(lua_State* luaState, const char* mtName, T value)
     {
         T** ptr = static_cast<T**>(lua_newuserdata(luaState, sizeof(T*)));
         *ptr = new T(value);
