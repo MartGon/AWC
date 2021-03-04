@@ -11,7 +11,7 @@ namespace Script::UserData::UserData
     void RegisterLib(lua_State* luaState, const char* libName, const luaL_Reg* funcs);
 
     template <typename T>
-    T* ToUserData(lua_State* luaState, std::string mtName, int index = 1)
+    T* ToUserData(lua_State* luaState, std::string mtName, int index)
     {
         T* userdata = static_cast<T*>(*static_cast<T**>(luaL_checkudata(luaState, index, mtName.c_str())));
         std::string error{mtName + " expected"};
