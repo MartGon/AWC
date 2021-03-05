@@ -10,7 +10,7 @@ using namespace Script;
 const char* UserData::Unit::MT_NAME = "AWC_Unit";
 
 const luaL_Reg UserData::Unit::methods[] = {
-    {"CaculateMovement", Unit::CalculateMovement},
+    {"CalculateMovement", Unit::CalculateMovement},
     {NULL, NULL}
 };
 
@@ -24,7 +24,7 @@ int UserData::Unit::CalculateMovement(lua_State* luaState)
     auto unit = UserData::ToUserData<::Unit>(luaState, MT_NAME, 1);
     auto map = UserData::ToUserData<::Map>(luaState, Map::MT_NAME, 2);
     auto vector2 = UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 3);
-    
+
     auto unitMovement = unit->CalculateMovement(*map, *vector2);
     auto unitMove = UserData::PushGCData(luaState, MT_NAME, unitMovement);
 
