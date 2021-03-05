@@ -8,6 +8,7 @@ SET(SOURCES
     src/UserData/Map.cpp
     src/UserData/Vector2.cpp
     src/UserData/Unit.cpp
+    src/UserData/UnitMovement.cpp
 )
 
 add_executable(ScriptTest ${SOURCES})
