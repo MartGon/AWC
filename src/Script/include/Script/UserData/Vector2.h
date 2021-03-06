@@ -21,4 +21,6 @@ namespace Script::UserData::Vector2
     int Add(lua_State* luaState);
     int Sub(lua_State* luaState);
     int Eq(lua_State* luaState);
+
+    int ToString(lua_State* luaState);
 }

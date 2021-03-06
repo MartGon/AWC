@@ -11,6 +11,7 @@ const luaL_Reg UserData::Vector2::methods[] = {
     {"__add", Vector2::Add},
     {"__sub", Vector2::Sub},
     {"__eq", Vector2::Eq},
+    {"__tostring", Vector2::ToString},
     {NULL, NULL}
 };
 
@@ -112,6 +113,16 @@ int UserData::Vector2::Eq(lua_State* luaState)
 
     bool eq = *a == *b;
     lua_pushboolean(luaState, eq);
+
+    return 1;
+}
+
+int UserData::Vector2::ToString(lua_State* luaState)
+{
+    ::Vector2* a = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 1);
+
+    std::string str = a->ToString();
+    lua_pushstring(luaState, str.c_str());
 
     return 1;
 }
