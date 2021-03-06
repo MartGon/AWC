@@ -93,7 +93,7 @@ namespace Script
         }
 
         template <typename T>
-        T* GetFullUserData(std::string key, const char* mtName)
+        T* GetUserData(std::string key, const char* mtName)
         {
             lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
             lua_getfield(luaState_, -1, key.c_str());
@@ -110,17 +110,6 @@ namespace Script
             Script::UserData::UserData::PushRawData(luaState_, mtName, userdata);
             lua_setfield(luaState_, -2, key.c_str());
             lua_pop(luaState_, 1);
-        }
-
-        template <typename T>
-        T* GetLightUserData(std::string key, const char* mtName)
-        {
-            lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
-            lua_getfield(luaState_, -1, key.c_str());
-            T* ptr = Script::UserData::UserData::ToUserData<T>(luaState_, mtName, -1);
-            lua_pop(luaState_, 2);
-
-            return ptr;
         }
 
         void SetMetaTable(std::string mtName)
