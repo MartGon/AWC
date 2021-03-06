@@ -87,7 +87,7 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef
             UserData::UserData::PushRawData(luaState, UserData::Game::MT_NAME, &game);
 
             // Call function
-            // TODO: Push prio params beforehand
+            // TODO: Push prio param beforehand
             auto ret = lua_pcall(luaState, 1, 0, 0);
             if(ret == LUA_OK)
             {

@@ -26,7 +26,6 @@ namespace Operation
 
         ResultCode code_;
         std::string reason_;
-        // TODO: Add string with explanation
     };
 
     enum Type : unsigned int

@@ -5,11 +5,7 @@
 #include <string>
 
 #include <AWC.h>
-
-// TODO: This should be part of its own lib. If included in AWC.h, then 
-// DB module cannot be built
-#include <Script/ScriptType.h>
-#include <Script/ScriptGame.h>
+#include <Script.h>
 
 int ExecuteLuaFile(lua_State* luaState, std::string file)
 {

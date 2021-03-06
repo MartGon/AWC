@@ -77,7 +77,9 @@ namespace Event
     private:
 
         void RemoveListeners(std::vector<Listener>& listeners, Entity::GUID ent);
-
-        std::unordered_map<unsigned int, std::vector<Listener>> eventListeners_;
+        
+        // TODO: Change to id system, then allow to register for any or a mask of operation types -> Change operation types to powers of 2
+        // It says unsigned int, but it actually is Operation::Type
+        std::unordered_map<unsigned int, std::vector<Listener>> eventListeners_; 
     };
 }
