@@ -19,6 +19,7 @@ namespace Operation
     private:
 
         ResultCode code_;
+        // TODO: Add string with explanation
     };
 
     enum Type : unsigned int

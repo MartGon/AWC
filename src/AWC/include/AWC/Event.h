@@ -28,6 +28,7 @@ namespace Event
 
             Type type;
             Process process;
+            // TODO: Add Operation Result
         };
     }
 

@@ -97,7 +97,14 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef
             {
                 std::string error = lua_tostring(luaState, -1);
                 lua_pop(luaState, 1);
+                int top = lua_gettop(luaState);
+
+                throw AWCException{error};
+
+                // TODO: Do this way, exception kept for debugging
+                /*
                 res = Operation::Result{Operation::ERROR};
+                */
             }
         }
     }

@@ -3,6 +3,7 @@ SET(SOURCES
 
     src/ScriptTest.cpp
     src/Script.cpp
+    src/Experiments.cpp
 
     src/UserData/Game.cpp
     src/UserData/Map.cpp

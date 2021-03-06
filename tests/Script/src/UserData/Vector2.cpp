@@ -21,7 +21,7 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        Vector2* origin = sTable.GetFullUserData<::Vector2>("origin", Script::UserData::Vector2::MT_NAME);
+        Vector2* origin = sTable.GetUserData<::Vector2>("origin", Script::UserData::Vector2::MT_NAME);
         CHECK(*origin == Vector2{0, 0});
     }
     SUBCASE("__add")
@@ -34,7 +34,7 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        Vector2* sum = sTable.GetFullUserData<::Vector2>("sum", Script::UserData::Vector2::MT_NAME);
+        Vector2* sum = sTable.GetUserData<::Vector2>("sum", Script::UserData::Vector2::MT_NAME);
         CHECK(*sum == Vector2{1, 1});
     }
     SUBCASE("__sub")
@@ -47,7 +47,7 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        Vector2* sub = sTable.GetFullUserData<::Vector2>("sub", Script::UserData::Vector2::MT_NAME);
+        Vector2* sub = sTable.GetUserData<::Vector2>("sub", Script::UserData::Vector2::MT_NAME);
         CHECK(*sub == Vector2{0, 1});
     }
     SUBCASE("__eq")
@@ -89,7 +89,7 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        Vector2 v = *sTable.GetFullUserData<Vector2>("origin", Script::UserData::Vector2::MT_NAME);
+        Vector2 v = *sTable.GetUserData<Vector2>("origin", Script::UserData::Vector2::MT_NAME);
 
         CHECK(v.x == 2);
         CHECK(v.y == 8);

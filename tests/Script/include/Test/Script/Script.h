@@ -4,10 +4,10 @@ namespace Test::Script
 {
     struct TestScript
     {
-        TestScript(std::string path, ::Script::Game& sGame) : path{path}, sGame{sGame}
+        TestScript(std::string path, ::Script::Game& sGame) 
+            : path{path}, sGame{sGame}, sType{sGame.CreateScriptType(path)}, ref{sGame.CreateScript(sType)}
         {
-            auto sType = sGame.CreateScriptType(path);
-            ref = sGame.CreateScript(sType);
+
         }
 
         inline ::Script::LuaTable& lt()
@@ -17,7 +17,8 @@ namespace Test::Script
 
         std::string path;
         ::Script::Game& sGame;
-        int ref;
+        unsigned int sType;
+        unsigned int ref;
     };
 
     std::string GetUserDataPath();

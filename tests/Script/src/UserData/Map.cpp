@@ -36,7 +36,7 @@ TEST_CASE("Map userdata")
         sTable.SetLightUserData("map", Script::UserData::Map::MT_NAME, &game.GetMap(0));
         sTable.SetFullUserData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
 
-        auto m = sTable.GetLightUserData<::Map>("map", Script::UserData::Map::MT_NAME);
+        auto m = sTable.GetUserData<::Map>("map", Script::UserData::Map::MT_NAME);
 
         sGame.PushScript(t.ref);
         game.Run();
