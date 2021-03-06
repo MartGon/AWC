@@ -8,6 +8,8 @@ function Execute(game)
 
     print(origin);
     print(dest);
+    print(_ENV);
+    print(_G);
 
     if unit then
         if origin ~= dest then

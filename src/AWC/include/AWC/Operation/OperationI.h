@@ -14,11 +14,18 @@ namespace Operation
     public:
 
         Result(ResultCode code) : code_{code} {}
+        Result(ResultCode code, std::string reason) : code_{code}, reason_{reason} {}
         explicit operator bool() const { return code_ == SUCCESS;}
+
+        inline std::string GetReason() const
+        {
+            return reason_;
+        }
 
     private:
 
         ResultCode code_;
+        std::string reason_;
         // TODO: Add string with explanation
     };
 

@@ -134,14 +134,24 @@ TEST_CASE("Error handling")
             std::cout << e.what() << '\n';
         }
 
-        auto s = sGame.CreateScript(t.sType);
-        sTable = sGame.GetScriptTable(s);
+        auto s2 = sGame.CreateScript(t.sType);
+        auto& s2t = sGame.GetScriptTable(s2);
 
-        sTable.SetInt("mapIndex", 0);
-        sTable.SetFullUserData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
-        sTable.SetFullUserData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
+        s2t.SetInt("mapIndex", 0);
+        s2t.SetFullUserData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
+        s2t.SetFullUserData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
 
-        sGame.PushScript(s);
+        using namespace Script;
+
+        auto origin1 = sTable.GetUserData<::Vector2>("origin", UserData::Vector2::MT_NAME);
+        auto origin2 = s2t.GetUserData<::Vector2>("origin", UserData::Vector2::MT_NAME);
+
+        CHECK(*origin1 != * origin2);
+
+        sGame.PushScript(s2);
+        game.Run();
+
+        sGame.PushScript(t.ref);
         game.Run();
     }
 }

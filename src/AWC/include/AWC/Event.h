@@ -18,6 +18,7 @@ namespace Event
             NONE,
             PRE,
             POST,
+            ERROR,
             ANY
         };
 
@@ -25,10 +26,12 @@ namespace Event
         {  
             Notification(Type type, Process process) : 
                 type{type}, process{process} {};
+            Notification(Type type, Process process, Operation::Result res) :
+                type{type}, process{process}, res{res} {}
 
             Type type;
             Process process;
-            // TODO: Add Operation Result
+            std::optional<Operation::Result> res;
         };
     }
 
@@ -61,7 +64,7 @@ namespace Event
     {
     public:
         void Register(Listener listener);
-        void Register(Entity::GUID entity, unsigned int type, HandlerCallback eventListener, Notification::Type notType = Notification::Type::ANY);
+        void Register(Entity::GUID entity, unsigned int type, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
         void Register(unsigned int opType, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
 
         void Unregister(Entity::GUID entity, unsigned int type);

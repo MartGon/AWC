@@ -87,7 +87,7 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef
             UserData::UserData::PushRawData(luaState, UserData::Game::MT_NAME, &game);
 
             // Call function
-            // TODO: Push game and prio params beforehand
+            // TODO: Push prio params beforehand
             auto ret = lua_pcall(luaState, 1, 0, 0);
             if(ret == LUA_OK)
             {
@@ -99,12 +99,7 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef
                 lua_pop(luaState, 1);
                 int top = lua_gettop(luaState);
 
-                throw AWCException{error};
-
-                // TODO: Do this way, exception kept for debugging
-                /*
-                res = Operation::Result{Operation::ERROR};
-                */
+                res = Operation::Result{Operation::ERROR, error};
             }
         }
     }

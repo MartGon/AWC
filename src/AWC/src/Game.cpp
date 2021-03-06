@@ -389,6 +389,11 @@ void Game::Run()
                 Notification::Notification notification{Notification::Type::POST, process};
                 events.Notify(notification, *this);
             }
+            else
+            {
+                Notification::Notification notification{Notification::Type::ERROR, process, res};
+                events.Notify(notification, *this);
+            }
         }
     }
 }
