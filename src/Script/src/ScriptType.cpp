@@ -96,7 +96,8 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef
             else
             {
                 std::string error = lua_tostring(luaState, -1);
-                throw AWCException(error);
+                lua_pop(luaState, 1);
+                res = Operation::Result{Operation::ERROR};
             }
         }
     }
