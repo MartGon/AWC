@@ -9,26 +9,30 @@ const char* UserData::Map::MT_NAME = "AWC_Map";
 const luaL_Reg UserData::Map::methods[] = {
         {"GetUnit", Map::GetUnit},
         {"RemoveUnit", Map::RemoveUnit},
+        {"AddUnit", Map::AddUnit},
         {NULL, NULL}
     };
+
+void UserData::Map::CheckMapPosition(lua_State* luaState, ::Map* map, ::Vector2 pos)
+{
+    bool validPos = map->IsPositionValid(pos.x, pos.y);
+    if(!validPos)
+    {
+        luaL_error(luaState, "Map position %s is not valid", pos.ToString().c_str());
+    }
+}
 
 int UserData::Map::GetUnit(lua_State* luaState)
 {
     auto map = UserData::ToUserData<::Map>(luaState, MT_NAME, 1);
-    auto pos = UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
+    auto pos = *UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
 
-    bool validPos = map->IsPositionValid(pos->x, pos->y);
-    if(validPos)
-    {
-        auto unit = map->GetUnit(pos->x, pos->y);
-
-        if(unit)
-            UserData::PushGCData(luaState, Unit::MT_NAME, unit);
-        else
-            lua_pushnil(luaState);
-    }
+    Map::CheckMapPosition(luaState, map, pos);
+    auto unit = map->GetUnit(pos);
+    if(unit)
+        UserData::PushGCData(luaState, Unit::MT_NAME, unit);
     else
-        luaL_error(luaState, "Map position (%d, %d) is not valid", pos->x, pos->y);
+        lua_pushnil(luaState);
 
     return 1;
 }
@@ -36,15 +40,23 @@ int UserData::Map::GetUnit(lua_State* luaState)
 int UserData::Map::RemoveUnit(lua_State* luaState)
 {
     auto map = UserData::ToUserData<::Map>(luaState, MT_NAME, 1);
-    auto pos = UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
+    auto pos = *UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
 
-    bool validPos = map->IsPositionValid(pos->x, pos->y);
-    if(validPos)
-    {
-        map->RemoveUnit(pos->x, pos->y);
-    }
-    else
-        luaL_error(luaState, "Map position (%d, %d) is not valid", pos->x, pos->y);
+    Map::CheckMapPosition(luaState, map, pos);
+    map->RemoveUnit(pos);
 
-    return 1;
+    return 0;
+}
+
+int UserData::Map::AddUnit(lua_State* luaState)
+{
+    auto map = UserData::ToUserData<::Map>(luaState, MT_NAME, 1);
+    auto pos = *UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 2);
+    auto unit = *UserData::ToUserData<::UnitPtr>(luaState, Unit::MT_NAME, 3);
+
+    Map::CheckMapPosition(luaState, map, pos);
+    map->AddUnit(pos, unit);
+        
+
+    return 0;
 }

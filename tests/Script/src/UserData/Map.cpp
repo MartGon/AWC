@@ -55,13 +55,20 @@ TEST_CASE("Map userdata")
         auto L = sGame.GetLuaState();
 
         auto& sTable = t.lt();
-        sTable.SetRawData("map", Script::UserData::Map::MT_NAME, &game.GetMap(0));
-        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
+        auto& mapRef = game.GetMap(0);
+        Vector2 origin{0, 0};
+        sTable.SetRawData("map", Script::UserData::Map::MT_NAME, &mapRef);
+        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, origin);
+
+        CHECK(soldier.use_count() == 2); // Count is 2: Here and Map
 
         sGame.PushScript(t.ref);
         game.Run();
 
         auto success = sTable.GetBool("success");
         CHECK(success == true);
+        CHECK(mapRef.GetUnit(origin).get() == nullptr);
+
+        CHECK(soldier.use_count() == 2); // Count is now 2: Here and Lua
     }
 }
