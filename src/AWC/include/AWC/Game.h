@@ -47,9 +47,9 @@ public:
     void RemoveUnit(Vector2 pos, uint mapIndex = 0);
 
     // Operation
-    void RemoveOperation(unsigned int id);
+    void RemoveProcess(unsigned int id);
     std::optional<Process> GetProcess(unsigned int id);
-    void Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
+    unsigned int Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
     void Run();
 
     // State
@@ -95,7 +95,7 @@ private:
     std::vector<Player> players_;
     std::vector<Map> maps_;
 
-    std::vector<Process> opQueue_;
+    std::vector<Process> processQueue_;
     std::vector<Process> opHistory_;
     unsigned int nextProcessId = 0;
     

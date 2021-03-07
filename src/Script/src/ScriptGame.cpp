@@ -38,15 +38,18 @@ Script::LuaTable& Script::Game::GetScriptTable(unsigned int id)
         throw AWCException("GetScriptTable Error: Script with id " + std::to_string(id) + " did not exist");
 }
 
-void Script::Game::PushScript(unsigned int id, unsigned int prio)
+unsigned int Script::Game::PushScript(unsigned int id, unsigned int prio)
 {
+    unsigned int pid = -1;
     if(UnorderedMapUtils::Contains(scripts_, id))
     {
         auto& script = scripts_.at(id);
-        game_.Push(script, prio);
+        pid = game_.Push(script, prio);
 
         //scripts_.erase(id);
     }
+
+    return pid;
 }
 
 // Private

@@ -117,14 +117,14 @@ void Game::RemoveUnit(Vector2 pos, uint mapIndex)
 
 // Operation
 
-void Game::RemoveOperation(unsigned int id)
+void Game::RemoveProcess(unsigned int id)
 {
-    for(int index = 0; index < opQueue_.size(); index++)
+    for(int index = 0; index < processQueue_.size(); index++)
     {   
-        auto proc = opQueue_.at(index);
+        auto proc = processQueue_.at(index);
         if(proc.id == id)
         {
-            VectorUtils::RemoveByIndex(opQueue_, index);
+            VectorUtils::RemoveByIndex(processQueue_, index);
             break;
         }
     }
@@ -136,7 +136,7 @@ std::optional<Process> Game::GetProcess(unsigned int id)
 {
     std::optional<Process> process;
 
-    for(auto p : opQueue_)
+    for(auto p : processQueue_)
     {
         if(p.id == id)
             return p;
@@ -145,10 +145,13 @@ std::optional<Process> Game::GetProcess(unsigned int id)
     return process;
 }
 
-void Game::Push(OperationIPtr op, uint8_t prio)
+unsigned int Game::Push(OperationIPtr op, uint8_t prio)
 {
-    opQueue_.push_back(Process{nextProcessId++, op, prio});
+    unsigned int pid = nextProcessId++;
+    processQueue_.push_back(Process{pid, op, prio});
     SortQueue();
+
+    return pid;
 }
 
 // State
@@ -365,9 +368,9 @@ void Game::Run()
     using namespace Operation;
     using namespace Event;
 
-    while(!opQueue_.empty())
+    while(!processQueue_.empty())
     {
-        Process& ref = opQueue_.front();
+        Process& ref = processQueue_.front();
 
         if(!ref.announced)
         {
@@ -377,23 +380,21 @@ void Game::Run()
         }
 
         // Take a copy. Taking a ref 
-        Process process = opQueue_.front();
+        Process process = processQueue_.front();
         if(process.announced)
         {
             Result res = process.op->Execute(*this, process.priority);
-            opHistory_.push_back(process);
+            Notification::Type type = Notification::Type::ERROR;
 
-            opQueue_.erase(opQueue_.begin());
             if(res)
             {
-                Notification::Notification notification{Notification::Type::POST, process};
-                events.Notify(notification, *this);
+                opHistory_.push_back(process);
+                type = Notification::Type::POST;
             }
-            else
-            {
-                Notification::Notification notification{Notification::Type::ERROR, process, res};
-                events.Notify(notification, *this);
-            }
+            processQueue_.erase(processQueue_.begin());
+
+            Notification::Notification notification{type, process, res};
+            events.Notify(notification, *this);
         }
     }
 }
@@ -404,5 +405,5 @@ void Game::SortQueue()
     {
         return a.priority > b.priority || (a.priority == b.priority && a.id < b.id);
     };
-    std::sort(opQueue_.begin(), opQueue_.end(), greater);
+    std::sort(processQueue_.begin(), processQueue_.end(), greater);
 }

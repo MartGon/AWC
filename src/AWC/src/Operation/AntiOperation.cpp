@@ -8,10 +8,10 @@ Result AntiOperation::Execute(Game& game, uint8_t prio)
 {
     Result res{SUCCESS};
 
-    game.RemoveOperation(targetId_);
+    game.RemoveProcess(targetId_);
 
     // TODO: Check if the opQueue size changed
-    // or RemoveOperation could return a bool or something
+    // or RemoveProcess could return a bool or something
 
     return res;
 }

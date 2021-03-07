@@ -56,7 +56,6 @@ int UserData::Map::AddUnit(lua_State* luaState)
 
     Map::CheckMapPosition(luaState, map, pos);
     map->AddUnit(pos, unit);
-        
 
     return 0;
 }

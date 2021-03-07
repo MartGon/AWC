@@ -71,4 +71,25 @@ TEST_CASE("Map userdata")
 
         CHECK(soldier.use_count() == 2); // Count is now 2: Here and Lua
     }
+    SUBCASE("AddUnit")
+    {
+        std::string path = Test::Script::GetUserDataPath() + "/Map/AddUnit.lua";
+        Test::Script::TestScript t(path, sGame);
+        
+        auto L = sGame.GetLuaState();
+
+        auto& sTable = t.lt();
+        auto& mapRef = game.GetMap(0);
+        Vector2 origin{0, 0};
+        sTable.SetRawData("map", Script::UserData::Map::MT_NAME, &mapRef);
+        sTable.SetGCData("unit", Script::UserData::Unit::MT_NAME, soldier);
+        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, origin);
+
+        sGame.PushScript(t.ref);
+        game.Run();
+
+        auto success = sTable.GetBool("success");
+        CHECK(success == true);
+        CHECK(mapRef.GetUnit(origin).get() != nullptr);
+    }
 }
