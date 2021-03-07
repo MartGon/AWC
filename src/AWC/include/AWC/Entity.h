@@ -9,7 +9,8 @@ namespace Entity
     {
         NIL,
         UNIT,
-        TILE
+        TILE,
+        HANDLER
     };
 
     struct GUID
@@ -38,27 +39,4 @@ namespace Entity
     };
 
     static const GUID NIL{Type::NIL, 0, 0};
-
-    union EntityU
-    {
-        EntityU() {};
-        EntityU(GUID unitGUID) : unitGUID{unitGUID} {};
-
-        Entity::GUID unitGUID;
-    };
-
-    struct Entity
-    {
-        Entity(Type type) : type{type} {};
-        Entity(Type type, GUID guid) :
-            type{type}, guid{guid} {};
-
-        bool operator==(const Entity& b) const
-        {
-            return type == b.type && guid.unitGUID == b.guid.unitGUID;
-        }
-
-        Type type;
-        EntityU guid;
-    };
 };

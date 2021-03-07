@@ -64,10 +64,10 @@ namespace Event
     {
     public:
         void Register(Listener listener);
-        void Register(Entity::GUID entity, unsigned int type, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
-        void Register(unsigned int opType, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
+        void Register(Entity::GUID entity, unsigned int optype, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
+        Entity::GUID Register(unsigned int opType, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
 
-        void Unregister(Entity::GUID entity, unsigned int type);
+        void Unregister(Entity::GUID entity, unsigned int optype);
         void Unregister(Entity::GUID entity);
 
         void Notify(Process p, Notification::Type notType, Game& game);
@@ -80,6 +80,8 @@ namespace Event
         
         // TODO: Change to id system, then allow to register for any or a mask of operation types -> Change operation types to powers of 2
         // It says unsigned int, but it actually is Operation::Type
-        std::unordered_map<unsigned int, std::vector<Listener>> eventListeners_; 
+        std::unordered_map<unsigned int, std::vector<Listener>> eventListeners_;
+
+        unsigned int lastId = 0;
     };
 }

@@ -47,8 +47,8 @@ public:
     void RemoveUnit(Vector2 pos, uint mapIndex = 0);
 
     // Operation
-    void RemoveProcess(unsigned int id);
-    std::optional<Process> GetProcess(unsigned int id);
+    void RemoveProcess(unsigned int pid);
+    std::optional<Process> GetProcess(unsigned int pid);
     unsigned int Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
     void Run();
 

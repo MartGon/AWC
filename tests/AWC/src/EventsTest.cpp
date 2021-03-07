@@ -105,7 +105,6 @@ TEST_CASE("Event test")
 Event::Listener GetNilListener(Event::HandlerCallback cb)
 {
     auto entType = Entity::Type::UNIT;
-
     auto opType = Operation::Type::CUSTOM;
     Event::Handler handler{opType, cb};
 
@@ -160,14 +159,13 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
     SUBCASE("Listener removal")
     {   
         int count = 0;
-        Event::HandlerCallback cb = [&count](Event::Notification::Notification noti, Entity::GUID ent, Game& game)
+        Event::HandlerCallback cb = [&count](Event::Notification::Notification noti, Entity::GUID, Game&)
         {
             if(noti.type == Event::Notification::Type::PRE)
                 count++;
         };
-        auto listener = GetNilListener(cb);
         auto& subject = game.GetSubject();
-        subject.Register(listener);
+        auto guid = subject.Register(Operation::Type::CUSTOM, cb);
 
         OperationIPtr custom{new Operation::Custom([&count](Game& game){
             
@@ -180,12 +178,26 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         // Is called here
         CHECK(count == 1);
 
-        subject.Unregister(listener.entity, listener.handler.type);
+        subject.Unregister(guid, Operation::Type::CUSTOM);
         game.Push(custom);
         game.ExecuteCommand(null, 0);
 
         // Is not called after being unregistered
         CHECK(count == 1);
+
+        guid = subject.Register(Operation::Type::CUSTOM, cb);
+        game.Push(custom);
+        game.ExecuteCommand(null, 0);
+
+        // Counts again
+        CHECK(count == 2);
+
+        subject.Unregister(guid);
+        game.Push(custom);
+        game.ExecuteCommand(null, 0);
+
+        // Stays the same after being removed
+        CHECK(count == 2);
     }
 }
 
