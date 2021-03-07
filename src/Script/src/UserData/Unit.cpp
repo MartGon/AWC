@@ -21,7 +21,7 @@ void UserData::Unit::Init(lua_State* luaState)
 
 int UserData::Unit::CalculateMovement(lua_State* luaState)
 {
-    auto unit = UserData::ToUserData<::Unit>(luaState, MT_NAME, 1);
+    auto unit = *UserData::ToUserData<::UnitPtr>(luaState, MT_NAME, 1);
     auto map = UserData::ToUserData<::Map>(luaState, Map::MT_NAME, 2);
     auto vector2 = UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 3);
 

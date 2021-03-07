@@ -122,8 +122,8 @@ TEST_CASE("Error handling")
         auto unitMove = soldier->CalculateMovement(game.GetMap(0), {2, 0});
         
         sTable.SetInt("mapIndex", 0);
-        sTable.SetFullUserData("origin", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
-        sTable.SetFullUserData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
+        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
+        sTable.SetGCData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
 
         try{
             sGame.PushScript(t.ref);
@@ -138,8 +138,8 @@ TEST_CASE("Error handling")
         auto& s2t = sGame.GetScriptTable(s2);
 
         s2t.SetInt("mapIndex", 0);
-        s2t.SetFullUserData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
-        s2t.SetFullUserData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
+        s2t.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
+        s2t.SetGCData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
 
         using namespace Script;
 

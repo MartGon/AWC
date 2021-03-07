@@ -82,7 +82,7 @@ namespace Script
         }
 
         template<typename T>
-        T* SetFullUserData(std::string key, const char* mtName, T userdata)
+        T* SetGCData(std::string key, const char* mtName, T userdata)
         {
             lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
             auto ptr = Script::UserData::UserData::PushGCData(luaState_, mtName, userdata);
@@ -104,7 +104,7 @@ namespace Script
         }
 
         template<typename T>
-        void SetLightUserData(std::string key, const char* mtName, T userdata)
+        void SetRawData(std::string key, const char* mtName, T userdata)
         {
             lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
             Script::UserData::UserData::PushRawData(luaState_, mtName, userdata);

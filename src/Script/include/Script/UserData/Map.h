@@ -10,4 +10,5 @@ namespace Script::UserData::Map
     extern const luaL_Reg methods[];
 
     int GetUnit(lua_State* L);
+    int RemoveUnit(lua_State* L);
 }

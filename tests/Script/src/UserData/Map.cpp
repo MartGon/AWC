@@ -33,10 +33,8 @@ TEST_CASE("Map userdata")
         auto L = sGame.GetLuaState();
 
         auto& sTable = t.lt();
-        sTable.SetLightUserData("map", Script::UserData::Map::MT_NAME, &game.GetMap(0));
-        sTable.SetFullUserData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
-
-        auto m = sTable.GetUserData<::Map>("map", Script::UserData::Map::MT_NAME);
+        sTable.SetRawData("map", Script::UserData::Map::MT_NAME, &game.GetMap(0));
+        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
 
         sGame.PushScript(t.ref);
         game.Run();
@@ -44,9 +42,26 @@ TEST_CASE("Map userdata")
         auto found = sTable.GetInt("found");
         CHECK(found == 0);
 
-        sTable.SetFullUserData("origin", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
+        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
 
         sGame.PushScript(t.ref);
         game.Run();
+    }
+    SUBCASE("RemoveUnit")
+    {
+        std::string path = Test::Script::GetUserDataPath() + "/Map/RemoveUnit.lua";
+        Test::Script::TestScript t(path, sGame);
+        
+        auto L = sGame.GetLuaState();
+
+        auto& sTable = t.lt();
+        sTable.SetRawData("map", Script::UserData::Map::MT_NAME, &game.GetMap(0));
+        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
+
+        sGame.PushScript(t.ref);
+        game.Run();
+
+        auto success = sTable.GetBool("success");
+        CHECK(success == true);
     }
 }
