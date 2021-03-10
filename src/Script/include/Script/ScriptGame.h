@@ -7,6 +7,8 @@
 #include <Script/ScriptType.h>
 #include <Script/UserData.h>
 
+#include <Script/DB/Database.h>
+
 namespace Script
 {
     class LuaState
@@ -70,6 +72,7 @@ namespace Script
         std::unordered_map<unsigned int, std::shared_ptr<Script::ScriptOperation>> scripts_;
         unsigned int sIndex_ = 0;
 
+        DB::Database<UnitType> db;
         ::Game game_;
     };
 

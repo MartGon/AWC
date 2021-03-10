@@ -4,13 +4,15 @@ set(SOURCES
     src/ScriptGame.cpp
     src/UserData.cpp
 
+    src/DB/Database.cpp
+    src/DB/Table.cpp
+
     src/UserData/Game.cpp
     src/UserData/Map.cpp
     src/UserData/Unit.cpp
     src/UserData/UserData.cpp
     src/UserData/UnitMovement.cpp
     src/UserData/Vector2.cpp
-
 )
 
 add_library(Script ${SOURCES})
