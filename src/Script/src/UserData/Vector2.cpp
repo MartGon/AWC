@@ -12,6 +12,8 @@ const luaL_Reg UserData::Vector2::methods[] = {
     {"__sub", Vector2::Sub},
     {"__eq", Vector2::Eq},
     {"__tostring", Vector2::ToString},
+    {"__index", Vector2::Get},
+    {"__newindex", Vector2::Set},
     {NULL, NULL}
 };
 
@@ -19,28 +21,6 @@ const luaL_Reg UserData::Vector2::functions[] = {
     {"new", Vector2::New},
     {NULL, NULL}
 };
-
-void UserData::Vector2::Init(lua_State* luaState)
-{
-    luaL_newmetatable(luaState, MT_NAME);
-
-    // Overload Access
-    lua_pushstring(luaState, "__index");
-    lua_pushcfunction(luaState, Vector2::Get);
-    lua_settable(luaState, -3); // Metatable.__index = Get
-
-    // Overload Assignment
-    lua_pushstring(luaState, "__newindex");
-    lua_pushcfunction(luaState, Vector2::Set);
-    lua_settable(luaState, -3); // Metatable.__index = Get
-
-    // Register Meta Methods
-    luaL_setfuncs(luaState, methods, 0);
-
-    lua_pop(luaState, 1);
-
-    UserData::RegisterLib(luaState, LIB_NAME, functions);
-}
 
 int UserData::Vector2::New(lua_State* luaState)
 {

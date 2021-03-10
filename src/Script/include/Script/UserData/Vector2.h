@@ -12,7 +12,6 @@ namespace Script::UserData::Vector2
     extern const luaL_Reg methods[];
     extern const luaL_Reg functions[];
 
-    void Init(lua_State* luaState);
     int New(lua_State* luaState);
 
     int Get(lua_State* luaState);

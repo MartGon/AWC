@@ -5,7 +5,8 @@ using namespace Script;
 void UserData::Init(lua_State* luaState)
 {
     // Special case
-    Vector2::Init(luaState);
+    UserData::RegisterLib(luaState, Vector2::LIB_NAME, Vector2::functions);
+    UserData::RegisterMetatable(luaState, Vector2::MT_NAME, Vector2::methods);
 
     // Objects
     UserData::RegisterMetatable(luaState, Game::MT_NAME, Game::methods);
