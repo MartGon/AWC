@@ -4,6 +4,10 @@
 
 #include <AWC/AWCException.h>
 
+#ifdef _DEBUG
+    #include <iostream>
+#endif
+
 using namespace Script;
 
 Script::Type::Type(lua_State* luaState, std::string scriptPath) : scriptPath_{scriptPath}, luaState_{luaState}, executeRef_{-1}, undoRef_{-1}
@@ -98,7 +102,10 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef
                 std::string error = lua_tostring(luaState, -1);
                 lua_pop(luaState, 1);
                 int top = lua_gettop(luaState);
-
+                
+                #ifdef _DEBUG
+                    std::cout << "Error ocurred while executing Lua Operation: " << error << "\n";
+                #endif 
                 res = Operation::Result{Operation::ERROR, error};
             }
         }

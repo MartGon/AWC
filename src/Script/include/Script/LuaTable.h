@@ -36,9 +36,18 @@ namespace Script
             SetMetaTable(mtName);
         }
 
+        LuaTable(LuaTable&& lt)
+        {
+            this->tableRef_ = lt.tableRef_;
+            this->luaState_ = lt.luaState_;
+            this->mtName_ = lt.mtName_;
+        }
+        LuaTable(LuaTable& lt) = delete;
+
         ~LuaTable()
         {
             luaL_unref(luaState_, LUA_REGISTRYINDEX, tableRef_);
+
         }
     
         void SetInt(std::string key, int n)
@@ -143,20 +152,20 @@ namespace Script
             return b;
         }
 
-        std::optional<LuaTable> GetTable(std::string key)
+        std::unique_ptr<LuaTable> GetTable(std::string key)
         {
             PushLuaTable();
-            lua_getfield(luaState_, -1, key.c_str());
+            int type = lua_getfield(luaState_, -1, key.c_str());
             
-            return LuaTable{luaState_, 1};
+            return std::unique_ptr<LuaTable>(new LuaTable{luaState_, -1});
         }
 
-        std::optional<LuaTable> GetTable(int index)
+        std::unique_ptr<LuaTable> GetTable(int index)
         {
             PushLuaTable();
             lua_geti(luaState_, -1, index);
 
-            return LuaTable{luaState_, 1};
+            return std::unique_ptr<LuaTable>(new LuaTable{luaState_, -1});
         }
 
         template <typename T>
@@ -224,18 +233,33 @@ namespace Script
             lua_pop(luaState_, 1);
         }
 
-        bool ContainsValue(std::string key)
+        int GetKeyType(std::string key)
         {
             PushLuaTable();
             int type = lua_getfield(luaState_, -1, key.c_str());
+            lua_pop(luaState_, 2);
+
+            return type;
+        }
+
+        int GetIndexType(int index)
+        {
+            PushLuaTable();
+            int type = lua_geti(luaState_, -1, index);
+            lua_pop(luaState_, 2);
             
-            return type != LUA_TNIL;
+            return type;
+        }
+
+        bool ContainsValue(std::string key)
+        {            
+            return GetKeyType(key) != LUA_TNIL;
         }
 
         int Length()
         {
             PushLuaTable();
-            int len = luaL_len(luaState_, -1);
+            int len = lua_rawlen(luaState_, -1);
             lua_pop(luaState_, 1);
 
             return len;

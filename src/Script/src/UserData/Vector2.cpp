@@ -28,8 +28,6 @@ int UserData::Vector2::New(lua_State* luaState)
     int y = luaL_checkinteger(luaState, 2);
     ::Vector2* vec = UserData::PushGCData<::Vector2>(luaState, MT_NAME, ::Vector2{x, y});
 
-    luaL_setmetatable(luaState, MT_NAME);
-
     return 1;
 }
 

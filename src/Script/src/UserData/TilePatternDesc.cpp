@@ -1,4 +1,6 @@
 #include <Script/UserData/TilePatternDesc.h>
+#include <Script/UserData/Vector2.h>
+
 #include <Script/LuaTable.h>
 
 using namespace Script;
@@ -23,24 +25,46 @@ int UserData::TilePatternDesc::New(lua_State* luaState)
     LuaTable lt{luaState, 1};
 
     const std::string dirKey = "directions";
-    auto dirT = lt.GetTable(dirKey);
+    auto dirTable = lt.GetTable(dirKey);
 
     const std::string error = dirKey + " key did not exist on table";
-    luaL_argcheck(luaState, dirT.has_value(), 1, error.c_str());
+    luaL_argcheck(luaState, dirTable, 1, error.c_str());
 
-    
+    std::vector<::Vector2> dirs;
+    auto len = dirTable->Length();
+    for(int i = 1; i < len + 1; i++)
+    {
+        auto type = dirTable->GetIndexType(i);
+        auto vec = dirTable->GetUserData<::Vector2>(i, Vector2::MT_NAME);
+        dirs.push_back(*vec);
+    }
 
-
+    ::TilePatternDescPtr tpdp = ::TilePatternDesc::Create(dirs);
+    UserData::PushGCData(luaState, MT_NAME, tpdp);
     
     return 1;
 }
 
 /*
+    --- Option 1 ----
     TilePatternDesc.New({
         "directions" = 
         {
-            Vector2.New(0, 0),
+            Vector2.New(1, 0),
+            Vector2.New(0, 1),
+            Vector2.New(-1, 0)
+            Vector2.New(0, -1)
+        }
+    })
 
+    --- Option 2 ---
+    TilePatternDesc.New({
+        "directions" = 
+        {
+            {x = 1, y = 0},
+            {x = 0, y = 1},
+            {x = -1, y = 0},
+            {x = 0, y = -1},
         }
     })
 */
