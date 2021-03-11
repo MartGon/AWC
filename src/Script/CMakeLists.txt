@@ -13,6 +13,7 @@ set(SOURCES
     src/UserData/UserData.cpp
     src/UserData/UnitMovement.cpp
     src/UserData/Vector2.cpp
+    src/UserData/TilePatternDesc.cpp
 )
 
 add_library(Script ${SOURCES})
