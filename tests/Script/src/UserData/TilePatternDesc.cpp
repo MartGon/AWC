@@ -22,7 +22,7 @@ TEST_CASE("TilePatternDesc userdata")
         game.Run();
         
         int len = sTable.Length();
-        auto num = sTable.GetInt("num");
+        auto num = sTable.Get<int>("num");
         
         auto tpd = *sTable.GetUserData<::TilePatternDescPtr>("tp", Script::UserData::TilePatternDesc::MT_NAME);
         std::vector<::Vector2> dirs {::Vector2{0, 1}, ::Vector2{1, 0}};

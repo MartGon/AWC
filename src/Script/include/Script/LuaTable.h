@@ -8,164 +8,79 @@
 
 namespace Script
 {
-    class ScriptOperation;
+    template<typename T>
+    void Push(lua_State* state, T val);
+
+    template<>
+    void Push<int>(lua_State* state, int val);
+    template<>
+    void Push<std::string>(lua_State* state, std::string val);
+    template<>
+    void Push<bool>(lua_State* state, bool val);
+
+    template <typename T>
+    T To(lua_State* state, int index);
+    template<>
+    int To<int>(lua_State* state, int index);
+    template<>
+    std::string To<std::string>(lua_State* state, int index);
+
+    template<>
+    bool To<bool>(lua_State* state, int index);
 
     class LuaTable
     {
-    friend class Script::ScriptOperation;
     public:
         // Creates a Wrapper for a table at the top of the stack
-        LuaTable(lua_State* luaState, int index) : luaState_{luaState}
-        {
-            lua_pushvalue(luaState, index);
-            tableRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
-        }
+        LuaTable(lua_State* luaState, int index);
 
         // Creates a Wrapper for a new table
-        LuaTable(lua_State* luaState) : luaState_{luaState}
-        {
-            lua_newtable(luaState);
-            tableRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
-        }
+        LuaTable(lua_State* luaState);
 
         // Creates a Wrapper for a new table, with the given metatable.
-        LuaTable(lua_State* luaState, std::string mtName) : luaState_{luaState}, mtName_{mtName}
-        {
-            lua_newtable(luaState);
-            tableRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
-            SetMetaTable(mtName);
-        }
+        LuaTable(lua_State* luaState, std::string mtName);
 
-        LuaTable(LuaTable&& lt)
-        {
-            this->tableRef_ = lt.tableRef_;
-            this->luaState_ = lt.luaState_;
-            this->mtName_ = lt.mtName_;
-        }
+        LuaTable(LuaTable&& lt);
         LuaTable(LuaTable& lt) = delete;
 
-        ~LuaTable()
-        {
-            luaL_unref(luaState_, LUA_REGISTRYINDEX, tableRef_);
-
-        }
+        ~LuaTable();
     
-        void SetInt(std::string key, int n)
+        template<typename T>
+        void Set(std::string key, T val)
         {
             PushLuaTable();
-            lua_pushinteger(luaState_, n);
+            Push(luaState_, val);
             SetField(key);
         }
 
-        void SetInt(int index, int n)
+        template<typename T>
+        void Set(int index, T val)
         {
             PushLuaTable();
-            lua_pushinteger(luaState_, n);
+            Push(luaState_, val);
             SetField(index);
         }
 
-        int GetInt(std::string key)
+        template<typename T>
+        T Get(std::string key)
         {
             PushLuaTable();
             lua_getfield(luaState_, -1, key.c_str());
-            int val = lua_tointeger(luaState_, -1);
-            lua_pop(luaState_, 2);
-            return val;
-        }
-
-        int GetInt(int index)
-        {
-            PushLuaTable();
-
-            lua_geti(luaState_, -1, index);
-            int val = lua_tointeger(luaState_, -1);
+            auto val = To<T>(luaState_, -1);
             lua_pop(luaState_, 2);
 
             return val;
         }
 
-        void SetString(std::string key, std::string str)
-        {
-            PushLuaTable();
-            lua_pushstring(luaState_, str.c_str());
-            SetField(key);
-        }
-
-        void SetString(int index, std::string str)
-        {
-            PushLuaTable();
-            lua_pushstring(luaState_, str.c_str());
-            SetField(index);
-        }
-
-        std::string GetString(std::string key)
-        {
-            PushLuaTable();
-            lua_getfield(luaState_, -1, key.c_str());
-            std::string str = std::string(lua_tostring(luaState_, -1));
-            lua_pop(luaState_, 2);
-
-            return str;
-        }
-
-        std::string GetString(int index)
+        template<typename T>
+        T Get(int index)
         {
             PushLuaTable();
             lua_geti(luaState_, -1, index);
-            std::string str = std::string(lua_tostring(luaState_, -1));
+            auto val = To<T>(luaState_, -1);
             lua_pop(luaState_, 2);
-
-            return str;
-        }
-
-        void SetBool(std::string key, bool b)
-        {
-            PushLuaTable();
-            lua_pushboolean(luaState_, b);
-            SetField(key);
-        }
-
-        void SetBool(int index, bool b)
-        {
-            PushLuaTable();
-            lua_pushboolean(luaState_, b);
-            SetField(index);
-        }
-
-        bool GetBool(std::string key)
-        {
-            PushLuaTable();
-            lua_getfield(luaState_, -1, key.c_str());
-            bool b = lua_toboolean(luaState_, -1);
-            lua_pop(luaState_, 2);
-
-            return b;
-        }
-
-        bool GetBool(int index)
-        {
-            PushLuaTable();
-            lua_geti(luaState_, -1, index);
-            bool b = lua_toboolean(luaState_, -1);
-            lua_pop(luaState_, 2);
-
-            return b;
-        }
-
-        std::unique_ptr<LuaTable> GetTable(std::string key)
-        {
-            PushLuaTable();
-            int type = lua_getfield(luaState_, -1, key.c_str());
             
-            return std::unique_ptr<LuaTable>(new LuaTable{luaState_, -1});
-        }
-
-        std::unique_ptr<LuaTable> GetTable(int index)
-        {
-            PushLuaTable();
-            lua_geti(luaState_, -1, index);
-
-            return std::unique_ptr<LuaTable>(new LuaTable{luaState_, -1});
+            return val;
         }
 
         template <typename T>
@@ -226,72 +141,27 @@ namespace Script
             SetField(index);
         }
 
-        void SetMetaTable(std::string mtName)
-        {
-            PushLuaTable();
-            luaL_setmetatable(luaState_, mtName.c_str());
-            lua_pop(luaState_, 1);
-        }
+        std::unique_ptr<LuaTable> GetTable(std::string key);
+        std::unique_ptr<LuaTable> GetTable(int index);
 
-        int GetKeyType(std::string key)
-        {
-            PushLuaTable();
-            int type = lua_getfield(luaState_, -1, key.c_str());
-            lua_pop(luaState_, 2);
+        void SetMetaTable(std::string mtName);
+        int GetKeyType(std::string key);
+        int GetIndexType(int index);
+        bool ContainsValue(std::string key);
+        int Length();
 
-            return type;
-        }
-
-        int GetIndexType(int index)
-        {
-            PushLuaTable();
-            int type = lua_geti(luaState_, -1, index);
-            lua_pop(luaState_, 2);
-            
-            return type;
-        }
-
-        bool ContainsValue(std::string key)
-        {            
-            return GetKeyType(key) != LUA_TNIL;
-        }
-
-        int Length()
-        {
-            PushLuaTable();
-            int len = lua_rawlen(luaState_, -1);
-            lua_pop(luaState_, 1);
-
-            return len;
-        }
-
-    private:
-
-        void PushLuaTable()
-        {
-            int type = lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
-            if(type != LUA_TTABLE)
-                throw AWCException("LuaTable: Internal Lua table was not type LUA_TTABLE");
-        }
-
-        // Assumes that table is at -2 and value is at the top of the stack
-        // Pops the internal lua table from the stack
-        void SetField(std::string key)
-        {
-            lua_setfield(luaState_, -2, key.c_str());
-            lua_pop(luaState_, 1);
-        }
-
-        void SetField(int index)
-        {
-            lua_seti(luaState_, -2, index);
-            lua_pop(luaState_, 1);
-        }
-
+        void PushLuaTable();
         int GetRef()
         {
             return tableRef_;
         }
+
+    private:
+
+        // Assumes that table is at -2 and value is at the top of the stack
+        // Pops the internal lua table from the stack
+        void SetField(std::string key);
+        void SetField(int index);
 
         lua_State* luaState_;
         std::string mtName_;

@@ -3,6 +3,7 @@ set(SOURCES
     src/ScriptOperation.cpp
     src/ScriptGame.cpp
     src/UserData.cpp
+    src/LuaTable.cpp
 
     src/DB/Database.cpp
     src/DB/Table.cpp

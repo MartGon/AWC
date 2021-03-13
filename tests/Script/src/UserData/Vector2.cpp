@@ -60,7 +60,7 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        bool eq = sTable.GetBool("eq");
+        bool eq = sTable.Get<bool>("eq");
         CHECK(eq == true);
     }
     SUBCASE("Get")
@@ -73,8 +73,8 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        int x = sTable.GetInt("x");
-        int y = sTable.GetInt("y");
+        int x = sTable.Get<int>("x");
+        int y = sTable.Get<int>("y");
 
         CHECK(x == 5);
         CHECK(y == 1);

@@ -21,20 +21,20 @@ TEST_CASE("Lua Table test")
 
         SUBCASE("Integers")
         {
-            lt.SetInt("Int", 1);
+            lt.Set("Int", 1);
 
             CHECK(lua_gettop(luaState) == 0);
 
-            auto var = lt.GetInt("Int");
+            auto var = lt.Get<int>("Int");
             CHECK(var == 1);
         }
         SUBCASE("Strings")
         {
-            lt.SetString("String", "str");
+            lt.Set<std::string>("String", "str");
 
             CHECK(lua_gettop(luaState) == 0);
 
-            auto var = lt.GetString("String");
+            auto var = lt.Get<std::string>("String");
             CHECK(var == "str");
         }
 
@@ -62,24 +62,24 @@ TEST_CASE("ScriptType Operations")
     {
         auto script = sg.CreateScript(st);
         auto& table = sg.GetScriptTable(script);
-        table.SetInt("value", 3);
+        table.Set("value", 3);
 
         sg.PushScript(script);
         sg.GetGame().Run();
 
-        CHECK(table.GetInt("value") == 6);
+        CHECK(table.Get<int>("value") == 6);
 
         
         sg.PushScript(script);
         sg.GetGame().Run();
 
-        CHECK(table.GetInt("value") == 9);
+        CHECK(table.Get<int>("value") == 9);
 
         sg.PushScript(script);
         CommandPtr null{new NullCommand()};
         sg.GetGame().ExecuteCommand(null);
 
-        CHECK(table.GetInt("value") == 12);
+        CHECK(table.Get<int>("value") == 12);
     }
     SUBCASE("Creation with wrong path")
     {
@@ -121,7 +121,7 @@ TEST_CASE("Error handling")
         auto& sTable = t.lt();
         auto unitMove = soldier->CalculateMovement(game.GetMap(0), {2, 0});
         
-        sTable.SetInt("mapIndex", 0);
+        sTable.Set("mapIndex", 0);
         sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
         sTable.SetGCData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
 
@@ -137,7 +137,7 @@ TEST_CASE("Error handling")
         auto s2 = sGame.CreateScript(t.sType);
         auto& s2t = sGame.GetScriptTable(s2);
 
-        s2t.SetInt("mapIndex", 0);
+        s2t.Set("mapIndex", 0);
         s2t.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
         s2t.SetGCData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
 

@@ -49,7 +49,7 @@ TEST_CASE("Unit userdata")
             std::cout << e.what() << '\n';
         }
 
-        auto canMove = sTable.GetBool("canMove");
+        auto canMove = sTable.Get<bool>("canMove");
         CHECK(canMove == true);
     }
 }

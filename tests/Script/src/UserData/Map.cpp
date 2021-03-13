@@ -39,7 +39,7 @@ TEST_CASE("Map userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        auto found = sTable.GetInt("found");
+        auto found = sTable.Get<int>("found");
         CHECK(found == 0);
 
         sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
@@ -65,7 +65,7 @@ TEST_CASE("Map userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        auto success = sTable.GetBool("success");
+        auto success = sTable.Get<bool>("success");
         CHECK(success == true);
         CHECK(mapRef.GetUnit(origin).get() == nullptr);
 
@@ -88,7 +88,7 @@ TEST_CASE("Map userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        auto success = sTable.GetBool("success");
+        auto success = sTable.Get<bool>("success");
         CHECK(success == true);
         CHECK(mapRef.GetUnit(origin).get() != nullptr);
     }

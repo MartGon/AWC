@@ -48,7 +48,7 @@ TEST_CASE("Unit userdata")
             std::cout << e.what() << '\n';
         }
 
-        auto calculated = sTable.GetBool("calculated");
+        auto calculated = sTable.Get<bool>("calculated");
         CHECK(calculated == true);
     }
 }

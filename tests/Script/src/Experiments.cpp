@@ -384,9 +384,9 @@ TEST_CASE("ENV with __index _G")
 
     // Ts1 Table
     auto& ts1Table = sGame.GetScriptTable(ts1.ref);
-    auto global1 = ts1Table.GetInt("global");
-    auto var1 = ts1Table.GetInt("var1");
-    auto var2 = ts1Table.GetInt("var2");
+    auto global1 = ts1Table.Get<int>("global");
+    auto var1 = ts1Table.Get<int>("var1");
+    auto var2 = ts1Table.Get<int>("var2");
 
     CHECK(global1 == 15);
     CHECK(var1 == 12);
@@ -394,9 +394,9 @@ TEST_CASE("ENV with __index _G")
 
     // Ts2 Table
     auto& ts2Table = sGame.GetScriptTable(ts2.ref);
-    auto global2 = ts2Table.GetInt("global");
-    var1 = ts2Table.GetInt("var1");
-    var2 = ts2Table.GetInt("var2");
+    auto global2 = ts2Table.Get<int>("global");
+    var1 = ts2Table.Get<int>("var1");
+    var2 = ts2Table.Get<int>("var2");
 
     CHECK(global2 == 4);
     CHECK(var1 == 0); // Nil, not defined
