@@ -5,16 +5,50 @@
 
 #include <Test/Script/Script.h>
 
-TEST_CASE("LuaTable")
+TEST_CASE("Lua Table test")
 {
-    Script::Game sGame;
-    auto& game = sGame.GetGame();
+    auto luaState = luaL_newstate();
 
-    std::string path = Test::Script::GetUserDataPath() + "/TilePatternDesc/New.lua";
-    Test::Script::TestScript t(path, sGame);
+    // Scope so lt is destroyed before luaState
+    {
+        Script::LuaTable lt{luaState};
 
-    auto& sTable = t.lt();
+        SUBCASE("Integers")
+        {
+            lt.Set("Int", 1);
 
-    sGame.PushScript(t.ref);
-    game.Run();
+            CHECK(lua_gettop(luaState) == 0);
+
+            auto var = lt.Get<int>("Int");
+            CHECK(var == 1);
+        }
+        SUBCASE("Strings")
+        {
+            lt.Set<std::string>("String", "str");
+
+            CHECK(lua_gettop(luaState) == 0);
+
+            auto var = lt.Get<std::string>("String");
+            CHECK(var == "str");
+        }
+        SUBCASE("Bools")
+        {
+            lt.Set("false", false);
+            lt.Set("true", true);
+
+            auto f = lt.Get<bool>("false");
+            auto t = lt.Get<bool>("true");
+
+            CHECK(f == false);
+            CHECK(t == true);
+        }
+        SUBCASE("UserData")
+        {
+            lt.SetGCData("vec", Script::UserData::Vector2::MT_NAME, Vector2{0, 1});
+        }
+
+        CHECK(lua_gettop(luaState) == 0);
+    }
+
+    lua_close(luaState);
 }

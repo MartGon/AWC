@@ -11,39 +11,6 @@
 #include <string>
 #include <iostream>
 
-TEST_CASE("Lua Table test")
-{
-    auto luaState = luaL_newstate();
-
-    // Scope so lt is destroyed before luaState
-    {
-        Script::LuaTable lt{luaState};
-
-        SUBCASE("Integers")
-        {
-            lt.Set("Int", 1);
-
-            CHECK(lua_gettop(luaState) == 0);
-
-            auto var = lt.Get<int>("Int");
-            CHECK(var == 1);
-        }
-        SUBCASE("Strings")
-        {
-            lt.Set<std::string>("String", "str");
-
-            CHECK(lua_gettop(luaState) == 0);
-
-            auto var = lt.Get<std::string>("String");
-            CHECK(var == "str");
-        }
-
-        CHECK(lua_gettop(luaState) == 0);
-    }
-
-    lua_close(luaState);
-}
-
 TEST_CASE("ScriptType Operations")
 {
     Script::Game sg;

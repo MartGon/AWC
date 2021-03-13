@@ -42,9 +42,13 @@ namespace Script::UserData::UserData
     template <typename T>
     void AddGCMethod(lua_State* luaState, const char* mtName)
     {
-        luaL_getmetatable(luaState, mtName);
-        lua_pushcfunction(luaState, Delete<T>);
-        lua_setfield(luaState, -2, "__gc");
+        int type = luaL_getmetatable(luaState, mtName);
+        if(type == LUA_TTABLE)
+        {
+            lua_pushcfunction(luaState, Delete<T>);
+            lua_setfield(luaState, -2, "__gc");
+        }
+
         lua_pop(luaState, 1);
     }
 

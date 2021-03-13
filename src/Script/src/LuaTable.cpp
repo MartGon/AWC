@@ -17,6 +17,12 @@ void Script::Push<std::string>(lua_State* state, std::string val)
 }
 
 template<>
+void Script::Push<const char*>(lua_State* state, const char* val)
+{
+    lua_pushstring(state, val);
+}
+
+template<>
 void Script::Push<bool>(lua_State* state, bool val)
 {
     lua_pushboolean(state, val);

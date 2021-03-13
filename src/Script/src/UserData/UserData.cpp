@@ -31,9 +31,13 @@ void UserData::RegisterLib(lua_State* luaState, const char* libName, const luaL_
 
 bool UserData::HasGCMethod(lua_State* luaState, const char* mtName)
 {
-    luaL_getmetatable(luaState, mtName);
-    int type = lua_getfield(luaState, -1, "__gc");
-    lua_pop(luaState, 2);
+    int type = luaL_getmetatable(luaState, mtName);
+    if(type == LUA_TTABLE)
+    {
+        int type = lua_getfield(luaState, -1, "__gc");
+        lua_pop(luaState, 1);
+    }
+    lua_pop(luaState, 1);
 
     return type != LUA_TNIL;
 }
