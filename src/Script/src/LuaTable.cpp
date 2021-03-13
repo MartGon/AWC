@@ -168,11 +168,9 @@ void LuaTable::PushLuaTable()
 void LuaTable::SetField(std::string key)
 {
     lua_setfield(luaState_, -2, key.c_str());
-    lua_pop(luaState_, 1);
 }
 
 void LuaTable::SetField(int index)
 {
     lua_seti(luaState_, -2, index);
-    lua_pop(luaState_, 1);
 }

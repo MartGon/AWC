@@ -35,12 +35,12 @@ int UserData::TilePatternDesc::New(lua_State* luaState)
     for(int i = 1; i < len + 1; i++)
     {
         auto type = dirTable->GetIndexType(i);
-        auto vec = dirTable->GetUserData<::Vector2>(i, Vector2::MT_NAME);
+        auto vec = dirTable->GetUserData<Vector2>(i);
         dirs.push_back(*vec);
     }
 
     ::TilePatternDescPtr tpdp = ::TilePatternDesc::Create(dirs);
-    UserData::PushGCData(luaState, MT_NAME, tpdp);
+    UserData::PushGCData<TilePatternDesc>(luaState, tpdp);
     
     return 1;
 }

@@ -6,6 +6,8 @@
 #include <Test/Script/Script.h>
 #include <Tests/AWC/UnitTest.h>
 
+using namespace Script;
+
 TEST_CASE("Vector2 userdata")
 {
     Script::Game sGame;
@@ -21,7 +23,7 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        Vector2* origin = sTable.GetUserData<::Vector2>("origin", Script::UserData::Vector2::MT_NAME);
+        ::Vector2* origin = sTable.GetUserData<UserData::Vector2>("origin");
         CHECK(*origin == Vector2{0, 0});
     }
     SUBCASE("__add")
@@ -34,7 +36,7 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        Vector2* sum = sTable.GetUserData<::Vector2>("sum", Script::UserData::Vector2::MT_NAME);
+        Vector2* sum = sTable.GetUserData<UserData::Vector2>("sum");
         CHECK(*sum == Vector2{1, 1});
     }
     SUBCASE("__sub")
@@ -47,7 +49,7 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        Vector2* sub = sTable.GetUserData<::Vector2>("sub", Script::UserData::Vector2::MT_NAME);
+        Vector2* sub = sTable.GetUserData<UserData::Vector2>("sub");
         CHECK(*sub == Vector2{0, 1});
     }
     SUBCASE("__eq")
@@ -89,7 +91,7 @@ TEST_CASE("Vector2 userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        Vector2 v = *sTable.GetUserData<Vector2>("origin", Script::UserData::Vector2::MT_NAME);
+        Vector2 v = *sTable.GetUserData<UserData::Vector2>("origin");
 
         CHECK(v.x == 2);
         CHECK(v.y == 8);

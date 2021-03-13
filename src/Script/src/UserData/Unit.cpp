@@ -21,12 +21,12 @@ void UserData::Unit::Init(lua_State* luaState)
 
 int UserData::Unit::CalculateMovement(lua_State* luaState)
 {
-    auto unit = *UserData::ToUserData<::UnitPtr>(luaState, MT_NAME, 1);
-    auto map = UserData::ToUserData<::Map>(luaState, Map::MT_NAME, 2);
-    auto vector2 = UserData::ToUserData<::Vector2>(luaState, Vector2::MT_NAME, 3);
+    auto unit = *UserData::ToUserData<Unit>(luaState, 1);
+    auto map = UserData::ToUserData<Map>(luaState, 2);
+    auto vector2 = UserData::ToUserData<Vector2>(luaState, 3);
 
     auto unitMovement = unit->CalculateMovement(*map, *vector2);
-    auto unitMove = UserData::PushGCData(luaState, UnitMovement::MT_NAME, unitMovement);
+    auto unitMove = UserData::PushGCData<UnitMovement>(luaState, unitMovement);
 
     return 1;
 }

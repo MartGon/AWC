@@ -33,8 +33,8 @@ TEST_CASE("Map userdata")
         auto L = sGame.GetLuaState();
 
         auto& sTable = t.lt();
-        sTable.SetRawData("map", Script::UserData::Map::MT_NAME, &game.GetMap(0));
-        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
+        sTable.SetDataRef<Script::UserData::Map>("map", &game.GetMap(0));
+        sTable.SetGCData<Script::UserData::Vector2>("origin", Vector2{2, 0});
 
         sGame.PushScript(t.ref);
         game.Run();
@@ -42,7 +42,7 @@ TEST_CASE("Map userdata")
         auto found = sTable.Get<int>("found");
         CHECK(found == 0);
 
-        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
+        sTable.SetGCData<Script::UserData::Vector2>("origin", Vector2{0, 0});
 
         sGame.PushScript(t.ref);
         game.Run();
@@ -57,8 +57,8 @@ TEST_CASE("Map userdata")
         auto& sTable = t.lt();
         auto& mapRef = game.GetMap(0);
         Vector2 origin{0, 0};
-        sTable.SetRawData("map", Script::UserData::Map::MT_NAME, &mapRef);
-        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, origin);
+        sTable.SetDataRef<Script::UserData::Map>("map", &mapRef);
+        sTable.SetGCData<Script::UserData::Vector2>("origin", origin);
 
         CHECK(soldier.use_count() == 2); // Count is 2: Here and Map
 
@@ -81,9 +81,9 @@ TEST_CASE("Map userdata")
         auto& sTable = t.lt();
         auto& mapRef = game.GetMap(0);
         Vector2 origin{0, 0};
-        sTable.SetRawData("map", Script::UserData::Map::MT_NAME, &mapRef);
-        sTable.SetGCData("unit", Script::UserData::Unit::MT_NAME, soldier);
-        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, origin);
+        sTable.SetDataRef<Script::UserData::Map>("map", &mapRef);
+        sTable.SetGCData<Script::UserData::Unit>("unit", soldier);
+        sTable.SetGCData<Script::UserData::Vector2>("origin", origin);
 
         sGame.PushScript(t.ref);
         game.Run();

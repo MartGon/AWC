@@ -61,6 +61,7 @@ namespace Script
             PushLuaTable();
             Push(luaState_, val);
             SetField(key);
+            lua_pop(luaState_, 1);
         }
 
         template<typename T, typename K>
@@ -85,43 +86,24 @@ namespace Script
             return ptr;
         }
 
-        template <typename T, typename K>
-        T* GetUserData(K key, const char* mtName)
-        {
-            PushLuaTable();
-            GetField(luaState_, -1, key);
-            T* ptr = Script::UserData::UserData::ToUserData<T>(luaState_, mtName, -1);
-            lua_pop(luaState_, 2);
-
-            return ptr;
-        }
-
         template <typename T>
         typename T::type* SetGCData(std::string key, typename T::type userdata)
         {
             PushLuaTable();
             auto ptr = Script::UserData::UserData::PushGCData<T>(luaState_, userdata);
             SetField(key);
+            lua_pop(luaState_, 1);
 
             return ptr;
         }
 
         template<typename T, typename K>
-        T* SetGCData(K key, const char* mtName, T userdata)
+        void SetDataRef(K key, typename T::type* userdata)
         {
             PushLuaTable();
-            auto ptr = Script::UserData::UserData::PushGCData(luaState_, mtName, userdata);
+            Script::UserData::UserData::PushDataRef<T>(luaState_, userdata);
             SetField(key);
-
-            return ptr;
-        }
-
-        template<typename T, typename K>
-        void SetRawData(K key, const char* mtName, T userdata)
-        {
-            PushLuaTable();
-            Script::UserData::UserData::PushRawData(luaState_, mtName, userdata);
-            SetField(key);
+            lua_pop(luaState_, 1);
         }
 
         std::unique_ptr<LuaTable> GetTable(std::string key);

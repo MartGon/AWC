@@ -8,6 +8,7 @@ namespace Script::UserData
 {
     struct Unit
     {
+        using type = ::UnitPtr;
         static const char* MT_NAME;
         static const luaL_Reg methods[];
         

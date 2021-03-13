@@ -35,9 +35,9 @@ TEST_CASE("Unit userdata")
         auto L = sGame.GetLuaState();
 
         auto& sTable = t.lt();
-        sTable.SetRawData("map", Script::UserData::Map::MT_NAME, &game.GetMap(0));
-        sTable.SetGCData("unit", Script::UserData::Unit::MT_NAME, soldier);
-        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
+        sTable.SetDataRef<Script::UserData::Map>("map", &game.GetMap(0));
+        sTable.SetGCData<Script::UserData::Unit>("unit", soldier);
+        sTable.SetGCData<Script::UserData::Vector2>("origin", Vector2{2, 0});
 
         try{        
             sGame.PushScript(t.ref);

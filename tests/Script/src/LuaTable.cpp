@@ -46,9 +46,9 @@ TEST_CASE("Lua Table test")
         {
             Script::UserData::Init(luaState);
 
-            lt.SetGCData("vec", Script::UserData::Vector2::MT_NAME, Vector2{0, 1});
+            lt.SetGCData<Script::UserData::Vector2>("vec", Vector2{0, 1});
 
-            auto vec = *lt.GetUserData<::Vector2>("vec", Script::UserData::Vector2::MT_NAME);
+            auto vec = *lt.GetUserData<Script::UserData::Vector2>("vec");
 
             CHECK(vec == Vector2{0, 1});
         }

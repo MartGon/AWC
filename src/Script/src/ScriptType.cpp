@@ -87,7 +87,7 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable& ta
 
         // Sets table to function ENV
         lua_setupvalue(luaState, 1, 1);
-        UserData::UserData::PushRawData(luaState, UserData::Game::MT_NAME, &game);
+        UserData::UserData::PushDataRef<UserData::Game>(luaState, &game);
 
         // Call function
         // TODO: Push prio param beforehand

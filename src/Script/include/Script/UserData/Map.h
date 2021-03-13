@@ -8,6 +8,7 @@ namespace Script::UserData
 {
     struct Map
     {
+        using type = ::Map;
         static const char* MT_NAME;
         static const luaL_Reg methods[];
         

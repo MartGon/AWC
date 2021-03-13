@@ -89,8 +89,8 @@ TEST_CASE("Error handling")
         auto unitMove = soldier->CalculateMovement(game.GetMap(0), {2, 0});
         
         sTable.Set("mapIndex", 0);
-        sTable.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
-        sTable.SetGCData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
+        sTable.SetGCData<Script::UserData::Vector2>("origin", Vector2{0, 0});
+        sTable.SetGCData<Script::UserData::Vector2>("dest", Vector2{0, 0});
 
         try{
             sGame.PushScript(t.ref);
@@ -105,13 +105,13 @@ TEST_CASE("Error handling")
         auto& s2t = sGame.GetScriptTable(s2);
 
         s2t.Set("mapIndex", 0);
-        s2t.SetGCData("origin", Script::UserData::Vector2::MT_NAME, Vector2{2, 0});
-        s2t.SetGCData("dest", Script::UserData::Vector2::MT_NAME, Vector2{0, 0});
+        s2t.SetGCData<Script::UserData::Vector2>("origin", Vector2{2, 0});
+        s2t.SetGCData<Script::UserData::Vector2>("dest", Vector2{0, 0});
 
         using namespace Script;
 
-        auto origin1 = sTable.GetUserData<::Vector2>("origin", UserData::Vector2::MT_NAME);
-        auto origin2 = s2t.GetUserData<::Vector2>("origin", UserData::Vector2::MT_NAME);
+        auto origin1 = sTable.GetUserData<Script::UserData::Vector2>("origin");
+        auto origin2 = s2t.GetUserData<Script::UserData::Vector2>("origin");
 
         CHECK(*origin1 != * origin2);
 

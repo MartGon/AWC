@@ -26,14 +26,14 @@ int UserData::Vector2::New(lua_State* luaState)
 {
     int x = luaL_checkinteger(luaState, 1);
     int y = luaL_checkinteger(luaState, 2);
-    ::Vector2* vec = UserData::PushGCData<::Vector2>(luaState, MT_NAME, ::Vector2{x, y});
+    ::Vector2* vec = UserData::PushGCData<Vector2>(luaState, ::Vector2{x, y});
 
     return 1;
 }
 
 int UserData::Vector2::Get(lua_State* luaState)
 {
-    ::Vector2* vec = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 1);
+    ::Vector2* vec = UserData::ToUserData<Vector2>(luaState, 1);
     std::string index = std::string(luaL_checkstring(luaState, 2));
 
     if(index == "x")
@@ -48,7 +48,7 @@ int UserData::Vector2::Get(lua_State* luaState)
 
 int UserData::Vector2::Set(lua_State* luaState)
 {
-    ::Vector2* vec = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 1);
+    ::Vector2* vec = UserData::ToUserData<Vector2>(luaState, 1);
     std::string index = std::string(luaL_checkstring(luaState, 2));
     auto n = luaL_checkinteger(luaState, 3);
 
@@ -64,30 +64,30 @@ int UserData::Vector2::Set(lua_State* luaState)
 
 int UserData::Vector2::Add(lua_State* luaState)
 {
-    ::Vector2* a = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 1);
-    ::Vector2* b = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 2);
+    ::Vector2* a = UserData::ToUserData<Vector2>(luaState, 1);
+    ::Vector2* b = UserData::ToUserData<Vector2>(luaState, 2);
 
     ::Vector2 sum = *a + *b;
-    UserData::PushGCData(luaState, MT_NAME, sum);
+    UserData::PushGCData<Vector2>(luaState, sum);
 
     return 1;
 }
 
 int UserData::Vector2::Sub(lua_State* luaState)
 {
-    ::Vector2* a = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 1);
-    ::Vector2* b = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 2);
+    ::Vector2* a = UserData::ToUserData<Vector2>(luaState, 1);
+    ::Vector2* b = UserData::ToUserData<Vector2>(luaState, 2);
 
     ::Vector2 sub = *a - *b;
-    UserData::PushGCData(luaState, MT_NAME, sub);
+    UserData::PushGCData<Vector2>(luaState, sub);
 
     return 1;
 }
 
 int UserData::Vector2::Eq(lua_State* luaState)
 {
-    ::Vector2* a = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 1);
-    ::Vector2* b = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 2);
+    ::Vector2* a = UserData::ToUserData<Vector2>(luaState, 1);
+    ::Vector2* b = UserData::ToUserData<Vector2>(luaState, 2);
 
     bool eq = *a == *b;
     lua_pushboolean(luaState, eq);
@@ -97,7 +97,7 @@ int UserData::Vector2::Eq(lua_State* luaState)
 
 int UserData::Vector2::ToString(lua_State* luaState)
 {
-    ::Vector2* a = UserData::ToUserData<::Vector2>(luaState, MT_NAME, 1);
+    ::Vector2* a = UserData::ToUserData<Vector2>(luaState, 1);
 
     std::string str = a->ToString();
     lua_pushstring(luaState, str.c_str());
