@@ -18,5 +18,7 @@ Json JsonUtils::GetJsonFromFile(std::string filename, std::string folder)
 	if(file.good())
 		data = Json::parse(file);
 
+    file.close();
+
     return data;
 }

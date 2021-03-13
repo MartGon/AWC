@@ -15,7 +15,7 @@ TileType AWCSer::LoadTileType(Json data)
     return TileType{id, name};
 }
 
-TilePtr AWCSer::LoadTile(Json data, Repository<TileType> tileTypeRepo)
+TilePtr AWCSer::LoadTile(Json data, Repository<TileType>& tileTypeRepo)
 {
     uint tileTypeId = JsonUtils::GetValue<uint>(data, "tileTypeId");
     auto& tileType = tileTypeRepo.GetById(tileTypeId);

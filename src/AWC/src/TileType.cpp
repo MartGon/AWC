@@ -1,7 +1,7 @@
 #include <AWC/TileType.h>
 #include <AWC/Tile.h>
 
-TileType::TileType(unsigned int id, const std::string& name) : id_{id}, name_{name}
+TileType::TileType(unsigned int id, std::string name) : id_{id}, name_{name}
 {
 
 }

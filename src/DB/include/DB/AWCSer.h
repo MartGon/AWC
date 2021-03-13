@@ -9,7 +9,7 @@ using Json = nlohmann::json;
 namespace AWCSer
 {
     TileType LoadTileType(Json data);
-    TilePtr LoadTile(Json data, Repository<TileType> tileTypeRepo);
+    TilePtr LoadTile(Json data, Repository<TileType>& tileTypeRepo);
 
     Vector2 LoadDirection(Json data);
 }

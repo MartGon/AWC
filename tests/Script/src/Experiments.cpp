@@ -351,6 +351,7 @@ TEST_CASE("GC")
 
     auto aPtr = std::make_shared<int>(2); // Count = 1;
 
+    /*
     Test* t = (Test*)malloc(sizeof(Test)); // Count = 2
     *t = Test{aPtr};
 
@@ -361,6 +362,7 @@ TEST_CASE("GC")
     CHECK(aPtr.use_count() == 1);
 
     free(t); // Free memory
+    */
 
     // Implicit Count = 0;
 }

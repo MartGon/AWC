@@ -51,12 +51,14 @@ TEST_CASE("Tile")
         CHECK(tile.get() != nullptr);
         CHECK(tile->GetId() == 0);
         CHECK(tile->GetName() == "Grass");
+        
     }
     SUBCASE("Loading from file")
     {
         Json data = JsonUtils::GetJsonFromFile("Tile.json", RESOURCES_DIR);
         TilePtr tile = AWCSer::LoadTile(data, tileTypeRepo);
 
+        
         CHECK(tile.get() != nullptr);
         CHECK(tile->GetId() == 0);
         CHECK(tile->GetName() == "Grass");

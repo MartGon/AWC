@@ -8,7 +8,7 @@ class Tile;
 class TileType
 {
 public:
-    TileType(unsigned int id, const std::string& name);
+    TileType(unsigned int id, std::string name);
 
     std::shared_ptr<Tile> CreateTile() const;
 

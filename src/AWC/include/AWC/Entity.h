@@ -29,7 +29,7 @@ namespace Entity
 
         std::string ToString()
         {
-            unsigned int type = static_cast<unsigned int>(type);
+            unsigned int type = static_cast<unsigned int>(this->type);
             return std::to_string(type) + "-" + std::to_string(id) + "-" + std::to_string(subType);
         }
 
