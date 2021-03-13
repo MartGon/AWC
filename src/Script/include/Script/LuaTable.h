@@ -26,9 +26,17 @@ namespace Script
     int To<int>(lua_State* state, int index);
     template<>
     std::string To<std::string>(lua_State* state, int index);
-
     template<>
     bool To<bool>(lua_State* state, int index);
+
+    template <typename T>
+    void GetField(lua_State*, int index, T key);
+    template<>
+    void GetField<int>(lua_State*, int index, int key);
+    template<>
+    void GetField<const char*>(lua_State*, int index, const char* key);
+    template<>
+    void GetField<std::string>(lua_State*, int index, std::string key);
 
     class LuaTable
     {
@@ -47,49 +55,41 @@ namespace Script
 
         ~LuaTable();
     
-        template<typename T>
-        void Set(std::string key, T val)
+        template<typename T, typename K>
+        void Set(K key, T val)
         {
             PushLuaTable();
             Push(luaState_, val);
             SetField(key);
         }
 
-        template<typename T>
-        void Set(int index, T val)
+        template<typename T, typename K>
+        T Get(K key)
         {
             PushLuaTable();
-            Push(luaState_, val);
-            SetField(index);
-        }
-
-        template<typename T>
-        T Get(std::string key)
-        {
-            PushLuaTable();
-            lua_getfield(luaState_, -1, key.c_str());
+            GetField(luaState_, -1, key);
             auto val = To<T>(luaState_, -1);
             lua_pop(luaState_, 2);
 
             return val;
         }
 
-        template<typename T>
-        T Get(int index)
+        template <typename T, typename K>
+        typename T::type* GetUserData(K key)
         {
             PushLuaTable();
-            lua_geti(luaState_, -1, index);
-            auto val = To<T>(luaState_, -1);
+            GetField(luaState_, -1, key);
+            auto ptr = Script::UserData::UserData::ToUserData<T>(luaState_, -1);
             lua_pop(luaState_, 2);
-            
-            return val;
+
+            return ptr;
         }
 
-        template <typename T>
-        T* GetUserData(std::string key, const char* mtName)
+        template <typename T, typename K>
+        T* GetUserData(K key, const char* mtName)
         {
             PushLuaTable();
-            lua_getfield(luaState_, -1, key.c_str());
+            GetField(luaState_, -1, key);
             T* ptr = Script::UserData::UserData::ToUserData<T>(luaState_, mtName, -1);
             lua_pop(luaState_, 2);
 
@@ -97,18 +97,17 @@ namespace Script
         }
 
         template <typename T>
-        T* GetUserData(int index, const char* mtName)
+        typename T::type* SetGCData(std::string key, typename T::type userdata)
         {
             PushLuaTable();
-            lua_geti(luaState_, -1, index);
-            T* ptr = Script::UserData::UserData::ToUserData<T>(luaState_, mtName, -1);
-            lua_pop(luaState_, 2);
+            auto ptr = Script::UserData::UserData::PushGCData<T>(luaState_, userdata);
+            SetField(key);
 
             return ptr;
         }
 
-        template<typename T>
-        T* SetGCData(std::string key, const char* mtName, T userdata)
+        template<typename T, typename K>
+        T* SetGCData(K key, const char* mtName, T userdata)
         {
             PushLuaTable();
             auto ptr = Script::UserData::UserData::PushGCData(luaState_, mtName, userdata);
@@ -117,30 +116,12 @@ namespace Script
             return ptr;
         }
 
-        template <typename T>
-        T* SetGCData(int index, const char* mtName, T userdata)
-        {
-            PushLuaTable();
-            auto ptr = Script::UserData::UserData::PushGCData(luaState_, mtName, userdata);
-            SetField(index);
-
-            return ptr;
-        }
-
-        template<typename T>
-        void SetRawData(std::string key, const char* mtName, T userdata)
+        template<typename T, typename K>
+        void SetRawData(K key, const char* mtName, T userdata)
         {
             PushLuaTable();
             Script::UserData::UserData::PushRawData(luaState_, mtName, userdata);
             SetField(key);
-        }
-
-        template <typename T>
-        void SetRawData(int index, const char* mtName, T userdata)
-        {
-            PushLuaTable();
-            Script::UserData::UserData::PushRawData(luaState_, mtName, userdata);
-            SetField(index);
         }
 
         std::unique_ptr<LuaTable> GetTable(std::string key);

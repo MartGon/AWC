@@ -24,7 +24,7 @@ TEST_CASE("TilePatternDesc userdata")
         int len = sTable.Length();
         auto num = sTable.Get<int>("num");
         
-        auto tpd = *sTable.GetUserData<::TilePatternDescPtr>("tp", Script::UserData::TilePatternDesc::MT_NAME);
+        auto tpd = *sTable.GetUserData<Script::UserData::TilePatternDesc>("tp");
         std::vector<::Vector2> dirs {::Vector2{0, 1}, ::Vector2{1, 0}};
         auto luaDirs = tpd->GetOriginDirections();
         CHECK(tpd->GetOriginDirections() == dirs);

@@ -4,11 +4,15 @@
 
 #include <lua.hpp>
 
-namespace Script::UserData::Game
+namespace Script::UserData
 {
-    extern const char* MT_NAME;
-    extern const luaL_Reg methods[];
+    struct Game
+    {
+        using type = ::Game;
+        static const char* MT_NAME;
+        static const luaL_Reg methods[];
 
-    int GetMap(lua_State* L);
-    int GetMapCount(lua_State* L);
+        static int GetMap(lua_State* L);
+        static int GetMapCount(lua_State* L);
+    };
 }

@@ -1,15 +1,18 @@
-#pragma
+#pragma once
 
 #include <AWC.h>
 
 #include <lua.hpp>
 
-namespace Script::UserData::Unit
+namespace Script::UserData
 {
-    extern const char* MT_NAME;
-    extern const luaL_Reg methods[];
-    
-    void Init(lua_State* luaState);
+    struct Unit
+    {
+        static const char* MT_NAME;
+        static const luaL_Reg methods[];
+        
+        static void Init(lua_State* luaState);
 
-    int CalculateMovement(lua_State* luaState);
+        static int CalculateMovement(lua_State* luaState);
+    };
 }

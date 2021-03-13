@@ -46,6 +46,24 @@ bool Script::To<bool>(lua_State* state, int index)
     return lua_toboolean(state, index);
 }
 
+template<>
+void Script::GetField<int>(lua_State* luaState, int index, int key)
+{
+    lua_geti(luaState, -1, key);
+}
+
+template<>
+void Script::GetField<const char*>(lua_State* luaState, int index, const char* key)
+{
+    lua_getfield(luaState, -1, key);
+}
+
+template<>
+void Script::GetField<std::string>(lua_State* luaState, int index, std::string key)
+{
+    lua_getfield(luaState, -1, key.c_str());
+}
+
 // LuaTable
 
 LuaTable::LuaTable(lua_State* luaState, int index) : luaState_{luaState}

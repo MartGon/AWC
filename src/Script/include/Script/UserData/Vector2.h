@@ -4,22 +4,26 @@
 
 #include <lua.hpp>
 
-namespace Script::UserData::Vector2
+namespace Script::UserData
 {
-    extern const char* MT_NAME;
-    extern const char* LIB_NAME;
+    struct Vector2
+    {
+        using type = ::Vector2;
+        static const char* MT_NAME;
+        static const char* LIB_NAME;
 
-    extern const luaL_Reg methods[];
-    extern const luaL_Reg functions[];
+        static const luaL_Reg methods[];
+        static const luaL_Reg functions[];
 
-    int New(lua_State* luaState);
+        static int New(lua_State* luaState);
 
-    int Get(lua_State* luaState);
-    int Set(lua_State* luaState);
-    
-    int Add(lua_State* luaState);
-    int Sub(lua_State* luaState);
-    int Eq(lua_State* luaState);
+        static int Get(lua_State* luaState);
+        static int Set(lua_State* luaState);
+        
+        static int Add(lua_State* luaState);
+        static int Sub(lua_State* luaState);
+        static int Eq(lua_State* luaState);
 
-    int ToString(lua_State* luaState);
+        static int ToString(lua_State* luaState);
+    };
 }

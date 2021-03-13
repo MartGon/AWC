@@ -4,14 +4,17 @@
 
 #include <lua.hpp>
 
-namespace Script::UserData::TilePatternDesc
+namespace Script::UserData
 {
-    extern const char* MT_NAME;
-    extern const char* LIB_NAME;
+    struct TilePatternDesc
+    {
+        using type = ::TilePatternDescPtr;
+        static const char* MT_NAME;
+        static const char* LIB_NAME;
 
-    extern const luaL_Reg methods[];
-    extern const luaL_Reg functions[];
+        static const luaL_Reg methods[];
+        static const luaL_Reg functions[];
 
-    int New(lua_State* luaState);
-
+        static int New(lua_State* luaState);
+    };
 }

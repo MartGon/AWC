@@ -4,11 +4,13 @@
 
 #include <AWC.h>
 
-namespace Script::UserData::UnitMovement
+namespace Script::UserData
 {
-    extern const char* MT_NAME;
+    struct UnitMovement
+    {
+        static const char* MT_NAME;
+        static const luaL_Reg methods[];
 
-    extern const luaL_Reg methods[];
-
-    int CanMove(lua_State* luaState);
+        static int CanMove(lua_State* luaState);
+    };
 }

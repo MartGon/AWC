@@ -4,14 +4,17 @@
 
 #include <lua.hpp>
 
-namespace Script::UserData::Map
+namespace Script::UserData
 {
-    extern const char* MT_NAME;
-    extern const luaL_Reg methods[];
+    struct Map
+    {
+        static const char* MT_NAME;
+        static const luaL_Reg methods[];
+        
+        static void CheckMapPosition(lua_State* luaState, ::Map* map, ::Vector2 pos);
 
-    void CheckMapPosition(lua_State* luaState, ::Map* map, ::Vector2 pos);
-
-    int GetUnit(lua_State* L);
-    int RemoveUnit(lua_State* L);
-    int AddUnit(lua_State* L);
+        static int GetUnit(lua_State* L);
+        static int RemoveUnit(lua_State* L);
+        static int AddUnit(lua_State* L);
+    };
 }
