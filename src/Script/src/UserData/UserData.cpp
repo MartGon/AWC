@@ -39,5 +39,5 @@ bool UserData::HasGCMethod(lua_State* luaState, const char* mtName)
     }
     lua_pop(luaState, 1);
 
-    return type != LUA_TNIL;
+    return type == LUA_TFUNCTION;
 }

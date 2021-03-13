@@ -19,6 +19,7 @@ namespace Script::UserData::UserData
     }
 
     bool HasGCMethod(lua_State* luaState, const char* mtName);
+
     template <typename T>
     void AddGCMethod(lua_State* luaState, const char* mtName)
     {
@@ -52,7 +53,7 @@ namespace Script::UserData::UserData
         *ptr = new type(value);
 
         if(!HasGCMethod(luaState, T::MT_NAME))
-            AddGCMethod<T>(luaState, T::MT_NAME);
+            AddGCMethod<type>(luaState, T::MT_NAME);
 
         luaL_setmetatable(luaState, T::MT_NAME);
 
