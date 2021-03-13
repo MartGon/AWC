@@ -17,7 +17,7 @@ namespace Script
     public:
         std::shared_ptr<ScriptOperation> CreateScript();
 
-        Operation::Result Execute(::Game& game, uint8_t prio, int tableRef);
+        Operation::Result Execute(::Game& game, uint8_t prio, LuaTable& tableRef);
 
     private:
         Type(lua_State* state, std::string scriptPath);

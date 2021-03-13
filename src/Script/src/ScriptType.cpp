@@ -72,7 +72,7 @@ std::shared_ptr<ScriptOperation> Script::Type::CreateScript()
     return s;
 }
 
-Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef)
+Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable& tableRef)
 {
     Operation::Result res{Operation::ERROR};
     
@@ -83,33 +83,33 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, int tableRef
     if(type == LUA_TFUNCTION)
     {
         // Get table
-        type = lua_rawgeti(luaState, LUA_REGISTRYINDEX, tableRef);
-        if(type == LUA_TTABLE)
-        {
-            // Sets table to function ENV
-            lua_setupvalue(luaState, 1, 1);
-            UserData::UserData::PushRawData(luaState, UserData::Game::MT_NAME, &game);
+        tableRef.PushLuaTable();
 
-            // Call function
-            // TODO: Push prio param beforehand
-            auto ret = lua_pcall(luaState, 1, 0, 0);
-            if(ret == LUA_OK)
-            {
-                res = Operation::Result{Operation::SUCCESS};
-            }
-            else
-            {
-                std::string error = lua_tostring(luaState, -1);
-                lua_pop(luaState, 1);
-                int top = lua_gettop(luaState);
-                
-                #ifdef _DEBUG
-                    std::cout << "Error ocurred while executing Lua Operation: " << error << "\n";
-                #endif 
-                res = Operation::Result{Operation::ERROR, error};
-            }
+        // Sets table to function ENV
+        lua_setupvalue(luaState, 1, 1);
+        UserData::UserData::PushRawData(luaState, UserData::Game::MT_NAME, &game);
+
+        // Call function
+        // TODO: Push prio param beforehand
+        auto ret = lua_pcall(luaState, 1, 0, 0);
+        if(ret == LUA_OK)
+        {
+            res = Operation::Result{Operation::SUCCESS};
+        }
+        else
+        {
+            std::string error = lua_tostring(luaState, -1);
+            lua_pop(luaState, 1);
+            int top = lua_gettop(luaState);
+            
+            #ifdef _DEBUG
+                std::cout << "Error ocurred while executing Lua Operation: " << error << "\n";
+            #endif 
+            res = Operation::Result{Operation::ERROR, error};
         }
     }
+    else
+        throw AWCException("Could not find stored execute function");
 
     return res;
 }
