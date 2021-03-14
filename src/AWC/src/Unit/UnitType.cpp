@@ -4,7 +4,7 @@
 #include <AWC/Unit/MovementDescType.h>
 #include <AWC/Unit/WeaponType.h>
 
-UnitType::UnitType(uint id, const std::string& name, MovementDecTypePtr moveType, std::vector<WeaponTypePtr> weaponTypes) 
+UnitType::UnitType(uint id, const std::string& name, MovementDescTypePtr moveType, std::vector<WeaponTypePtr> weaponTypes) 
     : id_{id}, name_{name}, moveType_{moveType}, weaponTypes_{weaponTypes}
 {
 

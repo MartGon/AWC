@@ -35,6 +35,12 @@ int Script::To<int>(lua_State* state, int index)
 }
 
 template<>
+unsigned int Script::To<unsigned int>(lua_State* state, int index)
+{
+    return (unsigned int)lua_tointeger(state, index);
+}
+
+template<>
 std::string Script::To<std::string>(lua_State* state, int index)
 {
     return std::string(lua_tostring(state, index));

@@ -5,6 +5,7 @@
 #include <Script/UserData/UnitMovement.h>
 #include <Script/UserData/Vector2.h>
 #include <Script/UserData/TilePatternDesc.h>
+#include <Script/UserData/MovementDescType.h>
 
 namespace Script::UserData
 {

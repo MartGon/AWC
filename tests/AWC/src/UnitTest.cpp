@@ -187,7 +187,7 @@ UnitType UnitTest::CreateSoldierType()
     tileCostTable->SetCost(grassId, 1);
 
     // Movement
-    MovementDecTypePtr moveType{ new MovementDescType{manhattan, {3, 0}, tileCostTable, unitCostTable, 99}};
+    MovementDescTypePtr moveType{ new MovementDescType{manhattan, {3, 0}, tileCostTable, unitCostTable, 99}};
 
     // Weapon
     AttackTable attackTable{ { {id, true}, {1, true} } };
@@ -219,7 +219,7 @@ UnitType UnitTest::CreateMechType()
     tileCostTable->SetCost(grassId, 1);
 
     // Movement
-    MovementDecTypePtr moveType{ new MovementDescType{manhattan, {2, 0}, tileCostTable, unitCostTable, 99}};
+    MovementDescTypePtr moveType{ new MovementDescType{manhattan, {2, 0}, tileCostTable, unitCostTable, 99}};
 
     // Weapon
     AttackTable attackTable{ { {0, true}, {id, true} } };
@@ -252,7 +252,7 @@ UnitType UnitTest::CreateFighter()
     tileCostTable->SetCost(grassId, 1);
 
     // Movement
-    MovementDecTypePtr moveType{ new MovementDescType{manhattan, {10, 0}, tileCostTable, unitCostTable, 75}};
+    MovementDescTypePtr moveType{ new MovementDescType{manhattan, {10, 0}, tileCostTable, unitCostTable, 75}};
 
     // Weapon
     AttackTable attackTable{ { {id, true} } };

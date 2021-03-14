@@ -25,6 +25,8 @@ namespace Script
     template<>
     int To<int>(lua_State* state, int index);
     template<>
+    unsigned int To<unsigned int>(lua_State* state, int index);
+    template<>
     std::string To<std::string>(lua_State* state, int index);
     template<>
     bool To<bool>(lua_State* state, int index);
@@ -149,7 +151,7 @@ namespace Script
         int Length();
         void SetMetaTable(std::string mtName);
         std::string GetMetaTableName();
-        
+
         void PushLuaTable();
     private:
 

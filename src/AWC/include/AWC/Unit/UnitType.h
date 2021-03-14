@@ -12,7 +12,7 @@ class Unit;
 class UnitType
 {
 public:
-    UnitType(uint id, const std::string& name, MovementDecTypePtr moveType, std::vector<WeaponTypePtr> weaponTypes);
+    UnitType(uint id, const std::string& name, MovementDescTypePtr moveType, std::vector<WeaponTypePtr> weaponTypes);
 
     std::shared_ptr<Unit> CreateUnit(Player& owner);
 
@@ -30,7 +30,7 @@ private:
     uint id_;
     uint lastInstanceId_ = 0;
 
-    MovementDecTypePtr moveType_;
+    MovementDescTypePtr moveType_;
     std::vector<WeaponTypePtr> weaponTypes_;
     std::vector<Event::Handler> listeners_;
 };

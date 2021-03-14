@@ -25,8 +25,12 @@ TEST_CASE("TilePatternDesc userdata")
         auto num = sTable.Get<int>("num");
         
         auto tpd = *sTable.GetUserData<Script::UserData::TilePatternDesc>("tp");
+
+        // This is a HACK. It should be tested by calculating a tile pattern
+        // This is much easier tho.
+        auto ptr = static_cast<TilePatternDesc*>(tpd.get());
         std::vector<::Vector2> dirs {::Vector2{0, 1}, ::Vector2{1, 0}};
-        auto luaDirs = tpd->GetOriginDirections();
-        CHECK(tpd->GetOriginDirections() == dirs);
+        auto luaDirs = ptr->GetOriginDirections();
+        CHECK(ptr->GetOriginDirections() == dirs);
     }
 }
