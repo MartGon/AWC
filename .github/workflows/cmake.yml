@@ -22,21 +22,21 @@ jobs:
       # We'll use this as our working directory for all subsequent commands
       run: cmake -E make_directory ${{runner.workspace}}/build
 
-    - name: Download Lua
-      shell: bash
-      run: curl -R -O http://www.lua.org/ftp/lua-5.4.2.tar.gz
+    # - name: Download Lua
+    #   shell: bash
+    #   run: curl -R -O http://www.lua.org/ftp/lua-5.4.2.tar.gz
 
-    - name: Uncompress Lua
-      shell: bash
-      run: tar zxf lua-5.4.2.tar.gz
+    # - name: Uncompress Lua
+    #   shell: bash
+    #   run: tar zxf lua-5.4.2.tar.gz
 
-    - name: Compile Lua
-      shell: bash
-      run: cd lua-5.4.2; make; cd ..
+    # - name: Compile Lua
+    #   shell: bash
+    #   run: cd lua-5.4.2; make; cd ..
 
-    - name: Set Lua lib and include dir env vars
-      shell: bash
-      run: echo "LUA_INCLUDE_DIR=$(pwd)/lua-5.4.2/src/" >> $GITHUB_ENV; echo "LUA_LIB_PATH=$(pwd)/lua-5.4.2/src/liblua.a" >> $GITHUB_ENV
+    # - name: Set Lua lib and include dir env vars
+    #   shell: bash
+    #   run: echo "LUA_INCLUDE_DIR=$(pwd)/lua-5.4.2/src/" >> $GITHUB_ENV; echo "LUA_LIB_PATH=$(pwd)/lua-5.4.2/src/liblua.a" >> $GITHUB_ENV
 
     - name: Configure CMake
       # Use a bash shell so we can use the same syntax for environment variable
@@ -60,6 +60,21 @@ jobs:
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{env.BUILD_TYPE}} --verbose
+
+    - name: Install Valgrind
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: sudo apt-get install valgrind
+
+    - name: Run Valgrind
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: |
+        valgrind --leak-check=full --error-exitcode=127 tests/AWC/AWCTest 
+        valgrind --leak-check=full --error-exitcode=127 tests/DB/DBTest 
+        valgrind --leak-check=full --error-exitcode=127 tests/Utils/UtilsTest
+        valgrind --leak-check=full --error-exitcode=127 tests/Script/ScriptTest
+
 
       # Sends a telegram notification
     - name: Send build notification
