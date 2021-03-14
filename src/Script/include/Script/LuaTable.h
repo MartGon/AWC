@@ -30,13 +30,13 @@ namespace Script
     bool To<bool>(lua_State* state, int index);
 
     template <typename T>
-    void GetField(lua_State*, int index, T key);
+    int GetField(lua_State*, int index, T key);
     template<>
-    void GetField<int>(lua_State*, int index, int key);
+    int GetField<int>(lua_State*, int index, int key);
     template<>
-    void GetField<const char*>(lua_State*, int index, const char* key);
+    int GetField<const char*>(lua_State*, int index, const char* key);
     template<>
-    void GetField<std::string>(lua_State*, int index, std::string key);
+    int GetField<std::string>(lua_State*, int index, std::string key);
 
     class LuaTable
     {
@@ -86,8 +86,8 @@ namespace Script
             return ptr;
         }
 
-        template <typename T>
-        typename T::type* SetDataCopy(std::string key, typename T::type userdata)
+        template <typename T, typename K>
+        typename T::type* SetDataCopy(K key, typename T::type userdata)
         {
             PushLuaTable();
             auto ptr = Script::UserData::UserData::PushDataCopy<T>(luaState_, userdata);
@@ -106,21 +106,39 @@ namespace Script
             lua_pop(luaState_, 1);
         }
 
-        std::unique_ptr<LuaTable> GetTable(std::string key);
-        std::unique_ptr<LuaTable> GetTable(int index);
-
-        void SetMetaTable(std::string mtName);
-        int GetKeyType(std::string key);
-        int GetIndexType(int index);
-        bool ContainsValue(std::string key);
-        int Length();
-
-        void PushLuaTable();
-        int GetRef()
+        template<typename K>
+        std::unique_ptr<LuaTable> GetTable(K key)
         {
-            return tableRef_;
+            PushLuaTable();
+            GetField(luaState_, -1, key);
+            
+            std::unique_ptr<LuaTable>ptr{new LuaTable{luaState_, -1}};
+
+            lua_pop(luaState_, 2);
+
+            return ptr;
         }
 
+        template<typename K>
+        int GetType(K key)
+        {
+            PushLuaTable();
+            int type = GetField(luaState_, -1, key);
+            lua_pop(luaState_, 2);
+
+            return type;
+        }
+
+        template <typename K>
+        bool ContainsValue(K key)
+        {            
+            return GetType(key) != LUA_TNIL;
+        }
+
+        int Length();
+        void SetMetaTable(std::string mtName);
+        std::string GetMetaTableName();
+        void PushLuaTable();
     private:
 
         // Assumes that table is at -2 and value is at the top of the stack

@@ -34,7 +34,7 @@ int UserData::TilePatternDesc::New(lua_State* luaState)
     auto len = dirTable->Length();
     for(int i = 1; i < len + 1; i++)
     {
-        auto type = dirTable->GetIndexType(i);
+        auto type = dirTable->GetType(i);
         auto vec = dirTable->GetUserData<Vector2>(i);
         dirs.push_back(*vec);
     }

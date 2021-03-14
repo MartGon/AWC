@@ -7,7 +7,6 @@ const char* UserData::Vector2::MT_NAME = "Utils_Vector2";
 const char* UserData::Vector2::LIB_NAME = "Vector2";
 
 const luaL_Reg UserData::Vector2::methods[] = {
-    {"__gc", UserData::Delete<::Vector2>},
     {"__add", Vector2::Add},
     {"__sub", Vector2::Sub},
     {"__eq", Vector2::Eq},

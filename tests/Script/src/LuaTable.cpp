@@ -42,7 +42,7 @@ TEST_CASE("Lua Table test")
             CHECK(f == false);
             CHECK(t == true);
         }
-        SUBCASE("UserData")
+        SUBCASE("UserData Copy")
         {
             Script::UserData::Init(luaState);
 
@@ -52,9 +52,18 @@ TEST_CASE("Lua Table test")
 
             CHECK(vec == Vector2{0, 1});
         }
-        SUBCASE("")
+        SUBCASE("UserData Ref")
         {
+            // This can't be done with a Vector2 beacause its metatable has a __gc method
+            // To delete the copies. Some trick has to be done if every UserData can be used as a ref and copy.
+            Script::UserData::Init(luaState);
 
+            Vector2 vec{3, 3};
+
+            lt.SetDataRef<Script::UserData::Vector2>("vec", &vec);
+            auto vecRef = lt.GetUserData<Script::UserData::Vector2>("vec");
+
+            CHECK(vecRef == &vec);
         }
 
         CHECK(lua_gettop(luaState) == 0);

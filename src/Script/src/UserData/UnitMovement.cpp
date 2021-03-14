@@ -7,7 +7,6 @@ using namespace Script;
 
 const char* UserData::UnitMovement::MT_NAME = "AWC_UnitMovement";
 const luaL_Reg UserData::UnitMovement::methods[] = {
-    {"__gc", UserData::Delete<::UnitMovement>},
     {"CanMove", UnitMovement::CanMove},
     {NULL, NULL}
 };

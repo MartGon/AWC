@@ -47,21 +47,21 @@ bool Script::To<bool>(lua_State* state, int index)
 }
 
 template<>
-void Script::GetField<int>(lua_State* luaState, int index, int key)
+int Script::GetField<int>(lua_State* luaState, int index, int key)
 {
-    lua_geti(luaState, -1, key);
+    return lua_geti(luaState, -1, key);
 }
 
 template<>
-void Script::GetField<const char*>(lua_State* luaState, int index, const char* key)
+int Script::GetField<const char*>(lua_State* luaState, int index, const char* key)
 {
-    lua_getfield(luaState, -1, key);
+    return lua_getfield(luaState, -1, key);
 }
 
 template<>
-void Script::GetField<std::string>(lua_State* luaState, int index, std::string key)
+int Script::GetField<std::string>(lua_State* luaState, int index, std::string key)
 {
-    lua_getfield(luaState, -1, key.c_str());
+    return lua_getfield(luaState, -1, key.c_str());
 }
 
 // LuaTable
@@ -99,52 +99,6 @@ LuaTable::~LuaTable()
 
 // Public
 
-std::unique_ptr<LuaTable> LuaTable::GetTable(std::string key)
-{
-    PushLuaTable();
-    int type = lua_getfield(luaState_, -1, key.c_str());
-    
-    return std::unique_ptr<LuaTable>(new LuaTable{luaState_, -1});
-}
-
-std::unique_ptr<LuaTable> LuaTable::GetTable(int index)
-{
-    PushLuaTable();
-    lua_geti(luaState_, -1, index);
-
-    return std::unique_ptr<LuaTable>(new LuaTable{luaState_, -1});
-}
-
-void LuaTable::SetMetaTable(std::string mtName)
-{
-    PushLuaTable();
-    luaL_setmetatable(luaState_, mtName.c_str());
-    lua_pop(luaState_, 1);
-}
-
-int LuaTable::GetKeyType(std::string key)
-{
-    PushLuaTable();
-    int type = lua_getfield(luaState_, -1, key.c_str());
-    lua_pop(luaState_, 2);
-
-    return type;
-}
-
-int LuaTable::GetIndexType(int index)
-{
-    PushLuaTable();
-    int type = lua_geti(luaState_, -1, index);
-    lua_pop(luaState_, 2);
-    
-    return type;
-}
-
-bool LuaTable::ContainsValue(std::string key)
-{            
-    return GetKeyType(key) != LUA_TNIL;
-}
-
 int LuaTable::Length()
 {
     PushLuaTable();
@@ -154,7 +108,28 @@ int LuaTable::Length()
     return len;
 }
 
-// Private
+void LuaTable::SetMetaTable(std::string mtName)
+{
+    PushLuaTable();
+    luaL_setmetatable(luaState_, mtName.c_str());
+    lua_pop(luaState_, 1);
+}
+
+std::string LuaTable::GetMetaTableName()
+{
+    std::string name;
+
+    PushLuaTable();
+    if(lua_getmetatable(luaState_, -1))
+    {
+        lua_getfield(luaState_, -1, "__name");
+        name = std::string(lua_tostring(luaState_, -1));
+        lua_pop(luaState_, 2); // Pops metatable and __name value
+    }
+    lua_pop(luaState_, 1);
+
+    return name;
+}
 
 void LuaTable::PushLuaTable()
 {
@@ -162,6 +137,8 @@ void LuaTable::PushLuaTable()
     if(type != LUA_TTABLE)
         throw AWCException("LuaTable: Internal Lua table was not type LUA_TTABLE");
 }
+
+// Private
 
 // Assumes that table is at -2 and value is at the top of the stack
 // Pops the internal lua table from the stack
