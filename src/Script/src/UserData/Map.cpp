@@ -30,7 +30,7 @@ int UserData::Map::GetUnit(lua_State* luaState)
     Map::CheckMapPosition(luaState, map, pos);
     auto unit = map->GetUnit(pos);
     if(unit)
-        UserData::PushGCData<Unit>(luaState, unit);
+        UserData::PushDataCopy<Unit>(luaState, unit);
     else
         lua_pushnil(luaState);
 

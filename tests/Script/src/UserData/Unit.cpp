@@ -36,8 +36,8 @@ TEST_CASE("Unit userdata")
 
         auto& sTable = t.lt();
         sTable.SetDataRef<Script::UserData::Map>("map", &game.GetMap(0));
-        sTable.SetGCData<Script::UserData::Unit>("unit", soldier);
-        sTable.SetGCData<Script::UserData::Vector2>("origin", Vector2{2, 0});
+        sTable.SetDataCopy<Script::UserData::Unit>("unit", soldier);
+        sTable.SetDataCopy<Script::UserData::Vector2>("origin", Vector2{2, 0});
 
         try{        
             sGame.PushScript(t.ref);

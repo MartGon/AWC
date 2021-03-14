@@ -26,7 +26,7 @@ int UserData::Unit::CalculateMovement(lua_State* luaState)
     auto vector2 = UserData::ToUserData<Vector2>(luaState, 3);
 
     auto unitMovement = unit->CalculateMovement(*map, *vector2);
-    auto unitMove = UserData::PushGCData<UnitMovement>(luaState, unitMovement);
+    auto unitMove = UserData::PushDataCopy<UnitMovement>(luaState, unitMovement);
 
     return 1;
 }

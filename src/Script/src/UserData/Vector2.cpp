@@ -26,7 +26,7 @@ int UserData::Vector2::New(lua_State* luaState)
 {
     int x = luaL_checkinteger(luaState, 1);
     int y = luaL_checkinteger(luaState, 2);
-    ::Vector2* vec = UserData::PushGCData<Vector2>(luaState, ::Vector2{x, y});
+    ::Vector2* vec = UserData::PushDataCopy<Vector2>(luaState, ::Vector2{x, y});
 
     return 1;
 }
@@ -68,7 +68,7 @@ int UserData::Vector2::Add(lua_State* luaState)
     ::Vector2* b = UserData::ToUserData<Vector2>(luaState, 2);
 
     ::Vector2 sum = *a + *b;
-    UserData::PushGCData<Vector2>(luaState, sum);
+    UserData::PushDataCopy<Vector2>(luaState, sum);
 
     return 1;
 }
@@ -79,7 +79,7 @@ int UserData::Vector2::Sub(lua_State* luaState)
     ::Vector2* b = UserData::ToUserData<Vector2>(luaState, 2);
 
     ::Vector2 sub = *a - *b;
-    UserData::PushGCData<Vector2>(luaState, sub);
+    UserData::PushDataCopy<Vector2>(luaState, sub);
 
     return 1;
 }

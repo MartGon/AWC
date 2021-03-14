@@ -46,7 +46,7 @@ namespace Script::UserData::UserData
     }
 
     template <typename T>
-    typename T::type* PushGCData(lua_State* luaState, typename T::type value)
+    typename T::type* PushDataCopy(lua_State* luaState, typename T::type value)
     {
         using type = typename T::type;
         type** ptr = static_cast<type**>(lua_newuserdata(luaState, sizeof(type*)));

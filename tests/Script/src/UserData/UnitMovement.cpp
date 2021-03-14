@@ -37,8 +37,8 @@ TEST_CASE("Unit userdata")
         auto& sTable = t.lt();
         auto unitMove = soldier->CalculateMovement(game.GetMap(0), {2, 0});
         
-        sTable.SetGCData<Script::UserData::UnitMovement>("unitMove", unitMove);
-        sTable.SetGCData<Script::UserData::Vector2>("dest", Vector2{0, 0});
+        sTable.SetDataCopy<Script::UserData::UnitMovement>("unitMove", unitMove);
+        sTable.SetDataCopy<Script::UserData::Vector2>("dest", Vector2{0, 0});
 
         try{        
             sGame.PushScript(t.ref);

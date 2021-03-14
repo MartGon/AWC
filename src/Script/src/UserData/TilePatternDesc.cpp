@@ -40,7 +40,7 @@ int UserData::TilePatternDesc::New(lua_State* luaState)
     }
 
     ::TilePatternDescPtr tpdp = ::TilePatternDesc::Create(dirs);
-    UserData::PushGCData<TilePatternDesc>(luaState, tpdp);
+    UserData::PushDataCopy<TilePatternDesc>(luaState, tpdp);
     
     return 1;
 }

@@ -46,21 +46,15 @@ TEST_CASE("Lua Table test")
         {
             Script::UserData::Init(luaState);
 
-            lt.SetGCData<Script::UserData::Vector2>("vec", Vector2{0, 1});
+            lt.SetDataCopy<Script::UserData::Vector2>("vec", Vector2{0, 1});
 
             auto vec = *lt.GetUserData<Script::UserData::Vector2>("vec");
 
             CHECK(vec == Vector2{0, 1});
         }
-        SUBCASE("Alternative UserData")
+        SUBCASE("")
         {
-            Script::UserData::Init(luaState);
 
-            lt.SetGCData<Script::UserData::Vector2>("vec", Vector2{0, 1});
-
-            auto vec = *lt.GetUserData<Script::UserData::Vector2>("vec");
-
-            CHECK(vec == Vector2{0, 1});
         }
 
         CHECK(lua_gettop(luaState) == 0);

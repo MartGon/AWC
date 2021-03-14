@@ -87,10 +87,10 @@ namespace Script
         }
 
         template <typename T>
-        typename T::type* SetGCData(std::string key, typename T::type userdata)
+        typename T::type* SetDataCopy(std::string key, typename T::type userdata)
         {
             PushLuaTable();
-            auto ptr = Script::UserData::UserData::PushGCData<T>(luaState_, userdata);
+            auto ptr = Script::UserData::UserData::PushDataCopy<T>(luaState_, userdata);
             SetField(key);
             lua_pop(luaState_, 1);
 
