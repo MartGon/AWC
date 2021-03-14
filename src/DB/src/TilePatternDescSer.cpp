@@ -4,7 +4,7 @@
 
 #include <AWC.h>
 
-TilePatternDescIPtr TilePatternDescSer::LoadTilePatternDescI(Json data, Repository<TilePatternDescIPtr> repo)
+TilePatternDescIPtr TilePatternDescSer::LoadTilePatternDescI(Json data, Repository<TilePatternDescIPtr>& repo)
 {
     TilePatternDescIPtr tpdip;
     auto type = JsonUtils::GetValue<TilePatternDescType>(data, "type", TilePatternDescType::BASE);
@@ -55,7 +55,7 @@ TilePatternDescPtr TilePatternDescSer::LoadTilePatternDesc(Json data)
     return tpd;
 }
 
-TilePatternDescIPtr TilePatternDescSer::LoadTilePatternDescComp(Json data, Repository<TilePatternDescIPtr> repo)
+TilePatternDescIPtr TilePatternDescSer::LoadTilePatternDescComp(Json data, Repository<TilePatternDescIPtr>& repo)
 {
     auto subType = JsonUtils::GetValue<TilePatternDescCompType>(data, "subType");
     auto tpdAId = JsonUtils::GetValue<uint>(data, "tpdA");

@@ -10,6 +10,8 @@ template<typename T>
 class Repository
 {
 public:
+    Repository(){};
+    Repository(Repository&) = delete;
 
     T& GetById(unsigned int id)
     {

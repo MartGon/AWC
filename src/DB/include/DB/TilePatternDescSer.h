@@ -36,9 +36,9 @@ namespace TilePatternDescSer
         STATIC_COST
     };
 
-    TilePatternDescIPtr LoadTilePatternDescI(Json data, Repository<TilePatternDescIPtr> repo = Repository<TilePatternDescIPtr>{});
+    TilePatternDescIPtr LoadTilePatternDescI(Json data, Repository<TilePatternDescIPtr>& repo);
     TilePatternDescPtr LoadTilePatternDesc(Json data);
-    TilePatternDescIPtr LoadTilePatternDescComp(Json data, Repository<TilePatternDescIPtr> repo);
+    TilePatternDescIPtr LoadTilePatternDescComp(Json data, Repository<TilePatternDescIPtr>& repo);
     std::vector<Vector2> LoadDirections(Json data);
 
 }
