@@ -46,24 +46,92 @@ TEST_CASE("Lua Table test")
         {
             Script::UserData::Init(luaState);
 
-            lt.SetDataCopy<Script::UserData::Vector2>("vec", Vector2{0, 1});
+            Vector2 vec{0, 1};
+            lt.SetDataCopy<Script::UserData::Vector2>("vec", vec);
 
-            auto vec = *lt.GetUserData<Script::UserData::Vector2>("vec");
+            vec.x = 1;
 
-            CHECK(vec == Vector2{0, 1});
+            auto vecCopy = *lt.GetUserData<Script::UserData::Vector2>("vec");
+
+            CHECK(vecCopy.x == 0);
+            CHECK(Vector2{0, 1} == vecCopy);
         }
         SUBCASE("UserData Ref")
         {
-            // This can't be done with a Vector2 beacause its metatable has a __gc method
-            // To delete the copies. Some trick has to be done if every UserData can be used as a ref and copy.
             Script::UserData::Init(luaState);
 
             Vector2 vec{3, 3};
+            vec.x = 1;
 
             lt.SetDataRef<Script::UserData::Vector2>("vec", &vec);
             auto vecRef = lt.GetUserData<Script::UserData::Vector2>("vec");
 
             CHECK(vecRef == &vec);
+            CHECK(vecRef->x == 1);
+        }
+        SUBCASE("Inner table")
+        {
+            Script::LuaTable table{luaState};
+            table.Set("int", 1);
+            table.Set("str", "text");
+
+            lt.SetTable("table", table);
+
+            auto innerTable = lt.GetTable("table");
+
+            CHECK(innerTable->Get<int>("int") == 1);
+            CHECK(innerTable->Get<std::string>("str") == "text");
+        }
+        SUBCASE("Get type")
+        {
+            lt.Set("int", 1);
+            lt.Set("str", "text");
+            lt.Set(1, true);
+
+            CHECK(lt.GetType("int") == LUA_TNUMBER);
+            CHECK(lt.GetType("str") == LUA_TSTRING);
+            CHECK(lt.GetType(1) == LUA_TBOOLEAN);
+        }
+        SUBCASE("Contains")
+        {
+            lt.Set("int", 1);
+            lt.Set(1, 2);
+
+            CHECK(lt.ContainsValue("int") == true);
+            CHECK(lt.ContainsValue(1) == true);
+        }
+        SUBCASE("Length")
+        {
+            lt.Set(1, "first");
+
+            CHECK(lt.Length() == 1);
+
+            lt.Set(3, "third");
+
+            CHECK(lt.Length() == 1);
+
+            lt.Set(2, "second");
+
+            CHECK(lt.Length() == 3);
+        }
+        SUBCASE("Metatable")
+        {
+            luaL_newmetatable(luaState, "Metatable");
+            lua_pop(luaState, 1);
+
+            lt.SetMetaTable("Metatable");
+            std::string mtName = lt.GetMetaTableName();
+
+            CHECK(mtName == "Metatable");
+        }
+        SUBCASE("Push Lua table")
+        {
+            lt.PushLuaTable();
+
+            CHECK(lua_gettop(luaState) == 1);
+            CHECK(lua_type(luaState, -1) == LUA_TTABLE);
+
+            lua_pop(luaState, 1);
         }
 
         CHECK(lua_gettop(luaState) == 0);

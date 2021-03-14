@@ -110,13 +110,24 @@ namespace Script
         std::unique_ptr<LuaTable> GetTable(K key)
         {
             PushLuaTable();
-            GetField(luaState_, -1, key);
-            
-            std::unique_ptr<LuaTable>ptr{new LuaTable{luaState_, -1}};
+            int type = GetField(luaState_, -1, key);
+
+            std::unique_ptr<LuaTable> ptr;
+            if(type == LUA_TTABLE)
+                ptr = std::unique_ptr<LuaTable>{new LuaTable{luaState_, -1}};
 
             lua_pop(luaState_, 2);
 
             return ptr;
+        }
+
+        template <typename K>
+        void SetTable(K key, LuaTable& table)
+        {
+            PushLuaTable();
+            table.PushLuaTable();
+            SetField(key); 
+            lua_pop(luaState_, 1);
         }
 
         template<typename K>
@@ -138,6 +149,7 @@ namespace Script
         int Length();
         void SetMetaTable(std::string mtName);
         std::string GetMetaTableName();
+        
         void PushLuaTable();
     private:
 
