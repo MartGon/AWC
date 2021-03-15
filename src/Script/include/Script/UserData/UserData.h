@@ -21,9 +21,35 @@ namespace Script::UserData
 
     namespace UserData
     {
-        void RegisterMetatable(lua_State* luaState, const char* mtName, const luaL_Reg* methods);
-        void RegisterMetaMethod(lua_State* luaState, const char* mtName, const char* key, const lua_CFunction method);
-        void RegisterLib(lua_State* luaState, const char* libName, const luaL_Reg* funcs);
+        template <typename T>
+        void RegisterMetatable(lua_State* luaState)
+        {
+            luaL_newmetatable(luaState, T::MT_NAME);
+
+            lua_pushstring(luaState, "__index");
+            lua_pushvalue(luaState, -2);
+            lua_settable(luaState, -3); // Metatable.__index = Metatable
+
+            luaL_setfuncs(luaState, T::methods, 0);
+            lua_pop(luaState, 1);
+        }
+
+        template <typename T>
+        void RegisterLib(lua_State* luaState)
+        {
+            lua_newtable(luaState);
+            luaL_setfuncs(luaState, T::functions, 0);
+            lua_setglobal(luaState, T::LIB_NAME);
+        }
+
+        template <typename T>
+        void RegisterMetaMethod(lua_State* luaState, const char* key, const lua_CFunction method)
+        {
+            luaL_getmetatable(luaState, T::MT_NAME);
+            lua_pushcfunction(luaState, method);
+            lua_setfield(luaState, -2, key);
+            lua_pop(luaState, 1);
+        }
         
         template <typename T>
         int Delete(lua_State* luaState)

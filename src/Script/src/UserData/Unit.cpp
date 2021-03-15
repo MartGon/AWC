@@ -14,11 +14,6 @@ const luaL_Reg UserData::Unit::methods[] = {
     {NULL, NULL}
 };
 
-void UserData::Unit::Init(lua_State* luaState)
-{
-    UserData::RegisterMetatable(luaState, MT_NAME, methods);
-}
-
 int UserData::Unit::CalculateMovement(lua_State* luaState)
 {
     auto unit = *UserData::ToUserData<Unit>(luaState, 1);

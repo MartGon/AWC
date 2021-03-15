@@ -11,8 +11,6 @@ namespace Script::UserData
         using type = ::UnitPtr;
         static const char* MT_NAME;
         static const luaL_Reg methods[];
-        
-        static void Init(lua_State* luaState);
 
         static int CalculateMovement(lua_State* luaState);
     };
