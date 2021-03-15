@@ -2,18 +2,19 @@
 
 #include <AWC/AWCusing.h>
 #include <AWC/Range.h>
+#include <AWC/CostTable.h>
 
 class MovementDescType
 {
 public:
-    MovementDescType(AreaDescIPtr tpd, Range range, CostTableIPtr tileCost,
-        CostTableIPtr unitCost, uint maxGas);
+    MovementDescType(AreaDescIPtr tpd, Range range, CostTable tileCost,
+        CostTable unitCost, uint maxGas);
 
     MovementDescPtr CreateMovementDesc() const;
 
     AreaDescIPtr tpd;
     Range range;
-    CostTableIPtr tileCostTable;
-    CostTableIPtr unitCostTable;
+    CostTable tileCostTable;
+    CostTable unitCostTable;
     uint maxGas;
 };

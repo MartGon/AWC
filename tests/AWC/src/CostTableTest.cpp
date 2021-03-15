@@ -23,7 +23,7 @@ TEST_CASE("Cost table")
 TEST_CASE("Fixed CostTable")
 {
     const uint cost = 1;
-    FixedCostTable costTable{1};
+    CostTable costTable{1};
 
     const uint GRASS_ID = 1;
     const uint WATER_ID = 2;

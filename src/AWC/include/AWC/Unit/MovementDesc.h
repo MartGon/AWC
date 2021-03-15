@@ -18,8 +18,8 @@ public:
     AreaDescIPtr GetMovePattern();
     Range GetRange();
     unsigned int GetMaxGas();
-    CostTableIPtr GetTileCostTable();
-    CostTableIPtr GetUnitCostTable();
+    CostTable GetTileCostTable();
+    CostTable GetUnitCostTable();
 
     unsigned int GetBaseTileCost(unsigned int tileId);
 

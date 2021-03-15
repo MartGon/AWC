@@ -6,8 +6,6 @@
 #include <unordered_map>
 
 using CommandPtr = std::shared_ptr<Command>;
-using CostTableIPtr = std::shared_ptr<CostTableI>;
-using CostTablePtr = std::shared_ptr<CostTable>;
 using Directions = std::vector<Vector2>;
 using DirectionsTable = std::unordered_map<Vector2, Directions>;
 using MovementDescPtr = std::shared_ptr<MovementDesc>;

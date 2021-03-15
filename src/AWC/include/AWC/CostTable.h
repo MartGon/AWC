@@ -2,34 +2,17 @@
 
 #include <unordered_map>
 
-class CostTableI
+class CostTable
 {
 public:
-    virtual ~CostTableI() {};
-
-    virtual unsigned int GetCost(unsigned int id) const = 0;
-};
-
-class CostTable : public CostTableI
-{
-public:
-    CostTable() {};
-    CostTable(std::unordered_map<unsigned int, unsigned int> map) : costMap_{map} {};
+    CostTable() : defaultCost_{std::numeric_limits<unsigned int>::max()} {};
+    CostTable(unsigned int defaultCost) : defaultCost_{defaultCost} {};
+    CostTable(std::unordered_map<unsigned int, unsigned int> map, unsigned int defaultCost) : costMap_{map}, defaultCost_{defaultCost} {};
 
     void SetCost(unsigned int id, unsigned int cost);
-    unsigned int GetCost(unsigned int id) const override;
+    unsigned int GetCost(unsigned int id) const;
 
 private:
     std::unordered_map<unsigned int, unsigned int> costMap_;
-};
-
-class FixedCostTable : public CostTableI
-{
-public:
-    FixedCostTable(unsigned int cost);
-
-    unsigned int GetCost(unsigned int id) const override;
-
-private:
-    unsigned int cost_;
+    unsigned int defaultCost_;
 };

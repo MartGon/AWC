@@ -179,12 +179,12 @@ UnitType UnitTest::CreateSoldierType()
     AreaDescIPtr manhattan = AreaDesc::Create(manhattanMoves);
 
     // CostTables
-    std::shared_ptr<CostTable> unitCostTable{new CostTable};
-    unitCostTable->SetCost(id, std::numeric_limits<uint>::max());
+    CostTable unitCostTable;
+    unitCostTable.SetCost(id, std::numeric_limits<uint>::max());
 
-    CostTablePtr tileCostTable{new CostTable};
+    CostTable tileCostTable;
     uint grassId = 0;
-    tileCostTable->SetCost(grassId, 1);
+    tileCostTable.SetCost(grassId, 1);
 
     // Movement
     MovementDescTypePtr moveType{ new MovementDescType{manhattan, {3, 0}, tileCostTable, unitCostTable, 99}};
@@ -210,13 +210,13 @@ UnitType UnitTest::CreateMechType()
     AreaDescIPtr manhattan = AreaDesc::Create(manhattanMoves);
 
     // CostTables
-    std::shared_ptr<CostTable> unitCostTable{new CostTable};
-    unitCostTable->SetCost(0, 0);
-    unitCostTable->SetCost(1, 0);
+    CostTable unitCostTable;
+    unitCostTable.SetCost(0, 0);
+    unitCostTable.SetCost(1, 0);
 
-    CostTablePtr tileCostTable{new CostTable};
+    CostTable tileCostTable;
     uint grassId = 0;
-    tileCostTable->SetCost(grassId, 1);
+    tileCostTable.SetCost(grassId, 1);
 
     // Movement
     MovementDescTypePtr moveType{ new MovementDescType{manhattan, {2, 0}, tileCostTable, unitCostTable, 99}};
@@ -242,14 +242,14 @@ UnitType UnitTest::CreateFighter()
     AreaDescIPtr manhattan = AreaDesc::Create(manhattanMoves);
 
     // CostTables
-    std::shared_ptr<CostTable> unitCostTable{new CostTable};
-    unitCostTable->SetCost(0, 0);
-    unitCostTable->SetCost(1, 0);
-    unitCostTable->SetCost(10, 0);
+    CostTable unitCostTable;
+    unitCostTable.SetCost(0, 0);
+    unitCostTable.SetCost(1, 0);
+    unitCostTable.SetCost(10, 0);
 
-    CostTablePtr tileCostTable{new CostTable};
+    CostTable tileCostTable;
     uint grassId = 0;
-    tileCostTable->SetCost(grassId, 1);
+    tileCostTable.SetCost(grassId, 1);
 
     // Movement
     MovementDescTypePtr moveType{ new MovementDescType{manhattan, {10, 0}, tileCostTable, unitCostTable, 75}};

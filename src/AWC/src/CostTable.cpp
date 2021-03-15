@@ -1,4 +1,5 @@
 #include <AWC/CostTable.h>
+#include <Utils/STLUtils.h>
 
 // CostTable
 
@@ -9,17 +10,7 @@ void CostTable::SetCost(unsigned int id, unsigned int cost)
 
 unsigned int CostTable::GetCost(unsigned int id) const
 {
-    return costMap_.at(id);
-}
+    auto cost = UnorderedMapUtils::Contains(costMap_, id) ? costMap_.at(id) : defaultCost_;
 
-// FixedCostTable
-
-FixedCostTable::FixedCostTable(unsigned int cost) : cost_{cost}
-{
-    
-}
-
-unsigned int FixedCostTable::GetCost(unsigned int id) const
-{
-    return cost_;
+    return cost;
 }

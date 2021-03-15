@@ -3,6 +3,7 @@
 #include <AWC/AWCusing.h>
 #include <AWC/Area/AreaDescI.h>
 #include <AWC/Range.h>
+#include <AWC/CostTable.h>
 
 #include <memory>
 
@@ -32,12 +33,12 @@ private:
 class TPDStaticCost : public AreaDescDecorator
 {
 public:
-    TPDStaticCost(AreaDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable);
+    TPDStaticCost(AreaDescIPtr child, CostTable tileCostTable, CostTable unitCostTable);
 
 private:
     AreaIPtr DoCalculateArea(const Map& map, Vector2 origin, std::optional<Vector2> destination, 
         const AreaConstraints& constraints) override;
 
-    CostTableIPtr tileCostTable_;
-    CostTableIPtr unitCostTable_;
+    CostTable tileCostTable_;
+    CostTable unitCostTable_;
 };

@@ -58,11 +58,11 @@ TEST_CASE("Area pathfinding test")
     auto manhattanDesc = AreaDesc::Create(directions);
 
     // CostTable
-    std::shared_ptr<CostTable> tileCostTable{new CostTable};
-    tileCostTable->SetCost(seaTileType.GetId(), 4);
-    tileCostTable->SetCost(grassTileType.GetId(), 1);
+    CostTable tileCostTable;
+    tileCostTable.SetCost(seaTileType.GetId(), 4);
+    tileCostTable.SetCost(grassTileType.GetId(), 1);
 
-    std::shared_ptr<CostTable> unitCostTable{new CostTable};
+    CostTable unitCostTable;
 
     // AreaConstraints
     AreaConstraints tpc{tileCostTable, unitCostTable, 0, 4};

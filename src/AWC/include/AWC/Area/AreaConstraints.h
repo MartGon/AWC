@@ -4,15 +4,16 @@
 
 #include <AWC/AWCusing.h>
 #include <AWC/Range.h>
+#include <AWC/CostTable.h>
 
 #include <memory>
 
 class AreaConstraints
 {
 public:
-    AreaConstraints(CostTableIPtr tileCostTable, CostTableIPtr unitCostTable, uint teamId,
+    AreaConstraints(CostTable tileCostTable, CostTable unitCostTable, uint teamId,
     unsigned int maxRange, unsigned int minRange = 0);
-    AreaConstraints(CostTableIPtr tileCostTable, CostTableIPtr unitCosttable, uint teamId, Range range);
+    AreaConstraints(CostTable tileCostTable, CostTable unitCosttable, uint teamId, Range range);
     
     unsigned int GetTileCost(unsigned int id) const;
     unsigned int GetUnitCost(unsigned int id) const;
@@ -20,6 +21,6 @@ public:
     const uint teamId;
     Range range;
 private:
-    CostTableIPtr tileCostTable;
-    CostTableIPtr unitCostTable;
+    CostTable tileCostTable;
+    CostTable unitCostTable;
 };

@@ -40,7 +40,7 @@ AreaIPtr TPDStaticRange::DoCalculateArea(const Map& map, Vector2 origin,
 
 // TPD FixedCost
 
-TPDStaticCost::TPDStaticCost(AreaDescIPtr child, CostTableIPtr tileCostTable, CostTableIPtr unitCostTable) 
+TPDStaticCost::TPDStaticCost(AreaDescIPtr child, CostTable tileCostTable, CostTable unitCostTable) 
     : tileCostTable_{tileCostTable}, unitCostTable_{unitCostTable},  AreaDescDecorator{child}
 {
 

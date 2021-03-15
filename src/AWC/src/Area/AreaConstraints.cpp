@@ -3,14 +3,14 @@
 #include <AWC/Map.h>
 #include <AWC/CostTable.h>
 
-AreaConstraints::AreaConstraints(CostTableIPtr tileCostTable, CostTableIPtr unitCostTable,
+AreaConstraints::AreaConstraints(CostTable tileCostTable, CostTable unitCostTable,
  unsigned int teamId, unsigned int maxRange, unsigned int minRange) :
     teamId{teamId}, range{maxRange, minRange}, tileCostTable{tileCostTable}, unitCostTable{unitCostTable}
 {
 
 }
 
-AreaConstraints::AreaConstraints(CostTableIPtr tileCostTable, CostTableIPtr unitCostTable,
+AreaConstraints::AreaConstraints(CostTable tileCostTable, CostTable unitCostTable,
  unsigned int teamId, Range range) :
     teamId{teamId}, range{range}, tileCostTable{tileCostTable}, unitCostTable{unitCostTable}
 {
@@ -19,10 +19,10 @@ AreaConstraints::AreaConstraints(CostTableIPtr tileCostTable, CostTableIPtr unit
 
 unsigned int AreaConstraints::GetTileCost(unsigned int id) const
 {
-    return tileCostTable->GetCost(id);
+    return tileCostTable.GetCost(id);
 }
 
 unsigned int AreaConstraints::GetUnitCost(unsigned int id) const
 {
-    return unitCostTable->GetCost(id);
+    return unitCostTable.GetCost(id);
 }

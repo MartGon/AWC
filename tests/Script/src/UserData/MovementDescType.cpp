@@ -25,8 +25,8 @@ TEST_CASE("MovementDescType userdata")
         CHECK(mdt->maxGas == -1);
         CHECK(mdt->range.minRange == 1);
         CHECK(mdt->range.maxRange == -1);
-        CHECK(mdt->tileCostTable->GetCost(1) == 1);
-        CHECK(mdt->unitCostTable->GetCost(1) == -1);
+        CHECK(mdt->tileCostTable.GetCost(1) == 1);
+        CHECK(mdt->unitCostTable.GetCost(1) == -1);
         
     }
 }

@@ -33,10 +33,10 @@ TEST_CASE("Area Composition Union test")
     auto queenDesc = std::make_shared<AreaDescUnion>(rookDesc, bishopDesc);
 
     // CostTable
-    std::shared_ptr<CostTable> tileCostTable{new CostTable};
-    tileCostTable->SetCost(grassTileType.GetId(), 1);
+    CostTable tileCostTable;
+    tileCostTable.SetCost(grassTileType.GetId(), 1);
 
-    std::shared_ptr<CostTable> unitCostTable{new CostTable};
+    CostTable unitCostTable;
 
     // AreaConstraints
     AreaConstraints tpc{tileCostTable, unitCostTable, 0, 10};
@@ -85,10 +85,10 @@ TEST_CASE("Area Composition Diff test")
     auto tpdd = std::make_shared<AreaDescDiff>(towRangeMooreDesc, oneDiagonalDesc);
 
     // CostTable
-    std::shared_ptr<CostTable> tileCostTable{new CostTable};
-    tileCostTable->SetCost(grassTileType.GetId(), 1);
+    CostTable tileCostTable;
+    tileCostTable.SetCost(grassTileType.GetId(), 1);
 
-    std::shared_ptr<CostTable> unitCostTable{new CostTable};
+    CostTable unitCostTable;
 
     // AreaConstraints
     AreaConstraints tpc{tileCostTable, unitCostTable, 0, 2};
@@ -178,10 +178,10 @@ TEST_CASE("Area Composition Intersect test")
     auto tpdd = std::make_shared<AreaDescIntersect>(oneRangeMoore, oneRangeManhattan);
 
     // CostTable
-    std::shared_ptr<CostTable> tileCostTable{new CostTable};
-    tileCostTable->SetCost(grassTileType.GetId(), 1);
+    CostTable tileCostTable;
+    tileCostTable.SetCost(grassTileType.GetId(), 1);
 
-    std::shared_ptr<CostTable> unitCostTable{new CostTable};
+    CostTable unitCostTable;
 
     // AreaConstraints
     AreaConstraints tpc{tileCostTable, unitCostTable, 0, 2};
@@ -274,10 +274,10 @@ void AreaCompTest::CheckQueenDesc(AreaDescIPtr queenDesc)
     MapUtils::FillMap(map, grassTileType);
 
     // CostTable
-    std::shared_ptr<CostTable> tileCostTable{new CostTable};
-    tileCostTable->SetCost(grassTileType.GetId(), 1);
+    CostTable tileCostTable;
+    tileCostTable.SetCost(grassTileType.GetId(), 1);
 
-    std::shared_ptr<CostTable> unitCostTable{new CostTable};
+    CostTable unitCostTable;
 
     // AreaConstraints
     AreaConstraints tpc{tileCostTable, unitCostTable, 0, 10};

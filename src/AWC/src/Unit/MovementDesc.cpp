@@ -47,17 +47,17 @@ unsigned int MovementDesc::GetMaxGas()
     return moveType.maxGas;
 }
 
-CostTableIPtr MovementDesc::GetTileCostTable()
+CostTable MovementDesc::GetTileCostTable()
 {
     return moveType.tileCostTable;
 }
 
-CostTableIPtr MovementDesc::GetUnitCostTable()
+CostTable MovementDesc::GetUnitCostTable()
 {
     return moveType.unitCostTable;
 }
 
 unsigned int MovementDesc::GetBaseTileCost(unsigned int tileId)
 {
-    return moveType.tileCostTable->GetCost(tileId);
+    return moveType.tileCostTable.GetCost(tileId);
 }

@@ -17,16 +17,16 @@ const luaL_Reg UserData::MovementDescType::functions[] = {
     {NULL, NULL}
 };
 
-CostTablePtr ParseCostTable(lua_State* luaState, LuaTable& t)
+CostTable ParseCostTable(lua_State* luaState, LuaTable& t)
 {
-    CostTablePtr ct{new CostTable};
+    CostTable ct{{}, std::numeric_limits<unsigned int>::max()};
     for(int i = 0; i < t.Length(); i++)
     {
         int luaI = i + 1;
         auto entry = t.GetTable(i + 1);
         luaL_argcheck(luaState, entry, 1, "table entry in CostTable was not a table");
 
-        ct->SetCost(entry->Get<uint>("id"), entry->Get<uint>("cost"));
+        ct.SetCost(entry->Get<uint>("id"), entry->Get<uint>("cost"));
     }
 
     return ct;
@@ -49,11 +49,11 @@ int UserData::MovementDescType::New(lua_State* luaState)
     auto tileCT = lt.GetTable("tileCT");
     luaL_argcheck(luaState, tileCT, 1, "tile CostTable was not found");
 
-    CostTablePtr tct = ParseCostTable(luaState, *tileCT);
+    CostTable tct = ParseCostTable(luaState, *tileCT);
 
     auto unitCT = lt.GetTable("unitCT");
     luaL_argcheck(luaState, unitCT, 1, "unit CostTable was not found");
-    CostTablePtr uct = ParseCostTable(luaState, *unitCT);
+    CostTable uct = ParseCostTable(luaState, *unitCT);
 
     auto maxGas = lt.Get<uint>("maxGas");
 

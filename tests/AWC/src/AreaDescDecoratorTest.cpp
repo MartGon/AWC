@@ -45,10 +45,10 @@ TEST_CASE("Area Fixed Range Decorator test")
     auto mooreDesc = AreaDesc::Create(directions);
     
     // Fixed CostTable
-    CostTableIPtr tileCostTable{new FixedCostTable{1}};
+    CostTable tileCostTable{1};
 
     // Fixed Range TPD
-    CostTableIPtr unitCostTable{new CostTable};
+    CostTable unitCostTable;
     auto mooreDescFixedRange = std::make_shared<TPDStaticRange>(mooreDesc, 1, 0);
 
     // Normal TPC
@@ -123,18 +123,18 @@ TEST_CASE("Area Fixed Cost Decorator test")
     auto mooreDesc = AreaDesc::Create(directions);
     
     // Fixed CostTable
-    auto fixedTileCostTable = std::make_shared<FixedCostTable>(1);
-    auto unitTileCostTable = std::make_shared<FixedCostTable>(0);
+    CostTable fixedTileCostTable{1};
+    CostTable unitTileCostTable{0};
 
     // Fixed Range TPD
-    CostTableIPtr unitCostTable{new CostTable};
+    CostTable unitCostTable;
     auto mooreDescFixedRange = std::make_shared<TPDStaticRange>(mooreDesc, 1, 0);
     auto mooreDescFixedCost = std::make_shared<TPDStaticCost>(mooreDescFixedRange, fixedTileCostTable, unitTileCostTable);
 
     // Normal TPC
-    std::shared_ptr<CostTable> normalCostTable{new CostTable};
-    normalCostTable->SetCost(0, 1);
-    normalCostTable->SetCost(1, 4);
+    CostTable normalCostTable;
+    normalCostTable.SetCost(0, 1);
+    normalCostTable.SetCost(1, 4);
     AreaConstraints constraints{normalCostTable, unitCostTable, 8, 0};
 
     SUBCASE("Check CalculateArea with composition")
