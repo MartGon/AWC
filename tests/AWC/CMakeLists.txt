@@ -13,7 +13,7 @@ SET(SOURCES
     src/AreaCompTest.cpp
     src/AreaDescTest.cpp
     src/AreaDescDecoratorTest.cpp
-    src/TileGraphTest.cpp
+    src/GraphTest.cpp
 )
 
 add_library(AWCTestLib ${SOURCES})

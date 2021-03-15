@@ -5,7 +5,7 @@
 #include <AWC/AWCusing.h>
 #include <AWC/Directions.h>
 #include <AWC/Area/AreaDescI.h>
-#include <AWC/Area/TileNode.h>
+#include <AWC/Area/Node.h>
 
 #include <unordered_map>
 #include <memory>

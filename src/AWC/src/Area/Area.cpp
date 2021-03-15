@@ -1,12 +1,12 @@
 #include <AWC/Area/Area.h>
 
-Area::Area(Vector2 origin, TileGraph tg, unsigned int maxRange, unsigned int minRange) : 
+Area::Area(Vector2 origin, Graph tg, unsigned int maxRange, unsigned int minRange) : 
     origin_{origin}, tg_{tg}, range_{maxRange, minRange}
 {
     
 }
 
-Area::Area(Vector2 origin, TileGraph tg, Range range) : 
+Area::Area(Vector2 origin, Graph tg, Range range) : 
     origin_{origin}, tg_{tg}, range_{range}
 {
     
@@ -32,7 +32,7 @@ std::vector<Vector2> Area::GetPathToTile(Vector2 dest) const
 
         while(node->pos != origin_)
         {
-            auto lowest = [](std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b) {
+            auto lowest = [](std::weak_ptr<Node> a, std::weak_ptr<Node> b) {
                 return a.lock()->cost < b.lock()->cost;
             };
             auto nei = node->GetNeighbourBySortCriteria(lowest);

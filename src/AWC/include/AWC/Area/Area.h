@@ -1,7 +1,7 @@
 #pragma once
 
 #include <AWC/AWCusing.h>
-#include <AWC/Area/TileGraph.h>
+#include <AWC/Area/Graph.h>
 #include <AWC/Area/AreaI.h>
 #include <AWC/Range.h>
 
@@ -24,13 +24,13 @@ public:
 
 private:
 
-    Area(Vector2 origin, TileGraph mg, unsigned int maxRange, unsigned int minRange);
-    Area(Vector2 origin, TileGraph mg, Range range);
+    Area(Vector2 origin, Graph mg, unsigned int maxRange, unsigned int minRange);
+    Area(Vector2 origin, Graph mg, Range range);
 
     bool IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRange = 0) const;
     bool IsTileInRange(Vector2 dest) const;
 
     Vector2 origin_;
-    TileGraph tg_;
+    Graph tg_;
     Range range_;
 };

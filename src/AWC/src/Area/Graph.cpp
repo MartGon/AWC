@@ -1,36 +1,36 @@
-#include <AWC/Area/TileGraph.h>
+#include <AWC/Area/Graph.h>
 #include <AWC/AWCException.h>
 
 #include <iostream>
 
-// TileGraph
+// Graph
 
-TileGraph::TileGraph(TileGraph& tg) : nodes_{tg.nodes_}
+Graph::Graph(Graph& tg) : nodes_{tg.nodes_}
 {
 }
 
-TileGraph::TileGraph(TileGraph&& other) : nodes_{std::move(other.nodes_)}
+Graph::Graph(Graph&& other) : nodes_{std::move(other.nodes_)}
 {
 #ifdef _DEBUG
     moved = true;
 #endif
 }
 
-TileNodePtr TileGraph::CreateNode(const Vector2 pos, const unsigned int cost)
+NodePtr Graph::CreateNode(const Vector2 pos, const unsigned int cost)
 {
-    std::shared_ptr<TileNode> mapNode;
+    std::shared_ptr<Node> mapNode;
     if(!NodeExists(pos))
     {
-        mapNode = std::shared_ptr<TileNode>(new TileNode{pos, cost});
+        mapNode = std::shared_ptr<Node>(new Node{pos, cost});
         nodes_.insert({pos, mapNode});
     }
     else
-        throw AWCAlreadyExistingIndexException("TileGraph::CreateNode", pos);;
+        throw AWCAlreadyExistingIndexException("Graph::CreateNode", pos);;
 
     return mapNode;
 }
 
-TileNodePtr TileGraph::CreateNode(const Vector2 pos, const unsigned int cost, const Vector2 nei)
+NodePtr Graph::CreateNode(const Vector2 pos, const unsigned int cost, const Vector2 nei)
 {
     auto mapNode = CreateNode(pos, cost);
     SetNeighbour(pos, nei);
@@ -38,7 +38,7 @@ TileNodePtr TileGraph::CreateNode(const Vector2 pos, const unsigned int cost, co
     return mapNode;
 }
 
-std::vector<Vector2> TileGraph::GetNodesPos() const
+std::vector<Vector2> Graph::GetNodesPos() const
 {
     std::vector<Vector2> nodesPos;
     for(auto pair : nodes_)
@@ -47,23 +47,23 @@ std::vector<Vector2> TileGraph::GetNodesPos() const
     return nodesPos;
 }
 
-TileNodePtr TileGraph::GetNode(Vector2 pos) const
+NodePtr Graph::GetNode(Vector2 pos) const
 {
-    TileNodePtr mapNode;
+    NodePtr mapNode;
     if(NodeExists(pos))
         mapNode = nodes_.at(pos);
     else
-        throw AWCNoExistingIndexException("TileGraph::GetNode", pos);
+        throw AWCNoExistingIndexException("Graph::GetNode", pos);
 
     return mapNode;
 }
 
-bool TileGraph::NodeExists(Vector2 pos) const
+bool Graph::NodeExists(Vector2 pos) const
 {
     return nodes_.find(pos) != nodes_.end();
 }
 
-void TileGraph::SetNeighbour(Vector2 a, Vector2 b)
+void Graph::SetNeighbour(Vector2 a, Vector2 b)
 {    
     auto nodeA = GetNode(a);
     auto nodeB = GetNode(b);
@@ -72,16 +72,16 @@ void TileGraph::SetNeighbour(Vector2 a, Vector2 b)
     nodeB.lock()->AddNeigbour(a, nodeA);
 }
 
-std::vector<TileNodePtr> TileGraph::DiscoverNeighbours(Vector2 pos, const Directions& directions)
+std::vector<NodePtr> Graph::DiscoverNeighbours(Vector2 pos, const Directions& directions)
 {
-    std::vector<TileNodePtr> neighbours;
+    std::vector<NodePtr> neighbours;
 
     auto current = GetNode(pos);
     for(const auto& dir : directions)
     {
         Vector2 tilePos = pos + dir;
 
-        TileNodePtr neighbour;
+        NodePtr neighbour;
         if(NodeExists(tilePos))
             neighbour = GetNode(tilePos);
         else

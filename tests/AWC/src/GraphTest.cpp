@@ -1,13 +1,13 @@
 #include "doctest.h"
 
-#include <AWC/Area/TileGraph.h>
+#include <AWC/Area/Graph.h>
 #include <AWC/AWCException.h>
 
 #include <iostream>
 
-TEST_CASE("TileNode tests")
+TEST_CASE("Node tests")
 {
-    TileGraph mg;
+    Graph mg;
     auto origin = mg.CreateNode({0, 0}, 0);
     auto neiRight = mg.CreateNode({1, 0}, 1);
     auto neiLeft = mg.CreateNode({-1, 0}, 1);
@@ -62,9 +62,9 @@ TEST_CASE("TileNode tests")
     }
 }
 
-TEST_CASE("TileGraph test")
+TEST_CASE("Graph test")
 {
-    TileGraph mg;
+    Graph mg;
     auto origin = mg.CreateNode({0, 0}, 0);
     auto neiRight = mg.CreateNode({1, 0}, 1);
     auto neiLeft = mg.CreateNode({-1, 0}, 1);
@@ -163,9 +163,9 @@ TEST_CASE("TileGraph test")
     }
     SUBCASE("Check move constructor")
     {
-        TileGraph mg;
-        TileGraph mg2{std::move(mg)};
-        TileGraph mg3 = std::move(mg);
+        Graph mg;
+        Graph mg2{std::move(mg)};
+        Graph mg3 = std::move(mg);
 #ifdef _DEBUG
         CHECK(mg2.moved == true);
         CHECK(mg3.moved == true);
@@ -175,7 +175,7 @@ TEST_CASE("TileGraph test")
 
 TEST_CASE("GetNeigbours by criteria")
 {
-    TileGraph mg;
+    Graph mg;
     auto origin = mg.CreateNode({0, 0}, 0);
     auto neiRight = mg.CreateNode({1, 0}, 1, {0, 0});
     auto neiLeft = mg.CreateNode({-1, 0}, 2, {0, 0});
@@ -186,7 +186,7 @@ TEST_CASE("GetNeigbours by criteria")
 
     SUBCASE("By lowest cost")
     {
-        auto lowest = [](std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b) {
+        auto lowest = [](std::weak_ptr<Node> a, std::weak_ptr<Node> b) {
             return a.lock()->cost < b.lock()->cost;
         };
         auto match = sOrigin->GetNeighbourBySortCriteria(lowest);
@@ -194,7 +194,7 @@ TEST_CASE("GetNeigbours by criteria")
     }
     SUBCASE("By highest cost")
     {
-        auto highest = [](std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b) {
+        auto highest = [](std::weak_ptr<Node> a, std::weak_ptr<Node> b) {
             return a.lock()->cost > b.lock()->cost;
         };
         auto match = sOrigin->GetNeighbourBySortCriteria(highest);
@@ -203,7 +203,7 @@ TEST_CASE("GetNeigbours by criteria")
     SUBCASE("No neighbours")
     {
         auto otherNode = mg.CreateNode({1, 1}, 0);
-        auto whatever = [](std::weak_ptr<TileNode> a, std::weak_ptr<TileNode> b) {
+        auto whatever = [](std::weak_ptr<Node> a, std::weak_ptr<Node> b) {
             return true;
         };
 

@@ -15,8 +15,8 @@
 #include "AWC/Operation/TakeDmg.h"
 #include "AWC/Operation/UpdateFlag.h"
 
-#include "AWC/Area/TileGraph.h"
-#include "AWC/Area/TileNode.h"
+#include "AWC/Area/Graph.h"
+#include "AWC/Area/Node.h"
 
 #include "AWC/Area/Area.h"
 #include "AWC/Area/AreaI.h"

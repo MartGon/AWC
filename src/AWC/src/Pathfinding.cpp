@@ -1,7 +1,7 @@
 #include <AWC/Pathfinding.h>
 
 #include <AWC/Map.h>
-#include <AWC/Area/TileGraph.h>
+#include <AWC/Area/Graph.h>
 #include <AWC/Area/Area.h>
 #include <AWC/Area/AreaConstraints.h>
 #include <AWC/Area/AreaDesc.h>
@@ -12,15 +12,15 @@
 
 using namespace Pathfinding;
 
-TileGraph Pathfinding::Dijkstra(Vector2 origin, Params params)
+Graph Pathfinding::Dijkstra(Vector2 origin, Params params)
 {
-    TileGraph tg;
+    Graph tg;
     auto originNode = tg.CreateNode(origin, 0);
 
     // Create prioQueue
     // PrioQueue pop values in reverse order
-    auto greater = [](TileNodePtr a, TileNodePtr b) { return a.lock()->cost > b.lock()->cost;};
-    std::priority_queue<TileNodePtr, std::vector<TileNodePtr>, decltype(greater)> prioQueue{greater};
+    auto greater = [](NodePtr a, NodePtr b) { return a.lock()->cost > b.lock()->cost;};
+    std::priority_queue<NodePtr, std::vector<NodePtr>, decltype(greater)> prioQueue{greater};
     prioQueue.push(originNode);
 
     while(!prioQueue.empty())
@@ -58,7 +58,7 @@ TileGraph Pathfinding::Dijkstra(Vector2 origin, Params params)
     return tg;
 }
 
-Directions Pathfinding::GetDiscoverDirections(TileNodePtr tileNode, Params params)
+Directions Pathfinding::GetDiscoverDirections(NodePtr tileNode, Params params)
 {
     auto directions = params.tpd.GetOriginDirections();
 
@@ -69,23 +69,23 @@ Directions Pathfinding::GetDiscoverDirections(TileNodePtr tileNode, Params param
     return directions;
 }
 
-Vector2 Pathfinding::GetMovementToOrigin(TileNodePtr tileNode)
+Vector2 Pathfinding::GetMovementToOrigin(NodePtr tileNode)
 {
     Vector2 movement{0, 0};
 
-    auto sTileNode = tileNode.lock();
-    auto lowestCost = [](TileNodePtr a, TileNodePtr b) {
+    auto sNode = tileNode.lock();
+    auto lowestCost = [](NodePtr a, NodePtr b) {
             return a.lock()->cost < b.lock()->cost;
         };
 
-    auto neighbour = sTileNode->GetNeighbourBySortCriteria(lowestCost);
+    auto neighbour = sNode->GetNeighbourBySortCriteria(lowestCost);
     if(auto sNeigbour = neighbour.lock())
-        movement = sTileNode->pos - sNeigbour->pos;
+        movement = sNode->pos - sNeigbour->pos;
     
     return movement;
 }
 
-Directions Pathfinding::GetValidDirections(TileNodePtr tileNode, Directions directions, const Map& map)
+Directions Pathfinding::GetValidDirections(NodePtr tileNode, Directions directions, const Map& map)
 {
     auto nodePos = tileNode.lock()->pos;
 

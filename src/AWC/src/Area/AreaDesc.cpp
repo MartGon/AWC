@@ -3,7 +3,7 @@
 #include <AWC/Area/AreaConstraints.h>
 #include <AWC/CostTable.h>
 #include <AWC/Map.h>
-#include <AWC/Area/TileGraph.h>
+#include <AWC/Area/Graph.h>
 #include <AWC/AWCException.h>
 #include <AWC/Pathfinding.h>
 

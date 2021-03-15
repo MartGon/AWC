@@ -22,8 +22,8 @@ SET(SOURCES
   src/Area/AreaDescI.cpp
   src/Area/AreaDescComp.cpp
   src/Area/AreaDescDecorator.cpp
-  src/Area/TileGraph.cpp
-  src/Area/TileNode.cpp
+  src/Area/Graph.cpp
+  src/Area/Node.cpp
 
   src/Operation/Operation.cpp
   src/Operation/AntiOperation.cpp
