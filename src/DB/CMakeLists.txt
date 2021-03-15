@@ -2,7 +2,7 @@ SET(SOURCES
     src/AWCSer.cpp
     src/JsonUtils.cpp
     src/Repository.cpp
-    src/TilePatternDescSer.cpp
+    src/AreaDescSer.cpp
     src/TileSer.cpp
 )
 

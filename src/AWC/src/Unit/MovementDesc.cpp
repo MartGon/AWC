@@ -32,7 +32,7 @@ void MovementDesc::RefillGas()
 
 // Static data forwarded from moveType
 
-TilePatternDescIPtr MovementDesc::GetMovePattern()
+AreaDescIPtr MovementDesc::GetMovePattern()
 {
     return moveType.tpd;
 }

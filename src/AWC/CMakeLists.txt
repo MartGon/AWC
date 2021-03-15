@@ -14,16 +14,16 @@ SET(SOURCES
   src/TileType.cpp
   src/Turn.cpp
 
-  src/TilePattern/TilePattern.cpp
-  src/TilePattern/TilePatternI.cpp
-  src/TilePattern/TilePatternComp.cpp
-  src/TilePattern/TilePatternConstraints.cpp
-  src/TilePattern/TilePatternDesc.cpp
-  src/TilePattern/TilePatternDescI.cpp
-  src/TilePattern/TilePatternDescComp.cpp
-  src/TilePattern/TilePatternDescDecorator.cpp
-  src/TilePattern/TileGraph.cpp
-  src/TilePattern/TileNode.cpp
+  src/Area/Area.cpp
+  src/Area/AreaI.cpp
+  src/Area/AreaComp.cpp
+  src/Area/AreaConstraints.cpp
+  src/Area/AreaDesc.cpp
+  src/Area/AreaDescI.cpp
+  src/Area/AreaDescComp.cpp
+  src/Area/AreaDescDecorator.cpp
+  src/Area/TileGraph.cpp
+  src/Area/TileNode.cpp
 
   src/Operation/Operation.cpp
   src/Operation/AntiOperation.cpp

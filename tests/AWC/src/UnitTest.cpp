@@ -4,7 +4,7 @@
 #include <AWC/CostTable.h>
 #include <AWC/Unit/MovementDescType.h>
 #include <AWC/Player.h>
-#include <AWC/TilePattern/TilePatternDesc.h>
+#include <AWC/Area/AreaDesc.h>
 #include <AWC/Unit/UnitType.h>
 #include <AWC/Unit/Unit.h>
 #include <AWC/Unit/WeaponType.h>
@@ -174,9 +174,9 @@ UnitType UnitTest::CreateSoldierType()
     uint id = 0;
     std::string name = "Soldier";
 
-    // TilePatternDesc
+    // AreaDesc
     std::vector<Vector2> manhattanMoves{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-    TilePatternDescIPtr manhattan = TilePatternDesc::Create(manhattanMoves);
+    AreaDescIPtr manhattan = AreaDesc::Create(manhattanMoves);
 
     // CostTables
     std::shared_ptr<CostTable> unitCostTable{new CostTable};
@@ -205,9 +205,9 @@ UnitType UnitTest::CreateMechType()
     uint id = 1;
     std::string name = "Mech";
 
-    // TilePatternDesc
+    // AreaDesc
     std::vector<Vector2> manhattanMoves{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-    TilePatternDescIPtr manhattan = TilePatternDesc::Create(manhattanMoves);
+    AreaDescIPtr manhattan = AreaDesc::Create(manhattanMoves);
 
     // CostTables
     std::shared_ptr<CostTable> unitCostTable{new CostTable};
@@ -237,9 +237,9 @@ UnitType UnitTest::CreateFighter()
     uint id = 10;
     std::string name = "Fighter";
 
-    // TilePatternDesc
+    // AreaDesc
     std::vector<Vector2> manhattanMoves{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-    TilePatternDescIPtr manhattan = TilePatternDesc::Create(manhattanMoves);
+    AreaDescIPtr manhattan = AreaDesc::Create(manhattanMoves);
 
     // CostTables
     std::shared_ptr<CostTable> unitCostTable{new CostTable};

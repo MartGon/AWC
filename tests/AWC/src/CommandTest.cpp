@@ -9,7 +9,7 @@
 #include <AWC/Tile.h>
 #include <AWC/Unit/UnitType.h>
 #include <AWC/Unit/Unit.h>
-#include <AWC/TilePattern/TilePatternDesc.h>
+#include <AWC/Area/AreaDesc.h>
 #include <AWC/CostTable.h>
 
 #include <Tests/AWC/UnitTest.h>

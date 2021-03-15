@@ -125,11 +125,11 @@ private:
 
     // Movement
     // TODO: This should become public once CalculateMovement does
-    TilePatternConstraints GetMoveConstraints() const;
+    AreaConstraints GetMoveConstraints() const;
 
     // Attack
     // TODO: This should become public once CalculateAttack does
-    TilePatternConstraints GetAttackConstraints(unsigned int weaponId) const;
+    AreaConstraints GetAttackConstraints(unsigned int weaponId) const;
     bool IsWeaponIdValid(uint weaponId) const;
 
     // State

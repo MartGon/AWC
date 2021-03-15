@@ -15,18 +15,18 @@
 #include "AWC/Operation/TakeDmg.h"
 #include "AWC/Operation/UpdateFlag.h"
 
-#include "AWC/TilePattern/TileGraph.h"
-#include "AWC/TilePattern/TileNode.h"
+#include "AWC/Area/TileGraph.h"
+#include "AWC/Area/TileNode.h"
 
-#include "AWC/TilePattern/TilePattern.h"
-#include "AWC/TilePattern/TilePatternI.h"
+#include "AWC/Area/Area.h"
+#include "AWC/Area/AreaI.h"
 
-#include "AWC/TilePattern/TilePatternComp.h"
-#include "AWC/TilePattern/TilePatternConstraints.h"
-#include "AWC/TilePattern/TilePatternDesc.h"
-#include "AWC/TilePattern/TilePatternDescComp.h"
-#include "AWC/TilePattern/TilePatternDescDecorator.h"
-#include "AWC/TilePattern/TilePatternDescI.h"
+#include "AWC/Area/AreaComp.h"
+#include "AWC/Area/AreaConstraints.h"
+#include "AWC/Area/AreaDesc.h"
+#include "AWC/Area/AreaDescComp.h"
+#include "AWC/Area/AreaDescDecorator.h"
+#include "AWC/Area/AreaDescI.h"
 
 #include "AWC/Unit/MovementDesc.h"
 #include "AWC/Unit/MovementDescType.h"

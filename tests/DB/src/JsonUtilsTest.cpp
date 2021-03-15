@@ -2,7 +2,7 @@
 #include "json.hpp"
 
 #include <DB/AWCSer.h>
-#include <DB/TilePatternDescSer.h>
+#include <DB/AreaDescSer.h>
 #include <DB/JsonUtils.h>
 
 using Json = nlohmann::json;
@@ -78,7 +78,7 @@ TEST_CASE("JsonUtils GetValueUnsafe")
     }
     SUBCASE("Get misc")
     {
-        CHECK_NOTHROW(JsonUtils::GetValueUnsafe<TilePatternDescSer::TilePatternDescType>(intObj));
+        CHECK_NOTHROW(JsonUtils::GetValueUnsafe<AreaDescSer::AreaDescType>(intObj));
     }
 }
 

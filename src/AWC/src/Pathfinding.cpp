@@ -1,10 +1,10 @@
 #include <AWC/Pathfinding.h>
 
 #include <AWC/Map.h>
-#include <AWC/TilePattern/TileGraph.h>
-#include <AWC/TilePattern/TilePattern.h>
-#include <AWC/TilePattern/TilePatternConstraints.h>
-#include <AWC/TilePattern/TilePatternDesc.h>
+#include <AWC/Area/TileGraph.h>
+#include <AWC/Area/Area.h>
+#include <AWC/Area/AreaConstraints.h>
+#include <AWC/Area/AreaDesc.h>
 
 #include <Utils.h>
 
@@ -100,7 +100,7 @@ Directions Pathfinding::GetValidDirections(TileNodePtr tileNode, Directions dire
     return validDirections;
 }
 
-unsigned int Pathfinding::GetTileCost(const Map& map, const TilePatternConstraints& tpc, Vector2 pos)
+unsigned int Pathfinding::GetTileCost(const Map& map, const AreaConstraints& tpc, Vector2 pos)
 {
     auto tile = map.GetTile(pos);
     auto cost = tpc.GetTileCost(tile->GetId());

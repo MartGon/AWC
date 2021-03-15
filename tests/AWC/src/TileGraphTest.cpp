@@ -1,6 +1,6 @@
 #include "doctest.h"
 
-#include <AWC/TilePattern/TileGraph.h>
+#include <AWC/Area/TileGraph.h>
 #include <AWC/AWCException.h>
 
 #include <iostream>

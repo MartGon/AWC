@@ -11,7 +11,7 @@ public:
     std::vector<Vector2> GetTilesInRange();
 
 private:
-    UnitAttack(TilePatternIPtr tp);
+    UnitAttack(AreaIPtr tp);
 
-    TilePatternIPtr tp_;
+    AreaIPtr tp_;
 };

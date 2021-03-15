@@ -32,11 +32,11 @@ private:
 class WeaponType
 {
 public:
-    WeaponType(TilePatternDescIPtr tpd, Range range, AttackTable attackTable, DamageTable damageTable, uint maxAmmo);
+    WeaponType(AreaDescIPtr tpd, Range range, AttackTable attackTable, DamageTable damageTable, uint maxAmmo);
 
     WeaponPtr CreateWeapon() const;
 
-    TilePatternDescIPtr tpd;
+    AreaDescIPtr tpd;
     Range range;
 
     // TODO: This two tables could become one and have AttackInfo

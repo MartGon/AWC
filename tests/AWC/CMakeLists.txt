@@ -9,10 +9,10 @@ SET(SOURCES
     src/MapTest.cpp
     src/TileTest.cpp
     src/UnitTest.cpp
-    src/TilePatternTest.cpp
-    src/TilePatternCompTest.cpp
-    src/TilePatternDescTest.cpp
-    src/TilePatternDescDecoratorTest.cpp
+    src/AreaTest.cpp
+    src/AreaCompTest.cpp
+    src/AreaDescTest.cpp
+    src/AreaDescDecoratorTest.cpp
     src/TileGraphTest.cpp
 )
 

@@ -4,7 +4,7 @@ function Execute(game)
 
     local vec1 = Vector2.new(0, 1);
     local vec2 = Vector2.new(1, 0);
-    local tp = TilePatternDesc.New({
+    local tp = AreaDesc.New({
         
         directions = {
             vec1,

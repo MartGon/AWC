@@ -4,7 +4,7 @@
 
 - Game operations
 - Event handlers
-- TilePatternDescriptors
+- AreaDescriptors
 - Win Conditions
 
 ## How can they be scripted ?

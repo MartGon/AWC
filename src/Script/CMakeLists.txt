@@ -14,7 +14,7 @@ set(SOURCES
     src/UserData/UserData.cpp
     src/UserData/UnitMovement.cpp
     src/UserData/Vector2.cpp
-    src/UserData/TilePatternDesc.cpp
+    src/UserData/AreaDesc.cpp
     src/UserData/MovementDescType.cpp
 )
 

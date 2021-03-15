@@ -2,7 +2,7 @@
 #include <Script/UserData/UserData.h>
 #include <Script/LuaTable.h>
 
-#include <Script/UserData/TilePatternDesc.h>
+#include <Script/UserData/AreaDesc.h>
 
 using namespace Script;
 
@@ -39,7 +39,7 @@ int UserData::MovementDescType::New(lua_State* luaState)
 
     LuaTable lt{luaState, 1};
 
-    auto tpd = lt.GetUserData<TilePatternDesc>("tpd");
+    auto tpd = lt.GetUserData<AreaDesc>("tpd");
 
     auto range = lt.GetTable("range");
     luaL_argcheck(luaState, range, 1, "range table was not found");
@@ -65,7 +65,7 @@ int UserData::MovementDescType::New(lua_State* luaState)
 
 /*
     MovementDescType.New({
-        tpd = TilePatternDesc.New({ ... }),
+        tpd = AreaDesc.New({ ... }),
         range = {
             "min" = 0;
             "max" = 100;

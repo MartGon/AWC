@@ -5,12 +5,12 @@ namespace Pathfinding
 {
     struct Params
     {
-        Params(const Map& map, const TilePatternDesc& tpd, const TilePatternConstraints& constraints, std::optional<Vector2> dest) :
+        Params(const Map& map, const AreaDesc& tpd, const AreaConstraints& constraints, std::optional<Vector2> dest) :
             map{map}, tpd{tpd}, constraints{constraints}, dest{dest} {}
 
         const Map& map;
-        const TilePatternDesc& tpd;
-        const TilePatternConstraints& constraints;
+        const AreaDesc& tpd;
+        const AreaConstraints& constraints;
         std::optional<Vector2> dest;
     };
 
@@ -19,6 +19,6 @@ namespace Pathfinding
     Directions GetDiscoverDirections(TileNodePtr tileNode, Params params);
     Vector2 GetMovementToOrigin(TileNodePtr tileNode);
     Directions GetValidDirections(TileNodePtr tileNode, Directions directions, const Map& map);
-    unsigned int GetTileCost(const Map& map, const TilePatternConstraints& tpc, Vector2 pos);
+    unsigned int GetTileCost(const Map& map, const AreaConstraints& tpc, Vector2 pos);
 
 }

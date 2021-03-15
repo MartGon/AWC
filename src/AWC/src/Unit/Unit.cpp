@@ -3,14 +3,14 @@
 #include <AWC/Unit/UnitMovement.h>
 #include <AWC/Unit/UnitAttack.h>
 
-#include <AWC/TilePattern/TilePatternConstraints.h>
+#include <AWC/Area/AreaConstraints.h>
 
 #include <AWC/Unit/MovementDescType.h>
 #include <AWC/Unit/MovementDesc.h>
 #include <AWC/Unit/Weapon.h>
 #include <AWC/Unit/WeaponType.h>
-#include <AWC/TilePattern/TilePatternDesc.h>
-#include <AWC/TilePattern/TilePattern.h>
+#include <AWC/Area/AreaDesc.h>
+#include <AWC/Area/Area.h>
 #include <AWC/CostTable.h>
 #include <AWC/Player.h>
 #include <AWC/Turn.h>
@@ -49,7 +49,7 @@ UnitMovement Unit::CalculateMovement(const Map& map, Vector2 origin)
 {
     auto moveDesc = moveDesc_->GetMovePattern();
     auto moveConstraints = GetMoveConstraints();
-    auto tp = moveDesc->CalculateTilePattern(map, origin, moveConstraints);
+    auto tp = moveDesc->CalculateArea(map, origin, moveConstraints);
     return UnitMovement{tp};
 }
 
@@ -75,13 +75,13 @@ bool Unit::CanMove() const
 
 UnitAttack Unit::CalculateAttack(unsigned int weaponId, const Map& map, Vector2 origin)
 {
-    UnitAttack unitAttack{TilePatternIPtr{nullptr}};
+    UnitAttack unitAttack{AreaIPtr{nullptr}};
     if(IsWeaponIdValid(weaponId))
     {
         auto weapon = weapons_[weaponId];
         auto tpd = weapon->GetAttackPattern();
         auto attackConstraints = GetAttackConstraints(weaponId);
-        auto tp = tpd->CalculateTilePattern(map, origin, attackConstraints);
+        auto tp = tpd->CalculateArea(map, origin, attackConstraints);
         unitAttack = UnitAttack{tp};
     }
     else
@@ -237,7 +237,7 @@ void Unit::RegisterHandlers(Event::Subject& subject)
 
     // Movement
 
-TilePatternConstraints Unit::GetMoveConstraints() const
+AreaConstraints Unit::GetMoveConstraints() const
 {
     // Note: Some of these could be modified by buffs/powerups
     auto tileCost = moveDesc_->GetTileCostTable();
@@ -245,13 +245,13 @@ TilePatternConstraints Unit::GetMoveConstraints() const
     auto range = moveDesc_->GetRange();
     auto teamId = owner_.GetTeamId();
 
-    TilePatternConstraints tpc{tileCost, unitCost, teamId, range};
+    AreaConstraints tpc{tileCost, unitCost, teamId, range};
     return tpc;
 }
 
     // Attack
 
-TilePatternConstraints Unit::GetAttackConstraints(unsigned int weaponId) const
+AreaConstraints Unit::GetAttackConstraints(unsigned int weaponId) const
 {
     auto weapon = weapons_[weaponId];
 
@@ -262,7 +262,7 @@ TilePatternConstraints Unit::GetAttackConstraints(unsigned int weaponId) const
     auto range = weapon->GetAttackRange();
     auto teamId = owner_.GetTeamId();
 
-    return TilePatternConstraints{fixedCost, unitFixedCost, teamId, range};
+    return AreaConstraints{fixedCost, unitFixedCost, teamId, range};
 }
 
 bool Unit::IsWeaponIdValid(uint weaponId) const

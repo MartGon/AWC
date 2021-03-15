@@ -3,12 +3,12 @@
 The current way to get a team id which a unit belongs to requires to get a Player object through a Game object by using the owner id stored in the Unit object. This creates a dependency
 when trying to calculate a unit's path, because the team which the units involved belong to is relevant to the calculation. Tiles which units of the enemy team are placed on have different costs.
 
-## Option 1 - TilePatternDesc access game
+## Option 1 - AreaDesc access game
 
-During the calculation, the TilePatternDesc object has access to the relevant Game object. Then it can perform the current method to access every unit's team ID.
+During the calculation, the AreaDesc object has access to the relevant Game object. Then it can perform the current method to access every unit's team ID.
 
-- Requires heavy refactoring. Wherever TilePatternDesc was used, now a Game instance has to be created.
-- Creates a dependency between TilePatternDesc and Game, when the Game object is only used for accessing players.
+- Requires heavy refactoring. Wherever AreaDesc was used, now a Game instance has to be created.
+- Creates a dependency between AreaDesc and Game, when the Game object is only used for accessing players.
 
 ## Option 2 - Player pointer/reference in units
 

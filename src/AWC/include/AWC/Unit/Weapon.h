@@ -18,7 +18,7 @@ public:
     bool HasEnoughAmmo();
 
     // Static data forwarded from Type
-    TilePatternDescIPtr GetAttackPattern();
+    AreaDescIPtr GetAttackPattern();
     Range GetAttackRange();
     bool CanAttackUnit(unsigned int unitId);
     float GetBaseDamageTo(unsigned int unitId);

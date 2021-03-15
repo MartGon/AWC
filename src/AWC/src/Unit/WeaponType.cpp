@@ -37,7 +37,7 @@ void DamageTable::SetDamageToUnit(uint unitId, float damage)
 
 // Weapon type
 
-WeaponType::WeaponType(TilePatternDescIPtr tpd, Range range, AttackTable attackTable, DamageTable damageTable, uint maxAmmo) :
+WeaponType::WeaponType(AreaDescIPtr tpd, Range range, AttackTable attackTable, DamageTable damageTable, uint maxAmmo) :
     tpd{tpd}, range{range}, attackTable{attackTable}, damageTable{damageTable}, maxAmmo{maxAmmo}
 
 {

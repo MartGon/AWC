@@ -7,7 +7,7 @@ void UserData::Init(lua_State* luaState)
     
     // Libs
     UserData::RegisterLib<Vector2>(luaState);
-    UserData::RegisterLib<TilePatternDesc>(luaState);
+    UserData::RegisterLib<AreaDesc>(luaState);
     UserData::RegisterLib<MovementDescType>(luaState);
 
     // Objects
@@ -16,6 +16,6 @@ void UserData::Init(lua_State* luaState)
     UserData::RegisterMetatable<Map>(luaState);
     UserData::RegisterMetatable<Unit>(luaState);
     UserData::RegisterMetatable<UnitMovement>(luaState);
-    UserData::RegisterMetatable<TilePatternDesc>(luaState);
+    UserData::RegisterMetatable<AreaDesc>(luaState);
     UserData::RegisterMetatable<MovementDescType>(luaState);
 }

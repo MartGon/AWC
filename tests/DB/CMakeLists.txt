@@ -3,7 +3,7 @@ SET(SOURCES
     src/DBTest.cpp
 
     src/AWCSerTest.cpp
-    src/TilePatternDescSerTest.cpp
+    src/AreaDescSerTest.cpp
     src/JsonUtilsTest.cpp
 )
 

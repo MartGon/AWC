@@ -5,7 +5,7 @@
 class UnitMovement
 {
 public:
-    UnitMovement(TilePatternIPtr tp);
+    UnitMovement(AreaIPtr tp);
 
     bool CanMove(Vector2 dest) const;
     uint GetMoveCostTo(Vector2 dest) const;
@@ -13,5 +13,5 @@ public:
     std::vector<Vector2> GetTilesPosInReach() const;
 
 private:
-    TilePatternIPtr tp_;
+    AreaIPtr tp_;
 };

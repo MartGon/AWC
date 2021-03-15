@@ -1,1 +1,0 @@
-#include <AWC/TilePattern/TilePatternI.h>

@@ -1,7 +1,7 @@
 #include "doctest.h"
 
 #include <DB/AWCSer.h>
-#include <DB/TilePatternDescSer.h>
+#include <DB/AreaDescSer.h>
 #include <DB/JsonUtils.h>
 
 #include <AWC/TileType.h>
@@ -10,7 +10,7 @@
 
 #include <Tests/DB/AWCSerTest.h>
 
-#include <Tests/AWC/TilePatternCompTest.h>
+#include <Tests/AWC/AreaCompTest.h>
 
 
 #include <iostream>

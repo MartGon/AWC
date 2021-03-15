@@ -35,7 +35,7 @@ bool Weapon::HasEnoughAmmo()
 
 // Static data forwarded from Type
 
-TilePatternDescIPtr Weapon::GetAttackPattern()
+AreaDescIPtr Weapon::GetAttackPattern()
 {
     return weaponType.tpd;
 }

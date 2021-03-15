@@ -15,7 +15,7 @@ public:
     void RefillGas();
 
     // Static data forwarded from Type
-    TilePatternDescIPtr GetMovePattern();
+    AreaDescIPtr GetMovePattern();
     Range GetRange();
     unsigned int GetMaxGas();
     CostTableIPtr GetTileCostTable();

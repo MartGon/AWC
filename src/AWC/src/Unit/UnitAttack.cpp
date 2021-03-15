@@ -1,17 +1,17 @@
 #include <AWC/Unit/UnitAttack.h>
-#include <AWC/TilePattern/TilePatternI.h>
+#include <AWC/Area/AreaI.h>
 
-UnitAttack::UnitAttack(TilePatternIPtr tp) : tp_{tp}
+UnitAttack::UnitAttack(AreaIPtr tp) : tp_{tp}
 {
 
 }
 
 bool UnitAttack::CanAttack(Vector2 dest)
 {
-    return tp_->IsTileInPattern(dest);
+    return tp_->ContainsTile(dest);
 }
 
 std::vector<Vector2> UnitAttack::GetTilesInRange()
 {
-    return tp_->GetTilesPosInPattern();
+    return tp_->GetContainedTiles();
 }
