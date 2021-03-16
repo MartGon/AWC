@@ -45,11 +45,11 @@ Graph Pathfinding::Dijkstra(Vector2 origin, Params params)
             // Check if accumulated cost to this neighbour is lower than previous
             auto constraints = params.constraints;
             uint neiCost = GetTileCost(map, constraints, sharedNei->pos);
-            uint calculatedCost = PrimitiveUtils::NoOverflowSum(node->cost, neiCost);
-            if(calculatedCost < sharedNei->cost && calculatedCost <= constraints.range.maxRange)
+            uint accumulatedCost = PrimitiveUtils::NoOverflowSum(node->cost, neiCost);
+            if(accumulatedCost < sharedNei->cost && accumulatedCost <= constraints.range.maxRange)
             {
                 // Push it to queue if that's the case
-                sharedNei->cost = calculatedCost;
+                sharedNei->cost = accumulatedCost;
                 prioQueue.push(nei);
             }
         }
