@@ -32,7 +32,7 @@ namespace Script
         Operation::Result Execute(::Game& state, uint8_t prio) override;
 
     private:
-        ScriptOperation(lua_State* luaState, Type& type) : 
+        ScriptOperation(lua_State* luaState, const Type& type) : 
             scriptType_{type}, luaState_{luaState}, argsTable_{luaState, MT_NAME}, OperationI{SCRIPT}
         {
 
@@ -40,6 +40,6 @@ namespace Script
 
         lua_State* luaState_;
         LuaTable argsTable_;
-        Type& scriptType_;
+        const Type& scriptType_;
     };
 }

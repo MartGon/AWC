@@ -66,13 +66,7 @@ namespace Script
 
         LuaState ls;
 
-        std::unordered_map<unsigned int, Script::Type> scriptTypes_;
-        unsigned int stIndex_ = 0;
-
-        std::unordered_map<unsigned int, std::shared_ptr<Script::ScriptOperation>> scripts_;
-        unsigned int sIndex_ = 0;
-
-        DB::Database<UnitType> db;
+        DB::Database<UnitType, Script::Type, std::shared_ptr<Script::ScriptOperation>> db;
         ::Game game_;
     };
 

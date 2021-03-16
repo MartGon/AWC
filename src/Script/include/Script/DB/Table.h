@@ -1,3 +1,8 @@
+#pragma once
+
+#include <Utils/STLUtils.h>
+#include <optional>
+
 #include <unordered_map>
 
 namespace DB
@@ -6,15 +11,23 @@ namespace DB
     class Table
     {
     public:
+        Table() : index_{0} {}
+        Table(const Table& t) = delete;
 
-        T& GetById(unsigned int id)
+        T* const GetById(unsigned int id)
         {
-            return umap_.at(id);
+            T* entry = nullptr;
+            if(UnorderedMapUtils::Contains(umap_, id))
+                entry = &umap_.at(id);
+
+            return entry;
         }
 
-        void Add(T entry)
+        int Add(T entry)
         {
-            umap_.insert({index_++, entry});
+            int id = index_++;
+            umap_.insert({id, entry});
+            return id;
         }
 
     private:

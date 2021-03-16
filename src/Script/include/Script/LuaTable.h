@@ -53,7 +53,7 @@ namespace Script
         LuaTable(lua_State* luaState, std::string mtName);
 
         LuaTable(LuaTable&& lt);
-        LuaTable(LuaTable& lt) = delete;
+        LuaTable(const LuaTable& lt) = delete;
 
         ~LuaTable();
     

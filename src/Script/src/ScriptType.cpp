@@ -65,14 +65,14 @@ Script::Type::Type(lua_State* luaState, std::string scriptPath) : scriptPath_{sc
     }
 }
 
-std::shared_ptr<ScriptOperation> Script::Type::CreateScript()
+std::shared_ptr<ScriptOperation> Script::Type::CreateScript() const
 {
     std::shared_ptr<ScriptOperation> s{new ScriptOperation{luaState_, *this}};
 
     return s;
 }
 
-Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable& tableRef)
+Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable& tableRef) const
 {
     Operation::Result res{Operation::ERROR};
     

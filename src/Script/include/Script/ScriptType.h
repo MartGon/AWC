@@ -15,9 +15,9 @@ namespace Script
     friend class Game;
 
     public:
-        std::shared_ptr<ScriptOperation> CreateScript();
+        std::shared_ptr<ScriptOperation> CreateScript() const;
 
-        Operation::Result Execute(::Game& game, uint8_t prio, LuaTable& tableRef);
+        Operation::Result Execute(::Game& game, uint8_t prio, LuaTable& tableRef) const;
 
     private:
         Type(lua_State* state, std::string scriptPath);

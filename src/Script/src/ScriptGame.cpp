@@ -6,8 +6,8 @@
 unsigned int Script::Game::CreateScriptType(std::string scriptPath)
 {
     Script::Type st{ls.GetLuaState(), scriptPath};
-    auto id = stIndex_++;
-    scriptTypes_.insert({id, st});
+    auto& scriptTypesTable = db.get<Script::Type>();
+    auto id = scriptTypesTable.Add(st);
 
     return id;
 }
@@ -15,13 +15,15 @@ unsigned int Script::Game::CreateScriptType(std::string scriptPath)
 unsigned int Script::Game::CreateScript(unsigned int typeId)
 {
     unsigned int id = -1;
-    if(UnorderedMapUtils::Contains(scriptTypes_, typeId))
+    auto& types = db.get<Script::Type>();
+    auto sType = types.GetById(typeId);
+    
+    if(sType)
     {
-        auto& st = scriptTypes_.at(typeId);
-        auto script = st.CreateScript();
-
-        id = sIndex_++;
-        scripts_.insert({id, script});
+        auto script = sType->CreateScript();
+        
+        auto& scripts = db.get<std::shared_ptr<Script::ScriptOperation>>();
+        id = scripts.Add(script);
     }
 
     return id;
@@ -29,9 +31,11 @@ unsigned int Script::Game::CreateScript(unsigned int typeId)
 
 Script::LuaTable& Script::Game::GetScriptTable(unsigned int id)
 {
-    if(UnorderedMapUtils::Contains(scripts_, id))
+    auto& scripts = db.get<std::shared_ptr<ScriptOperation>>();
+    auto scriptPtr  = scripts.GetById(id);
+    if(scriptPtr)
     {
-        auto& script = scripts_.at(id);
+        auto script = *scriptPtr;
         return script->GetArgsTable();
     }
     else
@@ -41,13 +45,11 @@ Script::LuaTable& Script::Game::GetScriptTable(unsigned int id)
 unsigned int Script::Game::PushScript(unsigned int id, unsigned int prio)
 {
     unsigned int pid = -1;
-    if(UnorderedMapUtils::Contains(scripts_, id))
-    {
-        auto& script = scripts_.at(id);
-        pid = game_.Push(script, prio);
+    auto& scripts = db.get<std::shared_ptr<ScriptOperation>>();
 
-        //scripts_.erase(id);
-    }
+    auto script = scripts.GetById(id);
+    if(script)
+        pid = game_.Push(*script, prio);
 
     return pid;
 }

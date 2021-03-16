@@ -35,7 +35,7 @@ namespace DB
         using IndexDB = Index<Table<I>, type>;
 
         template<class Type>
-        constexpr auto get() {
+        constexpr auto& get() {
             return std::get<IndexDB<Type>::value>(t);
         }
     };
