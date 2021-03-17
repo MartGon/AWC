@@ -1,7 +1,7 @@
 set(SOURCES 
     src/ScriptType.cpp
     src/ScriptOperation.cpp
-    src/ScriptGame.cpp
+    src/Game.cpp
     src/UserData.cpp
     src/LuaTable.cpp
 
@@ -16,6 +16,7 @@ set(SOURCES
     src/UserData/Vector2.cpp
     src/UserData/AreaDesc.cpp
     src/UserData/MovementDescType.cpp
+    src/UserData/Database.cpp
 )
 
 add_library(Script ${SOURCES})

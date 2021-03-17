@@ -6,6 +6,8 @@
 
 #include <Script/ScriptType.h>
 #include <Script/UserData.h>
+#include <Script/LuaTable.h>
+#include <Script/ScriptOperation.h>
 
 #include <Script/DB/Database.h>
 
@@ -60,13 +62,15 @@ namespace Script
         LuaTable& GetScriptTable(unsigned int id);
         unsigned int PushScript(unsigned int id, unsigned int prio = PRIORITY_DEFAULT);
 
+        using Database = DB::Database<UnitType, Script::Type, std::shared_ptr<Script::ScriptOperation>>;
+
     private:
 
         void InitState();
 
         LuaState ls;
 
-        DB::Database<UnitType, Script::Type, std::shared_ptr<Script::ScriptOperation>> db;
+        Database db;
         ::Game game_;
     };
 

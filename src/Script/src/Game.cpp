@@ -1,4 +1,6 @@
-#include <Script/ScriptGame.h>
+#include <Script/Game.h>
+
+#include <Script/UserData/Database.h>
 
 #include <AWC/AWCException.h>
 
@@ -64,6 +66,10 @@ void Script::Game::InitState()
 
     // Open standard libs
     luaL_openlibs(L);
+
+    // Push database
+    UserData::UserData::PushDataRef<UserData::Database>(L, &db);
+    lua_setglobal(L, "DB");
 
     // Create _MAIN, _ENV metatable, to access _G when not found
     luaL_newmetatable(L, MT_NAME);
