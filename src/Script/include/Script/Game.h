@@ -63,6 +63,10 @@ namespace Script
         unsigned int PushScript(unsigned int id, unsigned int prio = PRIORITY_DEFAULT);
 
         using Database = DB::Database<UnitType, Script::Type, std::shared_ptr<Script::ScriptOperation>>;
+        Database& GetDB()
+        {
+            return db;
+        }
 
     private:
 

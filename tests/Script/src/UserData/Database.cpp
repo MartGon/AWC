@@ -26,4 +26,20 @@ TEST_CASE("Database userdata")
         CHECK(success == true);
         CHECK(successG == true);
     }
+    SUBCASE("AddUnitType")
+    {
+        std::string path = Test::Script::GetUserDataPath() + "/Database/AddUnitType.lua";
+        Test::Script::TestScript t(path, sGame);
+
+        auto& sTable = t.lt();
+
+        sGame.PushScript(t.ref);
+        game.Run();
+
+        auto& db = sGame.GetDB();
+        auto& unitTypes = db.get<UnitType>();
+        CHECK(unitTypes.GetIndex() == 1);
+        CHECK(unitTypes.GetById(0)->GetName() == "Rook");
+        CHECK(unitTypes.GetById(0)->GetId() == 0);
+    }
 }

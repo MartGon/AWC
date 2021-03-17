@@ -30,6 +30,11 @@ namespace DB
             return id;
         }
 
+        unsigned int GetIndex() const
+        {
+            return index_;
+        }
+
     private:
         std::unordered_map<unsigned int, T> umap_;
         unsigned int index_;
