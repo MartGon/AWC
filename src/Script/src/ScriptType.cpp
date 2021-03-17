@@ -1,5 +1,5 @@
 #include <Script/ScriptType.h>
-#include <Script/ScriptGame.h>
+#include <Script/Game.h>
 #include <Script/UserData/Game.h>
 
 #include <AWC/AWCException.h>

@@ -43,7 +43,7 @@ namespace Script
     class LuaTable
     {
     public:
-        // Creates a Wrapper for a table at the top of the stack
+        // Creates a Wrapper for a table at the given index of the stack
         LuaTable(lua_State* luaState, int index);
 
         // Creates a Wrapper for a new table

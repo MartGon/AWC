@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Script/ScriptGame.h"
+#include "Script/Game.h"
 #include "Script/ScriptOperation.h"
 #include "Script/ScriptType.h"
 #include "Script/LuaTable.h"

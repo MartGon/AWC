@@ -13,6 +13,7 @@ SET(SOURCES
     src/UserData/UnitMovement.cpp
     src/UserData/AreaDesc.cpp
     src/UserData/MovementDescType.cpp
+    src/UserData/Database.cpp
 )
 
 add_executable(ScriptTest ${SOURCES})
