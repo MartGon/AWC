@@ -6,12 +6,16 @@
 using namespace Script;
 
 const char* UserData::Map::MT_NAME = "AWC_Map";
+const char* UserData::Map::LIB_NAME = "Map";
 const luaL_Reg UserData::Map::methods[] = {
         {"GetUnit", Map::GetUnit},
         {"RemoveUnit", Map::RemoveUnit},
         {"AddUnit", Map::AddUnit},
         {NULL, NULL}
     };
+const luaL_Reg UserData::Map::functions[] = {
+    {NULL, NULL}
+};
 
 void UserData::Map::CheckMapPosition(lua_State* luaState, ::Map* map, ::Vector2 pos)
 {

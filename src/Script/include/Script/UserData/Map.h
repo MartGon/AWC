@@ -10,7 +10,9 @@ namespace Script::UserData
     {
         using type = ::Map;
         static const char* MT_NAME;
+        static const char* LIB_NAME;
         static const luaL_Reg methods[];
+        static const luaL_Reg functions[];
         
         static void CheckMapPosition(lua_State* luaState, ::Map* map, ::Vector2 pos);
 

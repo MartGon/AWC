@@ -8,9 +8,12 @@
 using namespace Script;
 
 const char* UserData::Unit::MT_NAME = "AWC_Unit";
-
+const char* UserData::Unit::LIB_NAME = "Unit";
 const luaL_Reg UserData::Unit::methods[] = {
     {"CalculateMovement", Unit::CalculateMovement},
+    {NULL, NULL}
+};
+const luaL_Reg UserData::Unit::functions[] = {
     {NULL, NULL}
 };
 

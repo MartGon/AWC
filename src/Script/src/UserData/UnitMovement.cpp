@@ -6,8 +6,12 @@
 using namespace Script;
 
 const char* UserData::UnitMovement::MT_NAME = "AWC_UnitMovement";
+const char* UserData::UnitMovement::LIB_NAME = "UnitMovement";
 const luaL_Reg UserData::UnitMovement::methods[] = {
     {"CanMove", UnitMovement::CanMove},
+    {NULL, NULL}
+};
+const luaL_Reg UserData::UnitMovement::functions[] = {
     {NULL, NULL}
 };
 

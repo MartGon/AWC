@@ -10,7 +10,9 @@ namespace Script::UserData
     {
         using type = ::Game;
         static const char* MT_NAME;
+        static const char* LIB_NAME;
         static const luaL_Reg methods[];
+        static const luaL_Reg functions[];
 
         static int GetMap(lua_State* L);
         static int GetMapCount(lua_State* L);

@@ -5,11 +5,15 @@
 using namespace Script;
 
 const char* UserData::Game::MT_NAME = "AWC_Game";
+const char* UserData::Game::LIB_NAME = "Game";
 const luaL_Reg UserData::Game::methods[] = {
         {"GetMap", Game::GetMap},
         {"GetMapCount", Game::GetMapCount},
         {NULL, NULL}
     };
+const luaL_Reg UserData::Game::functions[] = {
+    {NULL, NULL}
+};
 
 int UserData::Game::GetMap(lua_State* L)
 {   

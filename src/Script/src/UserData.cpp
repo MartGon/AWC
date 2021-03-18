@@ -3,21 +3,29 @@
 
 using namespace Script;
 
+template <typename T>
+void Init(lua_State* luaState)
+{
+    UserData::UserData::RegisterLib<T>(luaState);
+    UserData::UserData::RegisterMetatable<T>(luaState);
+}
+
+template <typename T, typename Y, typename ...Ts>
+void Init(lua_State* luaState)
+{
+    Init<T>(luaState);
+    Init<Y, Ts...>(luaState);
+}
+
 void UserData::Init(lua_State* luaState)
 {
-    // Libs
-    UserData::RegisterLib<Vector2>(luaState);
-    UserData::RegisterLib<AreaDesc>(luaState);
-    UserData::RegisterLib<MovementDescType>(luaState);
-    UserData::RegisterLib<Database>(luaState);
-
-    // Objects
-    UserData::RegisterMetatable<Vector2>(luaState);
-    UserData::RegisterMetatable<Game>(luaState);
-    UserData::RegisterMetatable<Map>(luaState);
-    UserData::RegisterMetatable<Unit>(luaState);
-    UserData::RegisterMetatable<UnitMovement>(luaState);
-    UserData::RegisterMetatable<AreaDesc>(luaState);
-    UserData::RegisterMetatable<MovementDescType>(luaState);
-    UserData::RegisterMetatable<Database>(luaState);
+    ::Init<Vector2, 
+        AreaDesc,
+        Database,
+        MovementDescType,
+        Game,
+        Map,
+        Unit,
+        UnitMovement
+        >(luaState);
 }
