@@ -26,11 +26,10 @@ std::array<LuaFunction, 2> Script::Type::LoadFuncs(LuaVM& vm, std::string script
     vm.RunFile(scriptPath, env);
     env.PushLuaTable();
     
-    // TODO: Create LuaFunction wrapper;
     auto exType = lua_getfield(luaState, -1, "Execute"); // Table on Top
     auto undoType = lua_getfield(luaState, -2, "Undo"); // Table right below Execute function
 
-    return std::array<LuaFunction, 2>{{ {luaState, -1}, {luaState, -2} }};;
+    return std::array<LuaFunction, 2>{{ {luaState, -1}, {luaState, -2} }}; // Avoid call to destructor by Copy elision
 }
 
 std::shared_ptr<ScriptOperation> Script::Type::CreateScript() const
@@ -47,7 +46,7 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable& ta
     auto luaState = vm_.GetLuaState();
 
     // Get Execute function
-    funcs_[1].PushFunction();
+    funcs_[EXECUTE].PushFunction();
 
     // Get table
     tableRef.PushLuaTable();

@@ -32,6 +32,12 @@ namespace Script
 
         std::string scriptPath_;
         LuaVM& vm_;
+
+        enum Function : uint8_t
+        {
+            UNDO = 0,
+            EXECUTE = 1
+        };
         
         std::array<LuaFunction, 2> funcs_;
     };
