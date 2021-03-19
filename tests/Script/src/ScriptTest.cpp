@@ -35,7 +35,6 @@ TEST_CASE("ScriptType Operations")
         sg.GetGame().Run();
 
         CHECK(table.Get<int>("value") == 6);
-
         
         sg.PushScript(script);
         sg.GetGame().Run();

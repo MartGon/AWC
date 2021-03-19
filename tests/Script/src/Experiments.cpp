@@ -404,3 +404,93 @@ TEST_CASE("ENV with __index _G")
     CHECK(var1 == 0); // Nil, not defined
     CHECK(var2 == 3);
 }
+
+struct Container
+{
+    Container(int x, int y) : x{x}, y{y}
+    {
+
+    };
+    Container(const Container&) = delete;
+    Container(Container&&) = default;
+    ~Container()
+    {
+        std::cout << "~Container\n";
+    }
+
+    int x;
+    int y;
+};
+
+struct Caja
+{
+    Caja(int x, int y) : cont{x, y}
+    {
+
+    }
+    Caja(const Caja&) = delete;
+    Caja(Caja&&) = default;
+    ~Caja()
+    {
+        std::cout << "~Caja\n";
+    }
+
+    Container cont;
+};
+
+struct President
+{
+    int x;
+    int y;
+    int year;
+ 
+    President(int x, int y, int p_year)
+        : x{x}, y{y}, year{p_year}
+    {
+        std::cout << "I am being constructed.\n";
+    }
+    President(President&& other)
+        : x(other.x), y(other.y), year(other.year)
+    {
+        std::cout << "I am being moved.\n";
+    }
+
+    //President(const President&) = delete; 
+    President& operator=(const President& other) = default;
+};
+
+template<typename T>
+struct Tabla
+{
+    
+    template<typename ...Args>
+    void Emplace(Args&&... entry)
+    {
+        table2.emplace(std::piecewise_construct, 
+            std::forward_as_tuple(1), 
+            std::forward_as_tuple(std::forward<Args>(entry)...));
+    }
+
+    T& Get()
+    {
+        return table.at(1);
+    }
+    std::vector<T> table;
+    std::unordered_map<int, T> table2;
+};
+
+
+TEST_CASE("Move semantics")
+{
+    std::vector<President> elections;
+    std::unordered_map<int, President> mElections;
+    std::cout << "emplace_back:\n";
+    auto& ref = elections.emplace_back(1, 2, 1994);
+    mElections.emplace(std::piecewise_construct, std::forward_as_tuple(1), std::forward_as_tuple(2, 3, 4));
+
+    std::vector<Caja> cajas;
+    cajas.emplace_back(1, 2);
+
+    Tabla<President> t;
+    t.Emplace(1, 2, 3);
+}

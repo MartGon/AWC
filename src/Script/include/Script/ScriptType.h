@@ -1,10 +1,13 @@
 #pragma once
 
 #include <string>
+#include <array>
 
 #include <lua.hpp>
 
 #include <Script/ScriptOperation.h>
+
+#include <Script/Wrappers/LuaFunction.h>
 
 namespace Script
 {
@@ -16,17 +19,20 @@ namespace Script
     friend class Game;
 
     public:
+        Type(LuaVM& vm, std::string scriptPath);
+        Type(const Type&) = delete;
+        Type(Type&&) = default;
+
         std::shared_ptr<ScriptOperation> CreateScript() const;
 
         Operation::Result Execute(::Game& game, uint8_t prio, LuaTable& tableRef) const;
 
     private:
-        Type(LuaVM& vm, std::string scriptPath);
+        std::array<LuaFunction, 2> LoadFuncs(LuaVM& vm, std::string scriptPath);
 
         std::string scriptPath_;
-
         LuaVM& vm_;
-        int executeRef_;
-        int undoRef_;
+        
+        std::array<LuaFunction, 2> funcs_;
     };
 }

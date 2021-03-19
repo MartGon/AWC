@@ -7,9 +7,8 @@
 
 unsigned int Script::Game::CreateScriptType(std::string scriptPath)
 {
-    Script::Type st{vm_, scriptPath};
     auto& scriptTypesTable = db.get<Script::Type>();
-    auto id = scriptTypesTable.Add(st);
+    auto id = scriptTypesTable.Emplace(vm_, scriptPath);
 
     return id;
 }

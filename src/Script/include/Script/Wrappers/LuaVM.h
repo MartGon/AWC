@@ -16,6 +16,7 @@ namespace Script
         {
 
         }
+        
         LuaVM(const LuaVM&) = delete;
 
         lua_State* GetLuaState()

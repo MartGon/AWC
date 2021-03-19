@@ -30,6 +30,16 @@ namespace DB
             return id;
         }
 
+        template <typename ...Args>
+        int Emplace(Args&&... entry)
+        {
+            int id = index_++;
+            umap_.emplace(std::piecewise_construct, 
+                std::forward_as_tuple(id), 
+                std::forward_as_tuple(std::forward<Args>(entry)...));
+            return id;
+        }
+
         unsigned int GetIndex() const
         {
             return index_;
