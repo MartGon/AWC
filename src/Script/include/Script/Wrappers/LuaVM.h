@@ -4,26 +4,11 @@
 
 #include <string>
 
-#include <Script/LuaTable.h>
+#include <Script/Wrappers/LuaState.h>
+#include <Script/Wrappers/LuaTable.h>
 
 namespace Script
 {
-    class LuaState
-    {
-    public:
-        LuaState() : L{luaL_newstate()}
-        {
-
-        }
-
-        ~LuaState()
-        {
-            lua_close(L);
-        }
-
-        lua_State* L;
-    };
-
     class LuaVM
     {
     public:
@@ -44,7 +29,6 @@ namespace Script
         }
 
         // Basic lib
-
         void Pop(int amount);
         unsigned int Call(int nargs, int nresults, int msgh);
 

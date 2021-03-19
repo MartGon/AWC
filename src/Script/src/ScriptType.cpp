@@ -2,8 +2,8 @@
 #include <Script/Game.h>
 #include <Script/UserData/Game.h>
 
-#include <Script/LuaVM.h>
-#include <Script/LuaTable.h>
+#include <Script/Wrappers/LuaVM.h>
+#include <Script/Wrappers/LuaTable.h>
 
 #include <AWC/AWCException.h>
 

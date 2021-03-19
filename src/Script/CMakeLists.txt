@@ -3,8 +3,6 @@ set(SOURCES
     src/ScriptOperation.cpp
     src/Game.cpp
     src/UserData.cpp
-    src/LuaTable.cpp
-    src/LuaVM.cpp
 
     src/DB/Database.cpp
     src/DB/Table.cpp
@@ -18,6 +16,12 @@ set(SOURCES
     src/UserData/AreaDesc.cpp
     src/UserData/MovementDescType.cpp
     src/UserData/Database.cpp
+
+    src/Utils/Utils.cpp
+
+    src/Wrappers/LuaTable.cpp
+    src/Wrappers/LuaVM.cpp
+    src/Wrappers/LuaFunction.cpp
 )
 
 add_library(Script ${SOURCES})

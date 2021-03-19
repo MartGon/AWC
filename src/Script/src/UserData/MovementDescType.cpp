@@ -1,6 +1,6 @@
 #include <Script/UserData/MovementDescType.h>
 #include <Script/UserData/UserData.h>
-#include <Script/LuaTable.h>
+#include <Script/Wrappers/LuaTable.h>
 
 #include <Script/UserData/AreaDesc.h>
 

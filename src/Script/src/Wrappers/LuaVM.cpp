@@ -1,4 +1,4 @@
-#include <Script/LuaVM.h>
+#include <Script/Wrappers/LuaVM.h>
 
 #include <AWC.h>
 

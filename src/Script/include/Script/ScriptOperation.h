@@ -3,7 +3,7 @@
 #include <AWC/Operation/OperationI.h>
 
 #include <Script/UserData.h>
-#include <Script/LuaTable.h>
+#include <Script/Wrappers/LuaTable.h>
 
 #include <lua.hpp>
 

@@ -1,7 +1,7 @@
 #include <Script/UserData/AreaDesc.h>
 #include <Script/UserData/Vector2.h>
 
-#include <Script/LuaTable.h>
+#include <Script/Wrappers/LuaTable.h>
 
 using namespace Script;
 

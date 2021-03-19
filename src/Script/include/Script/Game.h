@@ -4,10 +4,10 @@
 
 #include <AWC/Game.h>
 
-#include <Script/LuaVM.h>
+#include <Script/Wrappers/LuaVM.h>
 #include <Script/ScriptType.h>
 #include <Script/UserData.h>
-#include <Script/LuaTable.h>
+#include <Script/Wrappers/LuaTable.h>
 #include <Script/ScriptOperation.h>
 
 #include <Script/DB/Database.h>
