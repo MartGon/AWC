@@ -9,6 +9,7 @@
 namespace Script
 {
     class Game;
+    class LuaVM;
 
     class Type
     {
@@ -20,11 +21,11 @@ namespace Script
         Operation::Result Execute(::Game& game, uint8_t prio, LuaTable& tableRef) const;
 
     private:
-        Type(lua_State* state, std::string scriptPath);
+        Type(LuaVM& vm, std::string scriptPath);
 
         std::string scriptPath_;
 
-        lua_State* luaState_;
+        LuaVM& vm_;
         int executeRef_;
         int undoRef_;
     };

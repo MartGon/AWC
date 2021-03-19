@@ -4,6 +4,7 @@
 
 #include <AWC/Game.h>
 
+#include <Script/LuaVM.h>
 #include <Script/ScriptType.h>
 #include <Script/UserData.h>
 #include <Script/LuaTable.h>
@@ -13,31 +14,11 @@
 
 namespace Script
 {
-    class LuaState
-    {
-    public:
-        LuaState() : L{luaL_newstate()}
-        {
-
-        }
-
-        ~LuaState()
-        {
-            lua_close(L);
-        }
-
-        lua_State* GetLuaState()
-        {
-            return L;
-        }
-
-    private:
-        lua_State* L;
-    };
-
     class Game
     {
     public:
+        using Database = DB::Database<UnitType, Script::Type, std::shared_ptr<Script::ScriptOperation>>;
+
         Game()
         {
             InitState();
@@ -52,28 +33,35 @@ namespace Script
             return game_;
         }
         
-        lua_State* GetLuaState()
+        LuaVM& GetLuaVM()
         {
-            return ls.GetLuaState();
+            return vm_;
         }
 
-        unsigned int CreateScriptType(std::string scriptPath);
-        unsigned int CreateScript(unsigned int typeId);
-        LuaTable& GetScriptTable(unsigned int id);
-        unsigned int PushScript(unsigned int id, unsigned int prio = PRIORITY_DEFAULT);
+        lua_State* GetLuaState()
+        {
+            return vm_.GetLuaState();
+        }
 
-        using Database = DB::Database<UnitType, Script::Type, std::shared_ptr<Script::ScriptOperation>>;
         Database& GetDB()
         {
             return db;
         }
 
+        // Scripts
+        unsigned int CreateScriptType(std::string scriptPath);
+        unsigned int CreateScript(unsigned int typeId);
+        LuaTable& GetScriptTable(unsigned int id);
+        unsigned int PushScript(unsigned int id, unsigned int prio = PRIORITY_DEFAULT);
+
+        // Config
+        void RunConfig(std::string configPath);
+
     private:
 
         void InitState();
 
-        LuaState ls;
-
+        LuaVM vm_;
         Database db;
         ::Game game_;
     };

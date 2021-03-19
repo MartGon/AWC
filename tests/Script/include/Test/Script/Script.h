@@ -22,4 +22,5 @@ namespace Test::Script
     };
 
     std::string GetUserDataPath();
+    std::string GetGameScriptPath(std::string file);
 }

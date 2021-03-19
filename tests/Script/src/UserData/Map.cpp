@@ -29,8 +29,6 @@ TEST_CASE("Map userdata")
     {
         std::string path = Test::Script::GetUserDataPath() + "/Map/GetUnit.lua";
         Test::Script::TestScript t(path, sGame);
-        
-        auto L = sGame.GetLuaState();
 
         auto& sTable = t.lt();
         sTable.SetDataRef<Script::UserData::Map>("map", &game.GetMap(0));
@@ -51,8 +49,6 @@ TEST_CASE("Map userdata")
     {
         std::string path = Test::Script::GetUserDataPath() + "/Map/RemoveUnit.lua";
         Test::Script::TestScript t(path, sGame);
-        
-        auto L = sGame.GetLuaState();
 
         auto& sTable = t.lt();
         auto& mapRef = game.GetMap(0);
@@ -75,8 +71,6 @@ TEST_CASE("Map userdata")
     {
         std::string path = Test::Script::GetUserDataPath() + "/Map/AddUnit.lua";
         Test::Script::TestScript t(path, sGame);
-        
-        auto L = sGame.GetLuaState();
 
         auto& sTable = t.lt();
         auto& mapRef = game.GetMap(0);

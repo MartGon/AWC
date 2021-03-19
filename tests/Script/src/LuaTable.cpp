@@ -5,7 +5,7 @@
 
 #include <Test/Script/Script.h>
 
-TEST_CASE("Lua Table test")
+TEST_CASE("Lua Table access test")
 {
     auto luaState = luaL_newstate();
 
@@ -136,6 +136,36 @@ TEST_CASE("Lua Table test")
 
         CHECK(lua_gettop(luaState) == 0);
     }
+
+    lua_close(luaState);
+}
+
+TEST_CASE("Creation test")
+{
+    auto luaState = luaL_newstate();
+
+    SUBCASE("Create new table")
+    {
+        Script::LuaTable lt{luaState};
+    }
+    SUBCASE("Create from existing table")
+    {
+        lua_newtable(luaState);
+        lua_pushinteger(luaState, 15);
+        lua_setfield(luaState, -2, "value");
+
+        Script::LuaTable lt{luaState, 1};
+        CHECK(lt.Get<int>("value") == 15);
+    }
+    SUBCASE("Create from existing table which is inside another table")
+    {
+        lua_pushinteger(luaState, 32);
+        lua_setglobal(luaState, "value");
+        Script::LuaTable lt{luaState, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS};
+
+        CHECK(lt.Get<int>("value") == 32);
+    }
+
 
     lua_close(luaState);
 }

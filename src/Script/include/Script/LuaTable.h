@@ -46,6 +46,14 @@ namespace Script
         // Creates a Wrapper for a table at the given index of the stack
         LuaTable(lua_State* luaState, int index);
 
+        // Creates a Wrapper for a table located at tIndex of a table at sIndex of the Stack
+        template <typename K>
+        LuaTable(lua_State* luaState, int sIndex, K tIndex) : luaState_{luaState}
+        {
+            GetField<K>(luaState, sIndex, tIndex);
+            tableRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
+        }
+
         // Creates a Wrapper for a new table
         LuaTable(lua_State* luaState);
 

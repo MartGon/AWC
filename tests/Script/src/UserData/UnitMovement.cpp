@@ -31,8 +31,6 @@ TEST_CASE("Unit userdata")
     {
         std::string path = Test::Script::GetUserDataPath() + "/UnitMovement/CanMove.lua";
         Test::Script::TestScript t(path, sGame);
-        
-        auto L = sGame.GetLuaState();
 
         auto& sTable = t.lt();
         auto unitMove = soldier->CalculateMovement(game.GetMap(0), {2, 0});

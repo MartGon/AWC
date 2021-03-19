@@ -32,7 +32,7 @@ TEST_CASE("Unit userdata")
         std::string path = Test::Script::GetUserDataPath() + "/Unit/CalculateMovement.lua";
         Test::Script::TestScript t(path, sGame);
         
-        auto L = sGame.GetLuaState();
+        
 
         auto& sTable = t.lt();
         sTable.SetDataRef<Script::UserData::Map>("map", &game.GetMap(0));

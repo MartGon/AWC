@@ -4,6 +4,7 @@ set(SOURCES
     src/Game.cpp
     src/UserData.cpp
     src/LuaTable.cpp
+    src/LuaVM.cpp
 
     src/DB/Database.cpp
     src/DB/Table.cpp

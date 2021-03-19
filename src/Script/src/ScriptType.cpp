@@ -2,6 +2,9 @@
 #include <Script/Game.h>
 #include <Script/UserData/Game.h>
 
+#include <Script/LuaVM.h>
+#include <Script/LuaTable.h>
+
 #include <AWC/AWCException.h>
 
 #ifdef _DEBUG
@@ -10,64 +13,36 @@
 
 using namespace Script;
 
-Script::Type::Type(lua_State* luaState, std::string scriptPath) : scriptPath_{scriptPath}, luaState_{luaState}, executeRef_{-1}, undoRef_{-1}
+Script::Type::Type(LuaVM& vm, std::string scriptPath) : scriptPath_{scriptPath}, vm_{vm}, executeRef_{-1}, undoRef_{-1}
 {
-    auto res = luaL_loadfile(luaState, scriptPath.c_str());
-    if(res == LUA_OK)
+    auto luaState = vm_.GetLuaState();
+
+    LuaTable env{luaState};
+    vm.RunFile(scriptPath, env);
+    env.PushLuaTable();
+    
+    // TODO: Create LuaFunction wrapper;
+    auto exType = lua_getfield(luaState, -1, "Execute"); // Table on Top
+    auto undoType = lua_getfield(luaState, -2, "Undo"); // Table right below Execute function
+
+    // Get a reference to both functions
+    // TODO: Note, could get a reference to ENV table instead. Then call through that table
+    if(exType == LUA_TFUNCTION && undoType == LUA_TFUNCTION)
     {
-        // Creates ENV table and gets a ref
-        lua_newtable(luaState);
-        lua_pushvalue(luaState, -1); // Push a copy for later
-
-        // Set ENV table, avoid polluting global scope
-        auto ret = lua_setupvalue(luaState, 1, 1); // The first table ref is popped
-        lua_pushvalue(luaState, 1); // Push a copy of the function, for the call
-        if(LUA_OK == lua_pcall(luaState, 0, 0, 0))
-        {
-            auto exType = lua_getfield(luaState, -1, "Execute"); // Table on Top
-            auto undoType = lua_getfield(luaState, -2, "Undo"); // Table right below Execute function
-
-            // Get a reference to both functions
-            // TODO: Note, could get a reference to ENV table instead. Then call through that table
-            if(exType == LUA_TFUNCTION && undoType == LUA_TFUNCTION)
-            {
-                undoRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
-                executeRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
-            }
-            else
-            {
-                throw AWCException{"Execute and Undo vars must be Lua functions"};
-            }
-        }
-        else
-        {
-            // TODO: Print the Lua stack
-            std::string err = lua_tostring(luaState, -1);
-            throw AWCException{"Lua Runtime error: " + err};
-        }
-
-        // Pops the ENV table from the stack
-        lua_pop(luaState, 1);
-
-        // Pops the lua script function;
-        lua_pop(luaState, 1);
+        undoRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
+        executeRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
     }
     else
     {
-        std::string prefix = (res == LUA_ERRSYNTAX ? "Lua Syntax" : "Out of memory") + std::string(" error: ");
-        std::string errMsg = std::string(lua_tostring(luaState, -1));
-        std::string msg = prefix + errMsg;
-
-        // Pops the lua error msg;
-        lua_pop(luaState, 1);
-
-        throw AWCException{msg};
+        throw AWCException{"Execute and Undo vars must be Lua functions"};
     }
+
+    vm.Pop(1); // Pop table
 }
 
 std::shared_ptr<ScriptOperation> Script::Type::CreateScript() const
 {
-    std::shared_ptr<ScriptOperation> s{new ScriptOperation{luaState_, *this}};
+    std::shared_ptr<ScriptOperation> s{new ScriptOperation{vm_.GetLuaState(), *this}};
 
     return s;
 }
@@ -76,7 +51,7 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable& ta
 {
     Operation::Result res{Operation::ERROR};
     
-    auto luaState = luaState_;
+    auto luaState = vm_.GetLuaState();
 
     // Get Execute function
     auto type = lua_rawgeti(luaState, LUA_REGISTRYINDEX, executeRef_);
@@ -100,7 +75,6 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable& ta
         {
             std::string error = lua_tostring(luaState, -1);
             lua_pop(luaState, 1);
-            int top = lua_gettop(luaState);
             
             #ifdef _DEBUG
                 std::cout << "Error ocurred while executing Lua Operation: " << error << "\n";

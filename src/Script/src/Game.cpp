@@ -7,7 +7,7 @@
 
 unsigned int Script::Game::CreateScriptType(std::string scriptPath)
 {
-    Script::Type st{ls.GetLuaState(), scriptPath};
+    Script::Type st{vm_, scriptPath};
     auto& scriptTypesTable = db.get<Script::Type>();
     auto id = scriptTypesTable.Add(st);
 
@@ -56,12 +56,17 @@ unsigned int Script::Game::PushScript(unsigned int id, unsigned int prio)
     return pid;
 }
 
+void Script::Game::RunConfig(std::string configPath)
+{
+    vm_.RunFile(configPath);
+}
+
 // Private
 
 void Script::Game::InitState()
 {
     // Init userdata
-    auto L = ls.GetLuaState();
+    auto L = vm_.GetLuaState();
     UserData::Init(L);
 
     // Open standard libs

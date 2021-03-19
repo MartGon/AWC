@@ -5,6 +5,7 @@ SET(SOURCES
     src/Script.cpp
     src/Experiments.cpp
     src/LuaTable.cpp
+    src/Game.cpp
 
     src/UserData/Game.cpp
     src/UserData/Map.cpp

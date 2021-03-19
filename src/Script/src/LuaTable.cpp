@@ -55,19 +55,19 @@ bool Script::To<bool>(lua_State* state, int index)
 template<>
 int Script::GetField<int>(lua_State* luaState, int index, int key)
 {
-    return lua_geti(luaState, -1, key);
+    return lua_geti(luaState, index, key);
 }
 
 template<>
 int Script::GetField<const char*>(lua_State* luaState, int index, const char* key)
 {
-    return lua_getfield(luaState, -1, key);
+    return lua_getfield(luaState, index, key);
 }
 
 template<>
 int Script::GetField<std::string>(lua_State* luaState, int index, std::string key)
 {
-    return lua_getfield(luaState, -1, key.c_str());
+    return lua_getfield(luaState, index, key.c_str());
 }
 
 // LuaTable
