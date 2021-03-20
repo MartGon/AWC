@@ -23,7 +23,7 @@ CostTable ParseCostTable(lua_State* luaState, LuaTable& t)
     for(int i = 0; i < t.Length(); i++)
     {
         int luaI = i + 1;
-        auto entry = t.GetTable(i + 1);
+        auto entry = t.GetLuaWrapper<Script::LuaTable>(i + 1);
         luaL_argcheck(luaState, entry, 1, "table entry in CostTable was not a table");
 
         ct.SetCost(entry->Get<uint>("id"), entry->Get<uint>("cost"));
@@ -41,17 +41,17 @@ int UserData::MovementDescType::New(lua_State* luaState)
 
     auto tpd = lt.GetUserData<AreaDesc>("tpd");
 
-    auto range = lt.GetTable("range");
+    auto range = lt.GetLuaWrapper<Script::LuaTable>("range");
     luaL_argcheck(luaState, range, 1, "range table was not found");
 
     Range r{range->Get<uint>("max"), range->Get<uint>("min")};
 
-    auto tileCT = lt.GetTable("tileCT");
+    auto tileCT = lt.GetLuaWrapper<Script::LuaTable>("tileCT");
     luaL_argcheck(luaState, tileCT, 1, "tile CostTable was not found");
 
     CostTable tct = ParseCostTable(luaState, *tileCT);
 
-    auto unitCT = lt.GetTable("unitCT");
+    auto unitCT = lt.GetLuaWrapper<Script::LuaTable>("unitCT");
     luaL_argcheck(luaState, unitCT, 1, "unit CostTable was not found");
     CostTable uct = ParseCostTable(luaState, *unitCT);
 

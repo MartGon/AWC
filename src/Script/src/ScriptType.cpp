@@ -20,8 +20,8 @@ Script::Type::Type(LuaVM& vm, std::string scriptPath) : scriptPath_{scriptPath},
     LuaTable env{luaState};
     vm.RunFile(scriptPath, env);
     
-    execute_ = env.GetFunction("Execute").value();
-    undo_ = env.GetFunction("Undo").value();
+    execute_ = env.GetLuaWrapper<Script::LuaFunction>("Execute").value();
+    undo_ = env.GetLuaWrapper<Script::LuaFunction>("Undo").value();
 }
 
 std::shared_ptr<ScriptOperation> Script::Type::CreateScript() const
@@ -38,10 +38,10 @@ Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable& ta
     auto luaState = vm_.GetLuaState();
 
     // Get Execute function
-    execute_.PushFunction();
+    execute_.PushInternal();
 
     // Get table
-    tableRef.PushLuaTable();
+    tableRef.PushInternal();
 
     // Sets table to function ENV
     lua_setupvalue(luaState, 1, 1);

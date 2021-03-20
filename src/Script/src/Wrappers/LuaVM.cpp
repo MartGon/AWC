@@ -56,7 +56,7 @@ unsigned int LuaVM::RunFile(std::string path, LuaTable& env)
     auto res = LoadFile(path);
     
     // Set ENV table, avoid polluting global scope
-    env.PushLuaTable();
+    env.PushInternal();
     auto ret = lua_setupvalue(ls.L, 1, 1); // f._ENV = env
 
     res = Call(0, 0, 0);

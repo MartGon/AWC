@@ -49,7 +49,7 @@ namespace Script
 
         ~LuaFunction();
 
-        int PushFunction() const;
+        int PushInternal() const;
 
     private:
 

@@ -54,7 +54,7 @@ namespace Script
         template<typename T, typename K>
         void Set(K key, T val)
         {
-            PushLuaTable();
+            PushInternal();
             Push(luaState_, val);
             SetField(key);
             lua_pop(luaState_, 1);
@@ -63,7 +63,7 @@ namespace Script
         template<typename T, typename K>
         T Get(K key)
         {
-            PushLuaTable();
+            PushInternal();
             GetField(luaState_, -1, key);
             auto val = To<T>(luaState_, -1);
             lua_pop(luaState_, 2);
@@ -74,7 +74,7 @@ namespace Script
         template <typename T, typename K>
         typename T::type* GetUserData(K key)
         {
-            PushLuaTable();
+            PushInternal();
             GetField(luaState_, -1, key);
             auto ptr = Script::UserData::UserData::ToUserData<T>(luaState_, -1);
             lua_pop(luaState_, 2);
@@ -85,7 +85,7 @@ namespace Script
         template <typename T, typename K>
         typename T::type* SetDataCopy(K key, typename T::type userdata)
         {
-            PushLuaTable();
+            PushInternal();
             auto ptr = Script::UserData::UserData::PushDataCopy<T>(luaState_, userdata);
             SetField(key);
             lua_pop(luaState_, 1);
@@ -96,57 +96,30 @@ namespace Script
         template<typename T, typename K>
         void SetDataRef(K key, typename T::type* userdata)
         {
-            PushLuaTable();
+            PushInternal();
             Script::UserData::UserData::PushDataRef<T>(luaState_, userdata);
             SetField(key);
             lua_pop(luaState_, 1);
         }
 
-        template<typename K>
-        std::optional<LuaTable> GetTable(K key)
+        template<typename T, typename K>
+        std::optional<T> GetLuaWrapper(K key)
         {
-            PushLuaTable();
+            PushInternal();
             int type = GetField(luaState_, -1, key);
 
-            std::optional<LuaTable> lt;
-            if(type == LUA_TTABLE)
-                lt = std::move(std::optional<LuaTable>{std::in_place, luaState_, -1});
+            std::optional<T> lt{std::in_place, luaState_, -1};
 
             lua_pop(luaState_, 2);
 
             return lt;
         }
 
-        template <typename K>
-        void SetTable(K key, LuaTable& table)
+        template <typename T, typename K>
+        void SetLuaWrapper(K key, T& val)
         {
-            PushLuaTable();
-            table.PushLuaTable();
-            SetField(key); 
-            lua_pop(luaState_, 1);
-        }
-
-        template <typename K>
-        std::optional<LuaFunction> GetFunction(K key)
-        {
-            std::optional<LuaFunction> f;
-
-            PushLuaTable();
-            auto type = GetField(luaState_, -1, key);
-            if(type == LUA_TFUNCTION)
-                f = std::move(std::optional<LuaFunction>(std::in_place, luaState_, -1));
-
-            lua_pop(luaState_, 2);
-            auto top = lua_gettop(luaState_);
-
-            return f;
-        }
-
-        template<typename K>
-        void SetFunction(K key, LuaFunction& f)
-        {
-            PushLuaTable();
-            f.PushFunction();
+            PushInternal();
+            val.PushInternal();
             SetField(key); 
             lua_pop(luaState_, 1);
         }
@@ -154,7 +127,7 @@ namespace Script
         template<typename K>
         int GetType(K key)
         {
-            PushLuaTable();
+            PushInternal();
             int type = GetField(luaState_, -1, key);
             lua_pop(luaState_, 2);
 
@@ -171,7 +144,7 @@ namespace Script
         void SetMetaTable(std::string mtName);
         std::string GetMetaTableName();
 
-        void PushLuaTable();
+        void PushInternal();
     private:
 
         // Assumes that table is at -2 and value is at the top of the stack

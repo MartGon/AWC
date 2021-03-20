@@ -25,7 +25,7 @@ int UserData::AreaDesc::New(lua_State* luaState)
     LuaTable lt{luaState, 1};
 
     const std::string dirKey = "directions";
-    auto dirTable = lt.GetTable(dirKey);
+    auto dirTable = lt.GetLuaWrapper<Script::LuaTable>(dirKey);
 
     const std::string error = dirKey + " key did not exist on table";
     luaL_argcheck(luaState, dirTable, 1, error.c_str());

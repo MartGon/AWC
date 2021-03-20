@@ -1,5 +1,8 @@
 #include <Script/Utils/Utils.h>
 
+#include <Script/Wrappers/LuaTable.h>
+#include <Script/Wrappers/LuaFunction.h>
+
 using namespace Script;
 
 // Push and To
@@ -29,6 +32,18 @@ void Script::Push<bool>(lua_State* state, bool val)
 }
 
 template<>
+void Script::Push<Script::LuaTable&>(lua_State* state, Script::LuaTable& val)
+{
+    val.PushInternal();
+}
+
+template<>
+void Script::Push<Script::LuaFunction&>(lua_State* state, Script::LuaFunction& val)
+{
+    val.PushInternal();
+}
+
+template<>
 int Script::To<int>(lua_State* state, int index)
 {
     return lua_tointeger(state, index);
@@ -44,6 +59,18 @@ template<>
 std::string Script::To<std::string>(lua_State* state, int index)
 {
     return std::string(lua_tostring(state, index));
+}
+
+template<>
+Script::LuaTable Script::To<Script::LuaTable>(lua_State* state, int index)
+{
+    return LuaTable{state, index};
+}
+
+template<>
+Script::LuaFunction Script::To<Script::LuaFunction>(lua_State* state, int index)
+{
+    return LuaFunction{state, index};
 }
 
 template<>

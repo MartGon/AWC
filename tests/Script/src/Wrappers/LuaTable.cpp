@@ -75,12 +75,31 @@ TEST_CASE("Lua Table access test")
             table.Set("int", 1);
             table.Set("str", "text");
 
-            lt.SetTable("table", table);
+            lt.SetLuaWrapper<Script::LuaTable>("table", table);
 
-            auto innerTable = lt.GetTable("table");
+            auto innerTable = lt.GetLuaWrapper<Script::LuaTable>("table");
 
             CHECK(innerTable->Get<int>("int") == 1);
             CHECK(innerTable->Get<std::string>("str") == "text");
+        }
+        SUBCASE("Inner Function")
+        {
+            luaL_loadstring(luaState, "i = 2;");
+            Script::LuaFunction f{luaState, -1};
+            lua_pop(luaState, 1);
+
+            lt.SetLuaWrapper<Script::LuaFunction>("f", f);
+
+            auto innerFunction = lt.GetLuaWrapper<Script::LuaFunction>("f");
+            CHECK(innerFunction.has_value() == true);
+
+            innerFunction->PushInternal();
+            lua_pcall(luaState, 0, 0, 0);
+            
+            lua_getglobal(luaState, "i");
+            CHECK(lua_tointeger(luaState, -1) == 2);
+
+            lua_pop(luaState, 1);
         }
         SUBCASE("Get type")
         {
@@ -126,7 +145,7 @@ TEST_CASE("Lua Table access test")
         }
         SUBCASE("Push Lua table")
         {
-            lt.PushLuaTable();
+            lt.PushInternal();
 
             CHECK(lua_gettop(luaState) == 1);
             CHECK(lua_type(luaState, -1) == LUA_TTABLE);
@@ -155,7 +174,7 @@ TEST_CASE("Creation test")
         lua_pop(luaState, 1);
         Script::LuaTable lt(luaState, "Metatable");
 
-        lt.PushLuaTable();
+        lt.PushInternal();
         CHECK(lua_getmetatable(luaState, 1) == 1);
         lua_getfield(luaState, -1, "__name");
         std::string s{lua_tostring(luaState, -1)};
@@ -215,10 +234,10 @@ TEST_CASE("Creation test")
         // No entry is created
         CHECK(rLen == luaL_len(luaState, LUA_REGISTRYINDEX));
 
-        n.PushLuaTable();
+        n.PushInternal();
         CHECK(lua_type(luaState, -1) == LUA_TTABLE);
 
-        lt.PushLuaTable();
+        lt.PushInternal();
         // Nothing is pushed
         CHECK(lua_type(luaState, -1) == LUA_TNIL);
     }
@@ -241,10 +260,10 @@ TEST_CASE("Creation test")
         // An entry is removed by move
         CHECK(rLen > luaL_len(luaState, LUA_REGISTRYINDEX));
 
-        a.PushLuaTable();
+        a.PushInternal();
         CHECK(lua_type(luaState, -1) == LUA_TTABLE);
 
-        lt.PushLuaTable();
+        lt.PushInternal();
         // Nothing is pushed
         CHECK(lua_type(luaState, -1) == LUA_TNIL);
     }

@@ -27,7 +27,7 @@ TEST_CASE("Construction")
         lua_pop(L, 1);
 
         Script::LuaTable t{L};
-        t.PushLuaTable();
+        t.PushInternal();
         // No function found at t["f"]
         CHECK_THROWS_AS(Script::LuaFunction(L, -1, "f"), const AWCException&);
         lua_pop(L, 1); 
@@ -58,14 +58,14 @@ TEST_CASE("Construction")
         rLen = luaL_len(L, LUA_REGISTRYINDEX);
 
         // Call both functions
-        f.PushFunction();
+        f.PushInternal();
         lua_pcall(L, 0, 0, 0);
 
         auto type = lua_getglobal(L, "i");
         CHECK(type == LUA_TNUMBER);
         CHECK(lua_tointeger(L, -1) == 2);
 
-        f2.PushFunction();
+        f2.PushInternal();
         lua_pcall(L, 0, 0, 0);
 
         type = lua_getglobal(L, "i");
@@ -101,14 +101,14 @@ TEST_CASE("Construction")
         CHECK(luaL_len(L, LUA_REGISTRYINDEX) < rLen);
 
         // Call both functions, both should have the same results
-        f.PushFunction();
+        f.PushInternal();
         lua_pcall(L, 0, 0, 0);
 
         auto type = lua_getglobal(L, "i");
         CHECK(type == LUA_TNUMBER);
         CHECK(lua_tointeger(L, -1) == 2);
 
-        g.PushFunction();
+        g.PushInternal();
         lua_pcall(L, 0, 0, 0);
 
         type = lua_getglobal(L, "i");
@@ -131,11 +131,11 @@ TEST_CASE("Construction")
         // No entry is created this time
         CHECK(rLen == luaL_len(L, LUA_REGISTRYINDEX));
 
-        t.PushFunction();
+        t.PushInternal();
         // T holds a function...
         CHECK(lua_type(L, -1) == LUA_TFUNCTION);
 
-        s.PushFunction();
+        s.PushInternal();
         // ... s holds nothing
         CHECK(lua_type(L, -1) == LUA_TNIL);
     }
@@ -165,11 +165,11 @@ TEST_CASE("Construction")
         // The function held by g was destroyed
         CHECK(luaL_len(L, LUA_REGISTRYINDEX) < rLen);
 
-        g.PushFunction();
+        g.PushInternal();
         // g holds a function...
         CHECK(lua_type(L, -1) == LUA_TFUNCTION);
 
-        f.PushFunction();
+        f.PushInternal();
         // ... f holds nothing
         CHECK(lua_type(L, -1) == LUA_TNIL);
     }

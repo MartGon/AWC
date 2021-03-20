@@ -18,7 +18,7 @@ LuaFunction::LuaFunction(lua_State* luaState, int index) : luaState_{luaState}
 
 // Copy
 LuaFunction::LuaFunction(const LuaFunction& other) : luaState_{other.luaState_}, 
-    functionRef_{(other.PushFunction(), luaL_ref(other.luaState_, LUA_REGISTRYINDEX))}
+    functionRef_{(other.PushInternal(), luaL_ref(other.luaState_, LUA_REGISTRYINDEX))}
 {
 
 }
@@ -56,7 +56,7 @@ LuaFunction::~LuaFunction()
 
 // public
 
-int LuaFunction::PushFunction() const
+int LuaFunction::PushInternal() const
 {
     return lua_rawgeti(luaState_, LUA_REGISTRYINDEX, functionRef_);
 }

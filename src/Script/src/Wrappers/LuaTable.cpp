@@ -51,7 +51,7 @@ LuaTable::~LuaTable()
 
 int LuaTable::Length()
 {
-    PushLuaTable();
+    PushInternal();
     int len = lua_rawlen(luaState_, -1);
     lua_pop(luaState_, 1);
 
@@ -60,7 +60,7 @@ int LuaTable::Length()
 
 void LuaTable::SetMetaTable(std::string mtName)
 {
-    PushLuaTable();
+    PushInternal();
     luaL_setmetatable(luaState_, mtName.c_str());
     lua_pop(luaState_, 1);
 }
@@ -69,7 +69,7 @@ std::string LuaTable::GetMetaTableName()
 {
     std::string name;
 
-    PushLuaTable();
+    PushInternal();
     if(lua_getmetatable(luaState_, -1))
     {
         lua_getfield(luaState_, -1, "__name");
@@ -81,7 +81,7 @@ std::string LuaTable::GetMetaTableName()
     return name;
 }
 
-void LuaTable::PushLuaTable()
+void LuaTable::PushInternal()
 {
     lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
 }

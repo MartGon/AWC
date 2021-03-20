@@ -6,6 +6,9 @@
 
 namespace Script
 {
+    class LuaTable;
+    class LuaFunction;
+
     template<typename T>
     void Push(lua_State* state, T val);
 
@@ -17,6 +20,10 @@ namespace Script
     void Push<const char*>(lua_State* state, const char* val);
     template<>
     void Push<bool>(lua_State* state, bool val);
+    template<>
+    void Push<LuaTable&>(lua_State* state, LuaTable& val);
+    template<>
+    void Push<LuaFunction&>(lua_State* state, LuaFunction& val);
 
     template <typename T>
     T To(lua_State* state, int index);
@@ -28,6 +35,10 @@ namespace Script
     std::string To<std::string>(lua_State* state, int index);
     template<>
     bool To<bool>(lua_State* state, int index);
+    template<>
+    LuaTable To<LuaTable>(lua_State* state, int index);
+    template<>
+    LuaFunction To<LuaFunction>(lua_State* state, int index);
 
     template <typename T>
     int GetField(lua_State*, int index, T key);
