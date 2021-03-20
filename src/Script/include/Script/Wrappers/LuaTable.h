@@ -19,8 +19,16 @@ namespace Script
         template <typename K>
         LuaTable(lua_State* luaState, int sIndex, K tIndex) : luaState_{luaState}
         {
-            GetField<K>(luaState, sIndex, tIndex);
-            tableRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
+            auto type = lua_type(luaState, sIndex);
+            if(type == LUA_TTABLE)
+            {
+                int top = lua_gettop(luaState);
+                GetField<K>(luaState, sIndex, tIndex);
+                CheckType(-1, top);
+                tableRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
+            }
+            else
+                throw AWCException("LuaFunction: No table found at " + std::to_string(sIndex));
         }
 
         // Creates a Wrapper for a new table
@@ -136,6 +144,8 @@ namespace Script
         // Pops the internal lua table from the stack
         void SetField(std::string key);
         void SetField(int index);
+
+        void CheckType(int index, int top);
 
         lua_State* luaState_;
         std::string mtName_;

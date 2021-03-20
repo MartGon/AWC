@@ -21,16 +21,10 @@ namespace Script
             auto type = lua_type(luaState, sIndex);
             if(type == LUA_TTABLE)
             {
+                int top = lua_gettop(luaState);
                 type = GetField<K>(luaState, sIndex, tIndex);
-                if(type == LUA_TFUNCTION)
-                {
-                    functionRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
-                }
-                else
-                {
-                    lua_pop(luaState, 1); // Pop the nil value
-                    throw AWCException("LuaFunction: value at index was not a function");
-                }
+                CheckType(-1, top);
+                functionRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
             }
             else
                 throw AWCException("LuaFunction: No table found at " + std::to_string(sIndex));
@@ -50,6 +44,8 @@ namespace Script
         void PushFunction() const;
 
     private:
+
+        void CheckType(int index, int top);
 
         lua_State* luaState_;
         int functionRef_;

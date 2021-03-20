@@ -6,6 +6,7 @@ using namespace Script;
 
 LuaTable::LuaTable(lua_State* luaState, int index) : luaState_{luaState}
 {
+    CheckType(index, lua_gettop(luaState));
     lua_pushvalue(luaState, index);
     tableRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
 }
@@ -23,11 +24,9 @@ LuaTable::LuaTable(lua_State* luaState, std::string mtName) : luaState_{luaState
     SetMetaTable(mtName);
 }
 
-LuaTable::LuaTable(LuaTable&& lt)
+LuaTable::LuaTable(LuaTable&& other) : tableRef_{other.tableRef_}, luaState_{other.luaState_}, mtName_{other.mtName_}
 {
-    this->tableRef_ = lt.tableRef_;
-    this->luaState_ = lt.luaState_;
-    this->mtName_ = lt.mtName_;
+    other.tableRef_ = LUA_REFNIL;
 }
 
 LuaTable::~LuaTable()
@@ -71,9 +70,7 @@ std::string LuaTable::GetMetaTableName()
 
 void LuaTable::PushLuaTable()
 {
-    int type = lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
-    if(type != LUA_TTABLE)
-        throw AWCException("LuaTable: Internal Lua table was not type LUA_TTABLE");
+    lua_rawgeti(luaState_, LUA_REGISTRYINDEX, tableRef_);
 }
 
 // Private
@@ -88,4 +85,14 @@ void LuaTable::SetField(std::string key)
 void LuaTable::SetField(int index)
 {
     lua_seti(luaState_, -2, index);
+}
+
+void LuaTable::CheckType(int index, int top)
+{
+    auto type = lua_type(luaState_, index);
+    if(type != LUA_TTABLE)
+    {
+        lua_settop(luaState_, top);
+        throw AWCException("LuaTable: Internal Lua table was not type LUA_TTABLE");
+    }
 }

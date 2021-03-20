@@ -4,15 +4,9 @@ using namespace Script;
 
 LuaFunction::LuaFunction(lua_State* luaState, int index) : luaState_{luaState}
 {
-    auto type = lua_type(luaState, index);
-
-    if(type == LUA_TFUNCTION)
-    {
-        lua_pushvalue(luaState, index);
-        functionRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
-    }
-    else
-        throw AWCException("LuaFunction: value at index " + std::to_string(index) + " was not a function");
+    CheckType(index, lua_gettop(luaState));
+    lua_pushvalue(luaState, index);
+    functionRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
 }
 
 LuaFunction::LuaFunction(const LuaFunction& other) : luaState_{other.luaState_}, 
@@ -34,4 +28,16 @@ LuaFunction::~LuaFunction()
 void LuaFunction::PushFunction() const
 {
     lua_rawgeti(luaState_, LUA_REGISTRYINDEX, functionRef_);
+}
+
+// private
+
+void LuaFunction::CheckType(int index, int top)
+{
+    auto type = lua_type(luaState_, index);
+    if(type != LUA_TFUNCTION)
+    {
+        lua_settop(luaState_, top);
+        throw AWCException("LuaFunction: value at index " + std::to_string(index) + " was not a function");
+    }
 }

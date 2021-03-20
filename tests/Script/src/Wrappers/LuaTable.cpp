@@ -148,8 +148,32 @@ TEST_CASE("Creation test")
     {
         Script::LuaTable lt{luaState};
     }
-    SUBCASE("Create from existing table")
+    SUBCASE("Create new table with metatable")
     {
+        luaL_newmetatable(luaState, "Metatable");
+        lua_pop(luaState, 1);
+        Script::LuaTable lt(luaState, "Metatable");
+
+        lt.PushLuaTable();
+        CHECK(lua_getmetatable(luaState, 1) == 1);
+        lua_getfield(luaState, -1, "__name");
+        std::string s{lua_tostring(luaState, -1)};
+
+        CHECK(s == "Metatable");
+    }
+    SUBCASE("Create from existing table at the stack")
+    {
+        // Nothing at top
+        CHECK_THROWS_AS(Script::LuaTable(luaState, -1), const AWCException&);
+        CHECK(lua_gettop(luaState) == 0);
+
+        // No valid type
+        lua_pushinteger(luaState, 1);
+        CHECK_THROWS_AS(Script::LuaTable(luaState, -1), const AWCException&);
+        lua_pop(luaState, 1);
+        CHECK(lua_gettop(luaState) == 0);
+
+        // valid
         lua_newtable(luaState);
         lua_pushinteger(luaState, 15);
         lua_setfield(luaState, -2, "value");
@@ -159,11 +183,43 @@ TEST_CASE("Creation test")
     }
     SUBCASE("Create from existing table which is inside another table")
     {
+        // Nothing at top
+        CHECK_THROWS_AS(Script::LuaTable(luaState, -1, "value"), const AWCException&);
+        CHECK(lua_gettop(luaState) == 0);
+
+        lua_newtable(luaState);
+        lua_pushinteger(luaState, 32);
+        lua_setfield(luaState, -2, "value");
+
+        // Value at t[n] is not a table
+        CHECK_THROWS_AS(Script::LuaTable(luaState, -1, "value"), const AWCException&);
+
         lua_pushinteger(luaState, 32);
         lua_setglobal(luaState, "value");
         Script::LuaTable lt{luaState, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS};
 
         CHECK(lt.Get<int>("value") == 32);
+    }
+    SUBCASE("Create by move")
+    {
+        auto rLen = luaL_len(luaState, LUA_REGISTRYINDEX);
+        Script::LuaTable lt{luaState};
+
+        // New entry on registry should be created
+        CHECK(rLen < luaL_len(luaState, LUA_REGISTRYINDEX));
+        rLen = luaL_len(luaState, LUA_REGISTRYINDEX);
+
+        Script::LuaTable n = std::move(lt);
+
+        // No entry is created
+        CHECK(rLen == luaL_len(luaState, LUA_REGISTRYINDEX));
+
+        n.PushLuaTable();
+        CHECK(lua_type(luaState, -1) == LUA_TTABLE);
+
+        lt.PushLuaTable();
+        // Nothing is pushed
+        CHECK(lua_type(luaState, -1) == LUA_TNIL);
     }
 
 
