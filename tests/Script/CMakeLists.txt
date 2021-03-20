@@ -4,7 +4,6 @@ SET(SOURCES
     src/ScriptTest.cpp
     src/Script.cpp
     src/Experiments.cpp
-    src/LuaTable.cpp
     src/Game.cpp
 
     src/UserData/Game.cpp
@@ -15,6 +14,9 @@ SET(SOURCES
     src/UserData/AreaDesc.cpp
     src/UserData/MovementDescType.cpp
     src/UserData/Database.cpp
+
+    src/Wrappers/LuaTable.cpp
+    src/Wrappers/LuaFunction.cpp
 )
 
 add_executable(ScriptTest ${SOURCES})

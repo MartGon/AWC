@@ -16,15 +16,24 @@ namespace Script
 
         // Creates a function for a wrapper located at t[tIndex], where t is the table at sIndex
         template <typename K>
-        LuaFunction(lua_State* luaState, int sIndex, K tIndex)
+        LuaFunction(lua_State* luaState, int sIndex, K tIndex) : luaState_{luaState}
         {
-            auto type = GetField<K>(luaState, sIndex, tIndex);
-            if(type == LUA_TFUNCTION)
+            auto type = lua_type(luaState, sIndex);
+            if(type == LUA_TTABLE)
             {
-                functionRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
+                type = GetField<K>(luaState, sIndex, tIndex);
+                if(type == LUA_TFUNCTION)
+                {
+                    functionRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
+                }
+                else
+                {
+                    lua_pop(luaState, 1); // Pop the nil value
+                    throw AWCException("LuaFunction: value at index was not a function");
+                }
             }
             else
-                throw AWCException("LuaFunction: value at index " + std::to_string(sIndex) + " was not a function");
+                throw AWCException("LuaFunction: No table found at " + std::to_string(sIndex));
         }
 
         // Creates a Wrapper to the function a the top of the stack
@@ -33,8 +42,8 @@ namespace Script
 
         }
 
-        LuaFunction(const LuaFunction&) = delete;
-        LuaFunction(LuaFunction&&) = default;
+        LuaFunction(const LuaFunction&);
+        LuaFunction(LuaFunction&&);
 
         ~LuaFunction();
 
@@ -43,6 +52,6 @@ namespace Script
     private:
 
         lua_State* luaState_;
-        unsigned int functionRef_;
+        int functionRef_;
     };
 }
