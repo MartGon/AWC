@@ -35,9 +35,19 @@ namespace Script
         {
 
         }
-
+        // Copy operations
         LuaFunction(const LuaFunction&);
+        LuaFunction& operator=(const LuaFunction&);
+        friend void swap(LuaFunction& a, LuaFunction& b)
+        {
+            using std::swap;
+
+            swap(a.functionRef_, b.functionRef_);
+        }
+
+        // Move operations
         LuaFunction(LuaFunction&&);
+        LuaFunction& operator=(LuaFunction&&);
 
         ~LuaFunction();
 

@@ -2,6 +2,8 @@
 
 using namespace Script;
 
+// Construction
+
 LuaFunction::LuaFunction(lua_State* luaState, int index) : luaState_{luaState}
 {
     CheckType(index, lua_gettop(luaState));
@@ -15,15 +17,37 @@ LuaFunction::LuaFunction(const LuaFunction& other) : luaState_{other.luaState_},
 
 }
 
+LuaFunction& LuaFunction::operator=(const LuaFunction& other)
+{
+    LuaFunction temp{other};
+    swap(*this, temp);
+
+    return *this;
+}
+
 LuaFunction::LuaFunction(LuaFunction&& other) : luaState_{other.luaState_}, functionRef_{other.functionRef_}
 {
     other.functionRef_ = LUA_REFNIL;
+}
+
+LuaFunction& LuaFunction::operator=(LuaFunction&& other)
+{
+    luaL_unref(luaState_, LUA_REGISTRYINDEX, functionRef_);
+
+    functionRef_ = other.functionRef_;
+    luaState_ = other.luaState_;
+
+    other.functionRef_ = LUA_REFNIL;
+
+    return *this;
 }
 
 LuaFunction::~LuaFunction()
 {
     luaL_unref(luaState_, LUA_REGISTRYINDEX, functionRef_);
 }
+
+// public
 
 void LuaFunction::PushFunction() const
 {
