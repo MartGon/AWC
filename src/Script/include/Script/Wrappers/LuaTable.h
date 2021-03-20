@@ -7,6 +7,8 @@
 #include <Script/UserData/UserData.h>
 #include <Script/Utils/Utils.h>
 
+#include <Script/Wrappers/LuaFunction.h>
+
 namespace Script
 {
     class LuaTable
@@ -45,9 +47,10 @@ namespace Script
         LuaTable(LuaTable&& lt);
         LuaTable& operator=(LuaTable&& other);
         
-
+        // Destructor
         ~LuaTable();
-    
+
+        // Getters and Setters
         template<typename T, typename K>
         void Set(K key, T val)
         {
@@ -119,6 +122,31 @@ namespace Script
         {
             PushLuaTable();
             table.PushLuaTable();
+            SetField(key); 
+            lua_pop(luaState_, 1);
+        }
+
+        template <typename K>
+        std::optional<LuaFunction> GetFunction(K key)
+        {
+            std::optional<LuaFunction> f;
+
+            PushLuaTable();
+            auto type = GetField(luaState_, -1, key);
+            if(type == LUA_TFUNCTION)
+                f = std::move(std::optional<LuaFunction>(std::in_place, luaState_, -1));
+
+            lua_pop(luaState_, 2);
+            auto top = lua_gettop(luaState_);
+
+            return f;
+        }
+
+        template<typename K>
+        void SetFunction(K key, LuaFunction& f)
+        {
+            PushLuaTable();
+            f.PushFunction();
             SetField(key); 
             lua_pop(luaState_, 1);
         }

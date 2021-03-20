@@ -11,6 +11,9 @@ namespace Script
     class LuaFunction
     {
     public:
+        // Creates a Wrapper to a nil function
+        LuaFunction(lua_State* luaState);
+
         // Creates a Wrapper to function at the given index
         LuaFunction(lua_State* luaState, int index);
 
@@ -30,11 +33,6 @@ namespace Script
                 throw AWCException("LuaFunction: No table found at " + std::to_string(sIndex));
         }
 
-        // Creates a Wrapper to the function a the top of the stack
-        LuaFunction(lua_State* luaState) : LuaFunction(luaState, -1)
-        {
-
-        }
         // Copy operations
         LuaFunction(const LuaFunction&);
         LuaFunction& operator=(const LuaFunction&);
@@ -51,7 +49,7 @@ namespace Script
 
         ~LuaFunction();
 
-        void PushFunction() const;
+        int PushFunction() const;
 
     private:
 

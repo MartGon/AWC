@@ -4,6 +4,11 @@ using namespace Script;
 
 // Construction
 
+LuaFunction::LuaFunction(lua_State* luaState) : luaState_{luaState}, functionRef_{LUA_REFNIL}
+{
+
+}
+
 LuaFunction::LuaFunction(lua_State* luaState, int index) : luaState_{luaState}
 {
     CheckType(index, lua_gettop(luaState));
@@ -11,8 +16,9 @@ LuaFunction::LuaFunction(lua_State* luaState, int index) : luaState_{luaState}
     functionRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
 }
 
+// Copy
 LuaFunction::LuaFunction(const LuaFunction& other) : luaState_{other.luaState_}, 
-    functionRef_{(lua_rawgeti(other.luaState_, LUA_REGISTRYINDEX, other.functionRef_), luaL_ref(other.luaState_, LUA_REGISTRYINDEX))}
+    functionRef_{(other.PushFunction(), luaL_ref(other.luaState_, LUA_REGISTRYINDEX))}
 {
 
 }
@@ -25,6 +31,7 @@ LuaFunction& LuaFunction::operator=(const LuaFunction& other)
     return *this;
 }
 
+// Move
 LuaFunction::LuaFunction(LuaFunction&& other) : luaState_{other.luaState_}, functionRef_{other.functionRef_}
 {
     other.functionRef_ = LUA_REFNIL;
@@ -49,9 +56,9 @@ LuaFunction::~LuaFunction()
 
 // public
 
-void LuaFunction::PushFunction() const
+int LuaFunction::PushFunction() const
 {
-    lua_rawgeti(luaState_, LUA_REGISTRYINDEX, functionRef_);
+    return lua_rawgeti(luaState_, LUA_REGISTRYINDEX, functionRef_);
 }
 
 // private
