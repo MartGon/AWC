@@ -143,6 +143,7 @@ TEST_CASE("Lua Table access test")
 TEST_CASE("Creation test")
 {
     auto luaState = luaL_newstate();
+    auto baseLen = luaL_len(luaState, LUA_REGISTRYINDEX);
 
     SUBCASE("Create new table")
     {
@@ -221,7 +222,35 @@ TEST_CASE("Creation test")
         // Nothing is pushed
         CHECK(lua_type(luaState, -1) == LUA_TNIL);
     }
+    SUBCASE("Move assignment operator")
+    {
+        auto rLen = luaL_len(luaState, LUA_REGISTRYINDEX);
+        Script::LuaTable lt{luaState};
 
+        // New entry on registry should be created
+        CHECK(rLen < luaL_len(luaState, LUA_REGISTRYINDEX));
+        rLen = luaL_len(luaState, LUA_REGISTRYINDEX);
+
+        Script::LuaTable a{luaState};
+        // Another new entry on registry should be created
+        CHECK(rLen < luaL_len(luaState, LUA_REGISTRYINDEX));
+        rLen = luaL_len(luaState, LUA_REGISTRYINDEX);
+
+        a = std::move(lt);
+
+        // An entry is removed by move
+        CHECK(rLen > luaL_len(luaState, LUA_REGISTRYINDEX));
+
+        a.PushLuaTable();
+        CHECK(lua_type(luaState, -1) == LUA_TTABLE);
+
+        lt.PushLuaTable();
+        // Nothing is pushed
+        CHECK(lua_type(luaState, -1) == LUA_TNIL);
+    }
+    // Check there are no objects left on the registry
+    lua_pushinteger(luaState, 1);
+    CHECK(luaL_ref(luaState, LUA_REGISTRYINDEX) == (baseLen + 1));
 
     lua_close(luaState);
 }

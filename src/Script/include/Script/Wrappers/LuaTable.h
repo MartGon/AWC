@@ -37,8 +37,14 @@ namespace Script
         // Creates a Wrapper for a new table, with the given metatable.
         LuaTable(lua_State* luaState, std::string mtName);
 
-        LuaTable(LuaTable&& lt);
+        // Copy operations
         LuaTable(const LuaTable& lt) = delete;
+        LuaTable& operator=(const LuaTable&) = delete;     
+
+        // Move Operations
+        LuaTable(LuaTable&& lt);
+        LuaTable& operator=(LuaTable&& other);
+        
 
         ~LuaTable();
     
@@ -94,18 +100,18 @@ namespace Script
         }
 
         template<typename K>
-        std::unique_ptr<LuaTable> GetTable(K key)
+        std::optional<LuaTable> GetTable(K key)
         {
             PushLuaTable();
             int type = GetField(luaState_, -1, key);
 
-            std::unique_ptr<LuaTable> ptr;
+            std::optional<LuaTable> lt;
             if(type == LUA_TTABLE)
-                ptr = std::unique_ptr<LuaTable>{new LuaTable{luaState_, -1}};
+                lt = std::move(std::optional<LuaTable>{std::in_place, luaState_, -1});
 
             lua_pop(luaState_, 2);
 
-            return ptr;
+            return lt;
         }
 
         template <typename K>

@@ -29,6 +29,19 @@ LuaTable::LuaTable(LuaTable&& other) : tableRef_{other.tableRef_}, luaState_{oth
     other.tableRef_ = LUA_REFNIL;
 }
 
+LuaTable& LuaTable::operator=(LuaTable&& other)
+{
+    luaL_unref(luaState_, LUA_REGISTRYINDEX, tableRef_);
+
+    tableRef_ = other.tableRef_;
+    luaState_ = other.luaState_;
+    mtName_ = std::move(other.mtName_);
+
+    other.tableRef_ = LUA_REFNIL;
+
+    return *this;
+}
+
 LuaTable::~LuaTable()
 {
     luaL_unref(luaState_, LUA_REGISTRYINDEX, tableRef_);   
