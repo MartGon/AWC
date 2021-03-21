@@ -48,4 +48,6 @@ namespace Script
     int GetField<const char*>(lua_State*, int index, const char* key);
     template<>
     int GetField<std::string>(lua_State*, int index, std::string key);
+
+    bool IsTable(lua_State*, int index);
 }

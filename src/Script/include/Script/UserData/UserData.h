@@ -90,6 +90,17 @@ namespace Script::UserData
         }
 
         template <typename T>
+        typename T::type* ToUserDataFromTable(lua_State* luaState, int index)
+        {
+            using type = typename T::type;
+            luaL_checktype(luaState, index, LUA_TTABLE);
+            type* userdata = T::FromTable(luaState, index);
+            lua_pop(luaState, 1);
+
+            return userdata;
+        }
+
+        template <typename T>
         typename T::type* PushDataCopy(lua_State* luaState, typename T::type value)
         {
             using type = typename T::type;
@@ -114,6 +125,30 @@ namespace Script::UserData
             datum->ptr = userdata;
 
             luaL_setmetatable(luaState, T::MT_NAME);
+        }
+        
+        // Private 
+        namespace 
+        {
+            template<typename T>
+            auto CastOrCreateImp(lua_State* luaState, int index, int type, int) -> decltype(T::FromTable(luaState, index))
+            {
+                return type == LUA_TUSERDATA ? 
+                    Script::UserData::UserData::ToUserData<T>(luaState, index) :
+                    Script::UserData::UserData::ToUserDataFromTable<T>(luaState, index);
+            }
+
+            template<typename T>
+            auto CastOrCreateImp(lua_State* luaState, int index, int type, double) -> typename T::type*
+            {
+                return Script::UserData::UserData::ToUserData<T>(luaState, index);
+            }
+        }
+
+        template<typename T>
+        typename T::type* CastOrCreate(lua_State* luaState, int index, int type)
+        {
+            return CastOrCreateImp<T>(luaState, index, type, 0);
         }
     } 
 }

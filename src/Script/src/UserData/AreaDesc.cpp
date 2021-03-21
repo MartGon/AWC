@@ -36,13 +36,20 @@ std::vector<::Vector2> ParseDirs(LuaTable& dirTable)
 
 int UserData::AreaDesc::New(lua_State* luaState)
 {
-    // Value to push
-    ::AreaDescPtr tpdp;
-
     bool isTable = lua_istable(luaState, 1);
     luaL_argcheck(luaState, isTable, 1, "Expected table");
 
-    LuaTable lt{luaState, 1};
+    FromTable(luaState, 1);
+    
+    return 1;
+}
+
+UserData::AreaDesc::type* UserData::AreaDesc::FromTable(lua_State* luaState, int index)
+{
+    // Value to push
+    ::AreaDescPtr tpdp;
+
+    LuaTable lt{luaState, index};
 
     const std::string dirKey = "directions";
     auto dirTable = lt.GetLuaWrapper<Script::LuaTable>(dirKey);
@@ -83,9 +90,7 @@ int UserData::AreaDesc::New(lua_State* luaState)
     else
         tpdp = ::AreaDesc::Create(dirs);
 
-    UserData::PushDataCopy<AreaDesc>(luaState, tpdp);
-    
-    return 1;
+    return UserData::PushDataCopy<AreaDesc>(luaState, tpdp);
 }
 
 /*

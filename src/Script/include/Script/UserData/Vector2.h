@@ -16,6 +16,7 @@ namespace Script::UserData
         static const luaL_Reg functions[];
 
         static int New(lua_State* luaState);
+        static ::Vector2* FromTable(lua_State* luaState, int index);
 
         static int Get(lua_State* luaState);
         static int Set(lua_State* luaState);

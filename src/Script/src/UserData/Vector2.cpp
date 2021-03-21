@@ -1,6 +1,8 @@
 #include <Script/UserData/Vector2.h>
 #include <Script/UserData/UserData.h>
 
+#include <Script/Wrappers/LuaTable.h>
+
 using namespace Script;
 
 const char* UserData::Vector2::MT_NAME = "Utils_Vector2";
@@ -28,6 +30,16 @@ int UserData::Vector2::New(lua_State* luaState)
     ::Vector2* vec = UserData::PushDataCopy<Vector2>(luaState, ::Vector2{x, y});
 
     return 1;
+}
+
+::Vector2* UserData::Vector2::FromTable(lua_State* luaState, int index)
+{
+    LuaTable table{luaState, index};
+    auto x = table.Get<int>("x");
+    auto y = table.Get<int>("y");
+    ::Vector2* vec = UserData::PushDataCopy<Vector2>(luaState, ::Vector2{x, y});
+
+    return vec;
 }
 
 int UserData::Vector2::Get(lua_State* luaState)

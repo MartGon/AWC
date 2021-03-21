@@ -96,3 +96,8 @@ int Script::GetField<std::string>(lua_State* luaState, int index, std::string ke
 {
     return lua_getfield(luaState, index, key.c_str());
 }
+
+bool Script::IsTable(lua_State* luaState, int index)
+{
+    return lua_type(luaState, index) == LUA_TTABLE;
+}

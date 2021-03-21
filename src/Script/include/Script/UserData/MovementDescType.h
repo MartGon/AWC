@@ -16,6 +16,8 @@ namespace Script::UserData
         static const luaL_Reg functions[];
 
         static int New(lua_State*);
+
+        static type* FromTable(lua_State* state, int index);
     };
 
     

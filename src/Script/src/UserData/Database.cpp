@@ -44,7 +44,6 @@ int UserData::Database::AddUnitType(lua_State* luaState)
 
     return 0;
 }
-
 /*
 
     db.AddUnitType({

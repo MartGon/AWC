@@ -37,6 +37,13 @@ int UserData::MovementDescType::New(lua_State* luaState)
     bool isTable = lua_istable(luaState, 1);
     luaL_argcheck(luaState, isTable, 1, "Expected table");
 
+    FromTable(luaState, 1);
+
+    return 1;
+}
+
+UserData::MovementDescType::type* UserData::MovementDescType::FromTable(lua_State* luaState, int index)
+{
     LuaTable lt{luaState, 1};
 
     auto tpd = lt.GetUserData<AreaDesc>("tpd");
@@ -58,9 +65,7 @@ int UserData::MovementDescType::New(lua_State* luaState)
     auto maxGas = lt.Get<uint>("maxGas");
 
     MovementDescTypePtr mdt{ new ::MovementDescType{*tpd, r, tct, uct, maxGas}};
-    UserData::PushDataCopy<MovementDescType>(luaState, mdt);
-
-    return 1;
+    return UserData::PushDataCopy<MovementDescType>(luaState, mdt);
 }
 
 /*

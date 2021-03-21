@@ -75,9 +75,9 @@ namespace Script
         typename T::type* GetUserData(K key)
         {
             PushInternal();
-            GetField(luaState_, -1, key);
-            auto ptr = Script::UserData::UserData::ToUserData<T>(luaState_, -1);
-            lua_pop(luaState_, 2);
+            auto type = GetField(luaState_, -1, key);
+            auto ptr = Script::UserData::UserData::CastOrCreate<T>(luaState_, -1, type);
+            lua_pop(luaState_, 2); // Pop Table and field
 
             return ptr;
         }
