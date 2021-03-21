@@ -6,6 +6,7 @@ SET(SOURCES
     src/Experiments.cpp
     src/Game.cpp
 
+    src/UserData/CostTable.cpp
     src/UserData/Game.cpp
     src/UserData/Map.cpp
     src/UserData/Vector2.cpp

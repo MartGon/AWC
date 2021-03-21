@@ -18,10 +18,14 @@ function Execute(game)
             max = -1;
         },
         tileCT = {
-            {id = 1, cost = 1}
+            entries = {
+                {id = 1, cost = 1}
+            }
         },
         unitCT = {
-            {id = 1, cost = -1}
+            entries = {
+                {id = 1, cost = -1}
+            }
         },
         maxGas = -1;
     });

@@ -17,10 +17,16 @@ local function GetMoveType()
             max = -1;
         },
         tileCT = {
-            {id = 1, cost = 1}
+            entries = {
+                {id = 1, cost = 1}
+            },
+            default = 1
         },
         unitCT = {
-            {id = 1, cost = -1}
+            entries = {
+                {id = 1, cost = 1}
+            },
+            default = 1
         },
         maxGas = -1;
     });

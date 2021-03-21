@@ -21,6 +21,6 @@ namespace Test::Script
         unsigned int ref;
     };
 
-    std::string GetUserDataPath();
+    std::string GetUserDataPath(std::string str = {});
     std::string GetGameScriptPath(std::string file);
 }

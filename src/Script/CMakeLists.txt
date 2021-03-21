@@ -7,6 +7,7 @@ set(SOURCES
     src/DB/Database.cpp
     src/DB/Table.cpp
 
+    src/UserData/CostTable.cpp
     src/UserData/Game.cpp
     src/UserData/Map.cpp
     src/UserData/Unit.cpp

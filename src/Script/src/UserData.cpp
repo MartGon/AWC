@@ -26,6 +26,7 @@ void UserData::Init(lua_State* luaState)
         Game,
         Map,
         Unit,
-        UnitMovement
+        UnitMovement,
+        CostTable
         >(luaState);
 }

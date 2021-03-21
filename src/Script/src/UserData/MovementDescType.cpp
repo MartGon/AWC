@@ -3,6 +3,7 @@
 #include <Script/Wrappers/LuaTable.h>
 
 #include <Script/UserData/AreaDesc.h>
+#include <Script/UserData/CostTable.h>
 
 using namespace Script;
 
@@ -16,21 +17,6 @@ const luaL_Reg UserData::MovementDescType::functions[] = {
     {"New", MovementDescType::New},
     {NULL, NULL}
 };
-
-CostTable ParseCostTable(lua_State* luaState, LuaTable& t)
-{
-    CostTable ct{{}, std::numeric_limits<unsigned int>::max()};
-    for(int i = 0; i < t.Length(); i++)
-    {
-        int luaI = i + 1;
-        auto entry = t.GetLuaWrapper<Script::LuaTable>(i + 1);
-        luaL_argcheck(luaState, entry, 1, "table entry in CostTable was not a table");
-
-        ct.SetCost(entry->Get<uint>("id"), entry->Get<uint>("cost"));
-    }
-
-    return ct;
-}
 
 int UserData::MovementDescType::New(lua_State* luaState)
 {
@@ -56,12 +42,13 @@ UserData::MovementDescType::type* UserData::MovementDescType::FromTable(lua_Stat
     auto tileCT = lt.GetLuaWrapper<Script::LuaTable>("tileCT");
     luaL_argcheck(luaState, tileCT, 1, "tile CostTable was not found");
 
-    CostTable tct = ParseCostTable(luaState, *tileCT);
+    ::CostTable tct = *lt.GetUserData<CostTable>("tileCT");
 
     auto unitCT = lt.GetLuaWrapper<Script::LuaTable>("unitCT");
     luaL_argcheck(luaState, unitCT, 1, "unit CostTable was not found");
-    CostTable uct = ParseCostTable(luaState, *unitCT);
 
+    ::CostTable uct = *lt.GetUserData<CostTable>("unitCT");
+    
     auto maxGas = lt.Get<uint>("maxGas");
 
     MovementDescTypePtr mdt{ new ::MovementDescType{*tpd, r, tct, uct, maxGas}};

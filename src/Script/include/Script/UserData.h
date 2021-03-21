@@ -6,6 +6,7 @@
 #include <Script/UserData/Vector2.h>
 #include <Script/UserData/AreaDesc.h>
 #include <Script/UserData/MovementDescType.h>
+#include <Script/UserData/CostTable.h>
 
 namespace Script::UserData
 {

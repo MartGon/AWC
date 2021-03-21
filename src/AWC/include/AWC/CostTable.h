@@ -10,6 +10,7 @@ public:
     CostTable(std::unordered_map<unsigned int, unsigned int> map, unsigned int defaultCost) : costMap_{map}, defaultCost_{defaultCost} {};
 
     void SetCost(unsigned int id, unsigned int cost);
+    void SetDefaultCost(unsigned int cost);
     unsigned int GetCost(unsigned int id) const;
 
 private:
