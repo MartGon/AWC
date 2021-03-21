@@ -30,6 +30,7 @@ namespace Script
         }
 
         // Basic lib
+        int GetTop();
         void Pop(int amount);
         unsigned int Call(int nargs, int nresults, int msgh);
 

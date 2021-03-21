@@ -4,6 +4,11 @@
 
 using namespace Script;
 
+int LuaVM::GetTop()
+{
+    return lua_gettop(ls.L);
+}
+
 void LuaVM::Pop(int amount)
 {
     lua_pop(ls.L, amount);
@@ -46,7 +51,6 @@ unsigned int LuaVM::RunFile(std::string path)
 {
     auto res = LoadFile(path);
     res = Call(0, 0, 0);
-    Pop(1); // Pop file function
 
     return res;
 }

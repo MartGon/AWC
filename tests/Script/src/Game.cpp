@@ -18,4 +18,5 @@ TEST_CASE("Config file")
     auto& t = vm.GetGlobalTable();
 
     CHECK(t.Get<int>("value") == 64);
+    CHECK(sg.GetLuaVM().GetTop() == 0);
 }
