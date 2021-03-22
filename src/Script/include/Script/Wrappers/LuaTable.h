@@ -21,8 +21,7 @@ namespace Script
         template <typename K>
         LuaTable(lua_State* luaState, int sIndex, K tIndex) : luaState_{luaState}
         {
-            auto type = lua_type(luaState, sIndex);
-            if(type == LUA_TTABLE)
+            if(IsTable(luaState, sIndex))
             {
                 int top = lua_gettop(luaState);
                 GetField<K>(luaState, sIndex, tIndex);
@@ -158,4 +157,6 @@ namespace Script
         std::string mtName_;
         int tableRef_;
     };
+
+    LuaTable CheckLuaTable(lua_State* L, int index);
 }

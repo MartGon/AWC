@@ -102,10 +102,16 @@ void LuaTable::SetField(int index)
 
 void LuaTable::CheckType(int index, int top)
 {
-    auto type = lua_type(luaState_, index);
-    if(type != LUA_TTABLE)
+    if(!IsTable(luaState_, index))
     {
         lua_settop(luaState_, top);
         throw AWCException("LuaTable: Internal Lua table was not type LUA_TTABLE");
     }
+}
+
+LuaTable Script::CheckLuaTable(lua_State* L, int index)
+{
+    luaL_checktype(L, index, LUA_TTABLE);
+    
+    return LuaTable{L, index};
 }

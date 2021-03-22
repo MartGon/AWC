@@ -65,8 +65,7 @@ int LuaFunction::PushInternal() const
 
 void LuaFunction::CheckType(int index, int top)
 {
-    auto type = lua_type(luaState_, index);
-    if(type != LUA_TFUNCTION)
+    if(!IsFunction(luaState_, index))
     {
         lua_settop(luaState_, top);
         throw AWCException("LuaFunction: value at index " + std::to_string(index) + " was not a function");

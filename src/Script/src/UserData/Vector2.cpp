@@ -34,7 +34,7 @@ int UserData::Vector2::New(lua_State* luaState)
 
 ::Vector2* UserData::Vector2::FromTable(lua_State* luaState, int index)
 {
-    LuaTable table{luaState, index};
+    LuaTable table = CheckLuaTable(luaState, index);
     auto x = table.Get<int>("x");
     auto y = table.Get<int>("y");
     ::Vector2* vec = UserData::PushDataCopy<Vector2>(luaState, ::Vector2{x, y});

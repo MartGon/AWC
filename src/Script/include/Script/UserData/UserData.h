@@ -4,6 +4,8 @@
 
 #include <string>
 
+#include <Script/Utils/Utils.h>
+
 namespace Script::UserData
 {
     enum class DatumType : uint8_t
@@ -59,13 +61,13 @@ namespace Script::UserData
             lua_setglobal(luaState, T::LIB_NAME);
         }
 
-        template <typename T>
-        void RegisterMetaMethod(lua_State* luaState, const char* key, const lua_CFunction method)
+        namespace Internal
         {
-            luaL_getmetatable(luaState, T::MT_NAME);
-            lua_pushcfunction(luaState, method);
-            lua_setfield(luaState, -2, key);
-            lua_pop(luaState, 1);
+            template<typename T>
+            UserDatum<typename T::type>* CheckUserData(lua_State* luaState, int index, const char* mtName)
+            {   
+                return static_cast<UserDatum<typename T::type>*>(luaL_checkudata(luaState, index, mtName));
+            }
         }
 
         template <typename T>
@@ -73,7 +75,7 @@ namespace Script::UserData
         {
             using type = typename T::type;
             std::string mtName = T::MT_NAME;
-            auto userdatum = static_cast<UserDatum<type>*>(luaL_checkudata(luaState, index, mtName.c_str()));
+            auto userdatum = Internal::CheckUserData<T>(luaState, index, mtName.c_str());
             auto userdata = userdatum->ptr;
             std::string error{mtName + " expected"};
             luaL_argcheck(luaState, userdata != nullptr, index, error.c_str());

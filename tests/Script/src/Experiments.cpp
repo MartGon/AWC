@@ -479,7 +479,6 @@ struct Tabla
     std::unordered_map<int, T> table2;
 };
 
-
 TEST_CASE("Move semantics")
 {
     std::vector<President> elections;
@@ -493,4 +492,56 @@ TEST_CASE("Move semantics")
 
     Tabla<President> t;
     t.Emplace(1, 2, 3);
+}
+
+int GetStack(lua_State* L)
+{
+    lua_Debug ld;
+    CHECK(lua_getstack(L, 0, &ld) != 0);
+
+    lua_pushstring(L, "1");
+
+    return 1;
+}
+
+TEST_CASE("lua_getstack")
+{
+    lua_State* L = luaL_newstate();
+    
+    lua_pushcfunction(L, GetStack);
+    lua_setglobal(L, "f");
+    lua_Debug ld;
+    CHECK(lua_getstack(L, 0, &ld) == 0);
+
+    lua_getglobal(L, "f");
+    lua_pcall(L, 0, 1, 0);
+
+    // This crashes the program because it's outside Lua domain
+    //luaL_checkudata(L, -1, "Heya");
+
+    lua_close(L);
+}
+
+template<typename T = int>
+struct Subject
+{
+    T Get();
+};
+
+template<>
+int Subject<int>::Get()
+{
+    return 3;
+}
+
+template<>
+double Subject<double>::Get()
+{
+    return 4;
+}
+
+TEST_CASE("Template parameter")
+{
+    CHECK(Subject().Get() == 3);
+    CHECK(Subject<double>().Get() == 4);
 }

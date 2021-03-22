@@ -32,7 +32,7 @@ void FillTable(lua_State* luaState, ::CostTable& ct, LuaTable& entries)
 
 int UserData::CostTable::New(lua_State* luaState)
 {
-    LuaTable entries{luaState, 1};
+    LuaTable entries= CheckLuaTable(luaState, 1);
     unsigned int defaultCost = luaL_checkinteger(luaState, 2);
 
     ::CostTable ct{{}, defaultCost};
@@ -45,7 +45,7 @@ int UserData::CostTable::New(lua_State* luaState)
 
 UserData::CostTable::type* UserData::CostTable::FromTable(lua_State* luaState, int index)
 {
-    LuaTable t{luaState, index};
+    LuaTable t = CheckLuaTable(luaState, index);
 
     auto defaultCost = t.ContainsValue("default") ? t.Get<unsigned int>("default") : 1;
     auto entries = t.GetLuaWrapper<LuaTable>("entries");

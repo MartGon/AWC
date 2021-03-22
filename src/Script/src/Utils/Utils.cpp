@@ -32,18 +32,6 @@ void Script::Push<bool>(lua_State* state, bool val)
 }
 
 template<>
-void Script::Push<Script::LuaTable&>(lua_State* state, Script::LuaTable& val)
-{
-    val.PushInternal();
-}
-
-template<>
-void Script::Push<Script::LuaFunction&>(lua_State* state, Script::LuaFunction& val)
-{
-    val.PushInternal();
-}
-
-template<>
 int Script::To<int>(lua_State* state, int index)
 {
     return lua_tointeger(state, index);
@@ -59,18 +47,6 @@ template<>
 std::string Script::To<std::string>(lua_State* state, int index)
 {
     return std::string(lua_tostring(state, index));
-}
-
-template<>
-Script::LuaTable Script::To<Script::LuaTable>(lua_State* state, int index)
-{
-    return LuaTable{state, index};
-}
-
-template<>
-Script::LuaFunction Script::To<Script::LuaFunction>(lua_State* state, int index)
-{
-    return LuaFunction{state, index};
 }
 
 template<>
@@ -100,4 +76,9 @@ int Script::GetField<std::string>(lua_State* luaState, int index, std::string ke
 bool Script::IsTable(lua_State* luaState, int index)
 {
     return lua_type(luaState, index) == LUA_TTABLE;
+}
+
+bool Script::IsFunction(lua_State* luaState, int index)
+{
+    return lua_type(luaState, index) == LUA_TFUNCTION;
 }

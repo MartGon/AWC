@@ -30,7 +30,7 @@ int UserData::MovementDescType::New(lua_State* luaState)
 
 UserData::MovementDescType::type* UserData::MovementDescType::FromTable(lua_State* luaState, int index)
 {
-    LuaTable lt{luaState, 1};
+    LuaTable lt= CheckLuaTable(luaState, index);
 
     auto tpd = lt.GetUserData<AreaDesc>("tpd");
 

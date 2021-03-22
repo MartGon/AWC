@@ -49,7 +49,7 @@ UserData::AreaDesc::type* UserData::AreaDesc::FromTable(lua_State* luaState, int
     // Value to push
     ::AreaDescPtr tpdp;
 
-    LuaTable lt{luaState, index};
+    LuaTable lt = CheckLuaTable(luaState, index);
 
     const std::string dirKey = "directions";
     auto dirTable = lt.GetLuaWrapper<Script::LuaTable>(dirKey);

@@ -21,11 +21,10 @@ namespace Script
         template <typename K>
         LuaFunction(lua_State* luaState, int sIndex, K tIndex) : luaState_{luaState}
         {
-            auto type = lua_type(luaState, sIndex);
-            if(type == LUA_TTABLE)
+            if(IsTable(luaState, sIndex))
             {
                 int top = lua_gettop(luaState);
-                type = GetField<K>(luaState, sIndex, tIndex);
+                GetField<K>(luaState, sIndex, tIndex);
                 CheckType(-1, top);
                 functionRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
             }
