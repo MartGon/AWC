@@ -20,15 +20,32 @@ namespace Script::UserData
     };
 
     namespace UserData
-    {
+    {        
+        template <typename T>
+        int Delete(lua_State* luaState)
+        {
+            auto userDatum = static_cast<UserDatum<T>*>(lua_touserdata(luaState, -1));
+            if(userDatum->type == DatumType::COPY)
+                delete static_cast<T*>(userDatum->ptr);
+
+            return 0;
+        }
+
         template <typename T>
         void RegisterMetatable(lua_State* luaState)
         {
             luaL_newmetatable(luaState, T::MT_NAME);
 
+            // Set __index
             lua_pushstring(luaState, "__index");
             lua_pushvalue(luaState, -2);
             lua_settable(luaState, -3); // Metatable.__index = Metatable
+
+            auto top = lua_gettop(luaState);
+
+            // Set __gc
+            lua_pushcfunction(luaState, Delete<typename T::type>);
+            lua_setfield(luaState, -2, "__gc"); // Metatable.__gc = Metatable
 
             luaL_setfuncs(luaState, T::methods, 0);
             lua_pop(luaState, 1);
@@ -48,31 +65,6 @@ namespace Script::UserData
             luaL_getmetatable(luaState, T::MT_NAME);
             lua_pushcfunction(luaState, method);
             lua_setfield(luaState, -2, key);
-            lua_pop(luaState, 1);
-        }
-        
-        template <typename T>
-        int Delete(lua_State* luaState)
-        {
-            auto userDatum = static_cast<UserDatum<T>*>(lua_touserdata(luaState, -1));
-            if(userDatum->type == DatumType::COPY)
-                delete static_cast<T*>(userDatum->ptr);
-
-            return 0;
-        }
-
-        bool HasGCMethod(lua_State* luaState, const char* mtName);
-
-        template <typename T>
-        void AddGCMethod(lua_State* luaState, const char* mtName)
-        {
-            int type = luaL_getmetatable(luaState, mtName);
-            if(type == LUA_TTABLE)
-            {
-                lua_pushcfunction(luaState, Delete<T>);
-                lua_setfield(luaState, -2, "__gc");
-            }
-
             lua_pop(luaState, 1);
         }
 
@@ -107,9 +99,6 @@ namespace Script::UserData
             auto datum = static_cast<UserDatum<type>*>(lua_newuserdata(luaState, sizeof(UserDatum<type>)));
             datum->type = DatumType::COPY;
             datum->ptr = new type(value);
-
-            if(!HasGCMethod(luaState, T::MT_NAME))
-                AddGCMethod<type>(luaState, T::MT_NAME);
 
             luaL_setmetatable(luaState, T::MT_NAME);
 
