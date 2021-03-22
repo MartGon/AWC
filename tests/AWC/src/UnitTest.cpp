@@ -268,3 +268,31 @@ UnitType UnitTest::CreateFighter()
 
     return soldierType;
 }
+
+UnitType UnitTest::CreateDimensionalRipper()
+{
+    // Name and id
+    uint id = 23;
+    std::string name = "Fighter";
+
+    // AreaDesc
+    std::vector<Vector2> manhattanMoves{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    AreaDescIPtr manhattan = AreaDesc::Create(manhattanMoves);
+
+    // CostTables
+    CostTable unitCostTable;
+    unitCostTable.SetCost(0, std::numeric_limits<uint>::max());
+    unitCostTable.SetCost(1, std::numeric_limits<uint>::max());
+    unitCostTable.SetCost(10, std::numeric_limits<uint>::max());
+
+    CostTable tileCostTable;
+    uint grassId = 0;
+    tileCostTable.SetCost(grassId, 1);
+
+    // Movement
+    MovementDescTypePtr moveType{ new MovementDescType{manhattan, {(uint)-1, 0}, tileCostTable, unitCostTable, (uint)-1}};
+
+    UnitType soldierType{id, name, moveType, {}};
+
+    return soldierType;
+}

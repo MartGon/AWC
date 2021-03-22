@@ -41,16 +41,24 @@ Graph Pathfinding::Dijkstra(Vector2 origin, Params params)
         for(const auto& nei : neighbours)
         {
             auto sharedNei = nei.lock();
-
-            // Check if accumulated cost to this neighbour is lower than previous
+   
             auto constraints = params.constraints;
             uint neiCost = GetTileCost(map, constraints, sharedNei->pos);
-            uint accumulatedCost = PrimitiveUtils::NoOverflowSum(node->cost, neiCost);
-            if(accumulatedCost < sharedNei->cost && accumulatedCost <= constraints.range.maxRange)
+            
+            // Ignore tiles that are at max cost
+            // Avoids unnecessary work when maxRange = max;
+            const auto maxDist = std::numeric_limits<unsigned int>::max();
+            if(neiCost < maxDist)
             {
-                // Push it to queue if that's the case
-                sharedNei->cost = accumulatedCost;
-                prioQueue.push(nei);
+                // Check if accumulated cost to this neighbour is lower than previous
+                uint accumulatedCost = PrimitiveUtils::NoOverflowSum(node->cost, neiCost);
+                const bool isInRange = accumulatedCost <= constraints.range.maxRange;
+                if(accumulatedCost < sharedNei->cost && isInRange)
+                {
+                    // Push it to queue if that's the case
+                    sharedNei->cost = accumulatedCost;
+                    prioQueue.push(nei);
+                }
             }
         }
     }
@@ -107,7 +115,7 @@ unsigned int Pathfinding::GetTileCost(const Map& map, const AreaConstraints& tpc
   
     if(auto unit = map.GetUnit(pos))
     {   
-        auto extraCost = tpc.GetUnitCost(unit->GetTypeId());
+        auto extraCost = tpc.GetUnitCost(unit->GetTypeId());   
         cost = PrimitiveUtils::NoOverflowSum(cost, extraCost);
     }
 

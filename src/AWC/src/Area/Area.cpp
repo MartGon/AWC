@@ -73,7 +73,8 @@ bool Area::IsTileInRange(Vector2 dest, unsigned int maxRange, unsigned int minRa
     if(tg_.NodeExists(dest))
     {
         auto cost = tg_.GetNode(dest).lock()->cost;
-        isInPattern = cost <= maxRange && cost >= minRange;
+        const auto max = std::numeric_limits<unsigned int>::max();
+        isInPattern = cost < max && cost <= maxRange && cost >= minRange;
     }
 
     return isInPattern; 

@@ -8,4 +8,5 @@ namespace UnitTest
     UnitType CreateSoldierType();
     UnitType CreateMechType();
     UnitType CreateFighter();
+    UnitType CreateDimensionalRipper();
 }

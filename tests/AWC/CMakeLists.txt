@@ -14,6 +14,7 @@ SET(SOURCES
     src/AreaDescTest.cpp
     src/AreaDescDecoratorTest.cpp
     src/GraphTest.cpp
+    src/UnitMovementTest.cpp
 )
 
 add_library(AWCTestLib ${SOURCES})
