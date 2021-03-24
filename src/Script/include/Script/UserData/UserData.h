@@ -73,12 +73,13 @@ namespace Script::UserData
         bool IsUserData(lua_State* luaState, int index)
         {
             bool isUD = false;
-            auto userdatum = ToUserData<T>(luaState, index);
+            auto userdatum = lua_touserdata(luaState, index);
             if(userdatum)
             {
+                bool hasMeta = lua_getmetatable(luaState, index);
                 luaL_getmetatable(luaState, T::MT_NAME);
-                lua_getmetatable(luaState, index);
-                isUD = lua_rawequal(luaState, -1, -2);
+                if(hasMeta)
+                    isUD = lua_rawequal(luaState, -1, -2);
 
                 lua_pop(luaState, 2);
             }

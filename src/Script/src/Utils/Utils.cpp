@@ -110,7 +110,8 @@ void Script::CheckArg<Scope::Internal>(lua_State* luaState, bool condition, int 
 template<>
 void Script::CheckArg<Scope::External>(lua_State* luaState, bool condition, int index, std::string msg)
 {
-    throw AWCException("Error at argument #" + std::to_string(index) + ": " + msg);
+    if(!condition)
+        throw AWCException("Error at argument #" + std::to_string(index) + ": " + msg);
 }
 
 template<>
@@ -122,6 +123,7 @@ void Script::CheckExpectedArg<Scope::Internal>(lua_State* luaState, bool conditi
 template<>
 void Script::CheckExpectedArg<Scope::External>(lua_State* luaState, bool condition, int index, std::string type)
 {
-    throw AWCException("Bad argument #" + std::to_string(index) + ": Expected " + type + 
-        " got " + std::string(lua_typename(luaState, index)));
+    if(!condition)
+        throw AWCException("Bad argument #" + std::to_string(index) + ": Expected " + type + 
+            " got " + std::string(lua_typename(luaState, index)));
 }
