@@ -6,8 +6,11 @@
 
 namespace Script
 {
-    struct Internal;
-    struct External;
+    enum class Scope
+    {
+        Internal,
+        External
+    };
 
     template<typename T>
     void Push(lua_State* state, T val)
@@ -50,4 +53,25 @@ namespace Script
 
     bool IsTable(lua_State*, int index);
     bool IsFunction(lua_State*, int index);
+
+    template<Scope>
+    void Check(lua_State* luaState, bool condition, std::string msg);
+    template<>
+    void Check<Scope::Internal>(lua_State* luaState, bool condition, std::string msg);
+    template<>
+    void Check<Scope::External>(lua_State* luaState, bool condition, std::string msg);
+
+    template<Scope>
+    void CheckArg(lua_State* luaState, bool condition, int index, std::string msg);
+    template<>
+    void CheckArg<Scope::Internal>(lua_State* luaState, bool condition, int index, std::string msg);
+    template<>
+    void CheckArg<Scope::External>(lua_State* luaState, bool condition, int index, std::string msg);
+
+    template<Scope>
+    void CheckExpectedArg(lua_State* luaState, bool condition, int index, std::string type);
+    template<>
+    void CheckExpectedArg<Scope::Internal>(lua_State* luaState, bool condition, int index, std::string type);
+    template<>
+    void CheckExpectedArg<Scope::External>(lua_State* luaState, bool condition, int index, std::string type);
 }

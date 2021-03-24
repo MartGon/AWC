@@ -51,7 +51,7 @@ namespace Script
         // Scripts
         unsigned int CreateScriptType(std::string scriptPath);
         unsigned int CreateScript(unsigned int typeId);
-        LuaTable& GetScriptTable(unsigned int id);
+        LuaTable<Scope::External>& GetScriptTable(unsigned int id);
         unsigned int PushScript(unsigned int id, unsigned int prio = PRIORITY_DEFAULT);
 
         // Config

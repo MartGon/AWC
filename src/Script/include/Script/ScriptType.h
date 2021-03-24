@@ -25,7 +25,7 @@ namespace Script
 
         std::shared_ptr<ScriptOperation> CreateScript() const;
 
-        Operation::Result Execute(::Game& game, uint8_t prio, LuaTable& tableRef) const;
+        Operation::Result Execute(::Game& game, uint8_t prio, LuaTable<Scope::External>& tableRef) const;
 
     private:
         std::string scriptPath_;

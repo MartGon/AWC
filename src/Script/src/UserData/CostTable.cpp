@@ -17,13 +17,13 @@ const luaL_Reg UserData::CostTable::functions[] = {
     {NULL, NULL}
 };
 
-void FillTable(lua_State* luaState, ::CostTable& ct, LuaTable& entries)
+void FillTable(lua_State* luaState, ::CostTable& ct, LuaTable<Scope::Internal>& entries)
 {
     
     for(int i = 0; i < entries.Length(); i++)
     {
         int luaI = i + 1;
-        auto entry = entries.GetLuaWrapper<Script::LuaTable>(i + 1);
+        auto entry = entries.GetLuaWrapper<Script::LuaTable<Scope::Internal>>(i + 1);
         luaL_argcheck(luaState, entry, 1, "table entry in CostTable was not a table");
 
         ct.SetCost(entry->Get<uint>("id"), entry->Get<uint>("cost"));
@@ -32,7 +32,7 @@ void FillTable(lua_State* luaState, ::CostTable& ct, LuaTable& entries)
 
 int UserData::CostTable::New(lua_State* luaState)
 {
-    LuaTable entries= CheckLuaTable(luaState, 1);
+    LuaTable<Scope::Internal> entries{luaState, 1};
     unsigned int defaultCost = luaL_checkinteger(luaState, 2);
 
     ::CostTable ct{{}, defaultCost};
@@ -45,10 +45,10 @@ int UserData::CostTable::New(lua_State* luaState)
 
 UserData::CostTable::type* UserData::CostTable::FromTable(lua_State* luaState, int index)
 {
-    LuaTable t = CheckLuaTable(luaState, index);
+    LuaTable<Scope::Internal> t{luaState, index};
 
     auto defaultCost = t.ContainsValue("default") ? t.Get<unsigned int>("default") : 1;
-    auto entries = t.GetLuaWrapper<LuaTable>("entries");
+    auto entries = t.GetLuaWrapper<LuaTable<Scope::Internal>>("entries");
 
     ::CostTable ct{{}, defaultCost};
     FillTable(luaState, ct, *entries);

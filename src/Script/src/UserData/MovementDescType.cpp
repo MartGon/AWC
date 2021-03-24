@@ -30,21 +30,21 @@ int UserData::MovementDescType::New(lua_State* luaState)
 
 UserData::MovementDescType::type* UserData::MovementDescType::FromTable(lua_State* luaState, int index)
 {
-    LuaTable lt= CheckLuaTable(luaState, index);
+    LuaTable<Scope::Internal> lt{luaState, index};
 
     auto tpd = lt.GetUserData<AreaDesc>("tpd");
 
-    auto range = lt.GetLuaWrapper<Script::LuaTable>("range");
+    auto range = lt.GetLuaWrapper<Script::LuaTable<Scope::Internal>>("range");
     luaL_argcheck(luaState, range, 1, "range table was not found");
 
     Range r{range->Get<uint>("max"), range->Get<uint>("min")};
 
-    auto tileCT = lt.GetLuaWrapper<Script::LuaTable>("tileCT");
+    auto tileCT = lt.GetLuaWrapper<Script::LuaTable<Scope::Internal>>("tileCT");
     luaL_argcheck(luaState, tileCT, 1, "tile CostTable was not found");
 
     ::CostTable tct = *lt.GetUserData<CostTable>("tileCT");
 
-    auto unitCT = lt.GetLuaWrapper<Script::LuaTable>("unitCT");
+    auto unitCT = lt.GetLuaWrapper<Script::LuaTable<Scope::Internal>>("unitCT");
     luaL_argcheck(luaState, unitCT, 1, "unit CostTable was not found");
 
     ::CostTable uct = *lt.GetUserData<CostTable>("unitCT");

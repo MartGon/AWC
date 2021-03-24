@@ -24,7 +24,7 @@ namespace Script
 
         }
 
-        LuaTable& GetArgsTable()
+        LuaTable<Scope::External>& GetArgsTable()
         {
             return argsTable_;
         }
@@ -39,7 +39,7 @@ namespace Script
         }
 
         lua_State* luaState_;
-        LuaTable argsTable_;
+        LuaTable<Scope::External> argsTable_;
         const Type& scriptType_;
     };
 }

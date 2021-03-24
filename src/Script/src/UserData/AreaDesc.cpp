@@ -22,7 +22,7 @@ std::string CreateKeyError(const std::string& key)
     return key + " key did not exist on table";
 }
 
-std::vector<::Vector2> ParseDirs(LuaTable& dirTable)
+std::vector<::Vector2> ParseDirs(LuaTable<Scope::Internal>& dirTable)
 {
     std::vector<::Vector2> dirs;
     for(int i = 1; i < dirTable.Length() + 1; i++)
@@ -49,10 +49,10 @@ UserData::AreaDesc::type* UserData::AreaDesc::FromTable(lua_State* luaState, int
     // Value to push
     ::AreaDescPtr tpdp;
 
-    LuaTable lt = CheckLuaTable(luaState, index);
+    LuaTable<Scope::Internal> lt{luaState, index};
 
     const std::string dirKey = "directions";
-    auto dirTable = lt.GetLuaWrapper<Script::LuaTable>(dirKey);
+    auto dirTable = lt.GetLuaWrapper<Script::LuaTable<Scope::Internal>>(dirKey);
 
     const std::string error = CreateKeyError(dirKey);
     luaL_argcheck(luaState, dirTable, 1, error.c_str());
@@ -66,7 +66,7 @@ UserData::AreaDesc::type* UserData::AreaDesc::FromTable(lua_State* luaState, int
     // Parse locked dirs
     if(lt.ContainsValue(lockedDirKey))
     {
-        auto luaLockedDirsTable = lt.GetLuaWrapper<LuaTable>(lockedDirKey);
+        auto luaLockedDirsTable = lt.GetLuaWrapper<LuaTable<Scope::Internal>>(lockedDirKey);
         DirectionsTable lockedDirsTable;
 
         for(int i = 1; i < luaLockedDirsTable->Length() + 1; i++)
@@ -74,12 +74,12 @@ UserData::AreaDesc::type* UserData::AreaDesc::FromTable(lua_State* luaState, int
             auto type = luaLockedDirsTable->GetType(i);
             luaL_argcheck(luaState, type == LUA_TTABLE, 1, "Entry of the given DirectionsTable was not a table");
             
-            auto entry = luaLockedDirsTable->GetLuaWrapper<LuaTable>(i);
+            auto entry = luaLockedDirsTable->GetLuaWrapper<LuaTable<Scope::Internal>>(i);
             auto dir = entry->GetUserData<Vector2>("dir");
             type = entry->GetType("locksTo");
             luaL_argcheck(luaState, type == LUA_TTABLE, 1, "locksTo entry was not a table");
 
-            auto lockedDirs = entry->GetLuaWrapper<LuaTable>("locksTo");
+            auto lockedDirs = entry->GetLuaWrapper<LuaTable<Scope::Internal>>("locksTo");
             auto dirs = ParseDirs(lockedDirs.value());
 
             lockedDirsTable.insert({*dir, dirs});

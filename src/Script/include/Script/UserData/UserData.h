@@ -4,6 +4,8 @@
 
 #include <string>
 
+#include <AWC.h>
+
 #include <Script/Utils/Utils.h>
 
 namespace Script::UserData
@@ -61,33 +63,41 @@ namespace Script::UserData
             lua_setglobal(luaState, T::LIB_NAME);
         }
 
-        namespace Internal
-        {
-            template<typename T>
-            UserDatum<typename T::type>* CheckUserData(lua_State* luaState, int index, const char* mtName)
-            {   
-                return static_cast<UserDatum<typename T::type>*>(luaL_checkudata(luaState, index, mtName));
-            }
-        }
-
         template <typename T>
         typename T::type* ToUserData(lua_State* luaState, int index)
         {
-            using type = typename T::type;
-            std::string mtName = T::MT_NAME;
-            auto userdatum = Internal::CheckUserData<T>(luaState, index, mtName.c_str());
-            auto userdata = userdatum->ptr;
-            std::string error{mtName + " expected"};
-            luaL_argcheck(luaState, userdata != nullptr, index, error.c_str());
-
-            return userdata;
+            return static_cast<UserDatum<typename T::type>*>(lua_touserdata(luaState, index))->ptr;
         }
 
         template <typename T>
+        bool IsUserData(lua_State* luaState, int index)
+        {
+            bool isUD = false;
+            auto userdatum = ToUserData<T>(luaState, index);
+            if(userdatum)
+            {
+                luaL_getmetatable(luaState, T::MT_NAME);
+                lua_getmetatable(luaState, index);
+                isUD = lua_rawequal(luaState, -1, -2);
+
+                lua_pop(luaState, 2);
+            }
+
+            return isUD;
+        }
+    
+        template<typename T, Scope s>
+        typename T::type* CheckUserData(lua_State* luaState, int index)
+        {   
+            CheckExpectedArg<s>(luaState, IsUserData<T>(luaState, index), index, T::MT_NAME);
+            return ToUserData<T>(luaState, index);
+        }
+
+        template <typename T, Scope s>
         typename T::type* ToUserDataFromTable(lua_State* luaState, int index)
         {
             using type = typename T::type;
-            luaL_checktype(luaState, index, LUA_TTABLE);
+            CheckExpectedArg<s>(luaState, IsTable(luaState, index), index, "table");
             type* userdata = T::FromTable(luaState, index);
             lua_pop(luaState, 1);
 
@@ -121,25 +131,25 @@ namespace Script::UserData
         // Private 
         namespace 
         {
-            template<typename T>
+            template<typename T, Scope s>
             auto CastOrCreateImp(lua_State* luaState, int index, int type, int) -> decltype(T::FromTable(luaState, index))
             {
                 return type == LUA_TUSERDATA ? 
-                    Script::UserData::UserData::ToUserData<T>(luaState, index) :
-                    Script::UserData::UserData::ToUserDataFromTable<T>(luaState, index);
+                    Script::UserData::UserData::CheckUserData<T, s>(luaState, index) :
+                    Script::UserData::UserData::ToUserDataFromTable<T, s>(luaState, index);
             }
 
-            template<typename T>
+            template<typename T, Scope s>
             auto CastOrCreateImp(lua_State* luaState, int index, int type, double) -> typename T::type*
             {
-                return Script::UserData::UserData::ToUserData<T>(luaState, index);
+                return Script::UserData::UserData::CheckUserData<T, s>(luaState, index);
             }
         }
 
-        template<typename T>
+        template<typename T, Scope s>
         typename T::type* CastOrCreate(lua_State* luaState, int index, int type)
         {
-            return CastOrCreateImp<T>(luaState, index, type, 0);
+            return CastOrCreateImp<T, s>(luaState, index, type, 0);
         }
     } 
 }

@@ -24,7 +24,7 @@ namespace Script
             return ls.L;
         }
 
-        LuaTable& GetGlobalTable()
+        LuaTable<Scope::External>& GetGlobalTable()
         {
             return global;
         }
@@ -39,10 +39,10 @@ namespace Script
         // Loads a lua chunk into a file
         unsigned int LoadFile(std::string path);
         unsigned int RunFile(std::string path);
-        unsigned int RunFile(std::string path, LuaTable& env);
+        unsigned int RunFile(std::string path, LuaTable<Scope::External>& env);
 
     private:
         LuaState ls;
-        LuaTable global;
+        LuaTable<Scope::External> global;
     };
 }

@@ -17,7 +17,7 @@ Script::Type::Type(LuaVM& vm, std::string scriptPath) : scriptPath_{scriptPath},
 {
     auto luaState = vm.GetLuaState();
 
-    LuaTable env{luaState};
+    LuaTable<Scope::External> env{luaState};
     vm.RunFile(scriptPath, env);
     
     execute_ = env.GetLuaWrapper<Script::LuaFunction>("Execute").value();
@@ -31,7 +31,7 @@ std::shared_ptr<ScriptOperation> Script::Type::CreateScript() const
     return s;
 }
 
-Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable& tableRef) const
+Operation::Result Script::Type::Execute(::Game& game, uint8_t prio, LuaTable<Scope::External>& tableRef) const
 {
     Operation::Result res{Operation::ERROR};
     

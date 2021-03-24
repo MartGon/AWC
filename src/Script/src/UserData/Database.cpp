@@ -19,7 +19,7 @@ const luaL_Reg UserData::Database::functions[] = {
 int UserData::Database::Get(lua_State* luaState)
 {
     lua_rawgeti(luaState, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS); // Get _G
-    LuaTable lt = CheckLuaTable(luaState, -1); // Global lua table wrapper
+    LuaTable<Scope::Internal> lt{luaState, -1}; // Global lua table wrapper
 
     auto db = lt.GetUserData<Database>("DB");
     UserData::PushDataRef<Database>(luaState, db);
@@ -35,7 +35,7 @@ int UserData::Database::AddUnitType(lua_State* luaState)
     bool isTable = lua_istable(luaState, 2);
     luaL_argcheck(luaState, isTable, 2, "Expected table");
 
-    LuaTable lt = CheckLuaTable(luaState, 2);
+    LuaTable<Scope::Internal> lt{luaState, 2};
     std::string name = lt.Get<std::string>("name");
     auto moveType = *lt.GetUserData<MovementDescType>("moveType");
 

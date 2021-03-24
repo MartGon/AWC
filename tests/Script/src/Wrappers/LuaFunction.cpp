@@ -26,7 +26,7 @@ TEST_CASE("Construction")
         CHECK_THROWS_AS(Script::LuaFunction(L, -1, "f"), const AWCException&);
         lua_pop(L, 1);
 
-        Script::LuaTable t{L};
+        Script::LuaTable<Script::Scope::External> t{L};
         t.PushInternal();
         // No function found at t["f"]
         CHECK_THROWS_AS(Script::LuaFunction(L, -1, "f"), const AWCException&);

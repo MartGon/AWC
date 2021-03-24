@@ -10,7 +10,7 @@ namespace Test::Script
 
         }
 
-        inline ::Script::LuaTable& lt()
+        inline ::Script::LuaTable<::Script::Scope::External>& lt()
         {
             return sGame.GetScriptTable(ref);
         }

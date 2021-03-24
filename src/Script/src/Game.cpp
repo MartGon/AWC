@@ -30,7 +30,7 @@ unsigned int Script::Game::CreateScript(unsigned int typeId)
     return id;
 }
 
-Script::LuaTable& Script::Game::GetScriptTable(unsigned int id)
+Script::LuaTable<Script::Scope::External>& Script::Game::GetScriptTable(unsigned int id)
 {
     auto& scripts = db.get<std::shared_ptr<ScriptOperation>>();
     auto scriptPtr  = scripts.GetById(id);

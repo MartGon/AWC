@@ -11,7 +11,7 @@ TEST_CASE("Lua Table access test")
 
     // Scope so lt is destroyed before luaState
     {
-        Script::LuaTable lt{luaState};
+        Script::LuaTable<Script::Scope::External> lt{luaState};
 
         SUBCASE("Integers")
         {
@@ -71,13 +71,13 @@ TEST_CASE("Lua Table access test")
         }
         SUBCASE("Inner table")
         {
-            Script::LuaTable table{luaState};
+            Script::LuaTable<Script::Scope::External> table{luaState};
             table.Set("int", 1);
             table.Set("str", "text");
 
-            lt.SetLuaWrapper<Script::LuaTable>("table", table);
+            lt.SetLuaWrapper<Script::LuaTable<Script::Scope::External>>("table", table);
 
-            auto innerTable = lt.GetLuaWrapper<Script::LuaTable>("table");
+            auto innerTable = lt.GetLuaWrapper<Script::LuaTable<Script::Scope::External>>("table");
 
             CHECK(innerTable->Get<int>("int") == 1);
             CHECK(innerTable->Get<std::string>("str") == "text");
@@ -166,13 +166,13 @@ TEST_CASE("Creation test")
 
     SUBCASE("Create new table")
     {
-        Script::LuaTable lt{luaState};
+        Script::LuaTable<Script::Scope::External> lt{luaState};
     }
     SUBCASE("Create new table with metatable")
     {
         luaL_newmetatable(luaState, "Metatable");
         lua_pop(luaState, 1);
-        Script::LuaTable lt(luaState, "Metatable");
+        Script::LuaTable<Script::Scope::External> lt(luaState, "Metatable");
 
         lt.PushInternal();
         CHECK(lua_getmetatable(luaState, 1) == 1);
@@ -184,12 +184,12 @@ TEST_CASE("Creation test")
     SUBCASE("Create from existing table at the stack")
     {
         // Nothing at top
-        CHECK_THROWS_AS(Script::LuaTable(luaState, -1), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1), const AWCException&);
         CHECK(lua_gettop(luaState) == 0);
 
         // No valid type
         lua_pushinteger(luaState, 1);
-        CHECK_THROWS_AS(Script::LuaTable(luaState, -1), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1), const AWCException&);
         lua_pop(luaState, 1);
         CHECK(lua_gettop(luaState) == 0);
 
@@ -198,13 +198,13 @@ TEST_CASE("Creation test")
         lua_pushinteger(luaState, 15);
         lua_setfield(luaState, -2, "value");
 
-        Script::LuaTable lt{luaState, 1};
+        Script::LuaTable<Script::Scope::External> lt{luaState, 1};
         CHECK(lt.Get<int>("value") == 15);
     }
     SUBCASE("Create from existing table which is inside another table")
     {
         // Nothing at top
-        CHECK_THROWS_AS(Script::LuaTable(luaState, -1, "value"), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1, "value"), const AWCException&);
         CHECK(lua_gettop(luaState) == 0);
 
         lua_newtable(luaState);
@@ -212,24 +212,24 @@ TEST_CASE("Creation test")
         lua_setfield(luaState, -2, "value");
 
         // Value at t[n] is not a table
-        CHECK_THROWS_AS(Script::LuaTable(luaState, -1, "value"), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1, "value"), const AWCException&);
 
         lua_pushinteger(luaState, 32);
         lua_setglobal(luaState, "value");
-        Script::LuaTable lt{luaState, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS};
+        Script::LuaTable<Script::Scope::External> lt{luaState, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS};
 
         CHECK(lt.Get<int>("value") == 32);
     }
     SUBCASE("Create by move")
     {
         auto rLen = luaL_len(luaState, LUA_REGISTRYINDEX);
-        Script::LuaTable lt{luaState};
+        Script::LuaTable<Script::Scope::External> lt{luaState};
 
         // New entry on registry should be created
         CHECK(rLen < luaL_len(luaState, LUA_REGISTRYINDEX));
         rLen = luaL_len(luaState, LUA_REGISTRYINDEX);
 
-        Script::LuaTable n = std::move(lt);
+        Script::LuaTable<Script::Scope::External> n = std::move(lt);
 
         // No entry is created
         CHECK(rLen == luaL_len(luaState, LUA_REGISTRYINDEX));
@@ -244,13 +244,13 @@ TEST_CASE("Creation test")
     SUBCASE("Move assignment operator")
     {
         auto rLen = luaL_len(luaState, LUA_REGISTRYINDEX);
-        Script::LuaTable lt{luaState};
+        Script::LuaTable<Script::Scope::External> lt{luaState};
 
         // New entry on registry should be created
         CHECK(rLen < luaL_len(luaState, LUA_REGISTRYINDEX));
         rLen = luaL_len(luaState, LUA_REGISTRYINDEX);
 
-        Script::LuaTable a{luaState};
+        Script::LuaTable<Script::Scope::External> a{luaState};
         // Another new entry on registry should be created
         CHECK(rLen < luaL_len(luaState, LUA_REGISTRYINDEX));
         rLen = luaL_len(luaState, LUA_REGISTRYINDEX);

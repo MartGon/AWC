@@ -55,7 +55,7 @@ unsigned int LuaVM::RunFile(std::string path)
     return res;
 }
 
-unsigned int LuaVM::RunFile(std::string path, LuaTable& env)
+unsigned int LuaVM::RunFile(std::string path, LuaTable<Scope::External>& env)
 {
     auto res = LoadFile(path);
     
