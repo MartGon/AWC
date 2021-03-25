@@ -3,6 +3,8 @@
 #include <lua.hpp>
 
 #include <string>
+#include <type_traits>
+#include <functional>
 
 namespace Script
 {
@@ -54,24 +56,66 @@ namespace Script
     bool IsTable(lua_State*, int index);
     bool IsFunction(lua_State*, int index);
 
-    template<Scope>
-    void Check(lua_State* luaState, bool condition, std::string msg);
-    template<>
-    void Check<Scope::Internal>(lua_State* luaState, bool condition, std::string msg);
-    template<>
-    void Check<Scope::External>(lua_State* luaState, bool condition, std::string msg);
+    template<typename K>
+    std::enable_if_t<std::is_integral_v<K>, std::string> KeyToString(K key)
+    {
+        return std::to_string(key);
+    }
+    template<typename K>
+    std::enable_if_t<std::is_pointer_v<K>, std::string> KeyToString(K key)
+    {
+        return std::string(key);
+    }
+    template<typename K>
+    std::enable_if_t<std::is_same_v<K, std::string>, std::string> KeyToString(K key)
+    {
+        return key;
+    }
+
 
     template<Scope>
-    void CheckArg(lua_State* luaState, bool condition, int index, std::string msg);
+    void Check(lua_State* luaState, bool condition, std::string msg, 
+        std::function<void(lua_State*)> errHandler = [](lua_State*){});
     template<>
-    void CheckArg<Scope::Internal>(lua_State* luaState, bool condition, int index, std::string msg);
+    void Check<Scope::Internal>(lua_State* luaState, bool condition, std::string msg, 
+        std::function<void(lua_State*)> errHandler);
     template<>
-    void CheckArg<Scope::External>(lua_State* luaState, bool condition, int index, std::string msg);
+    void Check<Scope::External>(lua_State* luaState, bool condition, std::string msg, 
+        std::function<void(lua_State*)> errHandler);
 
     template<Scope>
-    void CheckExpectedArg(lua_State* luaState, bool condition, int index, std::string type);
+    void CheckArg(lua_State* luaState, bool condition, int index, std::string msg, 
+        std::function<void(lua_State*)> errHandler = [](lua_State*){});
     template<>
-    void CheckExpectedArg<Scope::Internal>(lua_State* luaState, bool condition, int index, std::string type);
+    void CheckArg<Scope::Internal>(lua_State* luaState, bool condition, int index, std::string msg, 
+        std::function<void(lua_State*)> errHandler);
     template<>
-    void CheckExpectedArg<Scope::External>(lua_State* luaState, bool condition, int index, std::string type);
+    void CheckArg<Scope::External>(lua_State* luaState, bool condition, int index, std::string msg, 
+        std::function<void(lua_State*)> errHandler);
+
+    template<Scope>
+    void CheckExpectedArg(lua_State* luaState, bool condition, int index, std::string type,
+        std::function<void(lua_State*)> errHandler = [](lua_State*){});
+    template<>
+    void CheckExpectedArg<Scope::Internal>(lua_State* luaState, bool condition, int index, std::string type,
+        std::function<void(lua_State*)> errHandler);
+    template<>
+    void CheckExpectedArg<Scope::External>(lua_State* luaState, bool condition, int index, std::string type,
+        std::function<void(lua_State*)> errHandler);
+
+    template<Scope s, typename K>
+    void CheckArgInTable(lua_State* luaState, bool condition, int sIndex, K tIndex, std::string msg,
+        std::function<void(lua_State*)> errHandler = [](lua_State*){})
+    {
+        std::string err = "Table[" + KeyToString(tIndex) + "]: " + msg;
+        CheckArg<s>(luaState, condition, sIndex, err, errHandler);
+    }
+
+    template<Scope s, typename K>
+    void CheckExpectedArgInTable(lua_State* luaState, bool condition, int sIndex, K tIndex, std::string type,
+        std::function<void(lua_State*)> errHandler = [](lua_State*){})
+    {
+        std::string err = "Table[" + KeyToString(tIndex) + "]: " + type;
+        CheckExpectedArg<s>(luaState, condition, sIndex, err, errHandler);
+    }
 }

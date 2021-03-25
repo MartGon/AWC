@@ -85,12 +85,12 @@ TEST_CASE("Lua Table access test")
         SUBCASE("Inner Function")
         {
             luaL_loadstring(luaState, "i = 2;");
-            Script::LuaFunction f{luaState, -1};
+            Script::LuaFunction<Script::Scope::External> f{luaState, -1};
             lua_pop(luaState, 1);
 
-            lt.SetLuaWrapper<Script::LuaFunction>("f", f);
+            lt.SetLuaWrapper<Script::LuaFunction<Script::Scope::External>>("f", f);
 
-            auto innerFunction = lt.GetLuaWrapper<Script::LuaFunction>("f");
+            auto innerFunction = lt.GetLuaWrapper<Script::LuaFunction<Script::Scope::External>>("f");
             CHECK(innerFunction.has_value() == true);
 
             innerFunction->PushInternal();

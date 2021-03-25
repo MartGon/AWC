@@ -29,7 +29,10 @@ namespace Script
             CheckExpectedArg<s>(luaState, IsTable(luaState, sIndex), sIndex, "LuaTable");
             int top = lua_gettop(luaState);
             GetField<K>(luaState, sIndex, tIndex);
-            CheckExpectedArg<s>(luaState, IsTable(luaState, -1), sIndex, "LuaTable inside table");
+            CheckExpectedArgInTable<s>(luaState, IsTable(luaState, -1), sIndex, tIndex, "LuaTable",
+                [top](lua_State* luaState){
+                    lua_settop(luaState, top);
+                });
             tableRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
         }
 

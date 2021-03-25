@@ -11,10 +11,10 @@ TEST_CASE("Construction")
     SUBCASE("By index at stack")
     {
         // No function at that index
-        CHECK_THROWS_AS(Script::LuaFunction(L, -1), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaFunction<Script::Scope::External>(L, -1), const AWCException&);
 
         luaL_loadstring(L, "i = 2 + 3");
-        CHECK_NOTHROW(Script::LuaFunction{L, -1});
+        CHECK_NOTHROW(Script::LuaFunction<Script::Scope::External>{L, -1});
 
         // Function still at top
         CHECK(lua_gettop(L) == 1);
@@ -23,19 +23,19 @@ TEST_CASE("Construction")
     {
         lua_pushnil(L);
         // No table found at given index
-        CHECK_THROWS_AS(Script::LuaFunction(L, -1, "f"), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaFunction<Script::Scope::External>(L, -1, "f"), const AWCException&);
         lua_pop(L, 1);
 
         Script::LuaTable<Script::Scope::External> t{L};
         t.PushInternal();
         // No function found at t["f"]
-        CHECK_THROWS_AS(Script::LuaFunction(L, -1, "f"), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaFunction<Script::Scope::External>(L, -1, "f"), const AWCException&);
         lua_pop(L, 1); 
         CHECK(lua_gettop(L) == 0);
 
         luaL_dostring(L, "return {f = function() i = 2 + 3; end};");
         CHECK(lua_gettop(L) == 1);
-        CHECK_NOTHROW(Script::LuaFunction(L, -1, "f"));
+        CHECK_NOTHROW(Script::LuaFunction<Script::Scope::External>(L, -1, "f"));
     }
     SUBCASE("By Copy")
     {
@@ -43,7 +43,7 @@ TEST_CASE("Construction")
         CHECK(lua_gettop(L) == 1);
         auto rLen = luaL_len(L, LUA_REGISTRYINDEX);
 
-        Script::LuaFunction f{L, -1};
+        Script::LuaFunction<Script::Scope::External> f{L, -1};
         lua_pop(L, 1);
         CHECK(lua_gettop(L) == 0);
 
@@ -52,7 +52,7 @@ TEST_CASE("Construction")
         rLen = luaL_len(L, LUA_REGISTRYINDEX);
 
         // Create a copy
-        Script::LuaFunction f2 = f;
+        Script::LuaFunction<Script::Scope::External> f2 = f;
         // Check new entry on registry
         CHECK(luaL_len(L, LUA_REGISTRYINDEX) > rLen);
         rLen = luaL_len(L, LUA_REGISTRYINDEX);
@@ -78,7 +78,7 @@ TEST_CASE("Construction")
         CHECK(lua_gettop(L) == 1);
         auto rLen = luaL_len(L, LUA_REGISTRYINDEX);
 
-        Script::LuaFunction f{L, -1};
+        Script::LuaFunction<Script::Scope::External> f{L, -1};
         lua_pop(L, 1);
         CHECK(lua_gettop(L) == 0);
 
@@ -87,7 +87,7 @@ TEST_CASE("Construction")
         rLen = luaL_len(L, LUA_REGISTRYINDEX);
 
         luaL_loadstring(L, "i = 1; i = i + 4");
-        Script::LuaFunction g{L, -1};
+        Script::LuaFunction<Script::Scope::External> g{L, -1};
         lua_pop(L, 1);
         CHECK(lua_gettop(L) == 0);
 
@@ -120,14 +120,14 @@ TEST_CASE("Construction")
         auto rLen = luaL_len(L, LUA_REGISTRYINDEX);
 
         luaL_loadstring(L, "i = 1; i = i + 1");
-        Script::LuaFunction s(L, -1);
+        Script::LuaFunction<Script::Scope::External> s(L, -1);
         lua_pop(L, 1);
 
         // An entry on the registry should be created
         CHECK(rLen < luaL_len(L, LUA_REGISTRYINDEX));
         rLen = luaL_len(L, LUA_REGISTRYINDEX);
         
-        Script::LuaFunction t = std::move(s);
+        Script::LuaFunction<Script::Scope::External> t = std::move(s);
         // No entry is created this time
         CHECK(rLen == luaL_len(L, LUA_REGISTRYINDEX));
 
@@ -144,7 +144,7 @@ TEST_CASE("Construction")
         auto rLen = luaL_len(L, LUA_REGISTRYINDEX);
 
         luaL_loadstring(L, "i = 1; i = i + 1");
-        Script::LuaFunction f(L, -1);
+        Script::LuaFunction<Script::Scope::External> f(L, -1);
         lua_pop(L, 1);
 
         // An entry on the registry should be created for f
@@ -152,7 +152,7 @@ TEST_CASE("Construction")
         rLen = luaL_len(L, LUA_REGISTRYINDEX);
 
         luaL_loadstring(L, "j = 1; j = j + 1");
-        Script::LuaFunction g(L, -1);
+        Script::LuaFunction<Script::Scope::External> g(L, -1);
         lua_pop(L, 1);
 
         // An entry on the registry should be created for g

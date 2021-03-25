@@ -20,8 +20,8 @@ Script::Type::Type(LuaVM& vm, std::string scriptPath) : scriptPath_{scriptPath},
     LuaTable<Scope::External> env{luaState};
     vm.RunFile(scriptPath, env);
     
-    execute_ = env.GetLuaWrapper<Script::LuaFunction>("Execute").value();
-    undo_ = env.GetLuaWrapper<Script::LuaFunction>("Undo").value();
+    execute_ = env.GetLuaWrapper<Script::LuaFunction<Scope::External>>("Execute").value();
+    undo_ = env.GetLuaWrapper<Script::LuaFunction<Scope::External>>("Undo").value();
 }
 
 std::shared_ptr<ScriptOperation> Script::Type::CreateScript() const

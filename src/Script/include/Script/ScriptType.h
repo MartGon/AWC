@@ -31,7 +31,7 @@ namespace Script
         std::string scriptPath_;
         LuaVM& vm_;
         
-        LuaFunction execute_;
-        LuaFunction undo_;
+        LuaFunction<Scope::External> execute_;
+        LuaFunction<Scope::External> undo_;
     };
 }
