@@ -1,5 +1,5 @@
 #include <AWC/Area/Node.h>
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 Node::Node(const Vector2 pos, const unsigned int cost) : pos{pos}, cost{cost}
 {
@@ -11,7 +11,7 @@ void Node::AddNeigbour(Vector2 pos, NodePtr neighbour)
     if(!NeighbourExists(pos))
         neighbours_.insert({pos, neighbour});
     else
-        throw AWCAlreadyExistingIndexException("Node::AddNeighbour", pos);
+        throw AWC::AlreadyExistingIndexException("Node::AddNeighbour", pos);
 }
 
 NodePtr Node::GetNeighbour(Vector2 pos)
@@ -20,7 +20,7 @@ NodePtr Node::GetNeighbour(Vector2 pos)
     if(NeighbourExists(pos))
         nei = neighbours_[pos];
     else
-        throw AWCNoExistingIndexException("Node::GetNeighbour", pos);
+        throw AWC::NoExistingIndexException("Node::GetNeighbour", pos);
 
     return nei;
 }

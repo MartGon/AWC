@@ -1,7 +1,7 @@
 #include "doctest.h"
 
 #include <AWC/Area/Graph.h>
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 #include <iostream>
 
@@ -44,7 +44,7 @@ TEST_CASE("Node tests")
         {
             sOrigin->GetNeighbour({-1, -1});
         }
-        catch(const AWCNoExistingIndexException& e)
+        catch(const AWC::NoExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.index == Vector2{-1, -1});
@@ -54,7 +54,7 @@ TEST_CASE("Node tests")
         {
             mg.SetNeighbour({-1, 0}, {0, 0});
         }
-        catch(const AWCAlreadyExistingIndexException& e)
+        catch(const AWC::AlreadyExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.index == Vector2{0, 0});
@@ -101,7 +101,7 @@ TEST_CASE("Graph test")
         {
             mg.GetNode({-1, -1});
         }
-        catch(const AWCNoExistingIndexException& e)
+        catch(const AWC::NoExistingIndexException& e)
         {
             std::cout << e.what() << '\n';
             CHECK(e.index == Vector2{-1, -1});
@@ -113,7 +113,7 @@ TEST_CASE("Graph test")
         {
             mg.CreateNode({0, 0}, 0);
         }
-        catch(const AWCAlreadyExistingIndexException& e)
+        catch(const AWC::AlreadyExistingIndexException& e)
         {
             std::cout << e.what() << '\n';
             CHECK(e.index == Vector2{0, 0});
@@ -125,7 +125,7 @@ TEST_CASE("Graph test")
         {
             mg.SetNeighbour({-1, -1}, {1, 0});
         }
-        catch(const AWCNoExistingIndexException& e)
+        catch(const AWC::NoExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.index == Vector2{-1, -1});
@@ -135,7 +135,7 @@ TEST_CASE("Graph test")
         {
             mg.SetNeighbour({1, 0}, {-1, -1});
         }
-        catch(const AWCNoExistingIndexException& e)
+        catch(const AWC::NoExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.index == Vector2{-1, -1});
@@ -145,7 +145,7 @@ TEST_CASE("Graph test")
         {
             mg.SetNeighbour({0, 0}, {1, 0});
         }
-        catch(const AWCAlreadyExistingIndexException& e)
+        catch(const AWC::AlreadyExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.index == Vector2{1, 0});
@@ -155,7 +155,7 @@ TEST_CASE("Graph test")
         {
             mg.SetNeighbour({1, 0}, {0, 0});
         }
-        catch(const AWCAlreadyExistingIndexException& e)
+        catch(const AWC::AlreadyExistingIndexException& e)
         {
             std::cerr << e.what() << '\n';
             CHECK(e.index == Vector2{0, 0});

@@ -2,7 +2,7 @@
 
 #include <Utils.h>
 
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 class AreaI
 {

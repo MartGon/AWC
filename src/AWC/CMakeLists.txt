@@ -1,5 +1,5 @@
 SET(SOURCES
-  src/AWCException.cpp
+  src/Exception.cpp
   src/Command.cpp
   src/CostTable.cpp
   src/Entity.cpp

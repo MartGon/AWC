@@ -184,12 +184,12 @@ TEST_CASE("Creation test")
     SUBCASE("Create from existing table at the stack")
     {
         // Nothing at top
-        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1), const AWC::Exception&);
         CHECK(lua_gettop(luaState) == 0);
 
         // No valid type
         lua_pushinteger(luaState, 1);
-        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1), const AWC::Exception&);
         lua_pop(luaState, 1);
         CHECK(lua_gettop(luaState) == 0);
 
@@ -204,7 +204,7 @@ TEST_CASE("Creation test")
     SUBCASE("Create from existing table which is inside another table")
     {
         // Nothing at top
-        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1, "value"), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1, "value"), const AWC::Exception&);
         CHECK(lua_gettop(luaState) == 0);
 
         lua_newtable(luaState);
@@ -212,7 +212,7 @@ TEST_CASE("Creation test")
         lua_setfield(luaState, -2, "value");
 
         // Value at t[n] is not a table
-        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1, "value"), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaTable<Script::Scope::External>(luaState, -1, "value"), const AWC::Exception&);
 
         lua_pushinteger(luaState, 32);
         lua_setglobal(luaState, "value");

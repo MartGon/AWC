@@ -22,7 +22,7 @@ unsigned int LuaVM::Call(int nargs, int nresults, int msgh)
         // TODO: Print the Lua stack
         std::string err = lua_tostring(ls.L, -1);
         Pop(1); // Pop error string
-        throw AWCException{"Lua Runtime error: " + err};
+        throw AWC::Exception{"Lua Runtime error: " + err};
     }
 
     return res;
@@ -41,7 +41,7 @@ unsigned int LuaVM::LoadFile(std::string path)
         // Pops the lua error msg;
         Pop(1);
 
-        throw AWCException{msg};
+        throw AWC::Exception{msg};
     }
 
     return res;

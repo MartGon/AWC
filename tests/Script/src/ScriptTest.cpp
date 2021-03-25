@@ -50,7 +50,7 @@ TEST_CASE("ScriptType Operations")
     SUBCASE("Creation with wrong path")
     {
         std::string wrongPath = std::string(SCRIPTS_DIR) + "wrongPath.lua";
-        CHECK_THROWS_AS(sg.CreateScriptType(wrongPath), const AWCException&);
+        CHECK_THROWS_AS(sg.CreateScriptType(wrongPath), const AWC::Exception&);
 
 #ifdef _DEBUG
         CHECK(lua_gettop(luaState) == 0);
@@ -95,7 +95,7 @@ TEST_CASE("Error handling")
             sGame.PushScript(t.ref);
             game.Run();
         }
-        catch(const AWCException& e)
+        catch(const AWC::Exception& e)
         {
             std::cout << e.what() << '\n';
         }

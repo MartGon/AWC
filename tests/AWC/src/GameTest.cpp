@@ -147,7 +147,7 @@ TEST_CASE("Game State")
         CHECK(game.HasPlayerLost(1) == false);
         CHECK(game.HasPlayerBeenRouted(1) == false);
         CHECK(game.IsOver() == false);
-        CHECK_THROWS_AS(game.GetWinnerTeamId(), const AWCException&);
+        CHECK_THROWS_AS(game.GetWinnerTeamId(), const AWC::Exception&);
 
         // Remove last player two's unit
         map.RemoveUnit({1, 1});

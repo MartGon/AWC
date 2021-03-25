@@ -7,11 +7,11 @@
 
 namespace AWC
 {
-    class AWCException : public std::exception
+    class Exception : public std::exception
     {
     public:
-        virtual ~AWCException() {};
-        AWCException(std::string msg);
+        virtual ~Exception() {}
+        Exception(std::string msg);
 
         const char* what() const noexcept override;
 
@@ -19,14 +19,14 @@ namespace AWC
         const std::string msg_;
     };
 
-    class AWCInvalidIndexException : public AWCException
+    class InvalidIndexException : public Exception
     {
     public:
-        virtual ~AWCInvalidIndexException() {};
-        AWCInvalidIndexException(std::string formattedMsg, std::string prefix, Vector2 index);
-        AWCInvalidIndexException(std::string formattedMsg, std::string prefix, int x, int y);
-        AWCInvalidIndexException(std::string formattedMsg, Vector2 index);
-        AWCInvalidIndexException(std::string formattedMsg, int x, int y);
+        virtual ~InvalidIndexException() {};
+        InvalidIndexException(std::string formattedMsg, std::string prefix, Vector2 index);
+        InvalidIndexException(std::string formattedMsg, std::string prefix, int x, int y);
+        InvalidIndexException(std::string formattedMsg, Vector2 index);
+        InvalidIndexException(std::string formattedMsg, int x, int y);
 
         const Vector2 index;
 
@@ -39,21 +39,21 @@ namespace AWC
         std::string GetMessage(std::string formatted_msg, std::string prefix, Vector2 index) const;
     };
 
-    class AWCNoExistingIndexException : public AWCInvalidIndexException
+    class NoExistingIndexException : public InvalidIndexException
     {
     public:
-        AWCNoExistingIndexException(std::string prefix, Vector2 index);
-        AWCNoExistingIndexException(std::string prefix, int x, int y);
-        AWCNoExistingIndexException(Vector2 index);
-        AWCNoExistingIndexException(int x, int y);
+        NoExistingIndexException(std::string prefix, Vector2 index);
+        NoExistingIndexException(std::string prefix, int x, int y);
+        NoExistingIndexException(Vector2 index);
+        NoExistingIndexException(int x, int y);
     };
 
-    class AWCAlreadyExistingIndexException : public AWCInvalidIndexException
+    class AlreadyExistingIndexException : public InvalidIndexException
     {
     public:
-        AWCAlreadyExistingIndexException(std::string prefix, Vector2 index);
-        AWCAlreadyExistingIndexException(std::string prefix, int x, int y);
-        AWCAlreadyExistingIndexException(Vector2 index);
-        AWCAlreadyExistingIndexException(int x, int y);
+        AlreadyExistingIndexException(std::string prefix, Vector2 index);
+        AlreadyExistingIndexException(std::string prefix, int x, int y);
+        AlreadyExistingIndexException(Vector2 index);
+        AlreadyExistingIndexException(int x, int y);
     };
 }

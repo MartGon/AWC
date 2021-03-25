@@ -11,7 +11,7 @@ TEST_CASE("Construction")
     SUBCASE("By index at stack")
     {
         // No function at that index
-        CHECK_THROWS_AS(Script::LuaFunction<Script::Scope::External>(L, -1), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaFunction<Script::Scope::External>(L, -1), const AWC::Exception&);
 
         luaL_loadstring(L, "i = 2 + 3");
         CHECK_NOTHROW(Script::LuaFunction<Script::Scope::External>{L, -1});
@@ -23,13 +23,13 @@ TEST_CASE("Construction")
     {
         lua_pushnil(L);
         // No table found at given index
-        CHECK_THROWS_AS(Script::LuaFunction<Script::Scope::External>(L, -1, "f"), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaFunction<Script::Scope::External>(L, -1, "f"), const AWC::Exception&);
         lua_pop(L, 1);
 
         Script::LuaTable<Script::Scope::External> t{L};
         t.PushInternal();
         // No function found at t["f"]
-        CHECK_THROWS_AS(Script::LuaFunction<Script::Scope::External>(L, -1, "f"), const AWCException&);
+        CHECK_THROWS_AS(Script::LuaFunction<Script::Scope::External>(L, -1, "f"), const AWC::Exception&);
         lua_pop(L, 1); 
         CHECK(lua_gettop(L) == 0);
 

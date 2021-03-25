@@ -1,7 +1,7 @@
 #include <Utils.h>
 
 #include <AWC/Game.h>
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 #include <AWC/Command.h>
 #include <AWC/Operation/Operation.h>
 
@@ -183,7 +183,7 @@ uint Game::GetWinnerTeamId()
     if(IsOver() && GetPlayerCount() > 0)
         return players_[0].GetTeamId();
     else
-        throw AWCException("Either the game wasn't over or there are no players");
+        throw AWC::Exception("Either the game wasn't over or there are no players");
 }
 
 void Game::OnPlayerLost(uint playerIndex)

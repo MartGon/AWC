@@ -2,7 +2,7 @@
 
 #include <Script/UserData/Database.h>
 
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 
 unsigned int Script::Game::CreateScriptType(std::string scriptPath)
@@ -40,7 +40,7 @@ Script::LuaTable<Script::Scope::External>& Script::Game::GetScriptTable(unsigned
         return script->GetArgsTable();
     }
     else
-        throw AWCException("GetScriptTable Error: Script with id " + std::to_string(id) + " did not exist");
+        throw AWC::Exception("GetScriptTable Error: Script with id " + std::to_string(id) + " did not exist");
 }
 
 unsigned int Script::Game::PushScript(unsigned int id, unsigned int prio)

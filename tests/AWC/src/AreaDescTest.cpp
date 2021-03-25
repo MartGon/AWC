@@ -5,7 +5,7 @@
 #include <AWC/Area/AreaDesc.h>
 #include <AWC/Area/Area.h>
 #include <AWC/Map.h>
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 TEST_CASE("Manhattan Area test")
 {
@@ -81,10 +81,10 @@ TEST_CASE("Configuration interface tests")
         CHECK(manhattan->IsOriginDirection(e) == true);
         CHECK(manhattan->IsOriginDirection({1, 1}) == false);
 
-        CHECK_THROWS_AS(manhattan->RemoveOriginDirection({1, 1}), const AWCNoExistingIndexException&);
+        CHECK_THROWS_AS(manhattan->RemoveOriginDirection({1, 1}), const AWC::NoExistingIndexException&);
         CHECK_NOTHROW(manhattan->RemoveOriginDirection(e));
 
-        CHECK_THROWS_AS(manhattan->AddOriginDirection(n), const AWCAlreadyExistingIndexException&);
+        CHECK_THROWS_AS(manhattan->AddOriginDirection(n), const AWC::AlreadyExistingIndexException&);
         CHECK_NOTHROW(manhattan->AddOriginDirection({1, 1}));
     }
 

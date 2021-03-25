@@ -5,7 +5,7 @@
 #include <Script/Wrappers/LuaVM.h>
 #include <Script/Wrappers/LuaTable.h>
 
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 #ifdef _DEBUG
     #include <iostream>

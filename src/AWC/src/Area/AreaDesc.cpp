@@ -4,7 +4,7 @@
 #include <AWC/CostTable.h>
 #include <AWC/Map.h>
 #include <AWC/Area/Graph.h>
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 #include <AWC/Pathfinding.h>
 
 #include <Utils.h>
@@ -64,7 +64,7 @@ void AreaDesc::AddOriginDirection(Vector2 dir)
     if(!IsOriginDirection(dir))
         originDirections_.push_back(dir);
     else
-        throw AWCAlreadyExistingIndexException("AreaDesc::AddOriginDirection", dir);
+        throw AWC::AlreadyExistingIndexException("AreaDesc::AddOriginDirection", dir);
 }
 
 void AreaDesc::RemoveOriginDirection(Vector2 dir)
@@ -75,7 +75,7 @@ void AreaDesc::RemoveOriginDirection(Vector2 dir)
         lockedDirectionsTable_.erase(dir);
     }
     else
-        throw AWCNoExistingIndexException("AreaDesc::RemoveOriginDirection", dir);
+        throw AWC::NoExistingIndexException("AreaDesc::RemoveOriginDirection", dir);
 
 }
 

@@ -143,7 +143,7 @@ bool AttackCommand::CanBeExecuted(Game& game, uint playerIndex)
 
 // Exceptions
 
-InvalidCommandException::InvalidCommandException(const std::string error) : AWCException(error)
+InvalidCommandException::InvalidCommandException(const std::string error) : AWC::Exception(error)
 {
 
 }

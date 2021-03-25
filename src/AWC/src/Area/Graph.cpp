@@ -1,5 +1,5 @@
 #include <AWC/Area/Graph.h>
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 #include <iostream>
 
@@ -25,7 +25,7 @@ NodePtr Graph::CreateNode(const Vector2 pos, const unsigned int cost)
         nodes_.insert({pos, mapNode});
     }
     else
-        throw AWCAlreadyExistingIndexException("Graph::CreateNode", pos);;
+        throw AWC::AlreadyExistingIndexException("Graph::CreateNode", pos);;
 
     return mapNode;
 }
@@ -53,7 +53,7 @@ NodePtr Graph::GetNode(Vector2 pos) const
     if(NodeExists(pos))
         mapNode = nodes_.at(pos);
     else
-        throw AWCNoExistingIndexException("Graph::GetNode", pos);
+        throw AWC::NoExistingIndexException("Graph::GetNode", pos);
 
     return mapNode;
 }

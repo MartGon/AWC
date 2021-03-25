@@ -8,7 +8,7 @@
 #include <AWC/Unit/UnitType.h>
 #include <AWC/Tile.h>
 #include <AWC/TileType.h>
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 #include <Tests/AWC/UnitTest.h>
 
@@ -108,14 +108,14 @@ TEST_CASE("Maps follow some rules")
 
     SUBCASE("Don't allow operations out of bounds")
     {
-        CHECK_THROWS_AS(map.AddUnit(xSize + 1, ySize + 1, soldier), const AWCNoExistingIndexException&);
-        CHECK_THROWS_AS(map.SetTile(xSize + 1, ySize + 1, grass), const AWCNoExistingIndexException&);
-        CHECK_THROWS_AS(map.GetUnit(-1, -1), const AWCNoExistingIndexException&);
-        CHECK_THROWS_AS(map.GetTile(-1, -1), const AWCNoExistingIndexException&);
+        CHECK_THROWS_AS(map.AddUnit(xSize + 1, ySize + 1, soldier), const AWC::NoExistingIndexException&);
+        CHECK_THROWS_AS(map.SetTile(xSize + 1, ySize + 1, grass), const AWC::NoExistingIndexException&);
+        CHECK_THROWS_AS(map.GetUnit(-1, -1), const AWC::NoExistingIndexException&);
+        CHECK_THROWS_AS(map.GetTile(-1, -1), const AWC::NoExistingIndexException&);
     }
     SUBCASE("Only one unit can be in a given position")
     {
         auto soldier2 = soldierUnitType.CreateUnit(player);
-        CHECK_THROWS_AS(map.AddUnit(0, 0, soldier2), const AWCAlreadyExistingIndexException&);
+        CHECK_THROWS_AS(map.AddUnit(0, 0, soldier2), const AWC::AlreadyExistingIndexException&);
     }
 }

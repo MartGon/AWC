@@ -15,7 +15,7 @@
 #include <AWC/Player.h>
 #include <AWC/Turn.h>
 
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 Unit::Unit(uint id, const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& owner) 
     : id_{id}, unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}, owner_{owner}, flags{UnitNS::Flag::NONE}

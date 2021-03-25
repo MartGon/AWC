@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AWC/AWCusing.h"
-#include "AWC/AWCException.h"
+#include "AWC/Exception.h"
 #include "AWC/AWCfwd.h"
 
 #include "AWC/Operation/AntiOperation.h"

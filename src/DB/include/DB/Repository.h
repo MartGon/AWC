@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 
 #include <Utils.h>
 
@@ -23,7 +23,7 @@ public:
         if(!UnorderedMapUtils::Contains(entries, id))
             entries.insert({id, entry});
         else
-            AWCException("Repo: entry with id " + std::to_string(id) + " already exists");
+            AWC::Exception("Repo: entry with id " + std::to_string(id) + " already exists");
     }
 
 private:

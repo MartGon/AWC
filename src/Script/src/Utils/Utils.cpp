@@ -100,7 +100,7 @@ void Script::Check<Script::Scope::External>(lua_State* luaState, bool condition,
     if(!condition)
     {
         errHandler(luaState);
-        throw AWCException(msg);
+        throw AWC::Exception(msg);
     }
 }
 

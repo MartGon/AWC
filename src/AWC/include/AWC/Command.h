@@ -1,6 +1,6 @@
 #pragma once
 
-#include <AWC/AWCException.h>
+#include <AWC/Exception.h>
 #include <AWC/AWCfwd.h>
 #include <string>
 
@@ -59,7 +59,7 @@ private:
     void DoExecute(Game& game, uint playerIndex) override {};
 };
 
-class InvalidCommandException : public AWCException
+class InvalidCommandException : public AWC::Exception
 {
 public:
     InvalidCommandException(const std::string error);
