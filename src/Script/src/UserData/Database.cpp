@@ -42,9 +42,10 @@ int UserData::Database::AddUnitType(lua_State* luaState)
     auto moveType = *lt.GetUserData<MovementDescType>("moveType");
 
     ::UnitType ut{unitTypes.GetIndex(), name, moveType, {}};
-    unitTypes.Add(ut);
+    auto id = unitTypes.Add(ut);
+    lua_pushinteger(luaState, id);
 
-    return 0;
+    return 1;
 }
 
 int UserData::Database::GetUnitType(lua_State* luaState)
