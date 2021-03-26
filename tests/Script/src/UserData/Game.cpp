@@ -38,4 +38,13 @@ TEST_CASE("Game userdata")
         auto value = sTable.Get<int>("value");
         CHECK(value == 10);
     }
+    SUBCASE("CreatePlayer")
+    {
+        std::string path = std::string(SCRIPTS_DIR) + "UserData/Game/CreatePlayer.lua";
+        sGame.RunConfig(path);
+
+        auto& gTable = sGame.GetLuaVM().GetGlobalTable();
+        CHECK(gTable.Get<int>("playerId") == 0);
+        CHECK(game.GetPlayerCount() == 1);
+    }
 }

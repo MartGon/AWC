@@ -24,7 +24,8 @@ class Game
 public:
 
     // Players
-    void AddPlayer(Player player);
+    unsigned int AddPlayer(Player player);
+    unsigned int AddPlayer(unsigned int teamId, unsigned int resources = 0);
     void RemovePlayer(uint playerIndex);
     Player& GetPlayer(uint playerIndex);
     std::vector<std::reference_wrapper<Player>> GetPlayersByTeam(uint teamId);

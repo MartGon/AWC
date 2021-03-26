@@ -1,0 +1,1 @@
+teamId = player:GetTeamId();

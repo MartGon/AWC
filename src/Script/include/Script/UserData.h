@@ -7,6 +7,7 @@
 #include <Script/UserData/AreaDesc.h>
 #include <Script/UserData/MovementDescType.h>
 #include <Script/UserData/CostTable.h>
+#include <Script/UserData/Player.h>
 
 namespace Script::UserData
 {

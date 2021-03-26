@@ -6,17 +6,15 @@
 
 namespace Script::UserData
 {
-    struct Game
+    struct Player
     {
-        using type = ::Game;
+        using type = ::Player;
         static const char* MT_NAME;
         static const char* LIB_NAME;
+
         static const luaL_Reg methods[];
         static const luaL_Reg functions[];
 
-        static int GetMap(lua_State* L);
-        static int GetMapCount(lua_State* L);
-
-        static int CreatePlayer(lua_State* L);
+        static int GetTeamId(lua_State* luaState);
     };
 }

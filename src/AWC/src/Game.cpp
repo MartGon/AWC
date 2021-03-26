@@ -9,9 +9,17 @@
 
 // Players
 
-void Game::AddPlayer(Player player)
+unsigned int Game::AddPlayer(Player player)
 {
     players_.push_back(player);
+    return GetPlayerCount() - 1;
+}
+
+unsigned int Game::AddPlayer(unsigned int teamId, unsigned int resources)
+{
+    auto id = GetPlayerCount();
+    players_.emplace_back(id, teamId, resources);
+    return id;
 }
 
 void Game::RemovePlayer(uint playerIndex)

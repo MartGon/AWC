@@ -87,7 +87,7 @@ namespace Script::UserData
             return isUD;
         }
     
-        template<typename T, Scope s>
+        template<typename T, Scope s = Scope::Internal>
         typename T::type* CheckUserData(lua_State* luaState, int index)
         {   
             CheckExpectedArg<s>(luaState, IsUserData<T>(luaState, index), index, T::MT_NAME);

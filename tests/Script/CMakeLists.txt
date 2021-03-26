@@ -15,6 +15,7 @@ SET(SOURCES
     src/UserData/AreaDesc.cpp
     src/UserData/MovementDescType.cpp
     src/UserData/Database.cpp
+    src/UserData/Player.cpp
 
     src/Wrappers/LuaTable.cpp
     src/Wrappers/LuaFunction.cpp
