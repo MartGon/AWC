@@ -42,4 +42,21 @@ TEST_CASE("Database userdata")
         CHECK(unitTypes.GetById(0)->GetName() == "Rook");
         CHECK(unitTypes.GetById(0)->GetId() == 0);
     }
+    SUBCASE("AddUnitType")
+    {
+        std::string path = Test::Script::GetUserDataPath() + "/Database/GetUnitType.lua";
+        Test::Script::TestScript t(path, sGame);
+
+        auto& sTable = t.lt();
+        auto& db = sGame.GetDB();
+        auto& unitTypes = db.get<UnitType>();
+        unitTypes.Add(UnitTest::CreateSoldierType());
+
+        sGame.PushScript(t.ref);
+        game.Run();
+
+        auto soldierType = sTable.GetUserData<Script::UserData::UnitType>("type");
+
+        CHECK(soldierType == unitTypes.GetById(0));
+    }
 }

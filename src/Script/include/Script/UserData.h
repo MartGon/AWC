@@ -8,6 +8,7 @@
 #include <Script/UserData/MovementDescType.h>
 #include <Script/UserData/CostTable.h>
 #include <Script/UserData/Player.h>
+#include <Script/UserData/UnitType.h>
 
 namespace Script::UserData
 {

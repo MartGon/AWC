@@ -18,6 +18,7 @@ set(SOURCES
     src/UserData/MovementDescType.cpp
     src/UserData/Database.cpp
     src/UserData/Player.cpp
+    src/UserData/UnitType.cpp
 
     src/Utils/Utils.cpp
 

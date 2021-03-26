@@ -1,6 +1,7 @@
 #include <Script/UserData/Database.h>
 
 #include <Script/UserData/MovementDescType.h>
+#include <Script/UserData/UnitType.h>
 
 using namespace Script;
 
@@ -9,6 +10,7 @@ const char* UserData::Database::LIB_NAME = "Database";
 
 const luaL_Reg UserData::Database::methods[] = {
     {"AddUnitType", AddUnitType},
+    {"GetUnitType", GetUnitType},
     {NULL, NULL}
 };
 const luaL_Reg UserData::Database::functions[] = {
@@ -39,22 +41,21 @@ int UserData::Database::AddUnitType(lua_State* luaState)
     std::string name = lt.Get<std::string>("name");
     auto moveType = *lt.GetUserData<MovementDescType>("moveType");
 
-    UnitType ut{unitTypes.GetIndex(), name, moveType, {}};
+    ::UnitType ut{unitTypes.GetIndex(), name, moveType, {}};
     unitTypes.Add(ut);
 
     return 0;
 }
-/*
 
-    db.AddUnitType({
-        name = "Rook",
-        moveType = MoveDescType.New({
-            ...
-        }),
-        weaponTypes = {
-            ...
-        }
+int UserData::Database::GetUnitType(lua_State* luaState)
+{
+    auto db = UserData::ToUserData<Database>(luaState, 1);
+    auto& unitTypes = db->get<::UnitType>();
 
-    })
+    unsigned int typeId = luaL_checkinteger(luaState, 2);
+    auto unitType = unitTypes.GetById(typeId);
 
-*/
+    UserData::PushDataRef<UnitType>(luaState, unitType);
+
+    return 1;
+}

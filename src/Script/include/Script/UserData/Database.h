@@ -17,5 +17,6 @@ namespace Script::UserData
 
         static int Get(lua_State* luaState);
         static int AddUnitType(lua_State* luaState);
+        static int GetUnitType(lua_State* luaState);
     };
 }
