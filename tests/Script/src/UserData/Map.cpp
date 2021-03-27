@@ -10,10 +10,14 @@ TEST_CASE("Map userdata")
 {
     Script::Game sGame;
     auto& game = sGame.GetGame();
+    auto& db = sGame.GetDB();
+    auto& tileTypes = db.get<TileType>();
 
     Map map{5, 5};
     TileType grassType{0, "Grass"};
     MapUtils::FillMap(map, grassType);
+
+    tileTypes.Add(grassType);
 
     Player p{0, 0, 1000};
     game.AddPlayer(p);
@@ -85,5 +89,17 @@ TEST_CASE("Map userdata")
         auto success = sTable.Get<bool>("success");
         CHECK(success == true);
         CHECK(mapRef.GetUnit(origin).get() != nullptr);
+    }
+    SUBCASE("Fill")
+    {
+        std::string path = Test::Script::GetUserDataPath("/Map/Fill.lua");
+        auto mapId = game.CreateMap(12, 12);
+
+        sGame.RunConfig(path);
+
+        auto map = game.GetMap(mapId);
+
+        CHECK(map.GetTile(0, 0).get() != nullptr);
+        CHECK(map.GetTile(0, 0)->GetName() == "Grass");
     }
 }

@@ -19,5 +19,7 @@ namespace Script::UserData
         static int GetUnit(lua_State* L);
         static int RemoveUnit(lua_State* L);
         static int AddUnit(lua_State* L);
+
+        static int Fill(lua_State* L);
     };
 }

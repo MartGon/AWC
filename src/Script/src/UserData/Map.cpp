@@ -1,7 +1,4 @@
-#include <Script/UserData/Map.h>
-#include <Script/UserData/UserData.h>
-#include <Script/UserData/Unit.h>
-#include <Script/UserData/Vector2.h>
+#include <Script/UserData.h>
 
 using namespace Script;
 
@@ -11,6 +8,7 @@ const luaL_Reg UserData::Map::methods[] = {
         {"GetUnit", Map::GetUnit},
         {"RemoveUnit", Map::RemoveUnit},
         {"AddUnit", Map::AddUnit},
+        {"Fill", Map::Fill},
         {NULL, NULL}
     };
 const luaL_Reg UserData::Map::functions[] = {
@@ -60,6 +58,16 @@ int UserData::Map::AddUnit(lua_State* luaState)
 
     Map::CheckMapPosition(luaState, map, pos);
     map->AddUnit(pos, unit);
+
+    return 0;
+}
+
+int UserData::Map::Fill(lua_State* luaState)
+{
+    auto map = UserData::CheckUserData<Map>(luaState, 1);
+    auto tileType = UserData::CheckUserData<TileType>(luaState, 2);
+
+    MapUtils::FillMap(*map, *tileType);
 
     return 0;
 }
