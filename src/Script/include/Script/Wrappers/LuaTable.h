@@ -106,7 +106,7 @@ namespace Script
         {
             PushInternal();
             auto type = GetField(luaState_, -1, key);
-            auto ptr = Script::UserData::UserData::CastOrCreate<T, s>(luaState_, -1, type);
+            auto ptr = Script::UserData::UserData::CastOrCreate<T, s>(luaState_, -1);
             lua_pop(luaState_, 2); // Pop Table and field
 
             return ptr;

@@ -28,8 +28,8 @@ void UserData::Map::CheckMapPosition(lua_State* luaState, ::Map* map, ::Vector2 
 
 int UserData::Map::GetUnit(lua_State* luaState)
 {
-    auto map = UserData::ToUserData<Map>(luaState, 1);
-    auto pos = *UserData::ToUserData<Vector2>(luaState, 2);
+    auto map = UserData::CheckUserData<Map>(luaState, 1);
+    auto pos = *UserData::CheckUserData<Vector2>(luaState, 2);
 
     Map::CheckMapPosition(luaState, map, pos);
     auto unit = map->GetUnit(pos);
@@ -43,8 +43,8 @@ int UserData::Map::GetUnit(lua_State* luaState)
 
 int UserData::Map::RemoveUnit(lua_State* luaState)
 {
-    auto map = UserData::ToUserData<Map>(luaState, 1);
-    auto pos = *UserData::ToUserData<Vector2>(luaState, 2);
+    auto map = UserData::CheckUserData<Map>(luaState, 1);
+    auto pos = *UserData::CheckUserData<Vector2>(luaState, 2);
 
     Map::CheckMapPosition(luaState, map, pos);
     map->RemoveUnit(pos);
@@ -54,9 +54,9 @@ int UserData::Map::RemoveUnit(lua_State* luaState)
 
 int UserData::Map::AddUnit(lua_State* luaState)
 {
-    auto map = UserData::ToUserData<Map>(luaState, 1);
-    auto pos = *UserData::ToUserData<Vector2>(luaState, 2);
-    auto unit = *UserData::ToUserData<Unit>(luaState, 3);
+    auto map = UserData::CheckUserData<Map>(luaState, 1);
+    auto pos = *UserData::CheckUserData<Vector2>(luaState, 2);
+    auto unit = *UserData::CheckUserData<Unit>(luaState, 3);
 
     Map::CheckMapPosition(luaState, map, pos);
     map->AddUnit(pos, unit);

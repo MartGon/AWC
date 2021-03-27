@@ -31,7 +31,7 @@ int UserData::Database::Get(lua_State* luaState)
 
 int UserData::Database::AddUnitType(lua_State* luaState)
 {
-    auto db = UserData::ToUserData<Database>(luaState, 1);
+    auto db = UserData::CheckUserData<Database>(luaState, 1);
     auto& unitTypes = db->get<::UnitType>();
 
     bool isTable = lua_istable(luaState, 2);
@@ -50,7 +50,7 @@ int UserData::Database::AddUnitType(lua_State* luaState)
 
 int UserData::Database::GetUnitType(lua_State* luaState)
 {
-    auto db = UserData::ToUserData<Database>(luaState, 1);
+    auto db = UserData::CheckUserData<Database>(luaState, 1);
     auto& unitTypes = db->get<::UnitType>();
 
     unsigned int typeId = luaL_checkinteger(luaState, 2);

@@ -19,9 +19,9 @@ const luaL_Reg UserData::Unit::functions[] = {
 
 int UserData::Unit::CalculateMovement(lua_State* luaState)
 {
-    auto unit = *UserData::ToUserData<Unit>(luaState, 1);
-    auto map = UserData::ToUserData<Map>(luaState, 2);
-    auto vector2 = UserData::ToUserData<Vector2>(luaState, 3);
+    auto unit = *UserData::CheckUserData<Unit>(luaState, 1);
+    auto map = UserData::CheckUserData<Map>(luaState, 2);
+    auto vector2 = UserData::CheckUserData<Vector2>(luaState, 3);
 
     auto unitMovement = unit->CalculateMovement(*map, *vector2);
     auto unitMove = UserData::PushDataCopy<UnitMovement>(luaState, unitMovement);

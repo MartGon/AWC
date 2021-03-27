@@ -17,8 +17,8 @@ const luaL_Reg UserData::UnitMovement::functions[] = {
 
 int UserData::UnitMovement::CanMove(lua_State* luaState)
 {
-    auto unitMove = UserData::ToUserData<UnitMovement>(luaState, 1);
-    auto dest = UserData::ToUserData<Vector2>(luaState, 2);
+    auto unitMove = UserData::CheckUserData<UnitMovement>(luaState, 1);
+    auto dest = UserData::CheckUserData<Vector2>(luaState, 2);
 
     bool result = unitMove->CanMove(*dest);
     lua_pushboolean(luaState, result);

@@ -44,7 +44,7 @@ int UserData::Vector2::New(lua_State* luaState)
 
 int UserData::Vector2::Get(lua_State* luaState)
 {
-    ::Vector2* vec = UserData::ToUserData<Vector2>(luaState, 1);
+    ::Vector2* vec = UserData::CheckUserData<Vector2>(luaState, 1);
     std::string index = std::string(luaL_checkstring(luaState, 2));
 
     if(index == "x")
@@ -59,7 +59,7 @@ int UserData::Vector2::Get(lua_State* luaState)
 
 int UserData::Vector2::Set(lua_State* luaState)
 {
-    ::Vector2* vec = UserData::ToUserData<Vector2>(luaState, 1);
+    ::Vector2* vec = UserData::CheckUserData<Vector2>(luaState, 1);
     std::string index = std::string(luaL_checkstring(luaState, 2));
     auto n = luaL_checkinteger(luaState, 3);
 
@@ -75,8 +75,8 @@ int UserData::Vector2::Set(lua_State* luaState)
 
 int UserData::Vector2::Add(lua_State* luaState)
 {
-    ::Vector2* a = UserData::ToUserData<Vector2>(luaState, 1);
-    ::Vector2* b = UserData::ToUserData<Vector2>(luaState, 2);
+    ::Vector2* a = UserData::CheckUserData<Vector2>(luaState, 1);
+    ::Vector2* b = UserData::CheckUserData<Vector2>(luaState, 2);
 
     ::Vector2 sum = *a + *b;
     UserData::PushDataCopy<Vector2>(luaState, sum);
@@ -86,8 +86,8 @@ int UserData::Vector2::Add(lua_State* luaState)
 
 int UserData::Vector2::Sub(lua_State* luaState)
 {
-    ::Vector2* a = UserData::ToUserData<Vector2>(luaState, 1);
-    ::Vector2* b = UserData::ToUserData<Vector2>(luaState, 2);
+    ::Vector2* a = UserData::CheckUserData<Vector2>(luaState, 1);
+    ::Vector2* b = UserData::CheckUserData<Vector2>(luaState, 2);
 
     ::Vector2 sub = *a - *b;
     UserData::PushDataCopy<Vector2>(luaState, sub);
@@ -97,8 +97,8 @@ int UserData::Vector2::Sub(lua_State* luaState)
 
 int UserData::Vector2::Eq(lua_State* luaState)
 {
-    ::Vector2* a = UserData::ToUserData<Vector2>(luaState, 1);
-    ::Vector2* b = UserData::ToUserData<Vector2>(luaState, 2);
+    ::Vector2* a = UserData::CheckUserData<Vector2>(luaState, 1);
+    ::Vector2* b = UserData::CheckUserData<Vector2>(luaState, 2);
 
     bool eq = *a == *b;
     lua_pushboolean(luaState, eq);
@@ -108,7 +108,7 @@ int UserData::Vector2::Eq(lua_State* luaState)
 
 int UserData::Vector2::ToString(lua_State* luaState)
 {
-    ::Vector2* a = UserData::ToUserData<Vector2>(luaState, 1);
+    ::Vector2* a = UserData::CheckUserData<Vector2>(luaState, 1);
 
     std::string str = a->ToString();
     lua_pushstring(luaState, str.c_str());

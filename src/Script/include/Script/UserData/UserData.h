@@ -63,10 +63,45 @@ namespace Script::UserData
             lua_setglobal(luaState, T::LIB_NAME);
         }
 
-        template <typename T>
-        typename T::type* ToUserData(lua_State* luaState, int index)
+        // Private 
+        namespace 
         {
-            return static_cast<UserDatum<typename T::type>*>(lua_touserdata(luaState, index))->ptr;
+            template <typename T>
+            typename T::type* ToUserData(lua_State* luaState, int index)
+            {
+                return static_cast<UserDatum<typename T::type>*>(lua_touserdata(luaState, index))->ptr;
+            }
+
+            template <typename T, Scope s>
+            typename T::type* ToUserDataFromTable(lua_State* luaState, int index)
+            {
+                using type = typename T::type;
+                CheckExpectedArg<s>(luaState, IsTable(luaState, index), index, "table");
+                type* userdata = T::FromTable(luaState, index);
+                lua_pop(luaState, 1);
+
+                return userdata;
+            }
+
+            template<typename T, Scope s>
+            auto CastOrCreateImp(lua_State* luaState, int index, int) -> decltype(T::FromTable(luaState, index))
+            {
+                return lua_type(luaState, index) == LUA_TUSERDATA ? 
+                    ToUserData<T>(luaState, index) :
+                    ToUserDataFromTable<T, s>(luaState, index);
+            }
+
+            template<typename T, Scope s>
+            auto CastOrCreateImp(lua_State* luaState, int index, double) -> typename T::type*
+            {
+                return ToUserData<T>(luaState, index);
+            }
+        }
+
+        template<typename T, Scope s>
+        typename T::type* CastOrCreate(lua_State* luaState, int index)
+        {
+            return CastOrCreateImp<T, s>(luaState, index, 0);
         }
 
         template <typename T>
@@ -86,23 +121,18 @@ namespace Script::UserData
 
             return isUD;
         }
+
+        template<typename T>
+        bool IsUserDataOrTable(lua_State* luaState, int index)
+        {
+            return IsUserData<T>(luaState, index) || IsTable(luaState, index);
+        }
     
         template<typename T, Scope s = Scope::Internal>
         typename T::type* CheckUserData(lua_State* luaState, int index)
         {   
-            CheckExpectedArg<s>(luaState, IsUserData<T>(luaState, index), index, T::MT_NAME);
-            return ToUserData<T>(luaState, index);
-        }
-
-        template <typename T, Scope s>
-        typename T::type* ToUserDataFromTable(lua_State* luaState, int index)
-        {
-            using type = typename T::type;
-            CheckExpectedArg<s>(luaState, IsTable(luaState, index), index, "table");
-            type* userdata = T::FromTable(luaState, index);
-            lua_pop(luaState, 1);
-
-            return userdata;
+            CheckExpectedArg<s>(luaState, IsUserDataOrTable<T>(luaState, index), index, T::MT_NAME);
+            return CastOrCreate<T, s>(luaState, index);
         }
 
         template <typename T>
@@ -127,30 +157,6 @@ namespace Script::UserData
             datum->ptr = userdata;
 
             luaL_setmetatable(luaState, T::MT_NAME);
-        }
-        
-        // Private 
-        namespace 
-        {
-            template<typename T, Scope s>
-            auto CastOrCreateImp(lua_State* luaState, int index, int type, int) -> decltype(T::FromTable(luaState, index))
-            {
-                return type == LUA_TUSERDATA ? 
-                    Script::UserData::UserData::CheckUserData<T, s>(luaState, index) :
-                    Script::UserData::UserData::ToUserDataFromTable<T, s>(luaState, index);
-            }
-
-            template<typename T, Scope s>
-            auto CastOrCreateImp(lua_State* luaState, int index, int type, double) -> typename T::type*
-            {
-                return Script::UserData::UserData::CheckUserData<T, s>(luaState, index);
-            }
-        }
-
-        template<typename T, Scope s>
-        typename T::type* CastOrCreate(lua_State* luaState, int index, int type)
-        {
-            return CastOrCreateImp<T, s>(luaState, index, type, 0);
         }
     } 
 }
