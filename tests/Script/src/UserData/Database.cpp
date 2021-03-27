@@ -10,6 +10,8 @@ TEST_CASE("Database userdata")
 {
     Script::Game sGame;
     auto& game = sGame.GetGame();
+    auto& db = sGame.GetDB();
+    auto& gTable = sGame.GetLuaVM().GetGlobalTable();
 
     SUBCASE("Get")
     {
@@ -36,7 +38,7 @@ TEST_CASE("Database userdata")
         sGame.PushScript(t.ref);
         game.Run();
 
-        auto& db = sGame.GetDB();
+        
         auto& unitTypes = db.get<UnitType>();
         CHECK(unitTypes.GetIndex() == 1);
         CHECK(unitTypes.GetById(0)->GetName() == "Rook");
@@ -48,7 +50,6 @@ TEST_CASE("Database userdata")
         Test::Script::TestScript t(path, sGame);
 
         auto& sTable = t.lt();
-        auto& db = sGame.GetDB();
         auto& unitTypes = db.get<UnitType>();
         unitTypes.Add(UnitTest::CreateSoldierType());
 
@@ -58,5 +59,28 @@ TEST_CASE("Database userdata")
         auto soldierType = sTable.GetUserData<Script::UserData::UnitType>("type");
 
         CHECK(soldierType == unitTypes.GetById(0));
+    }
+    SUBCASE("AddTileType")
+    {
+        std::string path = Test::Script::GetUserDataPath() + "/Database/AddTileType.lua";
+
+        sGame.RunConfig(path);
+
+        auto& tileTypes = db.get<::TileType>();
+        auto tt = tileTypes.GetById(0);
+
+        CHECK(tt->GetId() == 0);
+        CHECK(tt->GetName() == "Grass");
+    }
+    SUBCASE("GetTileType")
+    {
+        std::string path = Test::Script::GetUserDataPath("/Database/GetTileType.lua");
+
+        auto& tileTypes = db.get<::TileType>();
+        tileTypes.Add(::TileType(tileTypes.GetIndex(), "Grass"));
+
+        sGame.RunConfig(path);
+
+        CHECK(gTable.GetUserData<Script::UserData::TileType>("tileType") == tileTypes.GetById(0));
     }
 }

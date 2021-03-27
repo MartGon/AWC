@@ -14,10 +14,11 @@ public:
     std::string GetName() const;
 
 private:
-    Tile(const TileType& tileType);
+    Tile(const TileType& tileType, unsigned int id);
 
     const TileType& tileType_;
 
+    unsigned int id_;
     // State information
     // Team CapturedBy;
 };

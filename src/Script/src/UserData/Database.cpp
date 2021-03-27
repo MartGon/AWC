@@ -11,6 +11,8 @@ const char* UserData::Database::LIB_NAME = "Database";
 const luaL_Reg UserData::Database::methods[] = {
     {"AddUnitType", AddUnitType},
     {"GetUnitType", GetUnitType},
+    {"AddTileType", AddTileType},
+    {"GetTileType", GetTileType},
     {NULL, NULL}
 };
 const luaL_Reg UserData::Database::functions[] = {
@@ -43,7 +45,8 @@ int UserData::Database::AddUnitType(lua_State* luaState)
 
     ::UnitType ut{unitTypes.GetIndex(), name, moveType, {}};
     auto id = unitTypes.Add(ut);
-    lua_pushinteger(luaState, id);
+    auto ptr = unitTypes.GetById(id);
+    UserData::PushDataRef<UnitType>(luaState, ptr);
 
     return 1;
 }
@@ -56,7 +59,40 @@ int UserData::Database::GetUnitType(lua_State* luaState)
     unsigned int typeId = luaL_checkinteger(luaState, 2);
     auto unitType = unitTypes.GetById(typeId);
 
-    UserData::PushDataRef<UnitType>(luaState, unitType);
+    if(unitType)
+        UserData::PushDataRef<UnitType>(luaState, unitType);
+    else
+        lua_pushnil(luaState);
+
+    return 1;
+}
+
+int UserData::Database::AddTileType(lua_State* luaState)
+{
+    auto db = UserData::CheckUserData<Database>(luaState, 1);
+    auto& tileTypes = db->get<::TileType>();
+    auto id = tileTypes.GetIndex();
+
+    auto name = std::string(luaL_checkstring(luaState, 2));
+    tileTypes.Add(::TileType{id, name});
+
+    UserData::PushDataRef<TileType>(luaState, tileTypes.GetById(id));
+
+    return 1;
+}
+
+int UserData::Database::GetTileType(lua_State* luaState)
+{
+    auto db = UserData::CheckUserData<Database>(luaState, 1);
+    auto& tileTypes = db->get<::TileType>();
+
+    auto id = luaL_checkinteger(luaState, 2);
+    auto tileType = tileTypes.GetById(id);
+
+    if(tileType)
+        UserData::PushDataRef<TileType>(luaState, tileTypes.GetById(id));
+    else
+        lua_pushnil(luaState);
 
     return 1;
 }

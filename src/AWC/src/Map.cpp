@@ -129,7 +129,7 @@ bool Map::IsPositionValid(Vector2 pos) const
 
 // MapUtils
 
-void MapUtils::FillMap(Map& map, const TileType& tileType)
+void MapUtils::FillMap(Map& map, TileType& tileType)
 {
     for(auto i = 0; i < map.GetWidth(); i++)
     {

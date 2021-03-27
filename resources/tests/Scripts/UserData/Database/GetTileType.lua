@@ -1,0 +1,1 @@
+tileType = DB:GetTileType(0);

@@ -29,6 +29,8 @@ void UserData::Init(lua_State* luaState)
         UnitMovement,
         CostTable,
         Player,
-        UnitType
+        UnitType,
+        TileType,
+        Tile
         >(luaState);
 }

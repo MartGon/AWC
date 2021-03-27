@@ -9,6 +9,8 @@
 #include <Script/UserData/CostTable.h>
 #include <Script/UserData/Player.h>
 #include <Script/UserData/UnitType.h>
+#include <Script/UserData/TileType.h>
+#include <Script/UserData/Tile.h>
 
 namespace Script::UserData
 {

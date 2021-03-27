@@ -17,6 +17,7 @@ SET(SOURCES
     src/UserData/Database.cpp
     src/UserData/Player.cpp
     src/UserData/UnitType.cpp
+    src/UserData/TileType.cpp
 
     src/Wrappers/LuaTable.cpp
     src/Wrappers/LuaFunction.cpp

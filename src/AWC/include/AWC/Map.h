@@ -56,5 +56,5 @@ private:
 
 namespace MapUtils
 {
-    void FillMap(Map& map, const TileType& tileType);
+    void FillMap(Map& map, TileType& tileType);
 }

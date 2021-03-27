@@ -19,6 +19,8 @@ set(SOURCES
     src/UserData/Database.cpp
     src/UserData/Player.cpp
     src/UserData/UnitType.cpp
+    src/UserData/TileType.cpp
+    src/UserData/Tile.cpp
 
     src/Utils/Utils.cpp
 

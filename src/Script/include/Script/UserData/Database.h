@@ -16,7 +16,11 @@ namespace Script::UserData
         static const luaL_Reg functions[];
 
         static int Get(lua_State* luaState);
+
         static int AddUnitType(lua_State* luaState);
         static int GetUnitType(lua_State* luaState);
+
+        static int AddTileType(lua_State* luaState);
+        static int GetTileType(lua_State* luaState);
     };
 }

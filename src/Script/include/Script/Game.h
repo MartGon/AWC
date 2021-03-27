@@ -17,7 +17,8 @@ namespace Script
     class Game
     {
     public:
-        using Database = DB::Database<UnitType, Script::Type, std::shared_ptr<Script::ScriptOperation>>;
+        using Database = DB::Database<UnitType, Script::Type, std::shared_ptr<Script::ScriptOperation>, 
+                                    TileType>;
 
         Game()
         {
