@@ -32,6 +32,15 @@ public:
     uint GetPlayerCount() const;
 
     // Maps
+    template<typename ...Args>
+    unsigned int CreateMap(Args&& ...args)
+    {
+        auto id = GetMapCount();
+        maps_.emplace_back(args...);
+
+        return id;
+    }
+    
     unsigned int AddMap(Map map);
     void RemoveMap(uint mapIndex);
     Map& GetMap(uint mapIndex);

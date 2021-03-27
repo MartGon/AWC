@@ -1,1 +1,1 @@
-playerId = Game:CreatePlayer(0);
+playerId = game:CreatePlayer(0);

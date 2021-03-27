@@ -16,6 +16,25 @@ TEST_CASE("Game userdata")
 
     game.AddMap(map);
 
+    SUBCASE("CreateMap")
+    {
+        std::string path = std::string(SCRIPTS_DIR) + "UserData/Game/CreateMap.lua";
+        sGame.RunConfig(path);
+
+        CHECK(game.GetMapCount() == 4);
+        
+        auto& map = game.GetMap(1);
+        CHECK(map.GetSize().x == 8);
+        CHECK(map.GetSize().y == 8);
+
+        map = game.GetMap(2);
+        CHECK(map.GetSize().x == 12);
+        CHECK(map.GetSize().y == 12);
+
+        map = game.GetMap(3);
+        CHECK(map.GetSize().x == 16);
+        CHECK(map.GetSize().y == 16);
+    }
     SUBCASE("GetMapCount")
     {
         std::string path = std::string(SCRIPTS_DIR) + "UserData/Game/GetMapCount.lua";

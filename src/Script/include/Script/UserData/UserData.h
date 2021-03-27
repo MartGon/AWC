@@ -96,12 +96,12 @@ namespace Script::UserData
             {
                 return ToUserData<T>(luaState, index);
             }
-        }
 
-        template<typename T, Scope s>
-        typename T::type* CastOrCreate(lua_State* luaState, int index)
-        {
-            return CastOrCreateImp<T, s>(luaState, index, 0);
+            template<typename T, Scope s>
+            typename T::type* CastOrCreate(lua_State* luaState, int index)
+            {
+                return CastOrCreateImp<T, s>(luaState, index, 0);
+            }
         }
 
         template <typename T>

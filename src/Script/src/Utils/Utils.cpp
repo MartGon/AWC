@@ -73,14 +73,19 @@ int Script::GetField<std::string>(lua_State* luaState, int index, std::string ke
     return lua_getfield(luaState, index, key.c_str());
 }
 
+bool Script::IsType(lua_State* L, int index, int type)
+{
+    return lua_type(L, index) == type;
+}
+
 bool Script::IsTable(lua_State* luaState, int index)
 {
-    return lua_type(luaState, index) == LUA_TTABLE;
+    return IsType(luaState, index, LUA_TTABLE);
 }
 
 bool Script::IsFunction(lua_State* luaState, int index)
 {
-    return lua_type(luaState, index) == LUA_TFUNCTION;
+    return IsType(luaState, index, LUA_TFUNCTION);
 }
 
 template<>

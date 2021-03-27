@@ -77,7 +77,7 @@ void Script::Game::InitState()
 
     // Push game
     UserData::UserData::PushDataRef<UserData::Game>(L, &game_);
-    lua_setglobal(L, "Game");
+    lua_setglobal(L, "game");
 
     // Create _MAIN, _ENV metatable, to access _G when not found
     luaL_newmetatable(L, MT_NAME);

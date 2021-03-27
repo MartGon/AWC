@@ -53,6 +53,7 @@ namespace Script
     template<>
     int GetField<std::string>(lua_State*, int index, std::string key);
 
+    bool IsType(lua_State* L, int index, int type);
     bool IsTable(lua_State*, int index);
     bool IsFunction(lua_State*, int index);
 
