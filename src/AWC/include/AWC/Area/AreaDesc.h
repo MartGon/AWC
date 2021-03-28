@@ -16,8 +16,7 @@ class AreaDesc : public AreaDescI
 {
 public:
 
-    static AreaDescPtr Create(const Directions& directions) 
-        {return AreaDescPtr{new AreaDesc{directions}};}
+    static AreaDescPtr Create(const Directions& directions);
     static AreaDescPtr CreateByLocked(const Directions& directions, const DirectionsTable& lockedDirectionsTable);
     static AreaDescPtr CreateByExclusive(const Directions& directions, const DirectionsTable& exclusiveDirectionsTable);
 

@@ -57,6 +57,8 @@ int UserData::Map::AddUnit(lua_State* luaState)
     auto unit = *UserData::CheckUserData<Unit>(luaState, 3);
 
     Map::CheckMapPosition(luaState, map, pos);
+    CheckArg<Scope::Internal>(luaState, map->IsPositionFree(pos), 2, "Pos " + pos.ToString() + " is not free!");
+    
     map->AddUnit(pos, unit);
 
     return 0;

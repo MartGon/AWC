@@ -17,6 +17,11 @@
 // Public
 
 // Factory methods
+AreaDescPtr AreaDesc::Create(const Directions& directions)
+{
+    return AreaDescPtr{new AreaDesc{directions}};
+}
+
 AreaDescPtr AreaDesc::CreateByLocked(const Directions& directions, 
     const DirectionsTable& lockedDirectionsTable)
 {

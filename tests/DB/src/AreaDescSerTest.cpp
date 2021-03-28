@@ -177,7 +177,7 @@ TEST_CASE("AreaDesc Rook by Locked")
             CHECK(VectorUtils::IsInside(tpDirs, dir));
         
         for(auto dir : tpDirs)
-            lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir);
+            CHECK(lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir));
 
     }
     SUBCASE("From file")
@@ -190,7 +190,7 @@ TEST_CASE("AreaDesc Rook by Locked")
             CHECK(VectorUtils::IsInside(tpDirs, dir));
         
         for(auto dir : tpDirs)
-            lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir);
+            CHECK(lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir));
     }
 }
 
@@ -344,8 +344,10 @@ TEST_CASE("AreaDesc Rook by Exclusive")
         for(auto dir : dirs)
             CHECK(VectorUtils::IsInside(tpDirs, dir));
         
+        /*
         for(auto dir : tpDirs)
-            lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir);
+            CHECK(lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir));
+        */
 
     }
     SUBCASE("From file")
@@ -358,7 +360,7 @@ TEST_CASE("AreaDesc Rook by Exclusive")
             CHECK(VectorUtils::IsInside(tpDirs, dir));
         
         for(auto dir : tpDirs)
-            lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir);
+            CHECK(lockedDirTableR.at(dir) == tpdp->GetLockedDirections(dir));
     }
 }
 
