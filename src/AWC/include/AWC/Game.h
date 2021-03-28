@@ -59,8 +59,17 @@ public:
     // Operation
     void RemoveProcess(unsigned int pid);
     std::optional<Process> GetProcess(unsigned int pid);
-    unsigned int Push(OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT);
     void Run();
+
+    template<typename ...Args>
+    unsigned int Push(Args&& ...args)
+    {
+        unsigned int pid = nextProcessId++;
+        processQueue_.emplace_back(pid, args...);
+        SortQueue();
+
+        return pid;
+    }
 
     // State
     void Start();

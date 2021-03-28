@@ -45,7 +45,7 @@ namespace Operation
     class OperationI
     {
     public:
-        OperationI(unsigned int type = Type::NONE) : type_{type} {};
+        OperationI(unsigned int type) : type_{type} {};
         virtual ~OperationI() {};
         virtual Result Execute(Game& state, uint8_t prio) { return Result{SUCCESS}; };
     

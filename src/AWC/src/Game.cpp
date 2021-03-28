@@ -153,15 +153,6 @@ std::optional<Process> Game::GetProcess(unsigned int id)
     return process;
 }
 
-unsigned int Game::Push(OperationIPtr op, uint8_t prio)
-{
-    unsigned int pid = nextProcessId++;
-    processQueue_.push_back(Process{pid, op, prio});
-    SortQueue();
-
-    return pid;
-}
-
 // State
 
 void Game::Start()
