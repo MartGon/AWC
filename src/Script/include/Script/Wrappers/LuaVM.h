@@ -3,6 +3,7 @@
 #include <lua.hpp>
 
 #include <string>
+#include <filesystem>
 
 #include <Script/Wrappers/LuaState.h>
 #include <Script/Wrappers/LuaTable.h>
@@ -12,7 +13,7 @@ namespace Script
     class LuaVM
     {
     public:
-        LuaVM() : global{ls.L, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS}
+        LuaVM() : global_{ls_.L, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS}
         {
 
         }
@@ -21,12 +22,12 @@ namespace Script
 
         lua_State* GetLuaState()
         {
-            return ls.L;
+            return ls_.L;
         }
 
         LuaTable<Scope::External>& GetGlobalTable()
         {
-            return global;
+            return global_;
         }
 
         // Basic lib
@@ -41,8 +42,11 @@ namespace Script
         unsigned int RunFile(std::string path);
         unsigned int RunFile(std::string path, LuaTable<Scope::External>& env);
 
+        // Modules
+        void AppendToPath(std::filesystem::path path);
+
     private:
-        LuaState ls;
-        LuaTable<Scope::External> global;
+        LuaState ls_;
+        LuaTable<Scope::External> global_;
     };
 }
