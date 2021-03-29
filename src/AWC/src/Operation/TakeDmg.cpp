@@ -15,7 +15,7 @@ Result TakeDmg::Execute(Game& game, Process::Info info)
     if(health <= 0)
     {
         OperationIPtr op {new UpdateFlag(victim_, UnitNS::DEAD, true)};
-        game.Push(op, info);
+        game.Push(op, info.priority);
     }
 
     return result;

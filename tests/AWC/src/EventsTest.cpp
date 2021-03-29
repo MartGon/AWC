@@ -353,7 +353,7 @@ TEST_CASE("Hugo and large tank")
             if(me && myGUID != attackerGUID && myPos.has_value())
             {
                 OperationIPtr counterAttack{new Operation::Attack(myPos.value(), attack->origin_, 0)};
-                game.Push(counterAttack, process.info.priority + 1);
+                game.Push(counterAttack, process.info.priority + 1, Process::Trigger::Trigger{Process::Trigger::Type::OPERATION, noti.process.id});
 
                 orderCheck.push_back(1);
             }
@@ -386,7 +386,7 @@ TEST_CASE("Hugo and large tank")
                         if(victim->GetGUID() == hugo)
                         {
                             OperationIPtr deny{ new Operation::AntiOperation(noti.process.id)};
-                            game.Push(deny, process.info.priority + 1);
+                            game.Push(deny, process.info.priority + 1, Process::Trigger::Trigger{Process::Trigger::Type::OPERATION, noti.process.id});
 
                             orderCheck.push_back(3);
                         }
@@ -426,7 +426,7 @@ TEST_CASE("Hugo and large tank")
                     if(attack->attacker_->GetGUID() == me)
                     {
                         OperationIPtr deny{new Operation::AntiOperation(process.id)};
-                        game.Push(deny, process.info.priority + 1);
+                        game.Push(deny, process.info.priority + 1, Process::Trigger::Trigger{Process::Trigger::Type::OPERATION, noti.process.id});
 
                         orderCheck.push_back(4);
                     }

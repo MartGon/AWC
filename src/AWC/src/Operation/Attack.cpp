@@ -21,12 +21,12 @@ Result Attack::Execute(Game& game, Process::Info info)
     {
         auto dmg = attacker_->GetDmgToUnit(weaponIndex_, targetUnit);
         OperationIPtr op{new TakeDmg(targetUnit, dmg, this)};
-        game.Push(op, info);
+        game.Push(op, info.priority);
     }
 
     StatMod::Extra extra{StatMod::Ammo{weaponIndex_}};
     OperationIPtr ammoOp{new StatMod(attacker_, UnitNS::AMMO, -1, extra)};
-    game.Push(ammoOp, info);
+    game.Push(ammoOp, info.priority);
 
     return result;
 }
