@@ -20,7 +20,7 @@ TEST_CASE("Database userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         bool success = sTable.Get<bool>("Success");
@@ -35,7 +35,7 @@ TEST_CASE("Database userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         
@@ -53,7 +53,7 @@ TEST_CASE("Database userdata")
         auto& unitTypes = db.get<UnitType>();
         unitTypes.Add(UnitTest::CreateSoldierType());
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         auto soldierType = sTable.GetUserData<Script::UserData::UnitType>("type");

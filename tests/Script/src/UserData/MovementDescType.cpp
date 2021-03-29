@@ -18,7 +18,7 @@ TEST_CASE("MovementDescType userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
         
         auto mdt = *sTable.GetUserData<Script::UserData::MovementDescType>("mdt");

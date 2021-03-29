@@ -4,7 +4,7 @@
 
 using namespace Operation;
 
-Result AntiOperation::Execute(Game& game, const Process::Info& info)
+Result AntiOperation::Execute(Game& game, const Process::Process& p)
 {
     Result res{SUCCESS};
 

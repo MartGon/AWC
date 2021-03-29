@@ -18,7 +18,7 @@ namespace Operation
             origin_{origin}, dest_{dest}, weaponIndex_{weaponIndex}, OperationI{Type::ATTACK} {};
         ~Attack() override {};
 
-        Result Execute(Game& state, const Process::Info& info) override;
+        Result Execute(Game& state, const Process::Process& p) override;
     
         UnitPtr attacker_;
         Position origin_;

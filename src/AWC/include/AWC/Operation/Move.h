@@ -13,7 +13,7 @@ namespace Operation
             origin_{origin}, dest_{dest}, OperationI{Type::MOVE} {};
         ~Move() override {};
 
-        Result Execute(Game& state, const Process::Info& info) override;
+        Result Execute(Game& state, const Process::Process& p) override;
     
         UnitPtr unit_;
         uint mapIndex_;

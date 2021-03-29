@@ -380,8 +380,9 @@ TEST_CASE("ENV with __index _G")
     std::string path2 = std::string(SCRIPTS_DIR) + "Global2.lua";
     Test::Script::TestScript ts2(path2, sGame);
     
-    sGame.PushScript(ts1.ref);
-    sGame.PushScript(ts2.ref);
+    Process::Trigger::Trigger t{Process::Trigger::Type::NONE, 0};
+    sGame.PushDebugScript(ts1.ref);
+    sGame.PushDebugScript(ts2.ref);
     game.Run();
 
     // Ts1 Table

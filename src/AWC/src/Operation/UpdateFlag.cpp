@@ -4,7 +4,7 @@
 
 using namespace Operation;
 
-Result UpdateFlag::Execute(Game& game, const Process::Info& info)
+Result UpdateFlag::Execute(Game& game, const Process::Process& p)
 {
     Result result{SUCCESS};
 

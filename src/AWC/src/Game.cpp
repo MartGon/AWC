@@ -372,22 +372,22 @@ void Game::Run()
         // Taking a ref 
         Process::Process& ref = processQueue_.front();
 
-        if(!ref.info.announced)
+        if(!ref.announced)
         {
-            ref.info.announced = true;
+            ref.announced = true;
             Notification::Notification notification{Notification::Type::PRE, ref};
             events.Notify(notification, *this);
         }
 
         // Take a copy. 
         Process::Process process = processQueue_.front();
-        if(process.info.announced)
+        if(process.announced)
         {
             // Remove before execution, in case it pushes another with less prio
             processQueue_.erase(processQueue_.begin());
 
             // Execute operation
-            Result res = process.op->Execute(*this, process.info);
+            Result res = process.op->Execute(*this, process);
             
             Notification::Type type = Notification::Type::ERROR;
             if(res)
@@ -408,7 +408,7 @@ void Game::SortQueue()
 {
     std::function<bool(Process::Process a, Process::Process b)> greater = [](Process::Process a, Process::Process b)
     {
-        return a.info.priority > b.info.priority || (a.info.priority == b.info.priority && a.id < b.id);
+        return a.priority > b.priority || (a.priority == b.priority && a.id < b.id);
     };
     std::sort(processQueue_.begin(), processQueue_.end(), greater);
 }

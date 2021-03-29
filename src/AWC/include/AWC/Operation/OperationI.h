@@ -48,7 +48,7 @@ namespace Operation
     public:
         OperationI(unsigned int type) : type_{type} {};
         virtual ~OperationI() {};
-        virtual Result Execute(Game& state, const Process::Info& info) { return Result{SUCCESS}; };
+        virtual Result Execute(Game& state, const Process::Process& p) { return Result{SUCCESS}; };
     
         unsigned int GetType() { return type_; }
 

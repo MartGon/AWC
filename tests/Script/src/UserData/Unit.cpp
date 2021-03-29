@@ -39,8 +39,8 @@ TEST_CASE("Unit userdata")
         sTable.SetDataCopy<Script::UserData::Unit>("unit", soldier);
         sTable.SetDataCopy<Script::UserData::Vector2>("origin", Vector2{2, 0});
 
-        try{        
-            sGame.PushScript(t.ref);
+        try{
+            sGame.PushDebugScript(t.ref);
             game.Run();
         }
         catch(const std::bad_alloc& e)

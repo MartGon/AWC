@@ -39,7 +39,7 @@ TEST_CASE("Unit userdata")
         sTable.SetDataCopy<Script::UserData::Vector2>("dest", Vector2{0, 0});
 
         try{        
-            sGame.PushScript(t.ref);
+            sGame.PushDebugScript(t.ref);
             game.Run();
         }
         catch(const std::bad_alloc& e)

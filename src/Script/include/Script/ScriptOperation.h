@@ -29,7 +29,7 @@ namespace Script
             return argsTable_;
         }
 
-        Operation::Result Execute(::Game& state, const Process::Info& info) override;
+        Operation::Result Execute(::Game& state, const Process::Process& p) override;
 
     private:
         ScriptOperation(lua_State* luaState, const Type& type) : 

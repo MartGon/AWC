@@ -29,23 +29,16 @@ namespace Process
         PRIORITY_DEFAULT = 128
     };
 
-    struct Info
-    {
-        explicit Info(uint8_t prio, 
-            Trigger::Trigger trigger) : priority{prio}, announced{false}, trigger{trigger} {};
-
-        uint8_t priority;
-        bool announced;
-        Trigger::Trigger trigger;
-    };
-
     struct Process
     {
-        Process(unsigned int id, OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT, 
-            Trigger::Trigger trigger = Trigger::Trigger{Trigger::Type::NONE, 0}) : id{id}, info{prio, trigger}, op{op} {};
+        Process(unsigned int id, OperationIPtr op, Trigger::Trigger trigger, uint8_t prio = PRIORITY_DEFAULT) : 
+            id{id}, priority{prio}, trigger{trigger}, op{op} {};
 
         unsigned int id;
-        Info info;
+        uint8_t priority;
+        bool announced = false;
+        Trigger::Trigger trigger;
+
         OperationIPtr op;
     };
 }

@@ -38,7 +38,7 @@ TEST_CASE("Map userdata")
         sTable.SetDataRef<Script::UserData::Map>("map", &game.GetMap(0));
         sTable.SetDataCopy<Script::UserData::Vector2>("origin", Vector2{2, 0});
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         auto found = sTable.Get<int>("found");
@@ -46,7 +46,7 @@ TEST_CASE("Map userdata")
 
         sTable.SetDataCopy<Script::UserData::Vector2>("origin", Vector2{0, 0});
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
     }
     SUBCASE("RemoveUnit")
@@ -62,7 +62,7 @@ TEST_CASE("Map userdata")
 
         CHECK(soldier.use_count() == 2); // Count is 2: Here and Map
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         auto success = sTable.Get<bool>("success");
@@ -83,7 +83,7 @@ TEST_CASE("Map userdata")
         sTable.SetDataCopy<Script::UserData::Unit>("unit", soldier);
         sTable.SetDataCopy<Script::UserData::Vector2>("origin", origin);
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         auto success = sTable.Get<bool>("success");

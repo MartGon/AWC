@@ -20,7 +20,7 @@ namespace Operation
 
         void AddChild(OperationI* child) { children.push_back(child); };
 
-        Result Execute(Game& state, const Process::Info& info) override;
+        Result Execute(Game& state, const Process::Process& p) override;
 
     private:
         std::vector<OperationI*> children;

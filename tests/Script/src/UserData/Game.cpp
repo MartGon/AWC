@@ -39,7 +39,7 @@ TEST_CASE("Game userdata")
     {
         std::string path = std::string(SCRIPTS_DIR) + "UserData/Game/GetMapCount.lua";
         Test::Script::TestScript t(path, sGame);
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         auto value = t.lt().Get<int>("value");
@@ -51,7 +51,7 @@ TEST_CASE("Game userdata")
         Test::Script::TestScript t(path, sGame);
         auto& sTable = t.lt();
         sTable.Set("mapIndex", 0);
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         auto value = sTable.Get<int>("value");

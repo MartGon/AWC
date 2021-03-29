@@ -11,7 +11,7 @@ namespace Operation
         UpdateFlag(UnitPtr unit, UnitNS::Flag flag, bool set) : unit_{unit}, 
             flag_{flag}, set_{set}, OperationI{Type::UPDATE_FLAG} {};
 
-        Result Execute(Game& game, const Process::Info& info) override;
+        Result Execute(Game& game, const Process::Process& p) override;
     
         UnitPtr unit_;
         Vector2 unitPos_;

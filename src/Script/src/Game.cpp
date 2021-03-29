@@ -43,18 +43,6 @@ Script::LuaTable<Script::Scope::External>& Script::Game::GetScriptTable(unsigned
         throw AWC::Exception("GetScriptTable Error: Script with id " + std::to_string(id) + " did not exist");
 }
 
-unsigned int Script::Game::PushScript(unsigned int id, unsigned int prio)
-{
-    unsigned int pid = -1;
-    auto& scripts = db.get<std::shared_ptr<ScriptOperation>>();
-
-    auto script = scripts.GetById(id);
-    if(script)
-        pid = game_.Push(*script, prio);
-
-    return pid;
-}
-
 void Script::Game::RunConfig(std::string configPath)
 {
     vm_.RunFile(configPath);

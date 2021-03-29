@@ -89,7 +89,8 @@ TEST_CASE("Event test")
         {
             auto process = noti.process;
             OperationIPtr antiOp{ new Operation::AntiOperation(process.id)};
-            game.Push(antiOp, process.info.priority + 1);
+            Process::Trigger::Trigger t{Process::Trigger::Type::OPERATION, process.id};
+            game.Push(antiOp, t, process.priority + 1);
         };
         subject.Register(Operation::Type::MOVE, cb, Event::Notification::Type::PRE);
 
@@ -138,18 +139,19 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         };
         auto& subject = game.GetSubject();
         subject.Register(Operation::Type::CUSTOM, recursiveCB);
-
+        
         OperationIPtr custom{new Operation::Custom([](Game& game){
             std::cout << "Custom operation this is \n";
         })};
-        game.Push(custom);
+        Process::Trigger::Trigger t{Process::Trigger::Type::NONE, 0};
+        game.Push(custom, t);
 
         CommandPtr null{ new NullCommand{}};
         game.ExecuteCommand(null, 0);
 
         CHECK(counter == 1);
 
-        game.Push(custom);
+        game.Push(custom, t);
         game.ExecuteCommand(null, 0);
 
         // On Pre only one is listening, so counter == 1
@@ -170,7 +172,8 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         OperationIPtr custom{new Operation::Custom([&count](Game& game){
             
         })};
-        game.Push(custom);
+        Process::Trigger::Trigger t{Process::Trigger::Type::NONE, 0};
+        game.Push(custom, t);
 
         CommandPtr null{new NullCommand};
         game.ExecuteCommand(null, 0);
@@ -179,21 +182,21 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         CHECK(count == 1);
 
         subject.Unregister(guid, Operation::Type::CUSTOM);
-        game.Push(custom);
+        game.Push(custom, t);
         game.ExecuteCommand(null, 0);
 
         // Is not called after being unregistered
         CHECK(count == 1);
 
         guid = subject.Register(Operation::Type::CUSTOM, cb);
-        game.Push(custom);
+        game.Push(custom, t);
         game.ExecuteCommand(null, 0);
 
         // Counts again
         CHECK(count == 2);
 
         subject.Unregister(guid);
-        game.Push(custom);
+        game.Push(custom, t);
         game.ExecuteCommand(null, 0);
 
         // Stays the same after being removed
@@ -241,7 +244,8 @@ TEST_CASE("Event::Subject listen by notification")
     OperationIPtr custom{new Operation::Custom([](Game& game){
             
         })};
-    game.Push(custom);
+    Process::Trigger::Trigger t{Process::Trigger::Type::NONE, 0};
+    game.Push(custom, t);
 
     CommandPtr null{new NullCommand};
     game.ExecuteCommand(null, 0);
@@ -272,9 +276,10 @@ TEST_CASE("Sort operations")
         check.push_back(3);
     })};
 
-    game.Push(third);
-    game.Push(first, 255);
-    game.Push(second);
+    Process::Trigger::Trigger t{Process::Trigger::Type::NONE, 0};
+    game.Push(third, t);
+    game.Push(first, t, 255);
+    game.Push(second, t);
 
     CommandPtr null{new NullCommand};
     
@@ -353,7 +358,8 @@ TEST_CASE("Hugo and large tank")
             if(me && myGUID != attackerGUID && myPos.has_value())
             {
                 OperationIPtr counterAttack{new Operation::Attack(myPos.value(), attack->origin_, 0)};
-                game.Push(counterAttack, process.info.priority + 1, Process::Trigger::Trigger{Process::Trigger::Type::OPERATION, noti.process.id});
+                game.Push(counterAttack, 
+                    Process::Trigger::Trigger{Process::Trigger::Type::OPERATION, noti.process.id}, process.priority + 1);
 
                 orderCheck.push_back(1);
             }
@@ -386,7 +392,8 @@ TEST_CASE("Hugo and large tank")
                         if(victim->GetGUID() == hugo)
                         {
                             OperationIPtr deny{ new Operation::AntiOperation(noti.process.id)};
-                            game.Push(deny, process.info.priority + 1, Process::Trigger::Trigger{Process::Trigger::Type::OPERATION, noti.process.id});
+                            game.Push(deny, 
+                                Process::Trigger::Trigger{Process::Trigger::Type::OPERATION, noti.process.id}, process.priority + 1);
 
                             orderCheck.push_back(3);
                         }
@@ -426,7 +433,8 @@ TEST_CASE("Hugo and large tank")
                     if(attack->attacker_->GetGUID() == me)
                     {
                         OperationIPtr deny{new Operation::AntiOperation(process.id)};
-                        game.Push(deny, process.info.priority + 1, Process::Trigger::Trigger{Process::Trigger::Type::OPERATION, noti.process.id});
+                        game.Push(deny, 
+                            Process::Trigger::Trigger{Process::Trigger::Type::OPERATION, noti.process.id}, process.priority + 1);
 
                         orderCheck.push_back(4);
                     }

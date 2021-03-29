@@ -11,7 +11,7 @@ namespace Operation
         AntiOperation(unsigned int targetId) : targetId_{targetId}, OperationI{Type::ANTI_OPERATION} {};
         ~AntiOperation() override {} ;
 
-        Result Execute(Game& state, const Process::Info& info) override;
+        Result Execute(Game& state, const Process::Process& p) override;
 
         unsigned int targetId_;
     };

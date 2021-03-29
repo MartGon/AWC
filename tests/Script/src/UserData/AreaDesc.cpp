@@ -18,7 +18,7 @@ TEST_CASE("AreaDesc userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
         
         int len = sTable.Length();
@@ -38,7 +38,7 @@ TEST_CASE("AreaDesc userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
         
         auto tpd = *sTable.GetUserData<Script::UserData::AreaDesc>("tp");

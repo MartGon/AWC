@@ -31,17 +31,17 @@ TEST_CASE("ScriptType Operations")
         auto& table = sg.GetScriptTable(script);
         table.Set("value", 3);
 
-        sg.PushScript(script);
+        sg.PushDebugScript(script);
         sg.GetGame().Run();
 
         CHECK(table.Get<int>("value") == 6);
         
-        sg.PushScript(script);
+        sg.PushDebugScript(script);
         sg.GetGame().Run();
 
         CHECK(table.Get<int>("value") == 9);
 
-        sg.PushScript(script);
+        sg.PushDebugScript(script);
         CommandPtr null{new NullCommand()};
         sg.GetGame().ExecuteCommand(null);
 
@@ -92,7 +92,7 @@ TEST_CASE("Error handling")
         sTable.SetDataCopy<Script::UserData::Vector2>("dest", Vector2{0, 0});
 
         try{
-            sGame.PushScript(t.ref);
+            sGame.PushDebugScript(t.ref);
             game.Run();
         }
         catch(const AWC::Exception& e)
@@ -114,10 +114,10 @@ TEST_CASE("Error handling")
 
         CHECK(*origin1 != * origin2);
 
-        sGame.PushScript(s2);
+        sGame.PushDebugScript(s2);
         game.Run();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
     }
 }

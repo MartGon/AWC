@@ -20,7 +20,7 @@ TEST_CASE("Vector2 userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         ::Vector2* origin = sTable.GetUserData<UserData::Vector2>("origin");
@@ -33,7 +33,7 @@ TEST_CASE("Vector2 userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         Vector2* sum = sTable.GetUserData<UserData::Vector2>("sum");
@@ -46,7 +46,7 @@ TEST_CASE("Vector2 userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         Vector2* sub = sTable.GetUserData<UserData::Vector2>("sub");
@@ -59,7 +59,7 @@ TEST_CASE("Vector2 userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         bool eq = sTable.Get<bool>("eq");
@@ -72,7 +72,7 @@ TEST_CASE("Vector2 userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         int x = sTable.Get<int>("x");
@@ -88,7 +88,7 @@ TEST_CASE("Vector2 userdata")
 
         auto& sTable = t.lt();
 
-        sGame.PushScript(t.ref);
+        sGame.PushDebugScript(t.ref);
         game.Run();
 
         Vector2 v = *sTable.GetUserData<UserData::Vector2>("origin");

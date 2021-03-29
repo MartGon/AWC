@@ -2,7 +2,7 @@
 
 using namespace Operation;
 
-Result Composed::Execute(Game& state, const Process::Info& info)
+Result Composed::Execute(Game& state, const Process::Process& p)
 {
     Result res{SUCCESS};
 
