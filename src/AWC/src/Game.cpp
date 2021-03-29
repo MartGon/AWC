@@ -387,7 +387,7 @@ void Game::Run()
             processQueue_.erase(processQueue_.begin());
 
             // Execute operation
-            Result res = process.op->Execute(*this, process.info.priority);
+            Result res = process.op->Execute(*this, process.info);
             
             Notification::Type type = Notification::Type::ERROR;
             if(res)

@@ -285,6 +285,23 @@ TEST_CASE("Sort operations")
     CHECK(order == check);
 }
 
+/*
+    Description:
+    Four units involved: Large tank, Cop, Hugo and Normal
+    Large attacks Hugo
+    Cop triggers, and attacks Large Tank right before.
+    Curse of Hugo triggers when Large takes DMG, from that point on, Hugo negates dmg taken
+    Large ignores Hugo buffs.
+
+    Then
+    Normal attacks Hugo
+    Hugo doesn't take any dmg
+
+    Result:
+    Large takes dmg from cop
+    Hugo takes dmg from large
+*/
+
 TEST_CASE("Hugo and large tank")
 {
     using namespace Event;
