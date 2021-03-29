@@ -11,7 +11,6 @@ class MovementDesc;
 struct Range;
 class Player;
 struct Position;
-struct Process;
 class Tile;
 class TileType;
 class Graph;
@@ -53,3 +52,8 @@ namespace Operation
     class UpdateFlag;
     class Attack;
 };
+
+namespace Process
+{
+    struct Process;
+}

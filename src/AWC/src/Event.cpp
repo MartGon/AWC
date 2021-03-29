@@ -97,13 +97,13 @@ void Subject::Notify(Notification::Notification notification, Game& game)
     }
 }
 
-void Subject::Notify(Process p, Operation::Type type, Notification::Type notType, Game& game)
+void Subject::Notify(Process::Process p, Operation::Type type, Notification::Type notType, Game& game)
 {
     Notification::Notification noti{notType, p};
     Notify(noti, game);
 }
 
-void Subject::Notify(Process p, Notification::Type notType, Game& game)
+void Subject::Notify(Process::Process p, Notification::Type notType, Game& game)
 {
     Notification::Notification noti{notType, p};
     Notify(noti, game);

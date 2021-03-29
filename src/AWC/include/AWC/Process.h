@@ -1,11 +1,9 @@
 #pragma once
 #include <AWC/AWCusing.h>
 
-enum Priority
-{
-    PRIORITY_DEFAULT = 128
-};
 
+namespace Process
+{
     namespace Trigger
     {
         enum class Type : uint8_t{
@@ -26,15 +24,29 @@ enum Priority
         };
     }
 
-struct Process
-{
-    Process(unsigned int id, OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT, 
-        Trigger::Trigger trigger = Trigger::Trigger{Trigger::Type::NONE, 0}) : id{id}, priority{prio}, op{op}, announced{false}, trigger{trigger} {};
+    enum Priority
+    {
+        PRIORITY_DEFAULT = 128
+    };
 
-    unsigned int id;
-    uint8_t priority;
-    bool announced;
-    Trigger::Trigger trigger;
+    struct Info
+    {
+        Info(unsigned int id, uint8_t prio = PRIORITY_DEFAULT, 
+            Trigger::Trigger trigger = Trigger::Trigger{Trigger::Type::NONE, 0}) : id{id}, priority{prio}, announced{false}, trigger{trigger} {};
 
-    OperationIPtr op;
-};
+        unsigned int id;
+        uint8_t priority;
+        bool announced;
+        Trigger::Trigger trigger;
+    };
+
+    struct Process
+    {
+        Process(unsigned int id, OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT, 
+            Trigger::Trigger trigger = Trigger::Trigger{Trigger::Type::NONE, 0}) : info{id, prio, trigger}, op{op} {};
+
+        
+        Info info;
+        OperationIPtr op;
+    };
+}

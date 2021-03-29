@@ -58,7 +58,7 @@ public:
 
     // Operation
     void RemoveProcess(unsigned int pid);
-    std::optional<Process> GetProcess(unsigned int pid);
+    std::optional<Process::Process> GetProcess(unsigned int pid);
     void Run();
 
     template<typename ...Args>
@@ -114,8 +114,8 @@ private:
     std::vector<Player> players_;
     std::vector<Map> maps_;
 
-    std::vector<Process> processQueue_;
-    std::vector<Process> opHistory_;
+    std::vector<Process::Process> processQueue_;
+    std::vector<Process::Process> opHistory_;
     unsigned int nextProcessId = 0;
     
     Turn currentTurn;    

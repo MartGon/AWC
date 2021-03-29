@@ -24,13 +24,13 @@ namespace Event
 
         struct Notification
         {  
-            Notification(Type type, Process process) : 
+            Notification(Type type, Process::Process process) : 
                 type{type}, process{process} {};
-            Notification(Type type, Process process, Operation::Result res) :
+            Notification(Type type, Process::Process process, Operation::Result res) :
                 type{type}, process{process}, res{res} {}
 
             Type type;
-            Process process;
+            Process::Process process;
             std::optional<Operation::Result> res;
         };
     }
@@ -70,8 +70,8 @@ namespace Event
         void Unregister(Entity::GUID entity, unsigned int optype);
         void Unregister(Entity::GUID entity);
 
-        void Notify(Process p, Notification::Type notType, Game& game);
-        void Notify(Process p, Operation::Type type, Notification::Type notType, Game& game);
+        void Notify(Process::Process p, Notification::Type notType, Game& game);
+        void Notify(Process::Process p, Operation::Type type, Notification::Type notType, Game& game);
         void Notify(Notification::Notification notification, Game& game);
 
     private:
