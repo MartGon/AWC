@@ -13,7 +13,7 @@ namespace Operation
             source_{source}, OperationI{Type::TAKE_DMG} {};
         ~TakeDmg() override {};
 
-        Result Execute(Game& state, uint8_t prio) override;
+        Result Execute(Game& state, Process::Info info) override;
     
         UnitPtr victim_;
         float attackDmg_;

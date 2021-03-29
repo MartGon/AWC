@@ -4,7 +4,7 @@
 
 using namespace Operation;
 
-Result AntiOperation::Execute(Game& game, uint8_t prio)
+Result AntiOperation::Execute(Game& game, Process::Info info)
 {
     Result res{SUCCESS};
 

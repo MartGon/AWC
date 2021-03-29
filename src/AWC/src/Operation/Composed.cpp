@@ -2,7 +2,7 @@
 
 using namespace Operation;
 
-Result Composed::Execute(Game& state, uint8_t prio)
+Result Composed::Execute(Game& state, Process::Info info)
 {
     Result res{SUCCESS};
 

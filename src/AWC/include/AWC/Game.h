@@ -62,10 +62,10 @@ public:
     void Run();
 
     template<typename ...Args>
-    unsigned int Push(Args&& ...args)
+    unsigned int Push(OperationIPtr op, Args&& ...args)
     {
         unsigned int pid = nextProcessId++;
-        processQueue_.emplace_back(pid, args...);
+        processQueue_.emplace_back(pid, op, args...);
         SortQueue();
 
         return pid;

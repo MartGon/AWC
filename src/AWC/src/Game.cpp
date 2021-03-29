@@ -130,7 +130,7 @@ void Game::RemoveProcess(unsigned int id)
     for(int index = 0; index < processQueue_.size(); index++)
     {   
         auto proc = processQueue_.at(index);
-        if(proc.info.id == id)
+        if(proc.id == id)
         {
             VectorUtils::RemoveByIndex(processQueue_, index);
             break;
@@ -146,7 +146,7 @@ std::optional<Process::Process> Game::GetProcess(unsigned int id)
 
     for(auto p : processQueue_)
     {
-        if(p.info.id == id)
+        if(p.id == id)
             return p;
     }
 
@@ -369,6 +369,7 @@ void Game::Run()
 
     while(!processQueue_.empty())
     {
+        // Taking a ref 
         Process::Process& ref = processQueue_.front();
 
         if(!ref.info.announced)
@@ -378,20 +379,25 @@ void Game::Run()
             events.Notify(notification, *this);
         }
 
-        // Take a copy. Taking a ref 
+        // Take a copy. 
         Process::Process process = processQueue_.front();
         if(process.info.announced)
         {
-            Result res = process.op->Execute(*this, process.info.priority);
-            Notification::Type type = Notification::Type::ERROR;
+            // Remove before execution, in case it pushes another with less prio
+            processQueue_.erase(processQueue_.begin());
 
+            // Execute operation
+            Result res = process.op->Execute(*this, process.info.priority);
+            
+            Notification::Type type = Notification::Type::ERROR;
             if(res)
             {
+                // Add to history on success
                 opHistory_.push_back(process);
                 type = Notification::Type::POST;
             }
-            processQueue_.erase(processQueue_.begin());
 
+            // Send notification
             Notification::Notification notification{type, process, res};
             events.Notify(notification, *this);
         }
@@ -402,7 +408,7 @@ void Game::SortQueue()
 {
     std::function<bool(Process::Process a, Process::Process b)> greater = [](Process::Process a, Process::Process b)
     {
-        return a.info.priority > b.info.priority || (a.info.priority == b.info.priority && a.info.id < b.info.id);
+        return a.info.priority > b.info.priority || (a.info.priority == b.info.priority && a.id < b.id);
     };
     std::sort(processQueue_.begin(), processQueue_.end(), greater);
 }

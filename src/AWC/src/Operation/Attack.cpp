@@ -6,7 +6,7 @@
 
 using namespace Operation;
 
-Result Attack::Execute(Game& game, uint8_t prio)
+Result Attack::Execute(Game& game, Process::Info info)
 {
     Result result{SUCCESS};
 
@@ -21,12 +21,12 @@ Result Attack::Execute(Game& game, uint8_t prio)
     {
         auto dmg = attacker_->GetDmgToUnit(weaponIndex_, targetUnit);
         OperationIPtr op{new TakeDmg(targetUnit, dmg, this)};
-        game.Push(op, prio);
+        game.Push(op, info);
     }
 
     StatMod::Extra extra{StatMod::Ammo{weaponIndex_}};
     OperationIPtr ammoOp{new StatMod(attacker_, UnitNS::AMMO, -1, extra)};
-    game.Push(ammoOp, prio);
+    game.Push(ammoOp, info);
 
     return result;
 }

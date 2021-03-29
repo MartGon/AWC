@@ -5,7 +5,7 @@
 
 using namespace Operation;
 
-Result TakeDmg::Execute(Game& game, uint8_t prio)
+Result TakeDmg::Execute(Game& game, Process::Info info)
 {
     Result result{SUCCESS};
 
@@ -15,7 +15,7 @@ Result TakeDmg::Execute(Game& game, uint8_t prio)
     if(health <= 0)
     {
         OperationIPtr op {new UpdateFlag(victim_, UnitNS::DEAD, true)};
-        game.Push(op, prio);
+        game.Push(op, info);
     }
 
     return result;

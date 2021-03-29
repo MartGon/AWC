@@ -32,9 +32,8 @@ namespace Process
     struct Info
     {
         Info(unsigned int id, uint8_t prio = PRIORITY_DEFAULT, 
-            Trigger::Trigger trigger = Trigger::Trigger{Trigger::Type::NONE, 0}) : id{id}, priority{prio}, announced{false}, trigger{trigger} {};
+            Trigger::Trigger trigger = Trigger::Trigger{Trigger::Type::NONE, 0}) : priority{prio}, announced{false}, trigger{trigger} {};
 
-        unsigned int id;
         uint8_t priority;
         bool announced;
         Trigger::Trigger trigger;
@@ -42,10 +41,11 @@ namespace Process
 
     struct Process
     {
+        Process(unsigned int id, OperationIPtr op, Info info) : id{id}, info{info}, op{op} {};
         Process(unsigned int id, OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT, 
-            Trigger::Trigger trigger = Trigger::Trigger{Trigger::Type::NONE, 0}) : info{id, prio, trigger}, op{op} {};
+            Trigger::Trigger trigger = Trigger::Trigger{Trigger::Type::NONE, 0}) : Process(id, op, Info{id, prio, trigger}) {}
 
-        
+        unsigned int id;
         Info info;
         OperationIPtr op;
     };

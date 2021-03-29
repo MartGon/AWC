@@ -88,7 +88,7 @@ TEST_CASE("Event test")
         auto cb = [](Event::Notification::Notification noti, Entity::GUID unitGUID, Game& game)
         {
             auto process = noti.process;
-            OperationIPtr antiOp{ new Operation::AntiOperation(process.info.id)};
+            OperationIPtr antiOp{ new Operation::AntiOperation(process.id)};
             game.Push(antiOp, process.info.priority + 1);
         };
         subject.Register(Operation::Type::MOVE, cb, Event::Notification::Type::PRE);
@@ -368,7 +368,7 @@ TEST_CASE("Hugo and large tank")
 
                         if(victim->GetGUID() == hugo)
                         {
-                            OperationIPtr deny{ new Operation::AntiOperation(noti.process.info.id)};
+                            OperationIPtr deny{ new Operation::AntiOperation(noti.process.id)};
                             game.Push(deny, process.info.priority + 1);
 
                             orderCheck.push_back(3);
@@ -408,7 +408,7 @@ TEST_CASE("Hugo and large tank")
                     auto attack = sourceOp->To<Operation::Attack>();
                     if(attack->attacker_->GetGUID() == me)
                     {
-                        OperationIPtr deny{new Operation::AntiOperation(process.info.id)};
+                        OperationIPtr deny{new Operation::AntiOperation(process.id)};
                         game.Push(deny, process.info.priority + 1);
 
                         orderCheck.push_back(4);

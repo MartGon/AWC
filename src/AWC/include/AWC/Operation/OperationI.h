@@ -1,5 +1,6 @@
 #pragma once
 #include <AWC/AWCusing.h>
+#include <AWC/Process.h>
 
 namespace Operation
 {
@@ -47,7 +48,7 @@ namespace Operation
     public:
         OperationI(unsigned int type) : type_{type} {};
         virtual ~OperationI() {};
-        virtual Result Execute(Game& state, uint8_t prio) { return Result{SUCCESS}; };
+        virtual Result Execute(Game& state, Process::Info info) { return Result{SUCCESS}; };
     
         unsigned int GetType() { return type_; }
 
