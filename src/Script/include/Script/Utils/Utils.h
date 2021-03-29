@@ -23,6 +23,8 @@ namespace Script
     template<>
     void Push<int>(lua_State* state, int val);
     template<>
+    void Push<unsigned int>(lua_State* state, unsigned int val);
+    template<>
     void Push<std::string>(lua_State* state, std::string val);
     template<>
     void Push<const char*>(lua_State* state, const char* val);

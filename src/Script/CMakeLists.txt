@@ -21,6 +21,8 @@ set(SOURCES
     src/UserData/UnitType.cpp
     src/UserData/TileType.cpp
     src/UserData/Tile.cpp
+    src/UserData/Process.cpp
+    src/UserData/Trigger.cpp
 
     src/Utils/Utils.cpp
 

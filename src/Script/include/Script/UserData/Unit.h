@@ -15,5 +15,7 @@ namespace Script::UserData
         static const luaL_Reg functions[];
 
         static int CalculateMovement(lua_State* luaState);
+
+        static int GetOwner(lua_State* luaState);
     };
 }

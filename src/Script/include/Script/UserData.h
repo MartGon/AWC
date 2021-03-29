@@ -11,6 +11,8 @@
 #include <Script/UserData/UnitType.h>
 #include <Script/UserData/TileType.h>
 #include <Script/UserData/Tile.h>
+#include <Script/UserData/Process.h>
+#include <Script/UserData/Trigger.h>
 
 namespace Script::UserData
 {

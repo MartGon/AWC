@@ -6,16 +6,15 @@
 
 namespace Script::UserData
 {
-    struct Player
+    struct Process
     {
-        using type = ::Player;
+        using type = ::Process::Process;
         static const char* MT_NAME;
         static const char* LIB_NAME;
 
         static const luaL_Reg methods[];
         static const luaL_Reg functions[];
 
-        static int GetId(lua_State* luaState);
-        static int GetTeamId(lua_State* luaState);
+        static int Get(lua_State* luaState);
     };
 }

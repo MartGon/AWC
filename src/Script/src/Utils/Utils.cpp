@@ -14,6 +14,12 @@ void Script::Push<int>(lua_State* state, int val)
 }
 
 template<>
+void Script::Push<unsigned int>(lua_State* state, unsigned int val)
+{
+    lua_pushinteger(state, val);
+}
+
+template<>
 void Script::Push<std::string>(lua_State* state, std::string val)
 {
     lua_pushstring(state, val.c_str());

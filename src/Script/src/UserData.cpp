@@ -3,11 +3,30 @@
 
 using namespace Script;
 
+template<typename T>
+auto InitLibImp(lua_State* luaState, int) -> decltype(T::InitLib(luaState))
+{
+    return T::InitLib(luaState);
+}
+
+template<typename T>
+auto InitLibImp(lua_State* luaState, double) -> int
+{
+    return 0;
+}
+
+template<typename T>
+int InitLib(lua_State* luaState)
+{
+    return InitLibImp<T>(luaState, 0);
+}
+
 template <typename T>
 void Init(lua_State* luaState)
 {
     UserData::UserData::RegisterLib<T>(luaState);
     UserData::UserData::RegisterMetatable<T>(luaState);
+    InitLib<T>(luaState);
 }
 
 template <typename T, typename Y, typename ...Ts>
@@ -31,6 +50,8 @@ void UserData::Init(lua_State* luaState)
         Player,
         UnitType,
         TileType,
-        Tile
+        Tile,
+        Process,
+        Trigger
         >(luaState);
 }

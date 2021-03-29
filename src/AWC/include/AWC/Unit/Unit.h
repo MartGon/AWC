@@ -36,7 +36,7 @@ friend class UnitType;
 public:
     const std::string GetName() const;
     const uint GetTypeId() const;
-    const Player& GetOwner() const;
+    Player& GetOwner() const;
 
     Entity::GUID GetGUID() const;
 
@@ -144,7 +144,7 @@ private:
     float health = 100;
     uint flags;
 
-    const Player& owner_;
+    Player& owner_;
     const UnitType& unitType_;
     const MovementDescPtr moveDesc_;
     const std::vector<WeaponPtr> weapons_;

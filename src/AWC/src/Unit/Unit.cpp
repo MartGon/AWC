@@ -33,7 +33,7 @@ const uint Unit::GetTypeId() const
     return unitType_.GetId();
 }
 
-const Player& Unit::GetOwner() const
+Player& Unit::GetOwner() const
 {
     return owner_;
 }

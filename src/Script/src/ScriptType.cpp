@@ -40,16 +40,19 @@ Operation::Result Script::Type::Execute(::Game& game, const Process::Process& p,
     // Get Execute function
     execute_.PushInternal();
 
-    // Get table
+    // // Sets table to function ENV
     tableRef.PushInternal();
-
-    // Sets table to function ENV
     lua_setupvalue(luaState, 1, 1);
+
+    // Push game
     UserData::UserData::PushDataRef<UserData::Game>(luaState, &game);
+
+    // Push process
+    UserData::UserData::PushDataCopy<UserData::Process>(luaState, p);
 
     // Call function
     // TODO: Push prio param beforehand
-    auto ret = lua_pcall(luaState, 1, 0, 0);
+    auto ret = lua_pcall(luaState, 2, 0, 0);
     if(ret == LUA_OK)
     {
         res = Operation::Result{Operation::SUCCESS};
