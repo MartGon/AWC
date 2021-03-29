@@ -4,7 +4,7 @@
 using namespace Operation;
 using namespace UnitNS;
 
-Result StatMod::Execute(Game& game, Process::Info info)
+Result StatMod::Execute(Game& game, const Process::Info& info)
 {
     Result res{SUCCESS};
 

@@ -6,7 +6,7 @@
 
 using namespace Operation;
 
-Result Attack::Execute(Game& game, Process::Info info)
+Result Attack::Execute(Game& game, const Process::Info& info)
 {
     Result result{SUCCESS};
 

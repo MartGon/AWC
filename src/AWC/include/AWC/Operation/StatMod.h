@@ -34,7 +34,7 @@ namespace Operation
             unit_{unit}, type_{type}, amount_{amount}, extra_{extra}, OperationI{Type::STAT_MOD} {};
         ~StatMod() override {};
 
-        Result Execute(Game& state, Process::Info info) override;
+        Result Execute(Game& state, const Process::Info& info) override;
     
         UnitPtr unit_;
         UnitNS::StatType type_;

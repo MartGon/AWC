@@ -9,7 +9,7 @@ namespace Operation
     public:
         Custom(std::function<void(Game&)> func) : func_{func}, OperationI{Type::CUSTOM} {};
         ~Custom() override {};
-        Result Execute(Game& state, Process::Info info) override { func_(state); return Result{SUCCESS}; }
+        Result Execute(Game& state, const Process::Info& info) override { func_(state); return Result{SUCCESS}; }
 
     private:
         std::function<void(Game&)> func_;

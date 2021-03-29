@@ -31,7 +31,7 @@ std::shared_ptr<ScriptOperation> Script::Type::CreateScript() const
     return s;
 }
 
-Operation::Result Script::Type::Execute(::Game& game, Process::Info info, LuaTable<Scope::External>& tableRef) const
+Operation::Result Script::Type::Execute(::Game& game, const Process::Info& info, LuaTable<Scope::External>& tableRef) const
 {
     Operation::Result res{Operation::ERROR};
     

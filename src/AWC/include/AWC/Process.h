@@ -43,7 +43,6 @@ namespace Process
     {
         Process(unsigned int id, OperationIPtr op, uint8_t prio = PRIORITY_DEFAULT, 
             Trigger::Trigger trigger = Trigger::Trigger{Trigger::Type::NONE, 0}) : id{id}, info{prio, trigger}, op{op} {};
-        Process(unsigned int id, OperationIPtr op, Info info) : Process{id, op, info.priority, info.trigger} {};
 
         unsigned int id;
         Info info;

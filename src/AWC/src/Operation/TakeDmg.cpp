@@ -5,7 +5,7 @@
 
 using namespace Operation;
 
-Result TakeDmg::Execute(Game& game, Process::Info info)
+Result TakeDmg::Execute(Game& game, const Process::Info& info)
 {
     Result result{SUCCESS};
 

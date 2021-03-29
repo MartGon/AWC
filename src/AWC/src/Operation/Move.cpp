@@ -4,7 +4,7 @@
 
 using namespace Operation;
 
-Result Move::Execute(Game& game, Process::Info info)
+Result Move::Execute(Game& game, const Process::Info& info)
 {
     Result result{SUCCESS};
 
