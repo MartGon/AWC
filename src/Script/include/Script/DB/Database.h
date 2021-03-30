@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Script/DB/Table.h>
+#include <Utils/Table.h>
 
 #include <tuple>
 

@@ -8,6 +8,8 @@
 #include <AWC/Operation/OperationI.h>
 #include <AWC/Process.h>
 
+#include <Utils/Table.h>
+
 #include <queue>
 #include <optional>
 
@@ -28,7 +30,7 @@ public:
     unsigned int AddPlayer(Args&& ...args)
     {
         auto id = GetPlayerCount();
-        players_.emplace_back(std::make_shared<Player>(id, args...));
+        players_.Emplace(std::make_shared<Player>(id, args...));
         return id;
     }
 
@@ -44,7 +46,7 @@ public:
     unsigned int CreateMap(Args&& ...args)
     {
         auto id = GetMapCount();
-        maps_.emplace_back(args...);
+        maps_.Emplace(args...);
 
         return id;
     }
@@ -86,15 +88,15 @@ public:
     uint GetWinnerTeamId();
 
     void OnPlayerLost(uint playerIndex);
-    bool HasPlayerLost(uint playerIndex) const;
-    bool HasPlayerBeenRouted(uint playerIndex) const;
+    bool HasPlayerLost(uint playerIndex);
+    bool HasPlayerBeenRouted(uint playerIndex);
 
     // Queries
-    void EnumUnits(std::function<void(UnitPtr)> operation, uint mapIndex = 0) const;
-    void EnumUnits(std::function<void(UnitPtr, Position)> operation, uint mapIndex = 0) const;
+    void EnumUnits(std::function<void(UnitPtr)> operation, uint mapIndex = 0);
+    void EnumUnits(std::function<void(UnitPtr, Position)> operation, uint mapIndex = 0);
 
-    std::vector<UnitPtr> GetUnits(uint mapIndex = 0) const;
-    std::vector<UnitPtr> GetPlayerUnits(uint playerIndex, uint mapIndex = 0) const;
+    std::vector<UnitPtr> GetUnits(uint mapIndex = 0);
+    std::vector<UnitPtr> GetPlayerUnits(uint playerIndex, uint mapIndex = 0);
     UnitPtr GetUnit(Entity::GUID guid);
     std::optional<Position> GetUnitPos(Entity::GUID guid);
 
@@ -111,16 +113,16 @@ private:
     void NotifyPassTurn(Turn& turn);
 
     // Index checks
-    bool IsPlayerIndexValid(uint playerIndex) const;
-    bool IsMapIndexValid(uint mapIndex) const;
-    void CheckPlayerIndex(uint playerIndex) const;
-    void CheckMapIndex(uint mapIndex) const;
+    bool IsPlayerIdValid(uint playerIndex) const;
+    bool IsMapIdValid(uint mapIndex) const;
+    void CheckPlayerId(uint playerIndex) const;
+    void CheckMapId(uint mapIndex) const;
 
     // Operations
     void SortQueue();
 
-    std::vector<std::shared_ptr<Player>> players_;
-    std::vector<Map> maps_;
+    Table<std::shared_ptr<Player>> players_;
+    Table<Map> maps_;
 
     std::vector<Process::Process> processQueue_;
     std::vector<Process::Process> opHistory_;

@@ -32,9 +32,9 @@ TEST_CASE("Game Configuration")
         game.RemoveMap(0);
 
         CHECK(game.GetMapCount() == 1);
-        CHECK(game.GetMap(0).GetWidth() == mapTwo.GetWidth());
-        CHECK(game.GetMap(0).GetHeight() == mapTwo.GetHeight());
-        CHECK_THROWS_AS(game.GetMap(1), const std::out_of_range&);
+        CHECK(game.GetMap(1).GetWidth() == mapTwo.GetWidth());
+        CHECK(game.GetMap(1).GetHeight() == mapTwo.GetHeight());
+        CHECK_THROWS_AS(game.GetMap(2), const std::out_of_range&);
     }
     SUBCASE("Player configuration")
     {
