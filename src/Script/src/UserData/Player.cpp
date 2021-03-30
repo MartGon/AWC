@@ -8,7 +8,7 @@ const char* UserData::Player::LIB_NAME = "Player";
 
 const luaL_Reg UserData::Player::methods[] = {
     {"GetTeamId", Player::GetTeamId},
-    {"GetId", Player::GetTeamId},
+    {"GetId", Player::GetId},
     {NULL, NULL}
 };
 
