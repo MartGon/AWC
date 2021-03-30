@@ -23,6 +23,7 @@ set(SOURCES
     src/UserData/Process.cpp
     src/UserData/Trigger.cpp
     src/UserData/WeaponType.cpp
+    src/UserData/UnitAttack.cpp
 
     src/Utils/Utils.cpp
 

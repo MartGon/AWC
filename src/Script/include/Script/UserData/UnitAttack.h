@@ -1,22 +1,19 @@
 #pragma once
 
-#include <AWC.h>
-
 #include <lua.hpp>
+
+#include <AWC.h>
 
 namespace Script::UserData
 {
-    struct Unit
+    struct UnitAttack
     {
-        using type = ::UnitPtr;
+        using type = ::UnitAttack;
         static const char* MT_NAME;
         static const char* LIB_NAME;
         static const luaL_Reg methods[];
         static const luaL_Reg functions[];
 
-        static int CalculateMovement(lua_State* luaState);
-        static int CalculateAttack(lua_State* luaState);
-
-        static int GetOwner(lua_State* luaState);
+        static int CanAttack(lua_State* luaState);
     };
 }

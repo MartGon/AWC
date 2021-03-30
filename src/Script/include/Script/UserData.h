@@ -14,6 +14,7 @@
 #include <Script/UserData/Process.h>
 #include <Script/UserData/Trigger.h>
 #include <Script/UserData/WeaponType.h>
+#include <Script/UserData/UnitAttack.h>
 
 namespace Script::UserData
 {
