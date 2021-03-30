@@ -43,7 +43,16 @@ int UserData::Database::AddUnitType(lua_State* luaState)
     std::string name = lt.Get<std::string>("name");
     auto moveType = *lt.GetUserData<MovementDescType>("moveType");
 
-    ::UnitType ut{unitTypes.GetIndex(), name, moveType, {}};
+    std::vector<WeaponType::type> weapons;
+    if(lt.ContainsValue("weapons"))
+    {
+        auto weaponTypesTable = lt.GetLuaWrapper<LuaTable<>>("weapons");
+        auto len = weaponTypesTable->Length();
+        for(int i = 1; i < len + 1; i++)
+            weapons.push_back(*weaponTypesTable->GetUserData<WeaponType>(i));
+    }
+
+    ::UnitType ut{unitTypes.GetFreeId(), name, moveType, weapons};
     auto id = unitTypes.Add(ut);
     auto ptr = unitTypes.GetById(id);
     UserData::PushDataRef<UnitType>(luaState, ptr);
@@ -71,7 +80,7 @@ int UserData::Database::AddTileType(lua_State* luaState)
 {
     auto db = UserData::CheckUserData<Database>(luaState, 1);
     auto& tileTypes = db->get<::TileType>();
-    auto id = tileTypes.GetIndex();
+    auto id = tileTypes.GetFreeId();
 
     auto name = std::string(luaL_checkstring(luaState, 2));
     tileTypes.Add(::TileType{id, name});

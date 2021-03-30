@@ -5,34 +5,34 @@
 
 bool AttackTable::IsInTable(uint id) const
 {
-    return innerMap_.find(id) != innerMap_.end();
+    return innerMap_.ContainsId(id);
 }
 
 bool AttackTable::CanAttack(uint id) const
 {
-    return IsInTable(id) && innerMap_.at(id);
+    return IsInTable(id) && innerMap_.GetByIdCopy(id);
 }
 
 void AttackTable::SetAttackable(uint id, bool attackable)
 {
-    innerMap_[id] = attackable;
+    innerMap_.Set(id, attackable);
 }
 
 // DamageTable
 
 bool DamageTable::IsInTable(uint id) const
 {
-    return innerMap_.find(id) != innerMap_.end();
+    return innerMap_.ContainsId(id);
 }
 
 float DamageTable::GetDamageToUnit(uint unitId) const
 {
-    return innerMap_.at(unitId);
+    return innerMap_.GetByIdCopy(unitId);
 }
 
 void DamageTable::SetDamageToUnit(uint unitId, float damage)
 {
-    innerMap_[unitId] = damage;
+    innerMap_.Set(unitId, damage);
 }
 
 // Weapon type

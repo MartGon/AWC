@@ -52,6 +52,7 @@ void UserData::Init(lua_State* luaState)
         TileType,
         Tile,
         Process,
-        Trigger
+        Trigger,
+        WeaponType
         >(luaState);
 }

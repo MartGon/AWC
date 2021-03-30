@@ -17,7 +17,7 @@ Script::Type::Type(LuaVM& vm, std::string scriptPath) : scriptPath_{scriptPath},
 {
     auto luaState = vm.GetLuaState();
 
-    LuaTable<Scope::External> env{luaState};
+    LuaTable<Scope::External> env{luaState, MT_NAME};
     vm.RunFile(scriptPath, env);
     
     execute_ = env.GetLuaWrapper<Script::LuaFunction<Scope::External>>("Execute").value();
@@ -40,7 +40,7 @@ Operation::Result Script::Type::Execute(::Game& game, const Process::Process& p,
     // Get Execute function
     execute_.PushInternal();
 
-    // // Sets table to function ENV
+    // Sets table to function ENV
     tableRef.PushInternal();
     lua_setupvalue(luaState, 1, 1);
 

@@ -13,6 +13,7 @@
 #include <Script/UserData/Tile.h>
 #include <Script/UserData/Process.h>
 #include <Script/UserData/Trigger.h>
+#include <Script/UserData/WeaponType.h>
 
 namespace Script::UserData
 {

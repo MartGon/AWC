@@ -40,7 +40,7 @@ TEST_CASE("Database userdata")
 
         
         auto& unitTypes = db.get<UnitType>();
-        CHECK(unitTypes.GetIndex() == 1);
+        CHECK(unitTypes.GetFreeId() == 1);
         CHECK(unitTypes.GetById(0)->GetName() == "Rook");
         CHECK(unitTypes.GetById(0)->GetId() == 0);
     }
@@ -77,7 +77,7 @@ TEST_CASE("Database userdata")
         std::string path = Test::Script::GetUserDataPath("/Database/GetTileType.lua");
 
         auto& tileTypes = db.get<::TileType>();
-        tileTypes.Add(::TileType(tileTypes.GetIndex(), "Grass"));
+        tileTypes.Add(::TileType(tileTypes.GetFreeId(), "Grass"));
 
         sGame.RunConfig(path);
 

@@ -223,4 +223,17 @@ namespace Script
         std::string mtName_;
         int tableRef_;
     };
+
+    template<typename T, Scope s = Scope::Internal>
+    Table<T> GetPairsTable(lua_State* luaState, LuaTable<s>& entries, std::string rightKey)
+    {
+        Table<T> t;
+        for(int i = 0; i < entries.Length(); i++)
+        {
+            auto entry = entries.template GetLuaWrapper<Script::LuaTable<s>>(i + 1);
+            t.Set(entry->template Get<unsigned int>("id"), entry->template Get<T>(rightKey));
+        }
+
+        return t;
+    }
 }

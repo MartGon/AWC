@@ -1,11 +1,14 @@
 #pragma once
 
+#include <Utils/Table.h>
+
 #include <AWC/AWCusing.h>
 #include <AWC/Range.h>
 
 class AttackTable
 {
 public:
+    AttackTable(Table<bool> attackTable) : innerMap_{attackTable} {};
     AttackTable(std::unordered_map<uint, bool> attackableUnits) : innerMap_{attackableUnits} {};
 
     bool IsInTable(uint id) const;
@@ -13,12 +16,13 @@ public:
     void SetAttackable(uint id, bool attackable);
 
 private:
-    std::unordered_map<uint, bool> innerMap_;
+    Table<bool> innerMap_;
 };
 
 class DamageTable
 {
 public:
+    DamageTable(Table<float> damageToUnits) : innerMap_{damageToUnits} {}
     DamageTable(std::unordered_map<uint, float> damageToUnits) : innerMap_{damageToUnits} {}
 
     bool IsInTable(uint id) const;
@@ -26,7 +30,7 @@ public:
     void SetDamageToUnit(uint id, float damage);
 
 private:
-    std::unordered_map<uint, float> innerMap_;
+    Table<float> innerMap_;
 };
 
 class WeaponType

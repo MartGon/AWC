@@ -25,6 +25,8 @@ namespace Script
     template<>
     void Push<unsigned int>(lua_State* state, unsigned int val);
     template<>
+    void Push<float>(lua_State* state, float val);
+    template<>
     void Push<std::string>(lua_State* state, std::string val);
     template<>
     void Push<const char*>(lua_State* state, const char* val);
@@ -41,6 +43,8 @@ namespace Script
     int To<int>(lua_State* state, int index);
     template<>
     unsigned int To<unsigned int>(lua_State* state, int index);
+    template<>
+    float To<float>(lua_State* state, int index);
     template<>
     std::string To<std::string>(lua_State* state, int index);
     template<>

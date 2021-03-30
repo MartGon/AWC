@@ -5,7 +5,7 @@
 
 void CostTable::SetCost(unsigned int id, unsigned int cost)
 {
-    costMap_[id] = cost;
+    costTable_.Set(id, cost);
 }
 
 void CostTable::SetDefaultCost(unsigned int cost)
@@ -15,7 +15,7 @@ void CostTable::SetDefaultCost(unsigned int cost)
 
 unsigned int CostTable::GetCost(unsigned int id) const
 {
-    auto cost = UnorderedMapUtils::Contains(costMap_, id) ? costMap_.at(id) : defaultCost_;
+    auto cost = costTable_.ContainsId(id) ? costTable_.GetByIdCopy(id) : defaultCost_;
 
     return cost;
 }

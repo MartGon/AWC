@@ -17,26 +17,12 @@ const luaL_Reg UserData::CostTable::functions[] = {
     {NULL, NULL}
 };
 
-void FillTable(lua_State* luaState, ::CostTable& ct, LuaTable<Scope::Internal>& entries)
-{
-    
-    for(int i = 0; i < entries.Length(); i++)
-    {
-        int luaI = i + 1;
-        auto entry = entries.GetLuaWrapper<Script::LuaTable<Scope::Internal>>(i + 1);
-        luaL_argcheck(luaState, entry, 1, "table entry in CostTable was not a table");
-
-        ct.SetCost(entry->Get<uint>("id"), entry->Get<uint>("cost"));
-    }
-}
-
 int UserData::CostTable::New(lua_State* luaState)
 {
     LuaTable<Scope::Internal> entries{luaState, 1};
     unsigned int defaultCost = luaL_checkinteger(luaState, 2);
 
-    ::CostTable ct{{}, defaultCost};
-    FillTable(luaState, ct, entries);
+    ::CostTable ct{GetPairsTable<unsigned int>(luaState, entries, "cost"), defaultCost};
 
     UserData::PushDataCopy<CostTable>(luaState, ct);
 
@@ -50,8 +36,7 @@ UserData::CostTable::type* UserData::CostTable::FromTable(lua_State* luaState, i
     auto defaultCost = t.ContainsValue("default") ? t.Get<unsigned int>("default") : 1;
     auto entries = t.GetLuaWrapper<LuaTable<Scope::Internal>>("entries");
 
-    ::CostTable ct{{}, defaultCost};
-    FillTable(luaState, ct, *entries);
+    ::CostTable ct{GetPairsTable<unsigned int>(luaState, entries.value(), "cost"), defaultCost};
 
     return UserData::PushDataCopy<CostTable>(luaState, ct);
 }

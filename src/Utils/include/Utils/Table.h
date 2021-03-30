@@ -9,7 +9,16 @@ template<typename T>
 class Table
 {
 public:
-    Table() : index_{0} {}
+    explicit Table() {};
+    explicit Table(std::unordered_map<unsigned int, T> umap) : umap_{umap}
+    {
+
+    }
+    
+    T GetByIdCopy(unsigned int id) const
+    {
+        return umap_.at(id);
+    }
 
     T* const GetById(unsigned int id)
     {
@@ -36,24 +45,38 @@ public:
 
     int Add(T entry)
     {
-        int id = index_++;
+        int id = GetFreeId();
         umap_.insert({id, entry});
         return id;
+    }
+
+    void Insert(unsigned int id, T entry)
+    {
+        umap_.insert({id, entry});
+    }
+
+    void Set(unsigned int id, T entry)
+    {
+        umap_[id] = entry;
     }
 
     template <typename ...Args>
     int Emplace(Args&&... entry)
     {
-        int id = index_++;
+        int id = GetFreeId();
         umap_.emplace(std::piecewise_construct, 
             std::forward_as_tuple(id), 
             std::forward_as_tuple(std::forward<Args>(entry)...));
         return id;
     }
 
-    unsigned int GetIndex() const
-    {
-        return index_;
+    unsigned int GetFreeId() const
+    {   
+        unsigned int i = 0; 
+        while(ContainsId(i)) 
+            i++;
+
+        return i;
     }
 
     bool ContainsId(unsigned int id) const
@@ -70,6 +93,6 @@ public:
     auto end() { return umap_.end(); }
 
 private:
+    
     std::unordered_map<unsigned int, T> umap_;
-    unsigned int index_;
 };

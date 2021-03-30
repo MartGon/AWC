@@ -22,6 +22,7 @@ set(SOURCES
     src/UserData/Tile.cpp
     src/UserData/Process.cpp
     src/UserData/Trigger.cpp
+    src/UserData/WeaponType.cpp
 
     src/Utils/Utils.cpp
 

@@ -255,8 +255,8 @@ AreaConstraints Unit::GetAttackConstraints(unsigned int weaponId) const
 {
     auto weapon = weapons_[weaponId];
 
-    CostTable fixedCost{ {}, 1 };
-    CostTable unitFixedCost{ {}, 0 };
+    CostTable fixedCost{ Table<unsigned int>{}, 1 };
+    CostTable unitFixedCost{ Table<unsigned int>{}, 0 };
 
     // Range could be affected by mods;
     auto range = weapon->GetAttackRange();
