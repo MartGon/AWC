@@ -24,11 +24,19 @@ class Game
 public:
 
     // Players
+    template<typename ...Args>
+    unsigned int AddPlayer(Args&& ...args)
+    {
+        auto id = GetPlayerCount();
+        players_.emplace_back(std::make_shared<Player>(id, args...));
+        return id;
+    }
+
+    unsigned int AddPlayer(std::shared_ptr<Player> player);
     unsigned int AddPlayer(Player player);
-    unsigned int AddPlayer(unsigned int teamId, unsigned int resources = 0);
     void RemovePlayer(uint playerIndex);
-    Player& GetPlayer(uint playerIndex);
-    std::vector<std::reference_wrapper<Player>> GetPlayersByTeam(uint teamId);
+    std::shared_ptr<Player> GetPlayer(uint playerIndex);
+    std::vector<std::shared_ptr<Player>> GetPlayersByTeam(uint teamId);
     uint GetPlayerCount() const;
 
     // Maps
@@ -111,7 +119,7 @@ private:
     // Operations
     void SortQueue();
 
-    std::vector<Player> players_;
+    std::vector<std::shared_ptr<Player>> players_;
     std::vector<Map> maps_;
 
     std::vector<Process::Process> processQueue_;

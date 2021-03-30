@@ -23,7 +23,7 @@ TEST_CASE("Map userdata")
     game.AddPlayer(p);
 
     auto soldierType = UnitTest::CreateSoldierType();
-    auto soldier = soldierType.CreateUnit(p);
+    auto soldier = soldierType.CreateUnit(&p);
 
     game.AddMap(map);
 

@@ -10,7 +10,7 @@ UnitType::UnitType(uint id, const std::string& name, MovementDescTypePtr moveTyp
 
 }
 
-std::shared_ptr<Unit> UnitType::CreateUnit(Player& owner)
+std::shared_ptr<Unit> UnitType::CreateUnit(Player* const owner)
 {
     return UnitPtr( new Unit{lastInstanceId_++, *this, moveType_->CreateMovementDesc(), GetWeapons(), owner});
 }

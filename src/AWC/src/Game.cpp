@@ -9,17 +9,16 @@
 
 // Players
 
-unsigned int Game::AddPlayer(Player player)
+unsigned int Game::AddPlayer(std::shared_ptr<Player> player)
 {
     players_.push_back(player);
     return GetPlayerCount() - 1;
 }
 
-unsigned int Game::AddPlayer(unsigned int teamId, unsigned int resources)
+unsigned int Game::AddPlayer(Player player)
 {
-    auto id = GetPlayerCount();
-    players_.emplace_back(id, teamId, resources);
-    return id;
+    players_.push_back(std::make_shared<Player>(player));
+    return GetPlayerCount() - 1;
 }
 
 void Game::RemovePlayer(uint playerIndex)
@@ -32,17 +31,17 @@ void Game::RemovePlayer(uint playerIndex)
     // TODO: Reset Captured buildings
 }
 
-Player& Game::GetPlayer(uint playerIndex)
+std::shared_ptr<Player> Game::GetPlayer(uint playerIndex)
 {
     CheckPlayerIndex(playerIndex);
     return players_.at(playerIndex);
 }
 
-std::vector<std::reference_wrapper<Player>> Game::GetPlayersByTeam(uint teamId)
+std::vector<std::shared_ptr<Player>> Game::GetPlayersByTeam(uint teamId)
 {
-    std::vector<std::reference_wrapper<Player>> teamPlayers;
+    std::vector<std::shared_ptr<Player>> teamPlayers;
     for(auto& player : players_)
-        if(player.GetTeamId() == teamId)
+        if(player->GetTeamId() == teamId)
             teamPlayers.push_back(player);
 
     return teamPlayers;
@@ -166,11 +165,11 @@ bool Game::IsOver() const
     bool isNotOver = GetPlayerCount() > 1;
     if(isNotOver)
     {
-        uint firstTeam = players_[0].GetTeamId();
+        uint firstTeam = players_[0]->GetTeamId();
 
         for(uint i = 1; i < GetPlayerCount() && isNotOver; i++)
         {
-            isNotOver = players_.at(i).GetTeamId() != firstTeam;
+            isNotOver = players_.at(i)->GetTeamId() != firstTeam;
         }
     }
 
@@ -180,7 +179,7 @@ bool Game::IsOver() const
 uint Game::GetWinnerTeamId()
 {
     if(IsOver() && GetPlayerCount() > 0)
-        return players_[0].GetTeamId();
+        return players_[0]->GetTeamId();
     else
         throw AWC::Exception("Either the game wasn't over or there are no players");
 }
@@ -225,7 +224,7 @@ std::vector<UnitPtr> Game::GetPlayerUnits(uint playerIndex, uint mapIndex) const
     std::vector<UnitPtr> playerUnits;
     std::function<void(UnitPtr)> operation = [&playerUnits, playerIndex](UnitPtr unit)
     {
-        if(unit->GetOwner().GetId() == playerIndex)
+        if(unit->GetOwner()->GetId() == playerIndex)
             playerUnits.push_back(unit);
     };
     EnumUnits(operation, mapIndex);

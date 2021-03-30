@@ -69,9 +69,9 @@ int UserData::Game::CreatePlayer(lua_State* luaState)
     auto game = UserData::CheckUserData<Game>(luaState, 1);
     auto teamId = luaL_checkinteger(luaState, 2);
 
-    auto id = game->AddPlayer(teamId);
-    ::Player* p = &game->GetPlayer(id);
-    UserData::PushDataRef<Player>(luaState, p);
+    auto id = game->AddPlayer(teamId, 0);
+    auto p = game->GetPlayer(id);
+    UserData::PushDataRef<Player>(luaState, p.get());
 
     return 1;
 }

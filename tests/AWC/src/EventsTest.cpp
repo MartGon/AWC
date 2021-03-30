@@ -56,8 +56,8 @@ TEST_CASE("Event test")
     handler.type = Operation::Type::MOVE;
 
     soldierType.AddHandler(handler);
-    auto soldierOne = soldierType.CreateUnit(playerOne);
-    auto soldierTwo = soldierType.CreateUnit(playerOne);
+    auto soldierOne = soldierType.CreateUnit(&playerOne);
+    auto soldierTwo = soldierType.CreateUnit(&playerOne);
 
     // Add to map
     game.AddUnit(soldierOne, {0, 0});
@@ -335,10 +335,10 @@ TEST_CASE("Hugo and large tank")
     auto soldierType = UnitTest::CreateSoldierType();
 
         // Puts units
-    auto large = soldierType.CreateUnit(playerOne);
-    auto hugo = soldierType.CreateUnit(playerTwo);
-    auto cop = soldierType.CreateUnit(playerTwo);
-    auto normal = soldierType.CreateUnit(playerOne);
+    auto large = soldierType.CreateUnit(&playerOne);
+    auto hugo = soldierType.CreateUnit(&playerTwo);
+    auto cop = soldierType.CreateUnit(&playerTwo);
+    auto normal = soldierType.CreateUnit(&playerOne);
 
     // Cop stuff
 

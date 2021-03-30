@@ -26,8 +26,8 @@ Result UpdateFlag::Execute(Game& game, const Process::Process& p)
                     // Check if player lost
                     // TODO: Move to listener function of game or a new WinCondition class
                     auto owner = unit_->GetOwner();
-                    if(game.HasPlayerLost(owner.GetId()))
-                        game.OnPlayerLost(owner.GetId());
+                    if(game.HasPlayerLost(owner->GetId()))
+                        game.OnPlayerLost(owner->GetId());
                 }
             }
 

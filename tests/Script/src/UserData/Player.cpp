@@ -14,9 +14,9 @@ TEST_CASE("Player UserData")
     SUBCASE("GetTeamId")    
     {
         auto path = Test::Script::GetUserDataPath("Player/GetTeamId.lua");    
-        auto playerId = game.AddPlayer(0);
+        auto playerId = game.AddPlayer(0, 0);
 
-        gTable.SetDataRef<Script::UserData::Player>("player", &game.GetPlayer(playerId));
+        gTable.SetDataRef<Script::UserData::Player>("player", game.GetPlayer(playerId).get());
 
         sGame.RunConfig(path);
 

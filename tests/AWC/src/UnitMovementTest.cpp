@@ -28,10 +28,10 @@ TEST_CASE("MoveCommands")
 
     UnitType soldierType = UnitTest::CreateSoldierType();
     UnitType dimRipperType = UnitTest::CreateDimensionalRipper();
-    auto soldier = soldierType.CreateUnit(game.GetPlayer(0));
-    auto dr = dimRipperType.CreateUnit(game.GetPlayer(0));
-    auto enemySoldier = soldierType.CreateUnit(game.GetPlayer(1));
-    auto enemySoldier2 = soldierType.CreateUnit(game.GetPlayer(1));
+    auto soldier = soldierType.CreateUnit(game.GetPlayer(0).get());
+    auto dr = dimRipperType.CreateUnit(game.GetPlayer(0).get());
+    auto enemySoldier = soldierType.CreateUnit(game.GetPlayer(1).get());
+    auto enemySoldier2 = soldierType.CreateUnit(game.GetPlayer(1).get());
     map.AddUnit(0, 0, soldier);
     map.AddUnit(1, 0, dr);
     map.AddUnit({0, 1}, enemySoldier2);

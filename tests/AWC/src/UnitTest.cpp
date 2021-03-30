@@ -20,7 +20,7 @@ TEST_CASE("Units have some properties")
 
     SUBCASE("Units are of a given type")
     {
-        auto soldier = soldierType.CreateUnit(player);
+        auto soldier = soldierType.CreateUnit(&player);
         CHECK(soldier->GetName() == unitName);
     }
 }
@@ -30,7 +30,7 @@ TEST_CASE("Unit movement test")
 {
     UnitType soldierType = UnitTest::CreateSoldierType();
     Player player{0, 0, 1000};
-    auto soldier = soldierType.CreateUnit(player);
+    auto soldier = soldierType.CreateUnit(&player);
 
     SUBCASE("Unit::Move and Unit::GetCurrentGas")
     {
@@ -56,9 +56,9 @@ TEST_CASE("Unit attack tests")
     UnitType mechType = UnitTest::CreateMechType();
     UnitType fighterType = UnitTest::CreateFighter();
     Player player{0, 0, 1000};
-    auto soldier = soldierType.CreateUnit(player);
-    auto mech = mechType.CreateUnit(player);
-    auto fighter = fighterType.CreateUnit(player);
+    auto soldier = soldierType.CreateUnit(&player);
+    auto mech = mechType.CreateUnit(&player);
+    auto fighter = fighterType.CreateUnit(&player);
 
     uint mainWeapon = 0;
     uint secondWeapon = 1;
@@ -146,7 +146,7 @@ TEST_CASE("Unit defense tests")
 {
     UnitType soldierType = UnitTest::CreateSoldierType();
     Player player{0, 0, 1000};
-    auto soldier = soldierType.CreateUnit(player);
+    auto soldier = soldierType.CreateUnit(&player);
 
     SUBCASE("Unit damage taken test")
     {

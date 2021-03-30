@@ -75,7 +75,7 @@ bool MoveCommand::CanBeExecuted(Game& game, uint playerIndex)
             if(unit->CanMove())
             {
                 auto commandAuthor = game.GetPlayer(playerIndex);
-                if(unit->GetOwner().GetId() == commandAuthor.GetId())
+                if(unit->GetOwner()->GetId() == commandAuthor->GetId())
                 {
                     auto unitMovement = unit->CalculateMovement(map, origin_);
                     canBeExecuted = unitMovement.CanMove(dest_);
@@ -121,7 +121,7 @@ bool AttackCommand::CanBeExecuted(Game& game, uint playerIndex)
             if(sourceUnit->CanAttack())
             {
                 auto commandAuthor = game.GetPlayer(playerIndex);
-                if(sourceUnit->GetOwner().GetId() == commandAuthor.GetId())
+                if(sourceUnit->GetOwner()->GetId() == commandAuthor->GetId())
                 {
                     auto unitAttack = sourceUnit->CalculateAttack(weaponIndex_, map, unitIndex_);
                     if(unitAttack.CanAttack(targetPos_))
@@ -130,7 +130,7 @@ bool AttackCommand::CanBeExecuted(Game& game, uint playerIndex)
                         {
                             // Team should be different
                             auto owner = targetUnit->GetOwner();
-                            canBeExecuted = commandAuthor.GetTeamId() != owner.GetTeamId();
+                            canBeExecuted = commandAuthor->GetTeamId() != owner->GetTeamId();
                         }
                         else
                             canBeExecuted = true;

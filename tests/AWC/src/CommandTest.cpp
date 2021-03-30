@@ -29,15 +29,13 @@ TEST_CASE("MoveCommands")
     MapUtils::FillMap(map, grassType);
     
     // Player
-    Player player{0, 0, 100};
-    Player enemy{1, 1, 1000};
-    game.AddPlayer(player);
-    game.AddPlayer(enemy);
+    game.AddPlayer(0, 100);
+    game.AddPlayer(1, 1000);
 
     UnitType soldierType = UnitTest::CreateSoldierType();
-    auto soldier = soldierType.CreateUnit(game.GetPlayer(0));
-    auto enemySoldier = soldierType.CreateUnit(game.GetPlayer(1));
-    auto enemySoldier2 = soldierType.CreateUnit(game.GetPlayer(1));
+    auto soldier = soldierType.CreateUnit(game.GetPlayer(0).get());
+    auto enemySoldier = soldierType.CreateUnit(game.GetPlayer(1).get());
+    auto enemySoldier2 = soldierType.CreateUnit(game.GetPlayer(1).get());
     map.AddUnit(0, 0, soldier);
     map.AddUnit({0, 1}, enemySoldier2);
     map.AddUnit({2, 2}, enemySoldier);
@@ -109,17 +107,15 @@ TEST_CASE("AttackCommands")
     MapUtils::FillMap(map, grassType);
     
     // Player
-    Player playerOne{0, 0, 100};
-    Player playerTwo{1, 1, 100};
-    game.AddPlayer(playerOne);
-    game.AddPlayer(playerTwo);
+    game.AddPlayer(0, 100);
+    game.AddPlayer(1, 100);
 
     UnitType soldierType = UnitTest::CreateSoldierType();
-    auto soldierOne = soldierType.CreateUnit(game.GetPlayer(0));
-    auto friendlySoldier = soldierType.CreateUnit(game.GetPlayer(0));
-    auto friendlySoldier2 = soldierType.CreateUnit(game.GetPlayer(0));
-    auto soldierTwo = soldierType.CreateUnit(game.GetPlayer(1));
-    auto soldierThree = soldierType.CreateUnit(game.GetPlayer(1));
+    auto soldierOne = soldierType.CreateUnit(game.GetPlayer(0).get());
+    auto friendlySoldier = soldierType.CreateUnit(game.GetPlayer(0).get());
+    auto friendlySoldier2 = soldierType.CreateUnit(game.GetPlayer(0).get());
+    auto soldierTwo = soldierType.CreateUnit(game.GetPlayer(1).get());
+    auto soldierThree = soldierType.CreateUnit(game.GetPlayer(1).get());
 
     map.AddUnit(0, 0, soldierOne);
     map.AddUnit(0, 1, friendlySoldier);

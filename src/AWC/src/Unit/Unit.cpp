@@ -17,7 +17,7 @@
 
 #include <AWC/Exception.h>
 
-Unit::Unit(uint id, const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& owner) 
+Unit::Unit(uint id, const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player* const owner) 
     : id_{id}, unitType_{unitType}, weapons_{weapons}, moveDesc_{movementDesc}, owner_{owner}, flags{UnitNS::Flag::NONE}
 {
 
@@ -33,7 +33,7 @@ const uint Unit::GetTypeId() const
     return unitType_.GetId();
 }
 
-Player& Unit::GetOwner() const
+Player* const Unit::GetOwner() const
 {
     return owner_;
 }
@@ -198,7 +198,7 @@ bool Unit::IsDead()
 
 void Unit::OnPassTurn(Turn& turn)
 {
-    if(turn.playerIndex == owner_.GetId())
+    if(turn.playerIndex == owner_->GetId())
     {
         RemoveFlag(UnitNS::Flag::MOVED);
         RemoveFlag(UnitNS::Flag::ATTACKED);
@@ -243,7 +243,7 @@ AreaConstraints Unit::GetMoveConstraints() const
     auto tileCost = moveDesc_->GetTileCostTable();
     auto unitCost = moveDesc_->GetUnitCostTable();
     auto range = moveDesc_->GetRange();
-    auto teamId = owner_.GetTeamId();
+    auto teamId = owner_->GetTeamId();
 
     AreaConstraints tpc{tileCost, unitCost, teamId, range};
     return tpc;
@@ -260,7 +260,7 @@ AreaConstraints Unit::GetAttackConstraints(unsigned int weaponId) const
 
     // Range could be affected by mods;
     auto range = weapon->GetAttackRange();
-    auto teamId = owner_.GetTeamId();
+    auto teamId = owner_->GetTeamId();
 
     return AreaConstraints{fixedCost, unitFixedCost, teamId, range};
 }

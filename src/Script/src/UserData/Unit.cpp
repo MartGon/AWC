@@ -28,9 +28,9 @@ int UserData::Unit::CalculateMovement(lua_State* luaState)
 int UserData::Unit::GetOwner(lua_State* luaState)
 {
     auto unit = *UserData::CheckUserData<Unit>(luaState, 1);
-    auto& player = unit->GetOwner();
+    auto player = unit->GetOwner();
 
-    UserData::PushDataRef<Player>(luaState, &player);
+    UserData::PushDataRef<Player>(luaState, player);
 
     return 1;
 }

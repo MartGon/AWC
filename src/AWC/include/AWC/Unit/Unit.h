@@ -36,7 +36,7 @@ friend class UnitType;
 public:
     const std::string GetName() const;
     const uint GetTypeId() const;
-    Player& GetOwner() const;
+    Player* const GetOwner() const;
 
     Entity::GUID GetGUID() const;
 
@@ -121,7 +121,7 @@ public:
     void RegisterHandlers(Event::Subject& subject);
 
 private:
-    Unit(uint id, const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player& ownerId);
+    Unit(uint id, const UnitType& unitType, const MovementDescPtr movementDesc, const std::vector<WeaponPtr> weapons, Player* const ownerId);
 
     // Movement
     // TODO: This should become public once CalculateMovement does
@@ -144,7 +144,7 @@ private:
     float health = 100;
     uint flags;
 
-    Player& owner_;
+    Player* const owner_;
     const UnitType& unitType_;
     const MovementDescPtr moveDesc_;
     const std::vector<WeaponPtr> weapons_;

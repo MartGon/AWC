@@ -45,14 +45,14 @@ TEST_CASE("Game Configuration")
         game.AddPlayer(playerTwo);
 
         CHECK(game.GetPlayerCount() == 2);
-        CHECK(game.GetPlayer(0).GetId() == playerOne.GetId());
-        CHECK(game.GetPlayer(1).GetId() == playerTwo.GetId());
+        CHECK(game.GetPlayer(0)->GetId() == playerOne.GetId());
+        CHECK(game.GetPlayer(1)->GetId() == playerTwo.GetId());
         CHECK_THROWS_AS(game.GetPlayer(2), const std::out_of_range&);
 
         game.RemovePlayer(1);
 
         CHECK(game.GetPlayerCount() == 1);
-        CHECK(game.GetPlayer(0).GetId() == playerOne.GetId());
+        CHECK(game.GetPlayer(0)->GetId() == playerOne.GetId());
         CHECK_THROWS_AS(game.GetPlayer(1), const std::out_of_range&);
     }
 }
@@ -83,8 +83,8 @@ TEST_CASE("Game State")
 
         Player player{0, 0, 1000};
         Player playerTwo{1, 1, 1000};
-        auto soldierOne = soldierType.CreateUnit(player);
-        auto soldierTwo = soldierType.CreateUnit(playerTwo);
+        auto soldierOne = soldierType.CreateUnit(&player);
+        auto soldierTwo = soldierType.CreateUnit(&playerTwo);
         
         auto& map = game.GetMap(0);
 
@@ -132,8 +132,8 @@ TEST_CASE("Game State")
 
         Player player{0, 0, 1000};
         Player playerTwo{1, 1, 1000};
-        auto soldierOne = soldierType.CreateUnit(player);
-        auto soldierTwo = soldierType.CreateUnit(playerTwo);
+        auto soldierOne = soldierType.CreateUnit(&player);
+        auto soldierTwo = soldierType.CreateUnit(&playerTwo);
         
         auto& map = game.GetMap(0);
 
@@ -166,8 +166,8 @@ TEST_CASE("Game State")
         CHECK(winnerTeam == 0);
         auto winnerPlayers = game.GetPlayersByTeam(winnerTeam);
         CHECK(winnerPlayers.size() == 1);
-        CHECK(winnerPlayers[0].get().GetTeamId() == winnerTeam);
-        CHECK(winnerPlayers[0].get().GetId() == 0);
+        CHECK(winnerPlayers[0].get()->GetTeamId() == winnerTeam);
+        CHECK(winnerPlayers[0].get()->GetId() == 0);
     }
 }
 
