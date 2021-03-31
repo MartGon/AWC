@@ -42,8 +42,9 @@ local weaponType = WeaponType.New({
         {id = 1, dmg = 25.5}
     }
 })
-
-
+local eventHandler = { opType = 1, callback = function ()
+    i = 2 + 3;
+end}
 
 function Execute(game)
 
@@ -54,6 +55,9 @@ function Execute(game)
         moveType = mdt;
         weapons = {
             weaponType
+        },
+        eventHandlers = {
+            eventHandler
         }
     });
     print("hey");

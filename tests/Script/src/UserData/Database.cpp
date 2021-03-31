@@ -40,11 +40,13 @@ TEST_CASE("Database userdata")
 
         
         auto& unitTypes = db.get<UnitType>();
+        auto rookType = unitTypes.GetById(0);
         CHECK(unitTypes.GetFreeId() == 1);
-        CHECK(unitTypes.GetById(0)->GetName() == "Rook");
-        CHECK(unitTypes.GetById(0)->GetId() == 0);
+        CHECK(rookType->GetName() == "Rook");
+        CHECK(rookType->GetId() == 0);
+        CHECK(rookType->GetHandlers().size() > 0);
     }
-    SUBCASE("AddUnitType")
+    SUBCASE("GetUnitType")
     {
         std::string path = Test::Script::GetUserDataPath() + "/Database/GetUnitType.lua";
         Test::Script::TestScript t(path, sGame);
