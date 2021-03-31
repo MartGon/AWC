@@ -1,9 +1,9 @@
 local soldierType = DB:GetUnitType(0);
-handled = false;
+
 soldierType:AddEventHandler({
     opType = 1,
     callback = function ()
-        handled = true;
+        Check()
         print("Hello from an event handler")
     end,
     notiType = 4

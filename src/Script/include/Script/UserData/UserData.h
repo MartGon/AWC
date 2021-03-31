@@ -99,9 +99,28 @@ namespace Script::UserData
             }
 
             template<typename T, Scope s>
-            typename T::type* CastOrCreate(lua_State* luaState, int index)
+            typename T::type* CastOrCreate(lua_State* luaState, int index) 
             {
                 return CastOrCreateImp<T, s>(luaState, index, 0);
+            }
+
+            template<typename T>
+            typename std::enable_if<std::is_function<decltype(T::FromTable)>::value, bool>::type 
+                CanBeCreatedFromTableImp(int)
+            {
+                return true;
+            }
+
+            template<typename T>
+            auto CanBeCreatedFromTableImp(double) -> bool
+            {
+                return false;
+            }
+
+            template<typename T>
+            bool CanBeCreatedFromTable()
+            {
+                return CanBeCreatedFromTableImp<T>(0);
             }
         }
 
@@ -124,15 +143,15 @@ namespace Script::UserData
         }
 
         template<typename T>
-        bool IsUserDataOrTable(lua_State* luaState, int index)
+        bool IsUserDataOrCanBeCreatedFromTable(lua_State* luaState, int index)
         {
-            return IsUserData<T>(luaState, index) || IsTable(luaState, index);
+            return IsUserData<T>(luaState, index) || CanBeCreatedFromTable<T>() && IsTable(luaState, index) ;
         }
     
         template<typename T, Scope s = Scope::Internal>
         typename T::type* CheckUserData(lua_State* luaState, int index)
         {   
-            CheckExpectedArg<s>(luaState, IsUserDataOrTable<T>(luaState, index), index, T::MT_NAME);
+            CheckExpectedArg<s>(luaState, IsUserDataOrCanBeCreatedFromTable<T>(luaState, index), index, T::MT_NAME);
             return CastOrCreate<T, s>(luaState, index);
         }
 

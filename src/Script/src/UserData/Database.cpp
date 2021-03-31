@@ -52,6 +52,16 @@ int UserData::Database::AddUnitType(lua_State* luaState)
             weapons.push_back(*weaponTypesTable->GetUserData<WeaponType>(i));
     }
 
+    std::vector<Event::Handler> handlers;
+    std::string ehKey = "eventHandlers";
+    if(lt.ContainsValue(ehKey))
+    {
+        auto ehTable = lt.GetLuaWrapper<LuaTable<>>(ehKey);
+        auto len = ehTable->Length();
+        for(int i = 1; i < len + 1; i++)
+            handlers.push_back(*ehTable->GetUserData<EventHandler>(i));
+    }
+
     ::UnitType ut{unitTypes.GetFreeId(), name, moveType, weapons};
     auto id = unitTypes.Add(ut);
     auto ptr = unitTypes.GetById(id);

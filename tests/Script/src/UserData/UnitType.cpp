@@ -6,6 +6,7 @@
 #include <Test/Script/Script.h>
 #include <Tests/AWC/UnitTest.h>
 
+bool handled = false;
 
 TEST_CASE("UnitType")
 {
@@ -43,6 +44,13 @@ TEST_CASE("UnitType")
         auto owner = game.GetPlayer(playerId);
         gTable.SetDataRef<Script::UserData::Player>("owner", owner.get());
 
+        Script::LuaFunction<Script::Scope::External> f(sGame.GetLuaVM().GetLuaState(), [](lua_State* state) -> int
+        {
+            handled = true;
+            return 3;
+        });
+        gTable.SetLuaWrapper<Script::LuaFunction<Script::Scope::External>>("Check", f);
+
         auto path = Test::Script::GetUserDataPath("UnitType/AddEventHandler.lua");
         sGame.RunConfig(path);
 
@@ -53,8 +61,6 @@ TEST_CASE("UnitType")
         });
         game.PushUntriggered(custom);
         game.Run();
-
-        bool handled = gTable.Get<bool>("handled");
 
         CHECK(executed == true);
         CHECK(handled == true);
