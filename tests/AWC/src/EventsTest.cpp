@@ -53,7 +53,7 @@ TEST_CASE("Event test")
     };
 
     Event::Handler handler{Operation::Type::MOVE, callback};
-    handler.type = Operation::Type::MOVE;
+    handler.opType = Operation::Type::MOVE;
 
     soldierType.AddHandler(handler);
     auto soldierOne = soldierType.CreateUnit(&playerOne);
@@ -103,7 +103,7 @@ TEST_CASE("Event test")
     }
 }
 
-Event::Listener GetNilListener(Event::HandlerCallback cb)
+Event::Listener GetNilListener(Event::CallbackFunction cb)
 {
     auto entType = Entity::Type::UNIT;
     auto opType = Operation::Type::CUSTOM;
@@ -123,7 +123,7 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         int counter = 0;
         int counterObjective = 5;
 
-        Event::HandlerCallback recursiveCB = [&recursiveCB, &counter, counterObjective]
+        Event::CallbackFunction recursiveCB = [&recursiveCB, &counter, counterObjective]
         (Event::Notification::Notification noti, Entity::GUID ent, Game& game)
         {
             if(noti.type == Event::Notification::Type::PRE)
@@ -158,10 +158,10 @@ TEST_CASE("Event::Subject::Add/Remove/Iteration test")
         // On Post, two of them are listening so counter = counter + 2; counter == 3
         CHECK(counter == 3);
     }
-    SUBCASE("Listener removal")
+    SUBCASE("EventHandler removal")
     {   
         int count = 0;
-        Event::HandlerCallback cb = [&count](Event::Notification::Notification noti, Entity::GUID, Game&)
+        Event::CallbackFunction cb = [&count](Event::Notification::Notification noti, Entity::GUID, Game&)
         {
             if(noti.type == Event::Notification::Type::PRE)
                 count++;

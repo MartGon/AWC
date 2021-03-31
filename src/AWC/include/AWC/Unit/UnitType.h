@@ -20,7 +20,7 @@ public:
     const uint GetId() const;
 
     std::vector<Event::Handler> GetHandlers() const;
-    void AddHandler(Event::Handler listener);
+    void AddHandler(Event::Handler handler);
 
 private:
 
@@ -32,5 +32,5 @@ private:
 
     MovementDescTypePtr moveType_;
     std::vector<WeaponTypePtr> weaponTypes_;
-    std::vector<Event::Handler> listeners_;
+    std::vector<Event::Handler> eventHandlers_;
 };

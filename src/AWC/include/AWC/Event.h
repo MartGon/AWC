@@ -35,27 +35,51 @@ namespace Event
         };
     }
 
-    using HandlerCallback = std::function<void(const Notification::Notification, Entity::GUID, Game&)>;
-
-    struct Handler
+    class CallbackI
     {
-        Handler(unsigned int type, HandlerCallback callback, Notification::Type notificationType = Notification::Type::ANY) : 
-            type{type}, callback{callback}, notificationType{notificationType} {};
+    public:
+        virtual void Call(const Notification::Notification, Entity::GUID, Game&) = 0;
+    };
 
-        bool ListensTo(Notification::Type type);
+    using CallbackFunction = std::function<void(const Notification::Notification, Entity::GUID, Game&)>;
 
-        unsigned int type;
-        HandlerCallback callback;
+    class Callback : public CallbackI
+    {
+    public:
+        Callback(CallbackFunction callback) : callback{callback} {};
+
+        void Call(const Notification::Notification notification, Entity::GUID e, Game& g) override
+        {
+            callback(notification, e, g);
+        }
+
+        CallbackFunction callback;
+    };
+
+    class Handler
+    {
+    public:
+        Handler(unsigned int opType, std::shared_ptr<CallbackI> handler, Notification::Type type = Notification::Type::ANY) :
+            handler{handler}, notificationType{type}, opType{opType} {};
+        Handler(unsigned int opType, CallbackFunction handlerCB, Notification::Type type = Notification::Type::ANY) :
+            Handler{opType, std::make_shared<Callback>(handlerCB), type} {};
+
+        void Call(const Notification::Notification notification, Entity::GUID e, Game& g)
+        {
+            handler->Call(notification, e, g);
+        }
+
+        bool Handles(Notification::Type type);
+
         Notification::Type notificationType;
+        unsigned int opType;
+
+    private:
+        std::shared_ptr<CallbackI> handler;
     };
 
     struct Listener
     {
-        Listener(Entity::GUID entity, Handler handler) :
-            entity{entity}, handler{handler} {};
-        Listener(Entity::GUID entity, unsigned int opType, HandlerCallback handler, Notification::Type type = Notification::Type::ANY) :
-            entity{entity}, handler{opType, handler, type} {};
-
         Entity::GUID entity;
         Handler handler;
     };
@@ -64,8 +88,14 @@ namespace Event
     {
     public:
         void Register(Listener listener);
-        void Register(Entity::GUID entity, unsigned int optype, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
-        Entity::GUID Register(unsigned int opType, HandlerCallback callback, Notification::Type notType = Notification::Type::ANY);
+        void Register(Entity::GUID entity, Handler handler);
+
+        template <typename ...Args>
+        void Register(Entity::GUID entity, unsigned int opType, Args&& ...args)
+        {
+            Register(entity, Handler{ opType, args...});
+        }
+        Entity::GUID Register(unsigned int opType, CallbackFunction callback, Notification::Type notType = Notification::Type::ANY);
 
         void Unregister(Entity::GUID entity, unsigned int optype);
         void Unregister(Entity::GUID entity);

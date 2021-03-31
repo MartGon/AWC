@@ -228,8 +228,7 @@ void Unit::RegisterHandlers(Event::Subject& subject)
     auto handlers = unitType_.GetHandlers();
     for(auto handler : handlers)
     {
-        Event::Listener listener{entity, handler};
-        subject.Register(listener);
+        subject.Register(entity, handler);
     }
 }
 

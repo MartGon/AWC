@@ -7,35 +7,33 @@
 using namespace Event;
 using namespace Operation;
 
-bool Handler::ListensTo(Notification::Type type)
+bool Handler::Handles(Notification::Type type)
 {
     return notificationType == Notification::Type::ANY || notificationType == type;
 }
 
 void Subject::Register(Listener listener)
 {
-    auto type = listener.handler.type;
-    if(!UnorderedMapUtils::Contains(eventListeners_, type))
+    auto opType = listener.handler.opType;
+
+    if(!UnorderedMapUtils::Contains(eventListeners_, opType))
     {
-        eventListeners_[type] = std::vector<Listener>{};
+        eventListeners_[opType] = std::vector<Listener>{};
     }
     
-    auto& typeListeners = eventListeners_.at(type);
+    auto& typeListeners = eventListeners_.at(opType);
     typeListeners.push_back(listener);
 }
 
-void Subject::Register(Entity::GUID entity, unsigned int type, HandlerCallback eventListener, Notification::Type notType)
+void Subject::Register(Entity::GUID entity, Handler handler)
 {
-    Listener listener{entity, type, eventListener, notType};
-    Subject::Register(listener);
+    Register(Listener{entity, handler});
 }
 
-Entity::GUID Subject::Register(unsigned int type, HandlerCallback cb, Notification::Type notType)
+Entity::GUID Subject::Register(unsigned int type, CallbackFunction cb, Notification::Type notType)
 {
-    Event::Handler handler{type, cb, notType};
     Entity::GUID entity{Entity::Type::HANDLER, 0, lastId++};
-    Event::Listener listener{entity, handler};
-    Register(listener);
+    Register(entity, type, cb, notType);
 
     return entity;
 }
@@ -90,9 +88,8 @@ void Subject::Notify(Notification::Notification notification, Game& game)
 
         for(auto listener : typeListeners)
         {
-            auto callback = listener.handler.callback;
-            if(listener.handler.ListensTo(notification.type))
-                callback(notification, listener.entity, game);
+            if(listener.handler.Handles(notification.type))
+                listener.handler.Call(notification, listener.entity, game);
         }
     }
 }
