@@ -54,6 +54,9 @@ void UserData::Init(lua_State* luaState)
         Process,
         Trigger,
         WeaponType,
-        UnitAttack
+        UnitAttack,
+        EventHandler,
+        EventNotification,
+        EntityGUID
         >(luaState);
 }

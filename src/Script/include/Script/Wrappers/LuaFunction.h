@@ -1,8 +1,12 @@
 #pragma once
 
+#include <functional>
+
 #include <lua.hpp>
 
 #include <Script/Utils/Utils.h>
+
+#include <Script/Wrappers/LuaTable.h>
 
 #include <AWC.h>
 
@@ -12,6 +16,7 @@ namespace Script
     class LuaFunction
     {
     public:
+
         // Creates a Wrapper to a nil function
         LuaFunction(lua_State* luaState) : luaState_{luaState}, functionRef_{LUA_REFNIL}
         {
@@ -24,6 +29,13 @@ namespace Script
             CheckArg<s>(luaState, IsFunction(luaState, index), index, "Function");
             lua_pushvalue(luaState, index);
             functionRef_ = luaL_ref(luaState, LUA_REGISTRYINDEX);
+        }
+
+        // Create wrapper to a given function
+        LuaFunction(lua_State* luaState, int(* f)(lua_State* luaState)) : 
+            LuaFunction{luaState, (lua_pushcfunction(luaState, f), -1)}
+        {
+
         }
 
         // Creates a function for a wrapper located at t[tIndex], where t is the table at sIndex
@@ -89,6 +101,25 @@ namespace Script
         int PushInternal() const
         {
             return lua_rawgeti(luaState_, LUA_REGISTRYINDEX, functionRef_);
+        }
+
+        void SetEnv(int index)
+        {
+            PushInternal();
+            unsigned int newIndex = index < 0 ? index - 1 : index;
+            lua_pushvalue(luaState_, newIndex); 
+            lua_setupvalue(luaState_, -2, 1);
+
+            lua_pop(luaState_, 1);
+        }
+
+        void SetEnv(LuaTable<s>& table)
+        {
+            PushInternal();
+            table.PushInternal();
+            lua_setupvalue(luaState_, -2, 1);
+
+            lua_pop(luaState_, 1);
         }
 
     private:

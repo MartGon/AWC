@@ -15,6 +15,9 @@
 #include <Script/UserData/Trigger.h>
 #include <Script/UserData/WeaponType.h>
 #include <Script/UserData/UnitAttack.h>
+#include <Script/UserData/EventHandler.h>
+#include <Script/UserData/EventNotification.h>
+#include <Script/UserData/EntityGUID.h>
 
 namespace Script::UserData
 {

@@ -6,8 +6,6 @@
 
 #include <Script/UserData/UserData.h>
 
-#include <Script/Wrappers/LuaFunction.h>
-
 namespace Script
 {
     template <Scope s = Scope::Internal>

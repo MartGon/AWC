@@ -1,20 +1,21 @@
 #pragma once
 
-#include <AWC.h>
-
 #include <lua.hpp>
+
+#include <AWC.h>
 
 namespace Script::UserData
 {
-    struct UnitType
+    struct EventHandler
     {
-        using type = ::UnitType;
+        using type = Event::Handler;
         static const char* MT_NAME;
         static const char* LIB_NAME;
         static const luaL_Reg methods[];
         static const luaL_Reg functions[];
 
-        static int CreateUnit(lua_State* luaState);
-        static int AddEventHandler(lua_State* luaState);
+        static int New(lua_State* luaState);
+
+        static type* FromTable(lua_State* state, int index);
     };
 }

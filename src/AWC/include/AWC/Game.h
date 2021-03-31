@@ -81,6 +81,13 @@ public:
         return pid;
     }
 
+    template<typename ...Args>
+    unsigned int PushUntriggered(OperationIPtr op, Args&& ...args)
+    {
+        Process::Trigger::Trigger t{Process::Trigger::Type::NONE, 0};
+        return Push(op, t, args...);
+    }
+
     // State
     void Start();
     bool IsOver() const;

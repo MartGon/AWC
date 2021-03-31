@@ -33,4 +33,30 @@ TEST_CASE("UnitType")
         CHECK(unit->GetName() == "Soldier");
         CHECK(unit->GetGUID().id == 0);
     }
+    SUBCASE("AddEventHandler")
+    {
+        auto& db = sGame.GetDB();
+        auto& unitTypes = db.get<::UnitType>();
+        unitTypes.Add(UnitTest::CreateSoldierType());
+
+        auto playerId = game.AddPlayer(0, 0);
+        auto owner = game.GetPlayer(playerId);
+        gTable.SetDataRef<Script::UserData::Player>("owner", owner.get());
+
+        auto path = Test::Script::GetUserDataPath("UnitType/AddEventHandler.lua");
+        sGame.RunConfig(path);
+
+        bool executed = false;
+        auto custom = std::make_shared<::Operation::Custom>([&executed](Game& g)
+        {
+            executed = true;
+        });
+        game.PushUntriggered(custom);
+        game.Run();
+
+        bool handled = gTable.Get<bool>("handled");
+
+        CHECK(executed == true);
+        CHECK(handled == true);
+    }
 }

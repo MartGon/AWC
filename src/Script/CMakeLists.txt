@@ -24,12 +24,16 @@ set(SOURCES
     src/UserData/Trigger.cpp
     src/UserData/WeaponType.cpp
     src/UserData/UnitAttack.cpp
+    src/UserData/EventHandler.cpp
+    src/UserData/EventNotification.cpp
+    src/UserData/EntityGUID.cpp
 
     src/Utils/Utils.cpp
 
     src/Wrappers/LuaTable.cpp
     src/Wrappers/LuaVM.cpp
     src/Wrappers/LuaFunction.cpp
+    src/Wrappers/LuaCallback.cpp
 )
 
 add_library(Script ${SOURCES})

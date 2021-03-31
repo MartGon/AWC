@@ -3,6 +3,13 @@
 #include <AWC.h>
 #include <Script.h>
 
+bool called = false;
+int Test(lua_State* luaState)
+{
+    called = true;
+    return 8;
+}
+
 TEST_CASE("Construction")
 {
     auto L = luaL_newstate();
@@ -18,6 +25,15 @@ TEST_CASE("Construction")
 
         // Function still at top
         CHECK(lua_gettop(L) == 1);
+    }
+    SUBCASE("By std::function")
+    {
+        Script::LuaFunction<Script::Scope::External> func{L, Test};
+        CHECK(lua_isfunction(L, -1) == true);
+        auto res = lua_pcall(L, 0, 0, 0);
+
+        CHECK(res == LUA_OK);
+        CHECK(called == true);
     }
     SUBCASE("By index at table")
     {
