@@ -35,5 +35,5 @@ UserData::EventHandler::type* UserData::EventHandler::FromTable(lua_State* luaSt
     bool isValid = notiType >= Event::Notification::Type::NONE && notiType <= Event::Notification::Type::ANY; 
     luaL_argcheck(luaState, isValid, index, "Notification type is not valid");
 
-    return UserData::PushDataCopy<EventHandler>(luaState, Event::Handler{opType, cb, });
+    return UserData::PushDataCopy<EventHandler>(luaState, Event::Handler{opType, cb, notiType});
 }
