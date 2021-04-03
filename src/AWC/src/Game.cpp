@@ -122,7 +122,7 @@ void Game::RemoveUnit(Vector2 pos, uint mapIndex)
     }
 }
 
-// Operation
+// Process
 
 void Game::RemoveProcess(unsigned int id)
 {
@@ -150,6 +150,21 @@ std::optional<Process::Process> Game::GetProcess(unsigned int id)
     }
 
     return process;
+}
+
+unsigned int Game::GetHistoryCount()
+{
+    return opHistory_.size();
+}
+
+std::optional<Process::Process> Game::GetHistoryProcess(unsigned int index)
+{
+    std::optional<Process::Process> p;
+    auto count = GetHistoryCount();
+    if(index < count && count >= 0)
+        p = opHistory_[index];
+
+    return p;
 }
 
 // State

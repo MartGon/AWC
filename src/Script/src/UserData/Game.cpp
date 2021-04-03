@@ -12,7 +12,10 @@ const luaL_Reg UserData::Game::methods[] = {
         {"GetMap", Game::GetMap},
         {"GetMapCount", Game::GetMapCount},
         {"CreatePlayer", Game::CreatePlayer},
+
         {"CancelProcess", Game::CancelProcess},
+        {"GetHistoryCount", Game::GetHistoryCount},
+        {"GetHistoryProcess", Game::GetHistoryProcess},
         {NULL, NULL}
     };
 const luaL_Reg UserData::Game::functions[] = {
@@ -87,4 +90,28 @@ int UserData::Game::CancelProcess(lua_State* luaState)
     game->Push(antiOp, trigger, p->priority + 1);
 
     return 0;
+}
+
+int UserData::Game::GetHistoryCount(lua_State* luaState)
+{
+    auto game = UserData::CheckUserData<Game>(luaState, 1);
+
+    lua_pushinteger(luaState, game->GetHistoryCount());
+
+    return 1;
+}
+
+int UserData::Game::GetHistoryProcess(lua_State* L)
+{
+    auto game = UserData::CheckUserData<Game>(L, 1);
+    auto index = luaL_checkinteger(L, 2) - 1;
+    
+    auto count = game->GetHistoryCount();
+    bool validIndex = index < count && index >= 0;
+    CheckArg<Scope::Internal>(L, validIndex, 2, "History index " + std::to_string(index) + " sis not valid");
+
+    auto p = game->GetHistoryProcess(index);
+    UserData::PushDataCopy<Process>(L, p.value());
+
+    return 1;
 }

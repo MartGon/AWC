@@ -34,6 +34,10 @@ int UserData::Process::Get(lua_State* L)
     {
         lua_pushinteger(L, p->id);
     }
+    else if(index == "operation")
+    {
+        UserData::PushDataCopy<Operation>(L, p->op);
+    }
     else
         ret = 0;
 

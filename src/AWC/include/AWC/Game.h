@@ -66,9 +66,11 @@ public:
     void AddUnit(UnitPtr unit, Vector2 pos, uint mapIndex = 0);
     void RemoveUnit(Vector2 pos, uint mapIndex = 0);
 
-    // Operation
+    // Process
     void RemoveProcess(unsigned int pid);
     std::optional<Process::Process> GetProcess(unsigned int pid);
+    unsigned int GetHistoryCount();
+    std::optional<Process::Process> GetHistoryProcess(unsigned int index);
     void Run();
 
     template<typename ...Args>
