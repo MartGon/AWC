@@ -21,9 +21,11 @@ int UserData::Trigger::InitLib(lua_State* L)
     lua_getglobal(L, LIB_NAME);
     Script::LuaTable<Scope::External> libTable{L, -1};
     lua_pop(L, 1);
+    Script::LuaTable<Scope::External> typetable{L};
+    libTable.SetLuaWrapper("Type", typetable);
 
-    libTable.Set("PLAYER", ToInt(::Process::Trigger::Type::PLAYER));
-    libTable.Set("OPERATION", ToInt(::Process::Trigger::Type::OPERATION));
+    typetable.Set("PLAYER", ToInt(::Process::Trigger::Type::PLAYER));
+    typetable.Set("OPERATION", ToInt(::Process::Trigger::Type::OPERATION));
 
     return 0;
 }

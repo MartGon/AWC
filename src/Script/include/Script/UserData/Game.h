@@ -18,6 +18,9 @@ namespace Script::UserData
         static int GetMap(lua_State* L);
         static int GetMapCount(lua_State* L);
 
+        static int GetUnit(lua_State* L);
+        static int GetUnitPos(lua_State* L);
+
         static int CreatePlayer(lua_State* L);
 
         static int CancelProcess(lua_State* L);

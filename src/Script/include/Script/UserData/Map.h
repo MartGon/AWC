@@ -15,6 +15,8 @@ namespace Script::UserData
         static const luaL_Reg functions[];
         
         static void CheckMapPosition(lua_State* luaState, ::Map* map, ::Vector2 pos);
+        static int GetSize(lua_State* L);
+        static int IsPosValid(lua_State* L);
 
         static int GetUnit(lua_State* L);
         static int RemoveUnit(lua_State* L);

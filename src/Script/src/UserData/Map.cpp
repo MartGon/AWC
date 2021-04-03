@@ -5,6 +5,8 @@ using namespace Script;
 const char* UserData::Map::MT_NAME = "AWC_Map";
 const char* UserData::Map::LIB_NAME = "Map";
 const luaL_Reg UserData::Map::methods[] = {
+        {"GetSize", Map::GetSize},
+        {"IsPosValid", Map::IsPosValid},
         {"GetUnit", Map::GetUnit},
         {"RemoveUnit", Map::RemoveUnit},
         {"AddUnit", Map::AddUnit},
@@ -22,6 +24,26 @@ void UserData::Map::CheckMapPosition(lua_State* luaState, ::Map* map, ::Vector2 
     {
         luaL_error(luaState, "Map position %s is not valid", pos.ToString().c_str());
     }
+}
+
+int UserData::Map::GetSize(lua_State* luaState)
+{
+    auto map = UserData::CheckUserData<Map>(luaState, 1);
+    auto size = map->GetSize();
+
+    UserData::PushDataCopy<Vector2>(luaState, size);
+
+    return 1;
+}
+
+int UserData::Map::IsPosValid(lua_State* luaState)
+{
+    auto map = UserData::CheckUserData<Map>(luaState, 1);
+    auto pos = UserData::CheckUserData<Vector2>(luaState, 2);
+
+    lua_pushboolean(luaState, map->IsPositionValid(*pos));
+
+    return 1;
 }
 
 int UserData::Map::GetUnit(lua_State* luaState)

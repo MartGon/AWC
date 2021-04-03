@@ -1,7 +1,6 @@
-#include <Script/UserData/Game.h>
-#include <Script/UserData/UserData.h>
-
 #include <Script/UserData.h>
+
+#include <Script/Wrappers/LuaTable.h>
 
 using namespace Script;
 
@@ -11,6 +10,10 @@ const luaL_Reg UserData::Game::methods[] = {
         {"CreateMap", Game::CreateMap},
         {"GetMap", Game::GetMap},
         {"GetMapCount", Game::GetMapCount},
+
+        {"GetUnit", Game::GetUnit},
+        {"GetUnitPos", Game::GetUnitPos},
+
         {"CreatePlayer", Game::CreatePlayer},
 
         {"CancelProcess", Game::CancelProcess},
@@ -65,6 +68,40 @@ int UserData::Game::GetMapCount(lua_State* luaState)
 
     int mapCount = game->GetMapCount();
     lua_pushinteger(luaState, mapCount);
+    return 1;
+}
+
+int UserData::Game::GetUnit(lua_State* L)
+{
+    auto game = UserData::CheckUserData<Game>(L, 1);
+    auto guid = UserData::CheckUserData<EntityGUID>(L, 2);
+    auto unit = game->GetUnit(*guid);
+
+    if(unit)
+        UserData::PushDataCopy<Unit>(L, unit);
+    else
+        lua_pushnil(L);
+
+    return 1;
+}
+
+int UserData::Game::GetUnitPos(lua_State* L)
+{
+    auto game = UserData::CheckUserData<Game>(L, 1);
+    auto guid = UserData::CheckUserData<EntityGUID>(L, 2);
+    auto pos = game->GetUnitPos(*guid);
+    // TODO - Create a way to auto unregister unit on remove
+    //CheckArg<Scope::Internal>(L, pos.has_value(), 2, "Unit position could not be found!!!");
+    if(pos.has_value())
+    {
+        LuaTable<Scope::Internal> position{L};
+        position.SetDataCopy<Vector2>("pos", pos->pos);
+        position.Set("mapId", pos->mapIndex);
+        position.PushInternal();
+    }
+    else
+        lua_pushnil(L);
+
     return 1;
 }
 
