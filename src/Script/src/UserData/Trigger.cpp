@@ -16,11 +16,6 @@ const luaL_Reg UserData::Trigger::functions[] = {
     {NULL, NULL}
 };
 
-unsigned int ToInt(Process::Trigger::Type type)
-{
-    return static_cast<unsigned int>(type);
-}
-
 int UserData::Trigger::InitLib(lua_State* L)
 {
     lua_getglobal(L, LIB_NAME);
@@ -51,4 +46,24 @@ int UserData::Trigger::Get(lua_State* L)
         ret = 0;
 
     return ret;
+}
+
+void UserData::Trigger::ToTable(lua_State* L, type& trigger)
+{
+    LuaTable<Scope::Internal> table{L};
+
+    table.Set("type", ToInt(trigger.type));
+    table.Set("id", trigger.id);
+
+    table.PushInternal();
+}
+
+UserData::Trigger::type* UserData::Trigger::FromTable(lua_State* L, int index)
+{
+    LuaTable<Scope::Internal> table{L, index};
+
+    auto type = static_cast<::Process::Trigger::Type>(table.Get<unsigned int>("type"));
+    auto id = table.Get<unsigned int>("id");
+
+    return UserData::PushDataCopy<Trigger>(L, ::Process::Trigger::Trigger{type, id});
 }

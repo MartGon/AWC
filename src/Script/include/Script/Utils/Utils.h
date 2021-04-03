@@ -15,15 +15,22 @@ namespace Script
     };
 
     template<typename T>
-    void Push(lua_State* state, T val)
+    std::enable_if_t<!std::is_enum_v<T>, void> Push(lua_State* state, T val)
     {
         val.PushInternal();
+    }
+    template<typename T>
+    std::enable_if_t<std::is_enum_v<T>, void> Push(lua_State* state, T val)
+    {
+        lua_tointeger(state, static_cast<unsigned int>(val));
     }
 
     template<>
     void Push<int>(lua_State* state, int val);
     template<>
     void Push<unsigned int>(lua_State* state, unsigned int val);
+    template<>
+    void Push<unsigned char>(lua_State* state, unsigned char val);
     template<>
     void Push<float>(lua_State* state, float val);
     template<>
@@ -34,15 +41,23 @@ namespace Script
     void Push<bool>(lua_State* state, bool val);
 
     template <typename T>
-    T To(lua_State* state, int index)
+    std::enable_if_t<!std::is_enum_v<T>, T> To(lua_State* state, int index)
     {
         return T{state, index};
+    }
+
+    template <typename T>
+    std::enable_if_t<std::is_enum_v<T>, T> To(lua_State* state, int index)
+    {
+        return static_cast<T>(lua_tointeger(state, index));
     }
 
     template<>
     int To<int>(lua_State* state, int index);
     template<>
     unsigned int To<unsigned int>(lua_State* state, int index);
+    template<>
+    unsigned char To<unsigned char>(lua_State* state, int index);
     template<>
     float To<float>(lua_State* state, int index);
     template<>
@@ -124,5 +139,11 @@ namespace Script
     {
         std::string err = "Table[" + KeyToString(tIndex) + "]: " + type;
         CheckExpectedArg<s>(luaState, condition, sIndex, err, errHandler);
+    }
+
+    template<typename T>
+    std::enable_if_t<std::is_enum_v<T>, unsigned int> ToInt(T type)
+    {
+        return static_cast<unsigned int>(type);
     }
 }

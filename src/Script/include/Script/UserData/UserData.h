@@ -178,5 +178,12 @@ namespace Script::UserData
 
             luaL_setmetatable(luaState, T::MT_NAME);
         }
+
+        template <typename T>
+        void PushAsTable(lua_State* luaState, typename T::type& userdata)
+        {
+            using type = typename T::type;
+            T::ToTable(luaState, userdata);
+        }
     } 
 }

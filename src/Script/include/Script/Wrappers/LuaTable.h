@@ -131,6 +131,15 @@ namespace Script
         }
 
         template<typename T, typename K>
+        void SetAsTable(K key, typename T::type& userdata)
+        {
+            PushInternal();
+            T::ToTable(luaState_, userdata);
+            SetField(key);
+            lua_pop(luaState_, 1);
+        }
+
+        template<typename T, typename K>
         std::optional<T> GetLuaWrapper(K key)
         {
             PushInternal();

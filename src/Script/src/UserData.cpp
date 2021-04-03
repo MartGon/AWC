@@ -57,6 +57,7 @@ void UserData::Init(lua_State* luaState)
         UnitAttack,
         EventHandler,
         EventNotification,
-        EntityGUID
+        EntityGUID,
+        Operation
         >(luaState);
 }

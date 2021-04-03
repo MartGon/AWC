@@ -6,16 +6,17 @@
 
 namespace Script::UserData
 {
-    struct UnitType
+    struct Operation
     {
-        using type = ::UnitType;
+        using type = ::OperationIPtr;
         static const char* MT_NAME;
         static const char* LIB_NAME;
+
         static const luaL_Reg methods[];
         static const luaL_Reg functions[];
 
-        static int CreateUnit(lua_State* luaState);
-        static int AddEventHandler(lua_State* luaState);
-        static int GetId(lua_State* luaState);
+        static void ToTable(lua_State* luaState, type& process);
+
+        static int GetArgs(lua_State* luaState);
     };
 }

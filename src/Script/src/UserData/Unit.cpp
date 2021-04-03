@@ -8,6 +8,7 @@ const luaL_Reg UserData::Unit::methods[] = {
     {"CalculateMovement", Unit::CalculateMovement},
     {"CalculateAttack", Unit::CalculateAttack},
     {"GetOwner", Unit::GetOwner},
+    {"GetGUID", Unit::GetGUID},
     {NULL, NULL}
 };
 const luaL_Reg UserData::Unit::functions[] = {
@@ -45,6 +46,15 @@ int UserData::Unit::GetOwner(lua_State* luaState)
     auto player = unit->GetOwner();
 
     UserData::PushDataRef<Player>(luaState, player);
+
+    return 1;
+}
+
+int UserData::Unit::GetGUID(lua_State* luaState)
+{
+    auto unit = *UserData::CheckUserData<Unit>(luaState, 1);
+
+    UserData::PushDataCopy<EntityGUID>(luaState, unit->GetGUID());
 
     return 1;
 }

@@ -20,6 +20,12 @@ void Script::Push<unsigned int>(lua_State* state, unsigned int val)
 }
 
 template<>
+void Script::Push<unsigned char>(lua_State* state, unsigned char val)
+{
+    lua_pushinteger(state, val);
+}
+
+template<>
 void Script::Push<float>(lua_State* state, float val)
 {
     lua_pushnumber(state, val);
@@ -53,6 +59,12 @@ template<>
 unsigned int Script::To<unsigned int>(lua_State* state, int index)
 {
     return (unsigned int)lua_tointeger(state, index);
+}
+
+template<>
+unsigned char Script::To<unsigned char>(lua_State* state, int index)
+{
+    return (unsigned char)lua_tointeger(state, index);
 }
 
 template<>

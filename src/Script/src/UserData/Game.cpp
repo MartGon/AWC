@@ -12,6 +12,7 @@ const luaL_Reg UserData::Game::methods[] = {
         {"GetMap", Game::GetMap},
         {"GetMapCount", Game::GetMapCount},
         {"CreatePlayer", Game::CreatePlayer},
+        {"CancelProcess", Game::CancelProcess},
         {NULL, NULL}
     };
 const luaL_Reg UserData::Game::functions[] = {
@@ -74,4 +75,16 @@ int UserData::Game::CreatePlayer(lua_State* luaState)
     UserData::PushDataRef<Player>(luaState, p.get());
 
     return 1;
+}
+
+int UserData::Game::CancelProcess(lua_State* luaState)
+{
+    auto game = UserData::CheckUserData<Game>(luaState, 1);
+    auto p = UserData::CheckUserData<Process>(luaState, 2);
+
+    ::Process::Trigger::Trigger trigger{::Process::Trigger::Type::OPERATION, p->id};
+    OperationIPtr antiOp = std::make_shared<::Operation::AntiOperation>(p->id);
+    game->Push(antiOp, trigger, p->priority + 1);
+
+    return 0;
 }

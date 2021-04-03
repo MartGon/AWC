@@ -27,6 +27,7 @@ set(SOURCES
     src/UserData/EventHandler.cpp
     src/UserData/EventNotification.cpp
     src/UserData/EntityGUID.cpp
+    src/UserData/Operation.cpp
 
     src/Utils/Utils.cpp
 

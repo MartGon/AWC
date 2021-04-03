@@ -18,5 +18,6 @@ namespace Script::UserData
         static int CalculateAttack(lua_State* luaState);
 
         static int GetOwner(lua_State* luaState);
+        static int GetGUID(lua_State* luaState);
     };
 }

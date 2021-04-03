@@ -11,11 +11,11 @@ void Script::LuaCallback::Call(const Event::Notification::Notification noti, Ent
 {
     f.PushInternal();
 
-    UserData::UserData::PushDataCopy<UserData::EventNotification>(L, noti);
+    auto notification = noti;
+    UserData::UserData::PushAsTable<UserData::EventNotification>(L, notification);
     UserData::UserData::PushDataCopy<UserData::EntityGUID>(L, e);
-    UserData::UserData::PushDataRef<UserData::Game>(L, &game);
     
-    auto result = lua_pcall(L, 3, 0, 0);
+    auto result = lua_pcall(L, 2, 0, 0);
     if(result != LUA_OK)
     {
         std::string error = lua_tostring(L, -1);

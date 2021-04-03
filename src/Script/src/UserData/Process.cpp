@@ -1,5 +1,7 @@
 #include <Script/UserData.h>
 
+#include <Script/Wrappers/LuaTable.h>
+
 using namespace Script;
 
 const char* UserData::Process::MT_NAME = "AWC_Process";
@@ -36,4 +38,32 @@ int UserData::Process::Get(lua_State* L)
         ret = 0;
 
     return ret;
+}
+
+UserData::Process::type* UserData::Process::FromTable(lua_State* L, int index)
+{
+    LuaTable<Scope::Internal> table{L, index};
+
+    unsigned int id = table.Get<unsigned int>("id");
+    auto announced = table.Get<bool>("announced");
+    auto prio = table.Get<uint8_t>("priority");
+    auto operation = *table.GetUserData<Operation>("operation");
+    auto trigger = *table.GetUserData<Trigger>("trigger");
+
+    ::Process::Process p{id, operation, trigger, prio};
+    p.announced = false;
+    return UserData::PushDataCopy<Process>(L, p);
+}
+
+void UserData::Process::ToTable(lua_State* L, type& p)
+{
+    LuaTable<Scope::Internal> table{L};
+
+    table.Set("id", p.id);
+    table.Set("announced", p.announced);
+    table.Set("priority", p.priority);
+    table.SetDataCopy<Operation>("operation", p.op);
+    table.SetAsTable<Trigger>("trigger", p.trigger);
+
+    table.PushInternal();
 }

@@ -9,6 +9,7 @@ const char* UserData::UnitType::LIB_NAME = "UnitType";
 const luaL_Reg UserData::UnitType::methods[] = {
     {"CreateUnit", UnitType::CreateUnit},
     {"AddEventHandler", UnitType::AddEventHandler},
+    {"GetId", UnitType::GetId},
     {NULL, NULL}
 };
 const luaL_Reg UserData::UnitType::functions[] = {
@@ -43,4 +44,13 @@ int UserData::UnitType::AddEventHandler(lua_State* luaState)
     unitType->AddHandler(eh);
 
     return 0;
+}
+
+int UserData::UnitType::GetId(lua_State* luaState)
+{
+    auto unitType = UserData::CheckUserData<UnitType>(luaState, 1);
+
+    lua_pushinteger(luaState, unitType->GetId());
+
+    return 1;
 }

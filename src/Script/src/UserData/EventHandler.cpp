@@ -33,7 +33,7 @@ UserData::EventHandler::type* UserData::EventHandler::FromTable(lua_State* luaSt
 
     auto notiType = static_cast<Event::Notification::Type>(table.Get<unsigned int>("notiType"));
     bool isValid = notiType >= Event::Notification::Type::NONE && notiType <= Event::Notification::Type::ANY; 
-    luaL_argcheck(luaState, isValid, index, "Notification type is not valid");
+    CheckArg<Scope::Internal>(luaState, isValid, index, "Notification type is not valid");
 
     return UserData::PushDataCopy<EventHandler>(luaState, Event::Handler{opType, cb, notiType});
 }

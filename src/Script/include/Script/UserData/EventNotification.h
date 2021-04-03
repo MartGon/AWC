@@ -13,5 +13,8 @@ namespace Script::UserData
         static const char* LIB_NAME;
         static const luaL_Reg methods[];
         static const luaL_Reg functions[];
+
+        static int InitLib(lua_State* L);
+        static void ToTable(lua_State* L, type& notification);
     };
 }

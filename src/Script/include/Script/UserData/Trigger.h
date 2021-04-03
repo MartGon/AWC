@@ -18,5 +18,8 @@ namespace Script::UserData
         static int InitLib(lua_State* L);
 
         static int Get(lua_State* L);
+
+        static void ToTable(lua_State* L, type& trigger);
+        static type* FromTable(lua_State* L, int index);
     };
 }

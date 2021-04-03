@@ -18,6 +18,7 @@
 #include <Script/UserData/EventHandler.h>
 #include <Script/UserData/EventNotification.h>
 #include <Script/UserData/EntityGUID.h>
+#include <Script/UserData/Operation.h>
 
 namespace Script::UserData
 {
