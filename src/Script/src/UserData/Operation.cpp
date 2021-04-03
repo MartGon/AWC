@@ -17,6 +17,22 @@ const luaL_Reg UserData::Operation::functions[] = {
     {NULL, NULL}
 };
 
+int UserData::Operation::InitLib(lua_State* L)
+{   
+    lua_getglobal(L, LIB_NAME);
+    LuaTable<Scope::External> lib{L, -1};
+    lua_pop(L, 1);
+    LuaTable<Scope::External> type{L};
+    lib.SetLuaWrapper("Type", type);
+
+    type.Set("ANTI_OPERATION", ::Operation::Type::ANTI_OPERATION);
+    type.Set("SCRIPT", Script::SCRIPT);
+    
+    auto top = lua_gettop(L);
+
+    return 0;
+}
+
 void UserData::Operation::ToTable(lua_State* L, type& op)
 {
     LuaTable<Scope::Internal> table{L};

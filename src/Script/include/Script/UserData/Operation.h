@@ -15,6 +15,8 @@ namespace Script::UserData
         static const luaL_Reg methods[];
         static const luaL_Reg functions[];
 
+
+        static int InitLib(lua_State* L);
         static void ToTable(lua_State* luaState, type& process);
 
         static int GetArgs(lua_State* luaState);

@@ -22,7 +22,7 @@ namespace Script
     template<typename T>
     std::enable_if_t<std::is_enum_v<T>, void> Push(lua_State* state, T val)
     {
-        lua_tointeger(state, static_cast<unsigned int>(val));
+        lua_pushinteger(state, static_cast<unsigned int>(val));
     }
 
     template<>
