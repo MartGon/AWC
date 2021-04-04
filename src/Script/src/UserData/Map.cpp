@@ -7,6 +7,7 @@ const char* UserData::Map::LIB_NAME = "Map";
 const luaL_Reg UserData::Map::methods[] = {
         {"GetSize", Map::GetSize},
         {"IsPosValid", Map::IsPosValid},
+        {"IsPosFree", Map::IsPosFree},
         {"GetUnit", Map::GetUnit},
         {"RemoveUnit", Map::RemoveUnit},
         {"AddUnit", Map::AddUnit},
@@ -42,6 +43,16 @@ int UserData::Map::IsPosValid(lua_State* luaState)
     auto pos = UserData::CheckUserData<Vector2>(luaState, 2);
 
     lua_pushboolean(luaState, map->IsPositionValid(*pos));
+
+    return 1;
+}
+
+int UserData::Map::IsPosFree(lua_State* luaState)
+{
+    auto map = UserData::CheckUserData<Map>(luaState, 1);
+    auto pos = UserData::CheckUserData<Vector2>(luaState, 2);
+
+    lua_pushboolean(luaState, map->IsPositionFree(*pos));
 
     return 1;
 }

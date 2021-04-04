@@ -17,6 +17,7 @@ namespace Script::UserData
         static void CheckMapPosition(lua_State* luaState, ::Map* map, ::Vector2 pos);
         static int GetSize(lua_State* L);
         static int IsPosValid(lua_State* L);
+        static int IsPosFree(lua_State* L);
 
         static int GetUnit(lua_State* L);
         static int RemoveUnit(lua_State* L);
