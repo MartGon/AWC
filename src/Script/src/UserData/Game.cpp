@@ -15,10 +15,13 @@ const luaL_Reg UserData::Game::methods[] = {
         {"GetUnitPos", Game::GetUnitPos},
 
         {"CreatePlayer", Game::CreatePlayer},
+        {"RemovePlayer", Game::RemovePlayer},
 
         {"CancelProcess", Game::CancelProcess},
         {"GetHistoryCount", Game::GetHistoryCount},
         {"GetHistoryProcess", Game::GetHistoryProcess},
+
+        {"AddEventHandler", Game::AddEventHandler},
         {NULL, NULL}
     };
 const luaL_Reg UserData::Game::functions[] = {
@@ -117,6 +120,20 @@ int UserData::Game::CreatePlayer(lua_State* luaState)
     return 1;
 }
 
+int UserData::Game::RemovePlayer(lua_State* L)
+{
+    auto game = UserData::CheckUserData<Game>(L, 1);
+    auto playerId = luaL_checkinteger(L, 2) - 1;
+
+    auto playerCount = game->GetPlayerCount();
+    bool validIndex = playerId < playerCount && playerId >= 0;
+    CheckArg<Scope::Internal>(L, validIndex, 2, "Player index " + std::to_string(playerId) + " is not valid");
+
+    game->RemovePlayer(playerId);
+
+    return 0;
+}
+
 int UserData::Game::CancelProcess(lua_State* luaState)
 {
     auto game = UserData::CheckUserData<Game>(luaState, 1);
@@ -145,10 +162,21 @@ int UserData::Game::GetHistoryProcess(lua_State* L)
     
     auto count = game->GetHistoryCount();
     bool validIndex = index < count && index >= 0;
-    CheckArg<Scope::Internal>(L, validIndex, 2, "History index " + std::to_string(index) + " sis not valid");
+    CheckArg<Scope::Internal>(L, validIndex, 2, "History index " + std::to_string(index) + " is not valid");
 
     auto p = game->GetHistoryProcess(index);
     UserData::PushDataCopy<Process>(L, p.value());
 
     return 1;
+}
+
+int UserData::Game::AddEventHandler(lua_State* L)
+{
+    auto game = UserData::CheckUserData<Game>(L, 1);
+    auto eventHandler = *UserData::CheckUserData<EventHandler>(L, 2);
+
+    auto& subject = game->GetSubject();
+    subject.Register(eventHandler);
+
+    return 0;
 }

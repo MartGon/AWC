@@ -71,6 +71,11 @@ namespace Event
 
         bool Handles(Notification::Type type);
 
+        std::shared_ptr<CallbackI> GetHandler() const
+        {
+            return handler;
+        }
+
         Notification::Type notificationType;
         unsigned int opType;
 
@@ -96,6 +101,7 @@ namespace Event
             Register(entity, Handler{ opType, args...});
         }
         Entity::GUID Register(unsigned int opType, CallbackFunction callback, Notification::Type notType = Notification::Type::ANY);
+        Entity::GUID Register(Handler handler);
 
         void Unregister(Entity::GUID entity, unsigned int optype);
         void Unregister(Entity::GUID entity);

@@ -22,9 +22,12 @@ namespace Script::UserData
         static int GetUnitPos(lua_State* L);
 
         static int CreatePlayer(lua_State* L);
+        static int RemovePlayer(lua_State* L);
 
         static int CancelProcess(lua_State* L);
         static int GetHistoryCount(lua_State* L);
         static int GetHistoryProcess(lua_State* L);
+
+        static int AddEventHandler(lua_State* L);
     };
 }

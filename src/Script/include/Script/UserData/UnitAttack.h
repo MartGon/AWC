@@ -15,5 +15,8 @@ namespace Script::UserData
         static const luaL_Reg functions[];
 
         static int CanAttack(lua_State* luaState);
+
+        static int GetTilesInRangeCount(lua_State* luaState);
+        static int GetTileInRange(lua_State* L);
     };
 }

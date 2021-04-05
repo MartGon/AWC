@@ -32,8 +32,13 @@ void Subject::Register(Entity::GUID entity, Handler handler)
 
 Entity::GUID Subject::Register(unsigned int type, CallbackFunction cb, Notification::Type notType)
 {
+    return Register(Event::Handler{type, cb, notType});
+}
+
+Entity::GUID Subject::Register(Event::Handler handler)
+{
     Entity::GUID entity{Entity::Type::HANDLER, 0, lastId++};
-    Register(entity, type, cb, notType);
+    Register(entity, handler);
 
     return entity;
 }

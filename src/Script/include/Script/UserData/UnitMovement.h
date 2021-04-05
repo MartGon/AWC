@@ -15,5 +15,7 @@ namespace Script::UserData
         static const luaL_Reg functions[];
 
         static int CanMove(lua_State* luaState);
+        static int GetTilesPosInReachCount(lua_State* luaState);
+        static int GetTilePosInReach(lua_State* L);
     };
 }
