@@ -6,9 +6,9 @@
 
 namespace Script::UserData
 {
-    struct UnitAttack
+    struct AttackArea
     {
-        using type = ::UnitAttack;
+        using type = ::AttackArea;
         static const char* MT_NAME;
         static const char* LIB_NAME;
         static const luaL_Reg methods[];

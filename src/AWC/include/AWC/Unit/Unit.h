@@ -48,7 +48,7 @@ public:
 
     // TODO: Move this out of Unit. Reduces coupling with Map
     // Returns information about the moves this unit can perform.
-    UnitMovement CalculateMovement(const Map& map, Vector2 origin);
+    MoveArea CalculateMovement(const Map& map, Vector2 origin);
 
     // Reduces currentGas by a given moveCost. Can also trigger movement events or be affected by powerups
     void Move(unsigned int moveCost);
@@ -63,7 +63,7 @@ public:
 
     // TODO: Move this out of Unit. Reduces coupling with Map
     // Returns information about the attacks this unit can perform with a given weapon
-    UnitAttack CalculateAttack(unsigned int weaponId, const Map& map, Vector2 origin);
+    AttackArea CalculateAttack(unsigned int weaponId, const Map& map, Vector2 origin);
 
     // Returns whether this unit can attack this turn
     bool CanAttack() const;

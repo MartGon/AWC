@@ -1,8 +1,8 @@
 #include <AWC/Command.h>
 
 #include <AWC/Unit/Unit.h>
-#include <AWC/Unit/UnitMovement.h>
-#include <AWC/Unit/UnitAttack.h>
+#include <AWC/Unit/MoveArea.h>
+#include <AWC/Unit/AttackArea.h>
 
 #include <AWC/Operation/Operation.h>
 

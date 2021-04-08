@@ -2,7 +2,7 @@
 
 #include <AWC/AWCusing.h>
 
-class UnitAttack
+class AttackArea
 {
     friend class Unit;
 public:
@@ -11,7 +11,7 @@ public:
     std::vector<Vector2> GetTilesInRange();
 
 private:
-    UnitAttack(AreaIPtr tp);
+    AttackArea(AreaIPtr tp);
 
     AreaIPtr tp_;
 };

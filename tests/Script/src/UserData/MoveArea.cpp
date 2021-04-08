@@ -29,13 +29,13 @@ TEST_CASE("Unit userdata")
     
     SUBCASE("CalculateMovement")
     {
-        std::string path = Test::Script::GetUserDataPath() + "/UnitMovement/CanMove.lua";
+        std::string path = Test::Script::GetUserDataPath() + "/MoveArea/CanMove.lua";
         Test::Script::TestScript t(path, sGame);
 
         auto& sTable = t.lt();
         auto unitMove = soldier->CalculateMovement(game.GetMap(0), {2, 0});
         
-        sTable.SetDataCopy<Script::UserData::UnitMovement>("unitMove", unitMove);
+        sTable.SetDataCopy<Script::UserData::MoveArea>("unitMove", unitMove);
         sTable.SetDataCopy<Script::UserData::Vector2>("dest", Vector2{0, 0});
 
         try{        

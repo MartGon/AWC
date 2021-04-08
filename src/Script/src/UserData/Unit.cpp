@@ -22,7 +22,7 @@ int UserData::Unit::CalculateMovement(lua_State* luaState)
     auto vector2 = UserData::CheckUserData<Vector2>(luaState, 3);
 
     auto unitMovement = unit->CalculateMovement(*map, *vector2);
-    auto unitMove = UserData::PushDataCopy<UnitMovement>(luaState, unitMovement);
+    auto unitMove = UserData::PushDataCopy<MoveArea>(luaState, unitMovement);
 
     return 1;
 }
@@ -35,7 +35,7 @@ int UserData::Unit::CalculateAttack(lua_State* luaState)
     auto vector2 = UserData::CheckUserData<Vector2>(luaState, 4);
 
     auto unitAttack = unit->CalculateAttack(weaponId, *map, *vector2);
-    auto attack = UserData::PushDataCopy<UnitAttack>(luaState, unitAttack);
+    auto attack = UserData::PushDataCopy<AttackArea>(luaState, unitAttack);
 
     return 1;
 }

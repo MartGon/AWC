@@ -1,7 +1,7 @@
 #include <AWC/Unit/Unit.h>
 #include <AWC/Unit/UnitType.h>
-#include <AWC/Unit/UnitMovement.h>
-#include <AWC/Unit/UnitAttack.h>
+#include <AWC/Unit/MoveArea.h>
+#include <AWC/Unit/AttackArea.h>
 
 #include <AWC/Area/AreaConstraints.h>
 
@@ -45,12 +45,12 @@ Entity::GUID Unit::GetGUID() const
 
 // Movement
 
-UnitMovement Unit::CalculateMovement(const Map& map, Vector2 origin)
+MoveArea Unit::CalculateMovement(const Map& map, Vector2 origin)
 {
     auto moveDesc = moveDesc_->GetMovePattern();
     auto moveConstraints = GetMoveConstraints();
     auto tp = moveDesc->CalculateArea(map, origin, moveConstraints);
-    return UnitMovement{tp};
+    return MoveArea{tp};
 }
 
 void Unit::Move(unsigned int moveCost)
@@ -73,16 +73,16 @@ bool Unit::CanMove() const
 
 // Attack
 
-UnitAttack Unit::CalculateAttack(unsigned int weaponId, const Map& map, Vector2 origin)
+AttackArea Unit::CalculateAttack(unsigned int weaponId, const Map& map, Vector2 origin)
 {
-    UnitAttack unitAttack{AreaIPtr{nullptr}};
+    AttackArea unitAttack{AreaIPtr{nullptr}};
     if(IsWeaponIdValid(weaponId))
     {
         auto weapon = weapons_[weaponId];
         auto tpd = weapon->GetAttackPattern();
         auto attackConstraints = GetAttackConstraints(weaponId);
         auto tp = tpd->CalculateArea(map, origin, attackConstraints);
-        unitAttack = UnitAttack{tp};
+        unitAttack = AttackArea{tp};
     }
     else
         ThrowInvalidWeaponIdException(weaponId);

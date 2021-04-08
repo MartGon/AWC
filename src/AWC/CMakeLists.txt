@@ -38,9 +38,9 @@ SET(SOURCES
   src/Unit/MovementDescType.cpp
   src/Unit/MovementDesc.cpp
   src/Unit/Unit.cpp
-  src/Unit/UnitAttack.cpp
+  src/Unit/AttackArea.cpp
   src/Unit/UnitType.cpp
-  src/Unit/UnitMovement.cpp
+  src/Unit/MoveArea.cpp
   src/Unit/Weapon.cpp
   src/Unit/WeaponType.cpp
 )

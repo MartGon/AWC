@@ -22,7 +22,7 @@ namespace Event
         UnitDeath unitDeath;
         UnitSpawn unitSpawn;
         UnitMove unitMove;
-        UnitAttack unitAttack;
+        AttackArea unitAttack;
         TurnPassed turnPassed;
     }
 

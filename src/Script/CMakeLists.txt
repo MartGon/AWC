@@ -11,7 +11,7 @@ set(SOURCES
     src/UserData/Map.cpp
     src/UserData/Unit.cpp
     src/UserData/UserData.cpp
-    src/UserData/UnitMovement.cpp
+    src/UserData/MoveArea.cpp
     src/UserData/Vector2.cpp
     src/UserData/AreaDesc.cpp
     src/UserData/MovementDescType.cpp
@@ -23,7 +23,7 @@ set(SOURCES
     src/UserData/Process.cpp
     src/UserData/Trigger.cpp
     src/UserData/WeaponType.cpp
-    src/UserData/UnitAttack.cpp
+    src/UserData/AttackArea.cpp
     src/UserData/EventHandler.cpp
     src/UserData/EventNotification.cpp
     src/UserData/EntityGUID.cpp

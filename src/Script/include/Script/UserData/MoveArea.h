@@ -6,9 +6,9 @@
 
 namespace Script::UserData
 {
-    struct UnitMovement
+    struct MoveArea
     {
-        using type = ::UnitMovement;
+        using type = ::MoveArea;
         static const char* MT_NAME;
         static const char* LIB_NAME;
         static const luaL_Reg methods[];

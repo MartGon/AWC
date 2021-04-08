@@ -2,10 +2,10 @@
 
 #include <AWC/AWCusing.h>
 
-class UnitMovement
+class MoveArea
 {
 public:
-    UnitMovement(AreaIPtr tp);
+    MoveArea(AreaIPtr tp);
 
     bool CanMove(Vector2 dest) const;
     uint GetMoveCostTo(Vector2 dest) const;

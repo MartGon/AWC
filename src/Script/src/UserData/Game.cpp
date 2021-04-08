@@ -123,7 +123,7 @@ int UserData::Game::CreatePlayer(lua_State* luaState)
 int UserData::Game::RemovePlayer(lua_State* L)
 {
     auto game = UserData::CheckUserData<Game>(L, 1);
-    auto playerId = luaL_checkinteger(L, 2) - 1;
+    auto playerId = luaL_checkinteger(L, 2);
 
     auto playerCount = game->GetPlayerCount();
     bool validIndex = playerId < playerCount && playerId >= 0;
@@ -165,7 +165,7 @@ int UserData::Game::GetHistoryProcess(lua_State* L)
     CheckArg<Scope::Internal>(L, validIndex, 2, "History index " + std::to_string(index) + " is not valid");
 
     auto p = game->GetHistoryProcess(index);
-    UserData::PushDataCopy<Process>(L, p.value());
+    UserData::PushAsTable<Process>(L, *p);
 
     return 1;
 }

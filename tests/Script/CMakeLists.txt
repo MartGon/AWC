@@ -11,7 +11,7 @@ SET(SOURCES
     src/UserData/Map.cpp
     src/UserData/Vector2.cpp
     src/UserData/Unit.cpp
-    src/UserData/UnitMovement.cpp
+    src/UserData/MoveArea.cpp
     src/UserData/AreaDesc.cpp
     src/UserData/MovementDescType.cpp
     src/UserData/Database.cpp
