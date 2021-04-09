@@ -19,6 +19,7 @@ const luaL_Reg UserData::Game::methods[] = {
 
         {"CancelProcess", Game::CancelProcess},
         {"GetHistoryCount", Game::GetHistoryCount},
+        {"GetHistoryIndex", Game::GetHistoryIndex},
         {"GetHistoryProcess", Game::GetHistoryProcess},
 
         {"AddEventHandler", Game::AddEventHandler},
@@ -151,6 +152,15 @@ int UserData::Game::GetHistoryCount(lua_State* luaState)
     auto game = UserData::CheckUserData<Game>(luaState, 1);
 
     lua_pushinteger(luaState, game->GetHistoryCount());
+
+    return 1;
+}
+
+int UserData::Game::GetHistoryIndex(lua_State* luaState)
+{
+    auto game = UserData::CheckUserData<Game>(luaState, 1);
+
+    lua_pushinteger(luaState, game->GetHistoryIndex());
 
     return 1;
 }

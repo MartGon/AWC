@@ -26,6 +26,7 @@ namespace Script::UserData
 
         static int CancelProcess(lua_State* L);
         static int GetHistoryCount(lua_State* L);
+        static int GetHistoryIndex(lua_State* L);
         static int GetHistoryProcess(lua_State* L);
 
         static int AddEventHandler(lua_State* L);
