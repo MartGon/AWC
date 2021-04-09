@@ -8,3 +8,8 @@ Operation::Result Script::ScriptOperation::Execute(::Game& state, const Process:
 {
     return scriptType_.Execute(state, p, argsTable_);
 }
+
+void Script::ScriptOperation::Undo(::Game& state, const Process::Process& p)
+{
+    return scriptType_.Undo(state, p, argsTable_);
+}

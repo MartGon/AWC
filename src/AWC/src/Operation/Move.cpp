@@ -17,3 +17,10 @@ Result Move::Execute(Game& game, const Process::Process& p)
 
     return result;
 }
+
+void Move::Undo(Game& game, const Process::Process& p)
+{
+    auto& map = game.GetMap(mapIndex_);
+    map.RemoveUnit(dest_);
+    map.AddUnit(origin_, unit_);
+}

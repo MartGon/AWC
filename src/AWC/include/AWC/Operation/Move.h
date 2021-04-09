@@ -14,6 +14,7 @@ namespace Operation
         ~Move() override {};
 
         Result Execute(Game& state, const Process::Process& p) override;
+        void Undo(Game& state, const Process::Process& p) override;
     
         UnitPtr unit_;
         uint mapIndex_;

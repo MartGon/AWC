@@ -152,16 +152,44 @@ std::optional<Process::Process> Game::GetProcess(unsigned int id)
     return process;
 }
 
+void Game::Undo()
+{
+    if(historyIndex_ > 0)
+    {
+        auto&  process = opHistory_[--historyIndex_];
+        process.op->Undo(*this, process);
+    }
+}
+
+void Game::Redo()
+{
+    if(historyIndex_ < GetHistoryCount())
+    {
+        auto& process = opHistory_[historyIndex_++];
+        process.op->Execute(*this, process);
+    }
+}
+
 unsigned int Game::GetHistoryCount()
 {
     return opHistory_.size();
+}
+
+unsigned int Game::GetHistoryIndex()
+{
+    return historyIndex_;
+}
+
+unsigned int Game::GetHistoryNextUndoIndex()
+{
+    return historyIndex_ - 1;
 }
 
 std::optional<Process::Process> Game::GetHistoryProcess(unsigned int index)
 {
     std::optional<Process::Process> p;
     auto count = GetHistoryCount();
-    if(index < count && count >= 0)
+    if(index < count && index >= 0)
         p = opHistory_[index];
 
     return p;
@@ -405,10 +433,11 @@ void Game::Run()
             Result res = process.op->Execute(*this, process);
             
             Notification::Type type = Notification::Type::ERROR;
-            if(res)
+            if(res && process.op->GetType() != Operation::Type::ANTI_OPERATION)
             {
                 // Add to history on success
-                opHistory_.push_back(process);
+                PushToHistory(process);
+
                 type = Notification::Type::POST;
             }
 
@@ -417,6 +446,15 @@ void Game::Run()
             events.Notify(notification, *this);
         }
     }
+}
+
+void Game::PushToHistory(Process::Process p)
+{
+    if(opHistory_.size() != historyIndex_)
+        opHistory_ = std::vector<Process::Process>{opHistory_.begin(), opHistory_.begin() + historyIndex_};
+
+    opHistory_.push_back(p);
+    historyIndex_ = opHistory_.size();
 }
 
 void Game::SortQueue()

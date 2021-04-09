@@ -69,9 +69,16 @@ public:
     // Process
     void RemoveProcess(unsigned int pid);
     std::optional<Process::Process> GetProcess(unsigned int pid);
-    unsigned int GetHistoryCount();
-    std::optional<Process::Process> GetHistoryProcess(unsigned int index);
     void Run();
+
+    void Undo();
+    void Redo();
+    unsigned int GetHistoryCount();
+    unsigned int GetHistoryIndex();
+    unsigned int GetHistoryNextUndoIndex();
+    unsigned int GetHistoryNextRedoIndex();
+    std::optional<Process::Process> GetHistoryProcess(unsigned int index);
+    
 
     template<typename ...Args>
     unsigned int Push(OperationIPtr op, Args&& ...args)
@@ -128,14 +135,17 @@ private:
     void CheckMapId(uint mapIndex) const;
 
     // Operations
+    void PushToHistory(Process::Process p);
     void SortQueue();
 
     Table<std::shared_ptr<Player>> players_;
     Table<Map> maps_;
 
     std::vector<Process::Process> processQueue_;
-    std::vector<Process::Process> opHistory_;
     unsigned int nextProcessId = 0;
+
+    std::vector<Process::Process> opHistory_;
+    unsigned int historyIndex_ = 0;   
     
     Turn currentTurn;    
     Event::Subject events;

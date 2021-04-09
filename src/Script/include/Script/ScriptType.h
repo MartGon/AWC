@@ -26,6 +26,7 @@ namespace Script
         std::shared_ptr<ScriptOperation> CreateScript() const;
 
         Operation::Result Execute(::Game& game, const Process::Process& p, LuaTable<Scope::External>& tableRef) const;
+        void Undo(::Game& game, const Process::Process& p, LuaTable<Scope::External>& tableRef) const;
 
     private:
         std::string scriptPath_;

@@ -30,6 +30,7 @@ namespace Script
         }
 
         Operation::Result Execute(::Game& state, const Process::Process& p) override;
+        void Undo(::Game& state, const Process::Process& p) override;
 
     private:
         ScriptOperation(lua_State* luaState, const Type& type) : 

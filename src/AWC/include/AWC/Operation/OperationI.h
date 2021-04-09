@@ -49,6 +49,7 @@ namespace Operation
         OperationI(unsigned int type) : type_{type} {};
         virtual ~OperationI() {};
         virtual Result Execute(Game& state, const Process::Process& p) { return Result{SUCCESS}; };
+        virtual void Undo(Game& state, const Process::Process& p) {};
     
         unsigned int GetType() { return type_; }
 

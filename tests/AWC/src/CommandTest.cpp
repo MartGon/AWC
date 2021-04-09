@@ -13,6 +13,7 @@
 #include <AWC/CostTable.h>
 
 #include <Tests/AWC/UnitTest.h>
+#include <Tests/AWC/GameTest.h>
 
 // Size checking
 TEST_CASE("MoveCommands")
@@ -170,4 +171,55 @@ TEST_CASE("AttackCommands")
         CHECK(victim->IsDead() == true);
         CHECK(gameMap.GetUnit(1, 0).get() == nullptr);
     }
+}
+
+TEST_CASE("Undo and Redo")
+{
+    // Game
+    Game game = GameTest::PrepareGame();
+    auto& map = game.GetMap(0);
+    auto playerOne = game.GetPlayer(0);
+
+    TileType grassType{0, "Grass"};
+    MapUtils::FillMap(map, grassType);
+
+    auto soldierType = UnitTest::CreateSoldierType();
+    game.AddUnit(soldierType.CreateUnit(playerOne.get()), {0, 0}, 0);
+
+    CommandPtr moveCommand{new MoveCommand{0, {0, 0}, {2, 0}}};
+    game.ExecuteCommand(moveCommand);
+
+    CHECK(map.GetUnit({2, 0}).get() != nullptr);
+
+    while(game.GetHistoryIndex() > 0)
+        game.Undo();
+
+    CHECK(map.GetUnit({0, 0}).get() != nullptr);
+    
+    while(game.GetHistoryIndex() < game.GetHistoryCount())
+        game.Redo();
+
+    CHECK(map.GetUnit({2, 0}).get() != nullptr);
+
+    game.Undo();
+    game.Undo();
+
+    CHECK(map.GetUnit({1, 0}).get() != nullptr);
+
+    CommandPtr moveCommand2{new MoveCommand{0, {1, 0}, {3, 0}}};
+
+    // This is a HACK to renew unit movement
+    game.PassTurn();
+    game.PassTurn();
+
+    game.ExecuteCommand(moveCommand2);
+
+    CHECK(map.GetUnit({3, 0}).get() != nullptr);
+
+    CHECK(game.GetHistoryCount() == 6);
+
+    while(game.GetHistoryIndex() > 0)
+        game.Undo();
+
+    CHECK(map.GetUnit({0, 0}).get() != nullptr);
 }

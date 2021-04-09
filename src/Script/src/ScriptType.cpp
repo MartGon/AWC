@@ -70,3 +70,38 @@ Operation::Result Script::Type::Execute(::Game& game, const Process::Process& p,
 
     return res;
 }
+
+void Script::Type::Undo(::Game& game, const Process::Process& p, LuaTable<Scope::External>& tableRef) const
+{
+    
+    auto luaState = vm_.GetLuaState();
+
+    // Get Execute function
+    undo_.PushInternal();
+
+    // Sets table to function ENV
+    tableRef.PushInternal();
+    lua_setupvalue(luaState, 1, 1);
+
+    // Push game
+    UserData::UserData::PushDataRef<UserData::Game>(luaState, &game);
+
+    // Push process
+    UserData::UserData::PushDataCopy<UserData::Process>(luaState, p);
+
+    // Call function
+    // TODO: Push prio param beforehand
+    auto ret = lua_pcall(luaState, 2, 0, 0);
+    if(ret == LUA_OK)
+    {
+    }
+    else
+    {
+        std::string error = lua_tostring(luaState, -1);
+        lua_pop(luaState, 1);
+        
+        #ifdef _DEBUG
+            std::cout << "Error ocurred while undoing Lua Operation: " << error << "\n";
+        #endif 
+    }
+}
